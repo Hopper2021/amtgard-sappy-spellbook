@@ -1,2 +1,2 @@
 # amtgard-sappy-spellbook
-A quick spellbook for sappy spell list playtesting
+A quick spellbook app for sappy spell list playtesting
