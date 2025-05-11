@@ -7,7 +7,7 @@ function App() {
     <>
       <Navbar bg="primary" variant="dark">
         <Container>
-          <Navbar.Brand href="#home">Sappy SpellBook</Navbar.Brand>
+          <Navbar.Brand href="home">Sappy SpellBook</Navbar.Brand>
           <Navbar.Collapse className="justify-content-end">
           <Dropdown drop="start">
             <Dropdown.Toggle bsPrefix="custom-dropdown-toggle">
@@ -15,7 +15,7 @@ function App() {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              <Dropdown.Item href="#action1">Settings</Dropdown.Item>
+              <Dropdown.Item href="action1">Settings</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </Navbar.Collapse>

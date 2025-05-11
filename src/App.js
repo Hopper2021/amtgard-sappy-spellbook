@@ -1,7 +1,7 @@
 import './App.css'
 import Header from '../src/components/HeaderBar.tsx'
 import FloatingActionButton from './components/FloatingActionButton.tsx'
-import { Container, Row, Col, Button } from 'react-bootstrap'
+import { Container, Row, Col } from 'react-bootstrap'
 
 function App() {
   const mockSpellListArray = [
