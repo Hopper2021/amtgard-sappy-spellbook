@@ -3,6 +3,7 @@ import React from 'react'
 import HeaderBar from './components/HeaderBar.tsx'
 import Home from './components/Home.tsx'
 import { Route, Routes } from 'react-router-dom'
+import CreateSpellList from './components/CreateSpellList.tsx'
 
 function App() {
   return (
@@ -11,7 +12,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />}/>
           <Route path="/listDetails" />
-          <Route path="/createList" />
+          <Route path="/createList" element={<CreateSpellList />}/>
         </Routes>
     </>
   )
