@@ -36,7 +36,8 @@ function App() {
               <Row key={spellList.id} className="border-bottom mb-3">
               <Button
                 className="p-1 text-start w-100"
-                variant="light"
+                variant="link"
+                style={{ textDecoration: 'none', color: 'inherit' }}
                 onClick={() => console.log(`Clicked on ${spellList.name}`)}
               >
                 {spellList.name} ({spellList.class}, level {spellList.maxLevel})
