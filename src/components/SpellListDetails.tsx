@@ -1,7 +1,9 @@
 import React from 'react'
 import { Container, Row, Button, Col, Form } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
 
 function SpellListDetails() {
+  const navigate = useNavigate()
   const mockPropsSpellList = {
     id: 1,
     name: 'Test Healer List',
@@ -22,7 +24,11 @@ function SpellListDetails() {
           <Form.Check type={'checkbox'} label={'show strips'} />
         </Col>
         <Col xs="auto">
-          <Button className="ms-auto d-block">Edit</Button>
+          <Button
+            className="ms-auto d-block"
+            onClick={() => navigate('/editList')}>
+              Edit
+          </Button>
         </Col>
       </Row>
       <Row>
