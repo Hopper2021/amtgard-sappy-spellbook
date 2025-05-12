@@ -2,7 +2,7 @@ import { Dropdown } from 'react-bootstrap'
 import React from 'react'
 import { Navbar, Container } from 'react-bootstrap'
 
-function App() {
+function HeaderBar() {
   return (
     <>
       <Navbar bg="primary" variant="dark">
@@ -25,4 +25,4 @@ function App() {
   )
 }
 
-export default App
+export default HeaderBar
