@@ -15,7 +15,7 @@ function App() {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              <Dropdown.Item href="action1">Settings</Dropdown.Item>
+              <Dropdown.Item>Settings</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </Navbar.Collapse>
