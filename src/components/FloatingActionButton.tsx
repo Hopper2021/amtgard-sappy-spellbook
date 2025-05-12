@@ -5,11 +5,11 @@ import { LuCirclePlus } from "react-icons/lu";
 function FloatingActionButton() {
   return (
     <Button
-        variant="primary"
-        className="position-fixed bottom-0 end-0 m-4 rounded-circle"
+        variant="dark"
+        className="position-fixed bottom-0 end-0 m-4 rounded-circle d-flex justify-content-center align-items-center"
         style={{ width: '60px', height: '60px' }}
     >
-        <LuCirclePlus size={30} color="white" />
+        <LuCirclePlus size={22} color="white" />
     </Button>
   )
 }
