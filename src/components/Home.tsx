@@ -1,8 +1,11 @@
 import React from 'react'
 import FloatingActionButton from './FloatingActionButton.tsx'
 import { Container, Row, Button } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
 
 function App() {
+  const navigate = useNavigate()
+
   const mockSpellListArray = [
     {
       id: 1,
@@ -38,7 +41,7 @@ function App() {
                 className="p-1 text-start w-100"
                 variant="link"
                 style={{ textDecoration: 'none', color: 'inherit' }}
-                onClick={() => console.log(`Clicked on ${spellList.name}`)}
+                onClick={() => navigate('/listDetails')}
               >
                 {spellList.name} ({spellList.class}, level {spellList.maxLevel})
               </Button>
