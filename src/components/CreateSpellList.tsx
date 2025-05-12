@@ -75,12 +75,10 @@ function CreateSpellList() {
 					</Dropdown.Menu>
 				</Dropdown>
 			</InputGroup>
-
-      <InputGroup className="mb-3">
-        <InputGroup.Checkbox className="pr-10" aria-label="Checkbox for following text input" />
-        <InputGroup.Text style={{ backgroundColor: 'transparent', border: 'none', paddingRight: 5 }}> Look The Part</InputGroup.Text>
-        <Form.Control style={{ backgroundColor: 'transparent', border: 'none', paddingRight: 5 }} aria-label="Text input with checkbox" />
-      </InputGroup>
+			
+			<InputGroup className="mb-3">
+				<Form.Check className="ml-2" type={'checkbox'} label={'Look The Part'} />
+			</InputGroup>
 
       <Button className="w-100" variant="unknown" style={{ backgroundColor: "lightgrey" }}>CREATE</Button>
     </Container>
