@@ -1,4 +1,4 @@
-export const allSpells = [
+export const ALL_SPELLS = [
   {
     id: 1,
     name: 'Abeyance',
@@ -1432,5 +1432,231 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     materials: 'string',
     incantation: '"Swift"',
   },
-  // need to add pages 74 and 75 of spells ( 16 and 17 )
+  {
+    id: 160,
+    name: 'Teleport',
+    type: 'Verbal',
+    school: 'Sorcery',
+    range: "20'",
+    materials: 'string',
+    incantation: '"I travel through the aether" x5',
+  },
+    {
+    id: 161,
+    name: 'Terror',
+    type: 'Verbal',
+    school: 'Death',
+    range: "20'",
+    materials: 'string',
+    incantation: '"Death makes thee terrified" x3',
+  },
+  {
+    id: 162,
+    name: 'Throw',
+    type: 'Verbal',
+    school: 'Death',
+    range: "20'",
+    materials: 'string',
+    incantation: '"My power throws thee" x3',
+  },
+  {
+    id: 163,
+    name: 'Tracking',
+    type: 'Verbal',
+    school: 'Sorcery',
+    range: "20'",
+    materials: 'string',
+    incantation: '"Tracking" x3',
+  },
+  {
+    id: 164,
+    name: 'Trickery',
+    type: 'Enchantment',
+    school: 'Sorcery',
+    range: "20'",
+    materials: 'string',
+    incantation: 'string',
+  },
+  {
+    id: 165,
+    name: 'Troll Blood',
+    type: 'Enchantment',
+    school: 'Protection',
+    range: 'Other',
+    materials: 'string',
+    incantation: '"The blood of the trolls sustains thee" x3',
+  },
+  {
+    id: 166,
+    name: 'True Grit',
+    type: 'Verbal',
+    school: 'Spirit',
+    range: 'Self',
+    materials: 'string',
+    incantation: '"The wicked flee when I pursue"',
+  },
+  {
+    id: 167,
+    name: 'Undead Minion',
+    type: 'Enchantment',
+    school: 'Death',
+    range: 'Other',
+    materials: 'Yellow strip',
+    incantation: `
+    "Flesh rots, bones break, skulls sigh, spirits take, 
+    let the power of my will descend on thee
+    let the power of my will restore thy spirit
+    let the power of my will knit thy corpse
+    let the power of my will give thee direction
+    let the power of my will cheat thy death
+    by the power of my will, arise my minion!"`,
+  },
+  {
+    id: 168,
+    name: 'Vampirism',
+    type: 'Enchantment',
+    school: 'Death',
+    range: 'Other',
+    materials: 'Yellow and white strip',
+    incantation: '"Thy hunger can never be sated" x3',
+  },
+  {
+    id: 169,
+    name: 'Void Touched',
+    type: 'Enchantment',
+    school: 'Sorcery',
+    range: 'Other',
+    materials: 'Red and white strip',
+    incantation: '"Embrace the old ones and surrender thyself" x3',
+  },
+  {
+    id: 170,
+    name: 'Ward Self',
+    type: 'Enchantment',
+    school: 'Protection',
+    range: 'Self',
+    materials: 'White strip',
+    incantation: '"The power of magic defends me" x3',
+  },
+  {
+    id: 171,
+    name: 'Warder',
+    type: 'Archetype',
+    school: 'Neutral',
+    range: 'string',
+    materials: 'string',
+    incantation: 'string',
+  },
+  {
+    id: 172,
+    name: 'Warlock',
+    type: 'Archetype',
+    school: 'Neutral',
+    range: 'string',
+    materials: 'string',
+    incantation: 'string',
+  },
+  {
+    id: 173,
+    name: 'Word of Mending',
+    type: 'Verbal',
+    school: 'Sorcery',
+    range: 'Touch',
+    materials: 'string',
+    incantation: 'Spedoinkle',
+  },
+  {
+    id: 174,
+    name: 'Wounding',
+    type: 'Verbal',
+    school: 'Death',
+    range: "20'",
+    materials: 'string',
+    incantation: '"Death strikes off why [left/right] [arm/leg]" x3',
+  },
+  {
+    id: 175,
+    name: 'EquipmentL Weapon, Long',
+    type: 'Neutral',
+    school: 'Neutral',
+    range: 'string',
+    materials: 'string',
+    incantation: 'string',
+  },
+]
+
+export const BARD_SPELLS = [
+  {
+    level: 1,
+    spells: [
+      { id: 33, cost: 1, max: null, frequency: '1/Refresh Charge x5'},
+      { id: 52, cost: 2, max: 2, frequency: null},
+      { id: 56, cost: 2, max: 2, frequency: null},
+      { id: 88, cost: 1, max: null, frequency: '1/Life'},
+      { id: 124, cost: 1, max: null, frequency: '1/Life'},
+      { id: 134, cost: 1, max: null, frequency: '1/Life'},
+      { id: 142, cost: 1, max: 1, frequency: 'Unlimited'},
+    ]
+  },
+  {
+    level: 2,
+    spells: [
+      { id: 46, cost: 1, max: null, frequency: '2/Refresh'},
+      { id: 49, cost: 3, max: 1, frequency: null},
+      { id: 76, cost: 2, max: null, frequency: '1/Refresh'},
+      { id: 86, cost: 1, max: 4, frequency: '1/Refresh'},
+      { id: 98, cost: 1, max: null, frequency: '1/Life'},
+      { id: 140, cost: 1, max: 1, frequency: 'Unlimited'},
+      { id: 147, cost: 1, max: 1, frequency: 'Unlimited'},
+    ]
+  },
+  {
+    level: 3,
+    spells: [
+      { id: 20, cost: 1, max: null, frequency: '1/Life'},
+      { id: 15, cost: 1, max: 1, frequency: '1/Refresh'},
+      { id: 31, cost: 1, max: 4, frequency: '1/Life'},
+      { id: 58, cost: 1, max: 2, frequency: '1/Life'},
+      { id: 51, cost: 2, max: 1, frequency: null},
+      { id: 143, cost: 1, max: 1, frequency: 'Unlimited'},
+    ]
+  },
+  {
+    level: 4,
+    spells: [
+      { id: 5, cost: 1, max: 4, frequency: '1/Life'},
+      { id: 175, cost: 3, max: 1, frequency: null},
+      { id: 126, cost: 1, max: null, frequency: '1/Refresh'},
+      { id: 136, cost: 1, max: null, frequency: '1/Refresh'},
+      { id: 141, cost: 1, max: 1, frequency: 'Unlimited'},
+      { id: 145, cost: 1, max: 1, frequency: 'Unlimited'},
+      { id: 156, cost: 1, max: null, frequency: '1/Refresh'},
+      { id: 159, cost: 1, max: 2, frequency: '1/Life'},
+      { id: 161, cost: 1, max: null, frequency: '1/Refresh'},
+    ]
+  },
+  {
+    level: 5,
+    spells: [
+      { id: 8, cost: 1, max: null, frequency: '1/Refresh'},
+      { id: 6, cost: 1, max: 2, frequency: '1/Life'},
+      { id: 42, cost: 1, max: 1, frequency: '1/Refresh'},
+      { id: 50, cost: 3, max: 1, frequency: null},
+      { id: 77, cost: 1, max: null, frequency: '1/Refresh'},
+      { id: 93, cost: 1, max: null, frequency: '1/Life'},
+      { id: 146, cost: 1, max: 1, frequency: 'Unlimited'},
+    ]
+  },
+  {
+    level: 6,
+    spells: [
+      { id: 29, cost: 2, max: 1, frequency: null},
+      { id: 40, cost: 2, max: 1, frequency: null},
+      { id: 49, cost: 2, max: 1, frequency: null},
+      { id: 91, cost: 1, max: 1, frequency: null},
+      { id: 135, cost: 1, max: null, frequency: '1/Refresh'},
+      { id: 144, cost: 1, max: 1, frequency: '1/Refresh Charge x5'},
+      { id: 148, cost: 1, max: null, frequency: '1/Refresh'},
+    ]
+  },
 ]
