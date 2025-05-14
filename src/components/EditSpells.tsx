@@ -5,9 +5,13 @@ import { useParams } from 'react-router-dom'
 
 interface Spell {
   id: number
-  name: string
-  level: number
-  description: string
+  purchased: number
+}
+
+interface SpellLevel {
+	level: number
+	points: number
+	spells: any[]
 }
 
 interface SpellList {
@@ -16,7 +20,7 @@ interface SpellList {
   class: string
   maxLevel: number
   lookThePart: boolean
-  spells: Spell[]
+  spells: SpellLevel[]
 }
 
 function EditSpells() {
@@ -42,22 +46,6 @@ function EditSpells() {
 		spells: spellListToEdit?.spells || [],
   })
 
-  const mockSpellList = {
-    id: 1,
-    name: 'Test Bard List',
-    class: 'Bard',
-    maxLevel: 6,
-    lookThePart: true,
-    spells: [
-      { level: 1, points: 5, spells: [ { id: 52, purchased: 1 }] },
-      { level: 2, points: 5, spells: [ { id: 46, purchased: 1 }] },
-      { level: 3, points: 5, spells: [ { id: 20, purchased: 1 }] },
-      { level: 4, points: 5, spells: [ { id: 5, purchased: 1 }] },
-      { level: 5, points: 5, spells: [ { id: 8, purchased: 1 }] },
-      { level: 6, points: 6, spells: [ { id: 29, purchased: 1 }] },
-    ]
-  }
-
   const getSpellDetails = (spellId: number) => {
     const spell = ALL_SPELLS.find(spell => spell.id === spellId)
     if (spell) {
@@ -67,7 +55,7 @@ function EditSpells() {
   }
 
   const calculateLevelPointsAvailable = (level: number) => {
-    const listLevel = mockSpellList.spells.find(listLevel => listLevel.level === level)
+    const listLevel = modifiedSpellList.spells.find(listLevel => listLevel.level === level)
     if (listLevel) {
       return listLevel.points
     }
@@ -75,15 +63,15 @@ function EditSpells() {
   }
 
   const calculateTrickleDownPointsAvailable = (level: number) => {
-    const levelsToSum = mockSpellList.spells.filter((listLevel) => listLevel.level >= level)
+    const levelsToSum = modifiedSpellList.spells.filter((listLevel) => listLevel.level >= level)
     const totalPoints = levelsToSum.reduce((sum, listLevel) => sum + listLevel.points, 0)
 
     return totalPoints
   }
 
-  const getAmountPurchased = (spellId) => {
-    for (const level of mockSpellList.spells) {
-      const spell = level.spells.find((spell) => spell.id === spellId)
+  const getAmountPurchased = (spellId: number): string => {
+    for (const level of modifiedSpellList.spells) {
+      const spell = level.spells.find((spell: { id: number; purchased: number }) => spell.id === spellId)
       if (spell) {
         return `x${spell.purchased}`
       }
@@ -91,9 +79,9 @@ function EditSpells() {
     return ''
   }
 
-  const calculateAmountPurchased = (spellId) => {
-    for (const level of mockSpellList.spells) {
-      const spell = level.spells.find((spell) => spell.id === spellId)
+  const calculateAmountPurchased = (spellId: number): string => {
+    for (const level of modifiedSpellList.spells) {
+      const spell = level.spells.find((spell: Spell) => spell.id === spellId)
       if (spell && addOrRemoveSpells === 'Add') {
         return `x${spell.purchased + 1}`
         // TO DO: Plan is to update the local storage every time a spell is added or removed
@@ -103,12 +91,12 @@ function EditSpells() {
     return ''
   }
 
-  console.log('mockSpellList', mockSpellList)
+  console.log('mockSpellList', modifiedSpellList)
 
   return (
     <Container fluid className="p-3">
       <CardHeader className="d-flex justify-content-between">
-        <h6>Edit {mockSpellList.class} Spells</h6>
+        <h6>Edit {modifiedSpellList.class} Spells</h6>
         <Button onClick={() => setAddOrRemoveSpells(addOrRemoveSpells === 'Add' ? 'Remove' : 'Add')} className="mb-2">
           {addOrRemoveSpells}
         </Button>
