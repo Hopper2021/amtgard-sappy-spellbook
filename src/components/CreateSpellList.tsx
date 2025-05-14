@@ -4,11 +4,10 @@ import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
 import { useNavigate } from 'react-router-dom'
 
-interface Spell {
-	id: number
-	name: string
+interface SpellLevel {
 	level: number
-	description: string
+	points: number
+	spells: any[]
 }
 
 interface SpellList {
@@ -17,7 +16,7 @@ interface SpellList {
 	class: string
 	maxLevel: number
 	lookThePart: boolean
-	spells: Spell[]
+	spells: SpellLevel[]
 }
 
 function CreateSpellList() {
@@ -41,7 +40,7 @@ function CreateSpellList() {
 		class: 'Bard',
 		maxLevel: 1,
 		lookThePart: false,
-		spells: [],
+		spells: [{ level: 1, points: 5, spells: [] }],
 	})
 
 	return (
@@ -85,16 +84,28 @@ function CreateSpellList() {
 								}}
 								id="dropdown-basic"
 							>
-								1
+								{newSpellList.maxLevel}
 							</Dropdown.Toggle>
 
 							<Dropdown.Menu>
-								<Dropdown.Item onClick={() => setNewSpellList({ ...newSpellList, maxLevel: 1 })}>1</Dropdown.Item>
-								<Dropdown.Item onClick={() => setNewSpellList({ ...newSpellList, maxLevel: 2 })}>2</Dropdown.Item>
-								<Dropdown.Item onClick={() => setNewSpellList({ ...newSpellList, maxLevel: 3 })}>3</Dropdown.Item>
-								<Dropdown.Item onClick={() => setNewSpellList({ ...newSpellList, maxLevel: 4 })}>4</Dropdown.Item>
-								<Dropdown.Item onClick={() => setNewSpellList({ ...newSpellList, maxLevel: 5 })}>5</Dropdown.Item>
-								<Dropdown.Item onClick={() => setNewSpellList({ ...newSpellList, maxLevel: 6 })}>6</Dropdown.Item>
+								{[...Array(6)].map((_, index) => {
+									const level = index + 1  // Levels 1 through 6
+									return (
+										<Dropdown.Item
+											key={level}
+											onClick={() => {
+												const updatedSpells = Array.from({ length: level }, (_, index) => ({
+													level: index + 1,
+													points: newSpellList.lookThePart && index + 1 === level ? 6 : 5,
+													spells: [],
+												}))
+												setNewSpellList({ ...newSpellList, maxLevel: level, spells: updatedSpells })
+											}}
+										>
+											{level}
+										</Dropdown.Item>
+									)
+								})}
 							</Dropdown.Menu>
 						</Dropdown>
 					</InputGroup>
@@ -133,12 +144,19 @@ function CreateSpellList() {
 					className="ml-2"
 					type={'checkbox'}
 					label={'Look The Part'}
-					onClick={() =>
+					checked={newSpellList.lookThePart}
+					onChange={() => {
+						const updatedSpells = newSpellList.spells.map((spell) =>
+							spell.level === newSpellList.maxLevel
+								? {...spell, points: newSpellList.lookThePart ? 5 : 6}
+								: spell
+						)
 						setNewSpellList({
 							...newSpellList,
 							lookThePart: !newSpellList.lookThePart,
+							spells: updatedSpells,
 						})
-					}
+					}}
 				/>
 			</InputGroup>
 
