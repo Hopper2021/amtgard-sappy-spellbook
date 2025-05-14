@@ -139,13 +139,20 @@ function CreateSpellList() {
 				</Dropdown>
 			</InputGroup>
 
-			<InputGroup className="mb-3">
-				<Form.Check
-					className="ml-2"
-					type={'checkbox'}
-					label={'Look The Part'}
-					checked={newSpellList.lookThePart}
-					onChange={() => {
+			<Form.Check
+				className="m-3"
+				type={'checkbox'}
+				id="lookThePartCheckbox"
+				label={
+					<label
+						htmlFor="lookThePartCheckbox"
+						style={{ cursor: 'pointer', display: 'inline-block', marginLeft: '5px' }}
+					>
+						Look The Part
+					</label>
+				}
+				checked={newSpellList.lookThePart}
+				onChange={() => {
 						const updatedSpells = newSpellList.spells.map((spell) =>
 							spell.level === newSpellList.maxLevel
 								? {...spell, points: newSpellList.lookThePart ? 5 : 6}
@@ -156,9 +163,8 @@ function CreateSpellList() {
 							lookThePart: !newSpellList.lookThePart,
 							spells: updatedSpells,
 						})
-					}}
-				/>
-			</InputGroup>
+				}}
+			/>
 
 			<Button
 				className="w-100"
