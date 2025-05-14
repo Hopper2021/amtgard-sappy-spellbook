@@ -4,11 +4,10 @@ import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
 import { useNavigate, useParams } from 'react-router-dom'
 
-interface Spell {
-  id: number
-  name: string
-  level: number
-  description: string
+interface SpellLevel {
+	level: number
+	points: number
+	spells: any[]
 }
 
 interface SpellList {
@@ -17,7 +16,7 @@ interface SpellList {
   class: string
   maxLevel: number
   lookThePart: boolean
-  spells: Spell[]
+  spells: SpellLevel[]
 }
 
 function ModifySpellList() {
@@ -35,8 +34,6 @@ function ModifySpellList() {
 		lookThePart: spellListToEdit?.lookThePart || false,
 		spells: spellListToEdit?.spells || [],
   })
-
-	console.log('modifiedSpellList', modifiedSpellList)
 
   return (
     <Container fluid className="p-2">

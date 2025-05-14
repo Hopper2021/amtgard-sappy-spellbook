@@ -1,16 +1,29 @@
 import React from 'react'
 import { Container, Row, Button, Col, Form } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+
+interface SpellLevel {
+	level: number
+	points: number
+	spells: any[]
+}
+
+interface SpellList {
+  id: number
+  name: string
+  class: string
+  maxLevel: number
+  lookThePart: boolean
+  spells: SpellLevel[]
+}
 
 function SpellListDetails() {
   const navigate = useNavigate()
-  const mockPropsSpellList = {
-    id: 1,
-    name: 'Test Healer List',
-    class: 'Healer',
-    maxLevel: 6,
-    spells: []
-  }
+  const { id } = useParams<{ id: string }>() // Grab the id from the URL
+
+  const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
+  const spellList = allSpellLists.find((list: SpellList) => list.id === parseInt(id || '0'))
+
 
   return (
     <Container className="pt-3">
@@ -32,9 +45,18 @@ function SpellListDetails() {
         </Col>
       </Row>
       <Row>
-        <Form.Text>Class: {mockPropsSpellList.class}</Form.Text>
+        <Form.Text>Class: {spellList.class}</Form.Text>
         <Form.Text>Points Remaining...</Form.Text>
-        <Form.Text>L1: 5, L2: 5, L3: 5, L4: 5, L5: 5, L6: 6</Form.Text>
+        { /* Form Text is space between somehow? seems like browser is lagging. Look into this later */ }
+        <Row>
+          {spellList.spells.map((level: SpellLevel, index) => (
+            <Col key={index}>
+              <Form.Text>
+                L{level.level}: {level.points}
+              </Form.Text>
+            </Col>
+          ))}
+        </Row>
         <Form.Text>**** Spells ****</Form.Text>
         <Form.Text>Level 1</Form.Text>
         <Form.Text>Level 2</Form.Text>
