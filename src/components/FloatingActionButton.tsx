@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from 'react-bootstrap'
-import { LuCirclePlus } from "react-icons/lu";
-import { useNavigate } from 'react-router-dom';
+import { LuCirclePlus } from "react-icons/lu"
+import { useNavigate } from 'react-router-dom'
 
 function FloatingActionButton() {
   const navigate = useNavigate()
