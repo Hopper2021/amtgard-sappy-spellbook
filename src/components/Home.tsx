@@ -105,7 +105,7 @@ function App() {
                 onMouseLeave={handleLongPressEnd}
                 onTouchStart={() => handleLongPressStart(spellList)}
                 onTouchEnd={handleLongPressEnd}
-                onClick={() => navigate('/listDetails')}
+                onClick={() => navigate(`/listDetails/${spellList.id}`)}
               >
                 {spellList.name} ({spellList.class}, level {spellList.maxLevel})
               </Button>
