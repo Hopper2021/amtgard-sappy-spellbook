@@ -95,8 +95,9 @@ function App() {
       {console.log('allSpellLists', allSpellLists.length)}
 
       <Container fluid className="p-3">
-        <h6>Spell Books</h6>
+        {/* This looks better on desktop when its inside the below container instead */}
         <Container className="px-4 pt-1">
+          <Row className="pb-2 fw-semibold">Spell Books</Row>
           {allSpellLists.length === 0 ? (
             <Row className="d-flex justify-content-center">
               <h6 className="text-center">No Spell Books Found</h6>
