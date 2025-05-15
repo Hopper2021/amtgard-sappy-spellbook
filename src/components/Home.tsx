@@ -3,6 +3,7 @@ import FloatingActionButton from './FloatingActionButton.tsx'
 import { Container, Row, Button, Modal } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { IoIosWarning } from "react-icons/io"
+import { LuCirclePlus } from "react-icons/lu"
 
 function App() {
   const navigate = useNavigate()
@@ -91,10 +92,17 @@ function App() {
           </Modal.Footer>
       </Modal>
 
+      {console.log('allSpellLists', allSpellLists.length)}
+
       <Container fluid className="p-3">
         <h6>Spell Books</h6>
         <Container className="px-4 pt-1">
-          {allSpellLists.map((spellList) => (
+          {allSpellLists.length === 0 ? (
+            <Row className="d-flex justify-content-center">
+              <h6 className="text-center">No Spell Books Found</h6>
+              <h6 className="text-center">Click the <LuCirclePlus size={20} /> on the bottom right to create one</h6>
+            </Row>)
+            : (allSpellLists.map((spellList) => (
             <Row key={spellList.id} className="border-bottom mb-3">
               <Button
                 className="p-1 text-start w-100"
@@ -110,7 +118,7 @@ function App() {
                 {spellList.name} ({spellList.class}, level {spellList.maxLevel})
               </Button>
             </Row>
-          ))}
+          )))}
         </Container>
       </Container>
       <FloatingActionButton />
