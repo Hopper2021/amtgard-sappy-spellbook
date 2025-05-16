@@ -127,7 +127,7 @@ function CreateSpellList() {
 						}}
 						id="dropdown-basic"
 					>
-						Bard
+						{newSpellList.class}
 					</Dropdown.Toggle>
 
 					<Dropdown.Menu>
