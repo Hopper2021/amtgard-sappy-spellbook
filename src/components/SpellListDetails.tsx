@@ -142,7 +142,8 @@ function SpellListDetails() {
                       {showStrips && fetchSpellDetails('materials', spell.id) ? (
                         <span>( {fetchSpellDetails('materials', spell.id)} )</span>
                       ) : null}
-                    {/* Consider revisiting how this looks. Magic balls have the ball displayed twice in two places. Maybe remove Green Magic Ball from materials? */}
+                    {/* "Magic ball" is being displayed in two places, in materials and type. 
+                    Consider removing Magic Ball from one of these keys in appConstants ALL_SPELLS */}
                   </div>
                 </div>
               </Row>
