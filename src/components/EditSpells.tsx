@@ -1,7 +1,8 @@
 import React from 'react'
 import { Container, Row, Accordion, Button, CardHeader } from 'react-bootstrap'
-import { ALL_SPELLS, BARD_SPELLS } from '../appConstants'
+import { ALL_SPELLS, BARD_SPELLS, HEALER_SPELLS } from '../appConstants'
 import { useParams } from 'react-router-dom'
+import { Toast, ToastContainer } from 'react-bootstrap'
 
 interface Spell {
   id: number
@@ -24,18 +25,18 @@ interface SpellList {
 }
 
 function EditSpells() {
-  // TODO: Add Remove button and update state
-  // Spell list will change to only show the spells in the local storage list and clicking them will remove them instead
   const [addOrRemoveSpells, setAddOrRemoveSpells] = React.useState('Add')
-
-  // TODO: This should be taken from local storage
-  // On Create page, this object will be set
-  // On This edit page, this object should be updated every time a spell is added or removed
-  // This should minimize data loss
-  const { id } = useParams<{ id: string }>() // Grab the id from the URL
+  const [cannotAffordSpell, setCannotAffordSpell] = React.useState(false)
+  const [spellMaxReached, setSpellMaxReached] = React.useState(false)
+  const [showToast, setShowToast] = React.useState(false)
+  const { id } = useParams<{ id: string }>()
 
   const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
   const spellListToEdit = allSpellLists.find((list: SpellList) => list.id === parseInt(id || '0'))
+
+  const spellsByClass = 
+    spellListToEdit?.class === 'Bard' &&  BARD_SPELLS ||
+    spellListToEdit?.class === 'Sorcerer' && HEALER_SPELLS
 
   const [modifiedSpellList, setModifiedSpellList] = React.useState<SpellList>({
 		id: parseInt(id || '0'),
@@ -79,22 +80,134 @@ function EditSpells() {
     return ''
   }
 
-  const calculateAmountPurchased = (spellId: number): string => {
-    for (const level of modifiedSpellList.spells) {
-      const spell = level.spells.find((spell: Spell) => spell.id === spellId)
-      if (spell && addOrRemoveSpells === 'Add') {
-        return `x${spell.purchased + 1}`
-        // TO DO: Plan is to update the local storage every time a spell is added or removed
-        // Not sure if this can be done in local state. Might lose data if you navigate away
-      }
+  const addSpellToList = (spellId: number) => {
+    if (!Array.isArray(spellsByClass)) return
+    const spellLevel = spellsByClass.find(level => level.spells.some(spell => spell.id === spellId))
+    if (!spellLevel) return
+
+    const spellData = spellLevel.spells.find(spell => spell.id === spellId)
+    const spellCost = spellData?.cost ?? 0
+    const spellMax = spellData?.max ?? Infinity
+
+    const currentLevelObj = modifiedSpellList.spells.find(level => level.level === spellLevel.level)
+    if (!currentLevelObj || currentLevelObj.points < spellCost) {
+      setCannotAffordSpell(true)
+      setShowToast(true)
+      setSpellMaxReached(false)
+      return
+    } else {
+      setCannotAffordSpell(false)
     }
-    return ''
+
+    const spellExists = currentLevelObj.spells.find((spell: Spell) => spell.id === spellId)
+    if (spellExists && spellExists.purchased >= spellMax) {
+      setShowToast(true)
+      setSpellMaxReached(true)
+      return
+    } else {
+      setSpellMaxReached(false)
+    }
+
+    const newSpellList: SpellList = {
+      ...modifiedSpellList,
+      spells: modifiedSpellList.spells.map(level => {
+        if (level.level >= spellLevel.level) {
+          if (level.level === spellLevel.level) {
+            let updatedSpells
+            if (spellExists) {
+              updatedSpells = level.spells.map((spell: Spell) =>
+                spell.id === spellId
+                  ? { ...spell, purchased: spell.purchased + 1 }
+                  : spell
+              )
+            } else {
+              updatedSpells = [...level.spells, { id: spellId, purchased: 1 }]
+            }
+            return {
+              ...level,
+              points: level.points - spellCost,
+              spells: updatedSpells,
+            }
+          } else {
+            return {
+              ...level,
+              points: level.points - spellCost,
+            }
+          }
+        }
+        return level
+      }),
+    }
+
+    setModifiedSpellList(newSpellList)
+    updateLocalStorage(newSpellList)
   }
 
-  console.log('mockSpellList', modifiedSpellList)
+  const removeSpellFromList = (spellId: number) => {
+    if (!Array.isArray(spellsByClass)) return
+    const spellLevel = spellsByClass.find(level => level.spells.some(spell => spell.id === spellId))
+    if (!spellLevel) return
+
+    const spellData = spellLevel.spells.find(spell => spell.id === spellId)
+    const spellCost = spellData?.cost ?? 0
+
+    const newSpellList: SpellList = {
+      ...modifiedSpellList,
+      spells: modifiedSpellList.spells.map(level => {
+        if (level.level >= spellLevel.level) {
+          if (level.level === spellLevel.level) {
+            const spellExists = level.spells.find((spell: Spell) => spell.id === spellId)
+            if (spellExists) {
+              if (spellExists.purchased <= 1) {
+                return {
+                  ...level,
+                  points: level.points + spellCost,
+                  spells: level.spells.filter((spell: Spell) => spell.id !== spellId),
+                }
+              } else {
+                return {
+                  ...level,
+                  points: level.points + spellCost,
+                  spells: level.spells.map((spell: Spell) =>
+                    spell.id === spellId
+                      ? { ...spell, purchased: spell.purchased - 1 }
+                      : spell
+                  ),
+                }
+              }
+            }
+          } else {
+            return {
+              ...level,
+              points: level.points + spellCost,
+            }
+          }
+        }
+        return level
+      }),
+    }
+
+    setModifiedSpellList(newSpellList)
+    updateLocalStorage(newSpellList)
+  }
+
+  const updateLocalStorage = (updatedList: SpellList) => {
+    const updatedSpellLists = allSpellLists.map((list: SpellList) =>
+      list.id === updatedList.id ? updatedList : list
+    )
+    localStorage.setItem('allSpellLists', JSON.stringify(updatedSpellLists))
+  }
 
   return (
     <Container fluid className="p-3">
+      <ToastContainer position="bottom-center" className="p-3">
+        <Toast className="bg-info text-white" show={showToast} onClose={() => setShowToast(false)} autohide delay={3000}>
+          <Toast.Body>
+            {cannotAffordSpell && <span>You cannot afford this spell at this level.</span>}
+            {spellMaxReached && <span>Maximum spell purchase number reached.</span>}
+          </Toast.Body>
+        </Toast>
+      </ToastContainer>
       <CardHeader className="d-flex justify-content-between">
         <h6>Edit {modifiedSpellList.class} Spells</h6>
         <Button onClick={() => setAddOrRemoveSpells(addOrRemoveSpells === 'Add' ? 'Remove' : 'Add')} className="mb-2">
@@ -102,24 +215,41 @@ function EditSpells() {
         </Button>
       </CardHeader>
         <Container>
-          {BARD_SPELLS.map((level) => (
-            <Accordion defaultActiveKey="1" flush>
+          {Array.isArray(spellsByClass) && spellsByClass.slice(0, modifiedSpellList.spells.length).map((level, index) => (
+            <Accordion key={index} defaultActiveKey="1" flush>
               <Accordion.Item eventKey="0" className="border-bottom">
                 <Accordion.Header>
                   Level {level.level}  ({calculateLevelPointsAvailable(level.level)}) available: {calculateTrickleDownPointsAvailable(level.level)}
                 </Accordion.Header>
                 <Accordion.Body>
-                  {level.spells.map((spellsByLevel) => (
-                    <Row className="d-flex justify-content-between">
-                      <Button
-                        variant="unknown"
-                        className="text-start border-bottom"
-                        onClick={() => calculateAmountPurchased(spellsByLevel.id)}
-                      >
-                        {getSpellDetails(spellsByLevel.id)} {getAmountPurchased(spellsByLevel.id)} (cost: {spellsByLevel.cost})
-                      </Button>
-                    </Row>
-                  ))}
+                  {addOrRemoveSpells === 'Add' ? (
+                    level.spells.map((spellsByLevel) => (
+                      <Row className="d-flex justify-content-between" key={spellsByLevel.id}>
+                        <Button
+                          variant="unknown"
+                          className="text-start border-bottom"
+                          onClick={() => addSpellToList(spellsByLevel.id)}
+                        >
+                          {getSpellDetails(spellsByLevel.id)} {getAmountPurchased(spellsByLevel.id)} (cost: {spellsByLevel.cost})
+                        </Button>
+                      </Row>
+                    ))
+                  ) : (
+                    modifiedSpellList.spells
+                      .find(lvl => lvl.level === level.level)?.spells.map((spellsByLevel) => (
+                        <Row className="d-flex justify-content-between" key={spellsByLevel.id}>
+                          <Button
+                            variant="unknown"
+                            className="text-start border-bottom"
+                            onClick={() => removeSpellFromList(spellsByLevel.id)}
+                          >
+                            {getSpellDetails(spellsByLevel.id)} {getAmountPurchased(spellsByLevel.id)} (cost: {
+                              ALL_SPELLS.find(s => s.id === spellsByLevel.id)?.cost ?? ''
+                            })
+                          </Button>
+                        </Row>
+                      )) || null
+                  )}
                 </Accordion.Body>
               </Accordion.Item>
             </Accordion>
