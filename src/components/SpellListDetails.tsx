@@ -135,7 +135,7 @@ function SpellListDetails() {
                   {fetchSpellDetails('school', spell.id) && showTypeAndSchool && (
                     <span>( {fetchSpellDetails('school', spell.id)} )</span>
                   )}
-                  <div className="m-0">
+                  <div style={{ marginLeft: '15px' }}>
                     {showIncantation && <span style={{ fontStyle: 'italic' }}>{fetchSpellDetails('incantation', spell.id)}</span>}
                   </div>
                   <div className="m-0">
