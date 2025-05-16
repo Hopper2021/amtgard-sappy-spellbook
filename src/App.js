@@ -16,7 +16,7 @@ function App() {
           <Route path="/*" element={<Home />}/>
           <Route path="/listDetails/:id" element={<SpellListDetails />}/>
           <Route path="/createList" element={<CreateSpellList />}/>
-          <Route path="/editList" element={<EditSpells />}/>
+          <Route path="/editList/:id" element={<EditSpells />}/>
           <Route path="/modifyList/:id" element={<ModifySpellList />}/>
         </Routes>
     </>
