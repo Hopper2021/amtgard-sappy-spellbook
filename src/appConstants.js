@@ -1583,6 +1583,15 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     materials: 'string',
     incantation: 'string',
   },
+  {
+    id: 176,
+    name: 'Equipment: Weapon, Hinged',
+    type: 'Neutral',
+    school: 'Neutral',
+    range: 'string',
+    materials: 'string',
+    incantation: 'string',
+  },
 ]
 
 export const BARD_SPELLS = [
@@ -1660,3 +1669,87 @@ export const BARD_SPELLS = [
     ]
   },
 ]
+
+  export const HEALER_SPELLS = [
+    {
+      level: 1,
+      spells: [
+        { id: 13, cost: 1, max: null, frequency: '1/Life'},
+        { id: 26, cost: 1, max: null, frequency: '1/Life'},
+        { id: 51, cost: 2, max: 1, frequency: null},
+        { id: 52, cost: 3, max: 2, frequency: null},
+        { id: 56, cost: 2, max: 2, frequency: null},
+        { id: 74, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 75, cost: 1, max: 1, frequency: 'Unlimited'},
+        { id: 124, cost: 1, max: null, frequency: '2/Life Charge x3'},
+      ]
+    },
+    {
+      level: 2,
+      spells: [
+        { id: 2, cost: 1, max: null, frequency: '1/Life'},
+        { id: 48, cost: 1, max: 4, frequency: '2 Balls / Unlimited'},
+        { id: 176, cost: 3, max: 1, frequency: null},
+        { id: 72, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 79, cost: 1, max: null, frequency: '1/Life Charge x3'},
+        { id: 86, cost: 2, max: 2, frequency: '1/Life'},
+        { id: 130, cost: 1, max: null, frequency: '1/Life Charge x3'},
+        { id: 134, cost: 1, max: null, frequency: '1/Life'},
+        { id: 154, cost: 1, max: null, frequency: '1/Life Charge x3'},
+
+      ]
+    },
+    {
+      level: 3,
+      spells: [
+        { id: 3, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 12, cost: 1, max: null, frequency: '1/Life Charge x3'},
+        { id: 50, cost: 2, max: 1, frequency: null},
+        { id: 58, cost: 1, max: 2, frequency: '1/Life'},
+        { id: 69, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 82, cost: 1, max: 3, frequency: '1 Ball / Unlimited'},
+        { id: 98, cost: 1, max: null, frequency: '1/Life'},
+        { id: 120, cost: 1, max: null, frequency: '1/Life'},
+        { id: 127, cost: 1, max: null, frequency: '1/Refresh Charge x3'},
+      ]
+    },
+    {
+      level: 4,
+      spells: [
+        { id: 25, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 28, cost: 1, max: 1, frequency: '`/Refresh Charge x10'},
+        { id: 43, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 70, cost: 1, max: null, frequency: '1/Life'},
+        { id: 81, cost: 1, max: 2, frequency: '2/Refresh'},
+        { id: 119, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 159, cost: 1, max: 2, frequency: '1/Life'},
+        { id: 160, cost: 1, max: 2, frequency: '1/Life'},
+      ]
+    },
+    {
+      level: 5,
+      spells: [
+        { id: 1, cost: 1, max: 2, frequency: '1/Ball / Unlimited'},
+        { id: 6, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 23, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 47, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 72, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 151, cost: 1, max: 2, frequency: '1/Life'},
+        { id: 167, cost: 2, max: null, frequency: '1/Refresh'},
+      ]
+    },
+    {
+      level: 6,
+      spells: [
+        { id: 7, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 96, cost: 1, max: 1, frequency: '1/Refresh'},
+        { id: 104, cost: 1, max: 1, frequency: null},
+        { id: 105, cost: 1, max: null, frequency: '1/Life'},
+        { id: 108, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 114, cost: 1, max: 1, frequency: null},
+        { id: 118, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 148, cost: 1, max: 4, frequency: '1/Refresh'},
+        { id: 171, cost: 2, max: 1, frequency: null},
+      ]
+    },
+  ]
