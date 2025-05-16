@@ -7,7 +7,7 @@ function HeaderBar() {
     <>
       <Navbar bg="primary" variant="dark">
         <Container>
-          <Navbar.Brand href="/">Sappy SpellBook</Navbar.Brand>
+          <Navbar.Brand href="/">Swiftgard</Navbar.Brand>
           <Navbar.Collapse className="justify-content-end">
           <Dropdown drop="start">
             <Dropdown.Toggle bsPrefix="custom-dropdown-toggle">
@@ -24,5 +24,7 @@ function HeaderBar() {
     </>
   )
 }
+
+// points dropped to a lower level when refunded to the highest level, leaves teh current level without points
 
 export default HeaderBar
