@@ -1690,7 +1690,7 @@ export const BARD_SPELLS = [
         { id: 2, cost: 1, max: null, frequency: '1/Life'},
         { id: 48, cost: 1, max: 4, frequency: '2 Balls / Unlimited'},
         { id: 176, cost: 3, max: 1, frequency: null},
-        { id: 72, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 76, cost: 1, max: null, frequency: '1/Refresh'},
         { id: 79, cost: 1, max: null, frequency: '1/Life Charge x3'},
         { id: 86, cost: 2, max: 2, frequency: '1/Life'},
         { id: 130, cost: 1, max: null, frequency: '1/Life Charge x3'},
