@@ -7,6 +7,7 @@ import { Toast, ToastContainer } from 'react-bootstrap'
 interface Spell {
   id: number
   purchased: number
+  rolledDown?: { [level: number]: number}
 }
 
 interface SpellLevel {
@@ -90,13 +91,11 @@ function EditSpells() {
     const spellMax = spellData?.max ?? Infinity
 
     const currentLevelObj = modifiedSpellList.spells.find(level => level.level === spellLevel.level)
-    if (!currentLevelObj || currentLevelObj.points < spellCost) {
+    if (!currentLevelObj) {
       setCannotAffordSpell(true)
       setShowToast(true)
       setSpellMaxReached(false)
       return
-    } else {
-      setCannotAffordSpell(false)
     }
 
     const spellExists = currentLevelObj.spells.find((spell: Spell) => spell.id === spellId)
@@ -108,35 +107,56 @@ function EditSpells() {
       setSpellMaxReached(false)
     }
 
+    let remainingCost = spellCost
+    let rolledDown: { [level: number]: number } = {}
+    const updatedLevels = modifiedSpellList.spells.map(level => {
+      if (remainingCost > 0 && level.level === spellLevel.level && level.points > 0) {
+        const deduct = Math.min(level.points, remainingCost)
+        remainingCost -= deduct
+        if (deduct > 0) rolledDown[level.level] = (rolledDown[level.level] || 0) + deduct
+        return { ...level, points: level.points - deduct }
+      }
+      if (remainingCost > 0 && level.level > spellLevel.level && level.points > 0) {
+        const deduct = Math.min(level.points, remainingCost)
+        remainingCost -= deduct
+        if (deduct > 0) rolledDown[level.level] = (rolledDown[level.level] || 0) + deduct
+        return { ...level, points: level.points - deduct }
+      }
+      return level
+    })
+
+    if (remainingCost > 0) {
+      setCannotAffordSpell(true)
+      setShowToast(true)
+      setSpellMaxReached(false)
+      return
+    }
+
+    const newLevels = updatedLevels.map(level => {
+      if (level.level === spellLevel.level) {
+        let updatedSpells: Spell[]
+        const spellExists = level.spells.find((spell: Spell) => spell.id === spellId)
+        if (spellExists) {
+          const mergedRolledDown = { ...spellExists.rolledDown }
+          for (const key in rolledDown) {
+            mergedRolledDown[key] = (mergedRolledDown[key] || 0) + rolledDown[key]
+          }
+          updatedSpells = level.spells.map((spell: Spell) =>
+            spell.id === spellId
+              ? { ...spell, purchased: spell.purchased + 1, rolledDown: mergedRolledDown }
+              : spell
+          )
+        } else {
+          updatedSpells = [...level.spells, { id: spellId, purchased: 1, rolledDown }]
+        }
+        return { ...level, spells: updatedSpells }
+      }
+      return level
+    })
+
     const newSpellList: SpellList = {
       ...modifiedSpellList,
-      spells: modifiedSpellList.spells.map(level => {
-        if (level.level >= spellLevel.level) {
-          if (level.level === spellLevel.level) {
-            let updatedSpells
-            if (spellExists) {
-              updatedSpells = level.spells.map((spell: Spell) =>
-                spell.id === spellId
-                  ? { ...spell, purchased: spell.purchased + 1 }
-                  : spell
-              )
-            } else {
-              updatedSpells = [...level.spells, { id: spellId, purchased: 1 }]
-            }
-            return {
-              ...level,
-              points: level.points - spellCost,
-              spells: updatedSpells,
-            }
-          } else {
-            return {
-              ...level,
-              points: level.points - spellCost,
-            }
-          }
-        }
-        return level
-      }),
+      spells: newLevels,
     }
 
     setModifiedSpellList(newSpellList)
@@ -145,46 +165,88 @@ function EditSpells() {
 
   const removeSpellFromList = (spellId: number) => {
     if (!Array.isArray(spellsByClass)) return
-    const spellLevel = spellsByClass.find(level => level.spells.some(spell => spell.id === spellId))
-    if (!spellLevel) return
+    const spellByClassLevel = spellsByClass.find(level => level.spells.some(spell => spell.id === spellId))
+    if (!spellByClassLevel) return
 
-    const spellData = spellLevel.spells.find(spell => spell.id === spellId)
-    const spellCost = spellData?.cost ?? 0
+    const spellByClassLevelData = spellByClassLevel.spells.find(spell => spell.id === spellId)
+    const spellCost = spellByClassLevelData?.cost ?? 0
 
-    const newSpellList: SpellList = {
-      ...modifiedSpellList,
-      spells: modifiedSpellList.spells.map(level => {
-        if (level.level >= spellLevel.level) {
-          if (level.level === spellLevel.level) {
-            const spellExists = level.spells.find((spell: Spell) => spell.id === spellId)
-            if (spellExists) {
-              if (spellExists.purchased <= 1) {
-                return {
-                  ...level,
-                  points: level.points + spellCost,
-                  spells: level.spells.filter((spell: Spell) => spell.id !== spellId),
-                }
-              } else {
-                return {
-                  ...level,
-                  points: level.points + spellCost,
-                  spells: level.spells.map((spell: Spell) =>
-                    spell.id === spellId
-                      ? { ...spell, purchased: spell.purchased - 1 }
-                      : spell
-                  ),
-                }
-              }
-            }
-          } else {
+    const currentLevelObj = modifiedSpellList.spells.find(level => level.level === spellByClassLevel.level)
+    if (!currentLevelObj) return
+
+    const spellExists = currentLevelObj.spells.find((spell: Spell) => spell.id === spellId)
+
+    let rolledDownMap: { [level: number]: number } = {}
+    if (spellExists && spellExists.rolledDown) {
+      rolledDownMap = { ...spellExists.rolledDown }
+    }
+
+    let remainingRefund = spellCost
+    const maxLevel = modifiedSpellList.maxLevel
+    const lookThePart = modifiedSpellList.lookThePart
+
+    const eligibleLevels = [...modifiedSpellList.spells]
+      .filter(level => level.level >= spellByClassLevel.level)
+      .sort((a, b) => b.level - a.level)
+
+    const refundedLevels = eligibleLevels.map(level => {
+      let maxPoints = 5
+      if (lookThePart && level.level === maxLevel) {
+        maxPoints = 6
+      }
+      const pointsCanRefund = Math.max(0, maxPoints - level.points)
+
+      let refund = 0
+
+      if (rolledDownMap[level.level]) {
+        refund = Math.min(pointsCanRefund, remainingRefund, rolledDownMap[level.level])
+        rolledDownMap[level.level] -= refund
+      } else if (level.level === spellByClassLevel.level) {
+        refund = Math.min(pointsCanRefund, remainingRefund)
+      }
+
+      if (refund > 0) {
+        remainingRefund -= refund
+        return { ...level, points: level.points + refund }
+      }
+      return level
+    })
+
+    const newLevels = modifiedSpellList.spells.map(level => {
+      const refunded = refundedLevels.find(l => l.level === level.level)
+      return refunded ? refunded : level
+    })
+
+    const newSpellLevels = newLevels.map(level => {
+      if (level.level === spellByClassLevel.level) {
+        if (spellExists) {
+          if (spellExists.purchased <= 1) {
             return {
               ...level,
-              points: level.points + spellCost,
+              spells: level.spells.filter((spell: Spell) => spell.id !== spellId),
+            }
+          } else {
+            let newRolledDown = { ...rolledDownMap }
+            Object.keys(newRolledDown).forEach(key => {
+              if (newRolledDown[key] <= 0) delete newRolledDown[key]
+            })
+            return {
+              ...level,
+              spells: level.spells.map((spell: Spell) =>
+                spell.id === spellId
+                  ? { ...spell, purchased: spell.purchased - 1, rolledDown: newRolledDown }
+                  : spell
+              ),
             }
           }
         }
-        return level
-      }),
+      }
+      return level
+    })
+
+    const newSpellList: SpellList = {
+      ...modifiedSpellList,
+      spells: newSpellLevels,
     }
 
     setModifiedSpellList(newSpellList)
