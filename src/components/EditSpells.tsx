@@ -35,8 +35,8 @@ function EditSpells() {
   const spellListToEdit = allSpellLists.find((list: SpellList) => list.id === parseInt(id || '0'))
 
   const spellsByClass = 
-    spellListToEdit?.class === 'Bard' &&  BARD_SPELLS ||
-    spellListToEdit?.class === 'Sorcerer' && HEALER_SPELLS
+    (spellListToEdit?.class === 'Bard' &&  BARD_SPELLS) ||
+    (spellListToEdit?.class === 'Healer' && HEALER_SPELLS)
 
   const [modifiedSpellList, setModifiedSpellList] = React.useState<SpellList>({
 		id: parseInt(id || '0'),
