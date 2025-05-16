@@ -62,7 +62,7 @@ function App() {
           <Button variant="secondary" className="mb-4" onClick={() => navigate(`/modifyList/${selectedSpellList?.id}`)}>
             Modify
           </Button>
-          <Button variant="primary" onClick={handleToggleDeleteModal}>
+          <Button variant="danger" onClick={handleToggleDeleteModal}>
             Delete
           </Button>
         </Modal.Dialog>
