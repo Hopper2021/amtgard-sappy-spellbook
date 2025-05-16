@@ -113,9 +113,9 @@ function ModifySpellList() {
 
 					<Dropdown.Menu>
 						<Dropdown.Item onClick={() => setModifiedSpellList({ ...modifiedSpellList, class: 'Bard' })}>Bard</Dropdown.Item>
-						<Dropdown.Item onClick={() => setModifiedSpellList({ ...modifiedSpellList, class: 'Druid' })}>Druid</Dropdown.Item>
+						{/* <Dropdown.Item onClick={() => setModifiedSpellList({ ...modifiedSpellList, class: 'Druid' })}>Druid</Dropdown.Item> */}
 						<Dropdown.Item onClick={() => setModifiedSpellList({ ...modifiedSpellList, class: 'Healer' })}>Healer</Dropdown.Item>
-						<Dropdown.Item onClick={() => setModifiedSpellList({ ...modifiedSpellList, class: 'Wizard' })}>Wizard</Dropdown.Item>
+						{/* <Dropdown.Item onClick={() => setModifiedSpellList({ ...modifiedSpellList, class: 'Wizard' })}>Wizard</Dropdown.Item> */}
 					</Dropdown.Menu>
 				</Dropdown>
 			</InputGroup>
