@@ -132,9 +132,9 @@ function CreateSpellList() {
 
 					<Dropdown.Menu>
 						<Dropdown.Item onClick={() => setNewSpellList({ ...newSpellList, class: 'Bard' })}>Bard</Dropdown.Item>
-						<Dropdown.Item onClick={() => setNewSpellList({ ...newSpellList, class: 'Druid' })}>Druid</Dropdown.Item>
+						{/* <Dropdown.Item onClick={() => setNewSpellList({ ...newSpellList, class: 'Druid' })}>Druid</Dropdown.Item> */}
 						<Dropdown.Item onClick={() => setNewSpellList({ ...newSpellList, class: 'Healer' })}>Healer</Dropdown.Item>
-						<Dropdown.Item onClick={() => setNewSpellList({ ...newSpellList, class: 'Wizard' })}>Wizard</Dropdown.Item>
+						{/* <Dropdown.Item onClick={() => setNewSpellList({ ...newSpellList, class: 'Wizard' })}>Wizard</Dropdown.Item> */}
 					</Dropdown.Menu>
 				</Dropdown>
 			</InputGroup>
