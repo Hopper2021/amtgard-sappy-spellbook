@@ -7,6 +7,9 @@ export const ALL_SPELLS = [
     range: null,
     materials: 'Green Magic Ball',
     incantation: '"The strength of aether is mine to evoke" x3',
+    effect: 'Target is Stunned for 60 seconds. Ignores armor.',
+    limitation: null,
+    note: null
   },
   {
     id: 2,
@@ -16,6 +19,9 @@ export const ALL_SPELLS = [
     range: 'Other',
     materials: 'White strip',
     incantation: '"I enchant thee with this blessing" x3',
+    effect: 'Bearer becomes Resistant to one of the following Schools: Death, Flame, Subdual, Command, Sorcery. School is chosen at the time of casting. Does not count towards a players Enchantment limit.',
+    limitation: 'May not be worn with any other Enchantments from the Protection School unless the other Enchantment is (ex).',
+    note: null
   },
   {
     id: 3,
@@ -25,6 +31,9 @@ export const ALL_SPELLS = [
     range: 'Other',
     materials: 'White strip',
     incantation: '"I enchant thee with this protection" x3',
+    effect: 'Bearer becomes Immune to one of the following Schools: Death, Flame, Subdual, Command, Sorcery. School is chosen at the time of casting.',
+    limitation: null,
+    note: null
   },
   {
     id: 4,
@@ -33,7 +42,10 @@ export const ALL_SPELLS = [
     school: 'Spirit',
     range: 'Self',
     materials: null,
-    incantation: '"Adrenaline"',
+    incantation: null,
+    effect: 'Player heals a wound.',
+    limitation: 'Kill Trigger.',
+    note: null
   },
   {
     id: 5,
@@ -43,6 +55,9 @@ export const ALL_SPELLS = [
     range: 'Touch',
     materials: 'Yellow Strip',
     incantation: '"My power amplifies thy voice" x3',
+    effect: 'Bearer gains Extension 1/Refresh Charge x3 (m). Other sources of Extension may not be utilized while Amplification is worn.',
+    limitation: null,
+    note: 'Does not use up any purchased instances of Extension.'
   },
   {
     id: 6,
@@ -52,6 +67,9 @@ export const ALL_SPELLS = [
     range: null,
     materials: null,
     incantation: '"Ambulant"',
+    effect: 'An incantation may be said while moving.',
+    limitation: 'May not be used on the Charge Incantation.',
+    note: 'Using Ambulant allows both the target indication and Ambulant to be said while moving, but not other Meta-Magics.'
   },
   {
     id: 7,
@@ -63,6 +81,9 @@ export const ALL_SPELLS = [
     incantation: `"May this armor protect thee from all forms of harm. May the flames of the fire not burn thee.
 May the bolts from the heavens not strike thee.
 May the arrows of your enemies not pierce thee. May this armor protect thee from all forms of harm."`,
+    effect: 'The effects of a Magic Ball, projectile weapon, or melee weapon which just struck armor worn by the player are ignored, even if the object would not otherwise affect the armor. The armor loses one point of value in the location struck. This effect will not trigger if the armor has no points left in the location struck. Ancestral Armor is not expended after use and will continue to provide protection until removed with Dispel Magic or similar abilities.',
+    limitation: 'Phase Arrow and Phase Bolt interact with armor worn by the bearer as though Ancestral Armor was not present.',
+    note: 'Engulfing Effects that do not strike the bearers armor and abilities that ignore armor entirely do not trigger Ancestral Armor.'
   },
   {
     id: 8,
@@ -72,6 +93,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: "20'",
     materials: null,
     incantation: '"I command thee to be alone" x3',
+    effect: "Target must remain at least 20' away from all other living players unless forced there by another ability. Lasts 30 seconds.",
+    limitation: null,
+    note: null
   },
   {
     id: 9,
@@ -81,6 +105,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: null,
+    effect: 'Gain Mutation (T) and Adaptive Blessing (Self) 1/Life Charge x5 (ex) (Swift)',
+    limitation: 'Loses all instances of Evolution, Hold Person, Pinning Arrow, and Adaptive Protection',
+    note: null
   },
   {
     id: 10,
@@ -90,6 +117,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: null,
+    effect: 'May wield a Small shield. Gain Greater Mend 2/Refresh Charge x10 (ex). Mend becomes 2/Life Charge x3 (ex). Casting Mend on weapons or shields does not consume a use of Mend.',
+    limitation: 'Rather than the normal amount of Specialty Arrows for an Archer, gain: - Pinning Arrow 3 Arrows / Unlimited (ex) - Phase Arrow 1 Arrow / Unlimited (ex) - Suppression Arrow 1 Arrow/ Unlimited (ex) Look the Part becomes a fourth Pinning Arrow.',
+    note: 'Player must still have a use of Mend remaining to cast on weapons or shields.'
   },
   {
     id: 11,
@@ -99,15 +129,21 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: "50'",
     materials: null,
     incantation: '"Assassinate"',
+    effect: 'The target is Cursed.',
+    limitation: 'May only be used immediately upon killing an enemy.',
+    note: 'Assassinate targets the killed enemy and does not require verbal targeting.'
   },
   {
     id: 12,
     name: 'Astral Intervention',
-    type: null,
-    school: null,
-    range: null,
+    type: 'Verbal',
+    school: 'Command',
+    range: "20'",
     materials: null,
-    incantation: null,
+    incantation: '"I command thee to retreat into the aether" x3',
+    effect: 'Target player becomes Insubstantial for 30 seconds.',
+    limitation: null,
+    note: 'If cast on self, the caster may end this Insubstantial State at any time by using the exit incantation for Insubstantial.'
   },
   {
     id: 13,
@@ -117,6 +153,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: "20'",
     materials: null,
     incantation: '"The spirits banish thee from this place" x3',
+    effect: 'Target Insubstantial player must return to their base where their Insubstantial State immediately ends.',
+    limitation: null,
+    note: "The target's Insubstantial State is replaced with a new Insubstantial State from Banish. If the Insubstantial State is ended before reaching the base, the rest of the effect is ended as well. If Banish is cast on self, the caster may end this Insubstantial State at any time by using the exit incantation for Insubstantial."
   },
   {
     id: 14,
@@ -126,6 +165,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: 'White strip',
     incantation: '"I enchant thee with barkskin" x3',
+    effect: 'Bearer gains one point of Magic Armor.',
+    limitation: null,
+    note: null
   },
   {
     id: 15,
@@ -135,24 +177,33 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Touch',
     materials: null,
     incantation: '"Be a bastion of healing" x3',
+    effect: 'Bearer may cast Heal (m) by incanting “<Player> thou art made whole” and removing an enchantment strip. Enchantment is removed when the last strip is removed.',
+    limitation: null,
+    note: null
   },
   {
-    id: 16,
+    id: 17,
     name: 'Attuned',
     type: null,
     school: null,
     range: null,
     materials: 'Three yellow strips',
     incantation: null,
+    effect: "May wear an additional Enchantment. Attuned does not count towards the bearer's Enchantment limit.",
+    limitation: 'This ability may not be used in conjunction with any other similar ability.',
+    note: 'If Attuned is removed, the bearer chooses which (m) Enchantments to lose to meet their new Enchantment limit, if necessary.'
   },
   {
-    id: 17,
+    id: 18,
     name: 'Battlemage',
     type: 'Archetype',
     school: 'Neutral',
     range: null,
     materials: null,
     incantation: null,
+    effect: 'Use of Ambulant becomes unlimited.',
+    limitation: null,
+    note: null
   },
   {
     id: 18,
@@ -162,6 +213,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: 'Red strip',
     incantation: '"I enchant thee with the strength of the bear" x3',
+    effect: "May wear an additional Enchantment. Attuned does not count towards the bearer's Enchantment limit.",
+    limitation: 'This ability may not be used in conjunction with any other similar ability.',
+    note: 'If Attuned is removed, the bearer chooses which (m) Enchantments to lose to meet their new Enchantment limit, if necessary.'
   },
   {
     id: 19,
@@ -171,6 +225,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: null,
+    effect: 'All the casters Enchantments of level 4 and below are now range Self instead of their previous range. Does not apply to Golem.',
+    limitation: null,
+    note: null
   },
   {
     id: 20,
@@ -180,6 +237,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: "20'",
     materials: null,
     incantation: '"I command thee awed" x3',
+    effect: "Target may not attack or cast Magical abilities at the caster or their carried equipment. Target must remain at least 20' away from the caster unless forced there by another ability. Lasts 30 seconds.",
+    limitation: null,
+    note: "If the caster attacks the target, begins casting another Magical ability at the target or their carried equipment, or dies, this ability's effect is negated."
   },
   {
     id: 21,
@@ -189,6 +249,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: 'Red strip',
     incantation: null,
+    effect: "Bearer's wielded melee weapons are Armor Breaking.",
+    limitation: null,
+    note: null
   },
   {
     id: 22,
@@ -198,15 +261,21 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: null,
+    effect: 'Gain Momentum Unlimited (ex) (Ambulant).',
+    limitation: 'May not wear Armor, and loses all instances of Blood and Thunder.',
+    note: null
   },
     {
     id: 23,
     name: 'Blessed Aura',
     type: 'Enchantment',
-    school: 'Healing',
-    range: null,
-    materials: null,
-    incantation: null,
+    school: 'Protection',
+    range: 'Other',
+    materials: 'White strip',
+    incantation: '"I enchant thy person, arms, and armor" x3',
+    effect: 'Resistant to all effects from the next source which would inflict a wound, death, State, or negatively affect them or their carried equipment. Does not trigger against effects cast by the player.',
+    limitation: null,
+    note: null
   },
   {
     id: 24,
@@ -216,6 +285,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: "20'",
     materials: null,
     incantation: '"I call lightning\'s flame to strike thee" x3',
+    effect: 'Target player dies.',
+    limitation: null,
+    note: null
   },
   {
     id: 25,
@@ -225,6 +297,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: 'White strip',
     incantation: '"I enchant thee against all harm" x3',
+    effect: 'Resistant to all effects from the next source which would inflict a wound, death, State, or other negative effect. Does not trigger against effects cast by the player.',
+    limitation: null,
+    note: null
   },
   {
     id: 26,
@@ -234,6 +309,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: 'White strip',
     incantation: '"I enchant thee against wounds" x3',
+    effect: 'Resistant to wounds. Does not count towards a players Enchantment limit.',
+    limitation: 'May not be worn with any other Enchantments from the Protection School unless the other Enchantment is (ex).',
+    note: null
   },
   {
     id: 27,
@@ -243,6 +321,13 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: null,
     incantation: '"I vanish from sight"',
+    effect: `Player becomes Insubstantial. While Insubstantial in this
+      way, player can move as they wish as long as they remain
+      within 50' from their starting point.`,
+    limitation: "Caster may not end State within 10' of a living enemy.",
+    note: `If the Insubstantial State is ended, the rest of the effect
+      is ended as well. Caster may end this Insubstantial State
+      at any time by using the exit incantation for Insubstantial.`
   },
   {
     id: 28,
@@ -252,6 +337,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Touch',
     materials: null,
     incantation: '"Circle of Protection" x3',
+    effect: 'The caster and up to five willing players within Touch range of the caster immediately have all States and Ongoing Effects removed and then become Insubstantial. All targets: - May not move from their starting location, and are unaffected by abilities that allow or require the player to move. - May use abilities on players and their carried equipment who became Insubstantial due to the same casting of Circle of Protection as though they were not Insubstantial. - May end this Insubstantial State at any time by using the exit incantation for Insubstantial. The caster may end Circle of Protection for all targets at any time by using the exit incantation for Insubstantial. If the Insubstantial State is ended for a target, the Ongoing Effects of Circle of Protection no longer apply to that player.',
+    limitation: null,
+    note: 'If a player is prevented from becoming Insubstantial, they are unaffected by Circle of Protection.'
   },
   {
     id: 29,
@@ -261,6 +349,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: null,
+    effect: "Player becomes Insubstantial. While Insubstantial in this way, player can move as they wish as long as they remain within 50' from their starting point.",
+    limitation: "Caster may not end State within 10' of a living enemy.",
+    note: "If the Insubstantial State is ended, the rest of the effect is ended as well. Caster may end this Insubstantial State at any time by using the exit incantation for Insubstantial."
   },
   {
     id: 30,
@@ -270,6 +361,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: null,
     incantation: '"Blood and Thunder!"',
+    effect: 'Player gains Blessing Against Wounds (ex).',
+    limitation: 'Kill Trigger.',
+    note: 'Player must still wear a white strip to denote Blessing Against Wounds.'
   },
   {
     id: 31,
@@ -279,6 +373,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: "20'",
     materials: null,
     incantation: '"I command thee suppressed"',
+    effect: 'Target player is Suppressed for 10 seconds.',
+    limitation: null,
+    note: null
   },
   {
     id: 32,
@@ -288,6 +385,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Unlimited',
     materials: null,
     incantation: '"And stay down!"',
+    effect: 'Target is Cursed. Target is also Suppressed for 30 seconds.',
+    limitation: 'Wound Trigger.',
+    note: 'Brutal Strike targets the wounded or dead player and does not require verbal targeting.'
   },
   {
     id: 33,
@@ -297,6 +397,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: null,
     incantation: '"My power grants thee confidence"',
+    effect: 'Target player may instantly Charge a single ability.',
+    limitation: "May not be used within 20' of a living enemy.",
+    note: null
   },
   {
     id: 34,
@@ -306,6 +409,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: 'Red strip',
     incantation: '"May thou bear this plague to all" x3',
+    effect: 'Bearers wielded melee weapons are Wounds Kill. Bearer is Fragile.',
+    limitation: null,
+    note: null
   },
   {
     id: 35,
@@ -315,6 +421,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Touch',
     materials: 'Three red strips',
     incantation: '"The mists of corrosion surround thee" x3',
+    effect: 'Bearer may cast Destroy Armor (m) by incanting "<player> the mists of corrosion destroy your <armor location> armor" and removing an enchantment strip. Enchantment is removed when the last strip is removed.',
+    limitation: null,
+    note: null
   },
   {
     id: 36,
@@ -324,6 +433,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: null,
+    effect: 'Gain Void Touched (Self) 2/Refresh (m). All uses of Terror become 1/Life Charge x10 (m).',
+    limitation: 'May not wield Great Weapons or Javelins and loses all instances of Flame Blade.',
+    note: null
   },
   {
     id: 37,
@@ -333,15 +445,21 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: "Arrow with red head cover labeled 'Destruction'",
     incantation: '"Destruction Arrow"',
+    effect: 'This arrow is Armor Destroying and Shield Destroying. Armor Destroying and Shield Destroying are applied after the normal effect of being hit with an arrow is applied.',
+    limitation: null,
+    note: null
   },
   {
     id: 38,
     name: 'Dimensional Rift',
     type: 'Verbal',
-    school: 'Neutral',
-    range: 'Self',
+    school: 'Sorcery',
+    range: '20"',
     materials: null,
-    incantation: null,
+    incantation: '"The power of the aether consumes thee" x3',
+    effect: 'Target insubstantial plater dies.',
+    limitation: null,
+    note: null
   },
   {
     id: 39,
@@ -351,6 +469,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: "20'",
     materials: null,
     incantation: '"Death shall come for thee" x3',
+    effect: 'Target player dies.',
+    limitation: 'Target must be wounded when the caster begins the Incantation.',
+    note: 'Even if the target has no wounds at the end of the Incantation they will still die.'
   },
   {
     id: 40,
@@ -360,6 +481,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: null,
+    effect: 'Equipment costs are doubled. Each Verbal purchased gives double the uses. Example: 1/Life Charge x3 becomes 2/Life Charge x3, 2/Life becomes 4/Life, 1/Refresh becomes 2/Refresh.',
+    limitation: null,
+    note: null
   },
   {
     id: 41,
@@ -368,7 +492,10 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     school: 'Death',
     range: "20'",
     materials: null,
-    incantation: '"The power of the aether consumes thee" x3',
+    incantation: '"Death destroys thy [hit location] armor" x3',
+    effect: 'Remove all armor points from target hit location.',
+    limitation: null,
+    note: 'Destroy Armor targets the player but affects the Hit Location. Visibility can be drawn to any part of the player, not just the desired Hit Location. Immunities, resistances, and other protections will only protect the armor from Destroy Armor if they specifically extend to the armor, such as Blessed Aura. Abilities like Enlightened Soul, Protection from Magic, and Adaptive Protection (Death) do not extend to armor and thus cannot protect against Destroy Armor. Ancestral Armor does not protect against verbal magic and thus cannot protect against Destroy Armor.'
   },
   {
     id: 42,
@@ -378,6 +505,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: 'Five red strips',
     incantation: '"My discordant melodies shall stymie my foes" x3',
+    effect: 'Bearer may cast Break Concentration (m) by incanting "<Player> thou art suppressed" and removing an enchantment strip. Enchantment is removed when the last strip is removed.',
+    limitation: null,
+    note: null
   },
   {
     id: 43,
@@ -387,6 +517,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: "20'",
     materials: null,
     incantation: '"By my power I dispel that magic" x3',
+    effect: 'All Enchantments on target are removed.',
+    limitation: null,
+    note: 'Will always remove Enchantments if successfully cast on a valid target, regardless of the player\'s Traits, States, Immunities, Ongoing Effects, or Enchantments (except Sleight of Mind).'
   },
   {
     id: 44,
@@ -396,6 +529,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: "20'",
     materials: null,
     incantation: '"Death comes for thee from below" x3',
+    effect: 'Target Stopped player dies.',
+    limitation: null,
+    note: null
   },
   {
     id: 45,
@@ -405,6 +541,13 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: null,
     incantation: '"I am filled with the power of magic"',
+    effect: `Caster may use Magic Balls they are currently carrying
+      by stating the name of the Magic Ball immediately prior to
+      throwing the ball in place of the incantation.`,
+    limitation: `This magic ends if the caster picks up any additional
+      Magic Balls or begins casting any new Magical abilities.`,
+    note: `The effect is not an incantation, and so is not stopped
+      by being Suppressed, and may be used while moving, etc.`
   },
   {
     id: 46,
@@ -414,6 +557,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: null,
     incantation: '"I empower thee"',
+    effect: 'Target player regains one use of any per-life ability they have expended.',
+    limitation: null,
+    note: null
   },
   {
     id: 47,
@@ -423,6 +569,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: 'White strip',
     incantation: '"A distant magic has no hold upon thy now enlightened soul" x3',
+    effect: 'Player is unaffected by Verbal Magical abilities used at a Range greater than Touch.',
+    limitation: 'Affects beneficial as well as harmful Magical abilities.',
+    note: 'Does not affect (ex) abilities, abilities with a Range of Touch, nor abilities whose Range is greater than Touch but are used at a Range of Touch anyway.'
   },
   {
     id: 48,
@@ -432,42 +581,57 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: 'Brown Magic Ball',
     incantation: '"The strength of earth is mine to evoke" x3',
+    effect: 'Target is Stopped for 60 seconds. Engulfing.',
+    limitation: null,
+    note: null
   },
   {
     id: 49,
     name: 'Equipment: Armor, 1 Point',
     type: 'Neutral',
-    school: 'Neutral',
+    school: null,
     range: null,
     materials: null,
     incantation: null,
+    effect: 'Your class maximum armor limit increases one additional point.',
+    limitation: null,
+    note: null
   },
   {
     id: 50,
     name: 'Equipment: Shield, Medium',
     type: 'Neutral',
-    school: 'Neutral',
+    school: null,
     range: null,
     materials: null,
     incantation: null,
+    effect: 'May wield up to a Medium shield.',
+    limitation: null,
+    note: null
   },
   {
     id: 51,
     name: 'Equipment: Shield, Small',
     type: 'Neutral',
-    school: 'Neutral',
+    school: null,
     range: null,
     materials: null,
     incantation: null,
+    effect: 'May wield a Small shield.',
+    limitation: null,
+    note: null
   },
   {
     id: 52,
     name: 'Equipment: Weapon, Short',
     type: 'Neutral',
-    school: 'Neutral',
+    school: null,
     range: null,
     materials: null,
     incantation: null,
+    effect: 'May wield one Short weapon at a time for each instance purchased (but may carry extras).',
+    limitation: null,
+    note: null
   },
   {
     id: 53,
@@ -477,6 +641,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: 'Yellow strip',
     incantation: '"I enchant thee with essence graft" x3',
+    effect: 'Bearer may wear up to three additional Enchantments. Essence Graft does not count towards the bearer\'s Enchantment limit.',
+    limitation: 'Bearer may only wear (m) Enchantments from the caster of Essence Graft. This ability may not be used in conjunction with any other similar abilities.',
+    note: 'If Essence Graft is removed, the bearer chooses which (m) Enchantments to lose to meet their new Enchantment limit, if necessary.'
   },
   {
     id: 54,
@@ -486,6 +653,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: null,
+    effect: "May not purchase Verbals with a range of 20' or 50'. Elemental Barrage becomes Charge x10.",
+    limitation: null,
+    note: 'Elemental Barrage must still be purchased.'
   },
   {
     id: 55,
@@ -495,6 +665,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: null,
     incantation: null,
+    effect: "May wear an additional Enchantment. Evolution does not count towards the bearer's Enchantment limit.",
+    limitation: null,
+    note: 'This ability does work in conjunction with Attuned, Essence Graft, or Phoenix Tears so long as the other limitations of those Enchantments are followed.'
   },
   {
     id: 56,
@@ -504,6 +677,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: null,
+    effect: 'A single per-life Verbal purchased becomes Charge x5 in addition to the normal frequency OR a single per-refresh Verbal purchased becomes Charge x10 in addition to the normal frequency. This Verbal must be determined before the game begins and cannot be changed.',
+    limitation: 'Verbal must be 4th level or lower.',
+    note: null
   },
   {
     id: 57,
@@ -513,6 +689,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: 'White strip',
     incantation: '"May the blessing of my god protect thee" x3',
+    effect: 'The target player gains either Immune to Command or Immune to Death.',
+    limitation: 'Type of ability must be chosen at the time of casting and may not be changed. The caster may only have one instance of Extend Immunities at a time.',
+    note: null
   },
   {
     id: 58,
@@ -522,6 +701,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: '"Extension"',
+    effect: "Verbal becomes 50'. Only works on Verbals with a range of 20'.",
+    limitation: null,
+    note: null
   },
   {
     id: 59,
@@ -531,6 +713,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: "20'",
     materials: null,
     incantation: '"I call upon death to smite thee" x3',
+    effect: 'Target player dies.',
+    limitation: null,
+    note: null
   },
   {
     id: 60,
@@ -540,6 +725,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: 'Red Magic Ball',
     incantation: '"The flame of fire is mine to evoke" x3',
+    effect: 'Fireball will have one of the following effects on the object first struck: 1. A weapon hit is destroyed 2. A Shield hit is subject to Shield Destroying 3. Armor hit with Armor Points remaining is subject to Armor Destroying. 4. A player hit dies.',
+    limitation: null,
+    note: null
   },
   {
     id: 61,
@@ -549,6 +737,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: 'Blue Magic Ball',
     incantation: '"Forcebolt" x3',
+    effect: 'Force Bolt will have one of the following effects on the object first struck: 1. A weapon hit is destroyed 2. Armor hit with Armor Points remaining is subject to Armor Breaking. 3. A player hit receives a wound to that hit location.',
+    limitation: null,
+    note: null
   },
   {
     id: 62,
@@ -558,6 +749,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: 'White strip',
     incantation: '"I grant thee a gift of the air" x3',
+    effect: 'The effects of any weapon or ammunition which just struck the bearer are ignored, instead the bearer declares "Gift of Air" and becomes Insubstantial. If the bearer is wearing armor it is affected as normal in addition to triggering Gift of Air. Bearer may choose to return directly to their base immediately after Gift of Air activates. Melee weapons with the Siege, Armor Breaking, Armor Destroying, Shield Crushing, or Shield Destroying Special Effects will affect the bearer as normal and do not trigger Gift of Air.',
+    limitation: 'Bearer may not wield weapons or Shields.',
+    note: 'If the Insubstantial State is ended, the player is not required to continue returning to base. Bearer may end this Insubstantial State at any time by using the exit incantation for Insubstantial.'
   },
   {
     id: 63,
@@ -567,6 +761,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: 'White strip',
     incantation: '"I grant thee a gift of the earth" x3',
+    effect: 'Bearer gains one point of Magic Armor and is affected as per Harden.',
+    limitation: null,
+    note: null
   },
   {
     id: 64,
@@ -576,6 +773,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: null,
     incantation: '"I grant thee a gift of the fire" x3',
+    effect: 'Bearer gains Heat Weapon 1/Refresh Charge x3 (m) and is Immune to Flame.',
+    limitation: null,
+    note: null
   },
   {
     id: 65,
@@ -585,6 +785,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: 'Red strip and white strip',
     incantation: '"The element of fire shall infuse your weapons" x3',
+    effect: "Bearer's wielded melee weapons are Armor Breaking and Shield Crushing. Bearer and their wielded weapons are Immune to Flame.",
+    limitation: null,
+    note: null
   },
   {
     id: 66,
@@ -594,6 +797,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: null,
     incantation: '"I shall not be harmed"',
+    effect: 'Player is Frozen for 10 seconds.',
+    limitation: null,
+    note: null
   },
   {
     id: 67,
@@ -603,6 +809,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: 'White strip and yellow strip',
     incantation: '"I grant thee a gift of the water" x3',
+    effect: 'Bearer gains one point of Magic Armor and Heal (Self) Unlimited (m).',
+    limitation: null,
+    note: null
   },
   {
     id: 68,
@@ -612,6 +821,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: 'White strip and yellow strip',
     incantation: '"From earth and clay I form thee" x3',
+    effect: 'Bearer is Immune to Death. Bearer is Cursed. Bearer can remove a wound via Mend. Bearer may use the caster as an alternate respawn point while the caster is alive. Bearer may treat the caster as a base for the purposes of the effects which require the bearer to go to their base. Non-magical armor worn affected as per Imbue Armor. All Enchantments worn by the Bearer, including Golem, are Persistent while Golem is worn.',
+    limitation: 'A caster may only have a single Golem Enchantment at a time.',
+    note: 'Greater Mend and Word of Mending will not remove a wound.'
   },
   {
     id: 69,
@@ -621,6 +833,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: 'White strip',
     incantation: '"I enchant thee with Greater Harden" x3',
+    effect: 'Shields and weapons wielded by the player are affected as per Harden.',
+    limitation: null,
+    note: null
   },
   {
     id: 70,
@@ -630,6 +845,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Touch',
     materials: null,
     incantation: '"By the grace of the divine thou art healed" x5',
+    effect: 'All wounds are healed. Ignores the Cursed State.',
+    limitation: null,
+    note: null
   },
   {
     id: 71,
@@ -639,6 +857,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Touch',
     materials: null,
     incantation: '"Return this <object name> to its former glory" x5',
+    effect: null,
+    limitation: null,
+    note: null
   },
   {
     id: 72,
@@ -648,6 +869,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: null,
     incantation: '"By the grace of the divine thou art resurrected" x5',
+    effect: "Target dead player who has not moved more than 5' from where they died is returned to life. Any wounds on the player are healed. Works regardless of any States on the target, and removes Cursed if present.",
+    limitation: null,
+    note: 'Enchantments on the player are retained.'
   },
   {
     id: 73,
@@ -657,6 +881,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: null,
+    effect: 'Gain Imbue Shield (Touch) 1/Life (m) and Martyr (Other) 2/Life Charge x3 (ex).',
+    limitation: 'Loses all instances of Protection from Magic and Extend Immunities. May only have one instance of Imbue Shield active at a time.',
+    note: null
   },
   {
     id: 74,
@@ -666,6 +893,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: 'White strip',
     incantation: '"I enchant thee with Harden" x3',
+    effect: "Bearer's wielded weapons or shield may only be destroyed or damaged by Magic Balls/Verbals which destroy objects e.g. Fireball or Pyrotechnics.",
+    limitation: 'Will only affect either the weapons or the shield of the bearer, not both.',
+    note: null
   },
   {
     id: 75,
@@ -675,6 +905,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Touch',
     materials: null,
     incantation: '"The white light of healing hath healed thee." x5',
+    effect: 'Target player heals a wound. Will restore all armor points in one location or repair a damaged or broken item.',
+    limitation: null,
+    note: null
   },
   {
     id: 76,
@@ -684,6 +917,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: "20'",
     materials: null,
     incantation: '"From all thine afflictions thou art released" x2',
+    effect: 'All Ongoing Effects and States are removed from the target. The caster may choose to leave some States or Effects in place. Greater Release may target Dead players.',
+    limitation: null,
+    note: 'When used to end a State or Ongoing Effect imposed by an ability with multiple effects, all other States and Ongoing Effects from the same source are also ended.'
   },
   {
     id: 77,
@@ -693,6 +929,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: 'Yellow strip',
     incantation: '"Let all those who oppose the hive feel the wrath of the swarm" x3',
+    effect: 'Bearer is Stopped. Any player on the bearer\'s team may use the bearer as their respawn point as per the normal game rules. Players respawning at the caster do so by announcing "My life for the swarm." Players on the bearer\'s team may treat the bearer as a base for the purposes of the effects which require the teammate to go to their base.',
+    limitation: 'Players cannot respawn at the bearer if there are living enemy players or a game objective within 20\' of the bearer.',
+    note: null
   },
   {
     id: 78,
@@ -702,6 +941,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: "20'",
     materials: null,
     incantation: '"I call upon flame to heat that [type of weapon]" x3',
+    effect: 'Target weapon may not be wielded for 30 seconds. Players who are Immune to Flame may continue to wield the weapon.',
+    limitation: null,
+    note: 'The equipment, not the person, is the target of Heat Weapon. The equipment is the only thing required to be within range and visible for this ability to affect it.'
   },
   {
     id: 79,
@@ -711,6 +953,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: "20'",
     materials: null,
     incantation: '"I command thee to stop" x3',
+    effect: 'Target player becomes Stopped for 30 seconds.',
+    limitation: null,
+    note: null
   },
   {
     id: 80,
@@ -720,6 +965,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: null,
+    effect: 'May wield Great weapons and Javelins. Imbue Weapon: Pick one: -Hold Person becomes 1/Life Charge x3 (m). -Pinning Arrow becomes 2 Arrows / Unlimited (ex)',
+    limitation: 'May not wield shields. Loses all instances of Release and Evolution.',
+    note: 'You only gain the benefit of an option if you already have that ability.'
   },
   {
     id: 81,
@@ -729,6 +977,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: 'White strip',
     incantation: '"This Shield shall neither bend nor break" x3',
+    effect: 'Shield wielded by the player cannot be destroyed nor damaged. Engulfing effects hitting the wielded shield are ignored.',
+    limitation: null,
+    note: null
   },
   {
     id: 82,
@@ -738,6 +989,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: 'White Magic Ball',
     incantation: '"The strength of ice is mine to evoke" x3',
+    effect: 'Target player becomes Frozen for 60 seconds. Engulfing.',
+    limitation: null,
+    note: null
   },
   {
     id: 83,
@@ -747,6 +1001,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: "20'",
     materials: null,
     incantation: '"My power makes thee frozen" x3',
+    effect: 'Target player becomes Frozen for 30 seconds.',
+    limitation: null,
+    note: null
   },
   {
     id: 84,
@@ -756,6 +1013,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: 'White strip',
     incantation: '"I enchant thee with Imbued Armor" x3',
+    effect: 'Armor worn by the bearer gains 1 Armor Point to its current and maximum rating in each location, up to the bearer\'s class maximum.',
+    limitation: 'Does not apply to Magic Armor. A player may only benefit from one instance of Imbue Armor.',
+    note: 'When this enchantment is removed, the bearer loses 1 current and maximum Armor Point in each location.'
   },
   {
     id: 85,
@@ -765,6 +1025,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: null,
+    effect: 'Gain Fireball 2 Balls / Unlimited (m). Flame Blade becomes (Self) 2/Refresh Charge x5.',
+    limitation: 'May not wield shields. Lose all instances of Steal Life Essence.',
+    note: null
   },
   {
     id: 86,
@@ -774,6 +1037,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: '"Innate"',
+    effect: 'May be used to instantly Charge a single ability by stating its name.',
+    limitation: null,
+    note: null
   },
   {
     id: 87,
@@ -783,6 +1049,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: null,
+    effect: 'Gain Sacred Blades (Self) 1/Life (ex)',
+    limitation: 'Player loses all instances of Greater Resurrect and Awe.',
+    note: null
   },
   {
     id: 88,
@@ -792,6 +1061,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: "20'",
     materials: null,
     incantation: '"I command thy attention" x3',
+    effect: 'Target is unable to attack or cast Magical abilities at anyone other than the caster or their carried equipment for 30 seconds, or until either party dies. If the target of Insult is attacked or has Magical abilities cast on them or their carried equipment by someone other than the caster, the target of Insult becomes able to choose to attack the offending party as well.',
+    limitation: null,
+    note: 'The target may still charge and throw Magic Balls at the caster.'
   },
   {
     id: 89,
@@ -801,6 +1073,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: 'White strip',
     incantation: '"I enchant thee with Ironskin" x3',
+    effect: 'Bearer is Immune to Flame and gains two points Magic Armor affected as per Ancestral Armor.',
+    limitation: null,
+    note: null
   },
   {
     id: 90,
@@ -810,6 +1085,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: null,
+    effect: 'Replace Harden with Greater Harden (Self) (ex) at the same frequency. Gain Phoenix Tears (Self) 3/Refresh (ex) (Swift) and Imbue Armor (T).',
+    limitation: 'Loses all instances of Ancestral Armor and True Grit.',
+    note: null
   },
   {
     id: 91,
@@ -819,6 +1097,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: null,
+    effect: 'Each Extension purchased gives double the uses. Example: 1/Life becomes 2/Life. Swift may not be purchased or used.',
+    limitation: null,
+    note: null
   },
   {
     id: 92,
@@ -828,6 +1109,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: 'Yellow Magic Ball',
     incantation: '"The flame of storms is mine to evoke" x3',
+    effect: 'A player struck is subject to an Engulfing Stopped effect for 60 seconds. In addition Lightning Bolt will have one of the following effects on the object first struck: 1. A weapon hit is destroyed 2. Armor hit with Armor Points remaining is subject to Armor Breaking. 3. A player hit receives a wound in that hit location.',
+    limitation: null,
+    note: null
   },
   {
     id: 93,
@@ -837,6 +1121,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: "20'",
     materials: null,
     incantation: '"I command thee to be lost" x3',
+    effect: 'Player becomes Insubstantial and must move directly to their base. Player must end their Insubstantial State as per normal once they reach their base.',
+    limitation: null,
+    note: 'If the Insubstantial State is ended before reaching the base, the rest of the effect is ended as well. If Lost is cast on self, the caster may end this Insubstantial State at any time by using the exit incantation for Insubstantial.'
   },
   {
     id: 94,
@@ -845,7 +1132,10 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     school: 'Death',
     range: 'Other',
     materials: 'White strip and red strip',
-    incantation: '"I enchant thee with Lycanthropy" x3',
+    incantation: '"I enchant thee with Lycanthopy" x3',
+    effect: "Bearer gains two points of magic armor. Bearer's wielded melee weapons are Shield Crushing. Bearer is Immune to Command.",
+    limitation: null,
+    note: null
   },
   {
     id: 95,
@@ -855,6 +1145,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: null,
     incantation: '"Thy burdens are mine to bear."',
+    effect: 'A single State is removed from target willing player. The caster gains the removed State with a new duration of 10 seconds.',
+    limitation: 'Cannot be cast while Cursed. Caster may not remove themselves from Insubstantial states gained this way.',
+    note: null
   },
   {
     id: 96,
@@ -864,6 +1157,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: 'Five yellow strips',
     incantation: '"Let the powers of healing flow through me" x3',
+    effect: 'Caster may Heal (m) a player at Touch by stating "I grant thee healing" and removing an enchantment strip. Enchantment is removed when the last strip is removed.',
+    limitation: null,
+    note: 'The effect is not an incantation, and so is not stopped by being Suppressed, and may be used while moving, etc.'
   },
   {
     id: 97,
@@ -873,6 +1169,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: null,
+    effect: 'Gain Blessing Against Wounds (Touch) 1/Life (ex), Sever Spirit 1/Life Charge x3 (ex), and Swift 2/Life (ex). Abilities in the Spirit school become Charge x3.',
+    limitation: 'May not wear Armor and may not wield Great weapons.',
+    note: null
   },
   {
     id: 98,
@@ -882,6 +1181,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Touch',
     materials: null,
     incantation: '"I make this item whole again" x5',
+    effect: 'Destroyed or damaged item is repaired, or one point of armor in one location is repaired.',
+    limitation: null,
+    note: null
   },
   {
     id: 99,
@@ -891,6 +1193,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: null,
     incantation: null,
+    effect: 'Player may block arrows, projectile weapons, and Magic Balls with their hands and wielded melee or thrown weapons. Any arrow, projectile weapon or magic ball blocked is nullified.',
+    limitation: null,
+    note: null
   },
   {
     id: 100,
@@ -900,8 +1205,11 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: null,
     incantation: '"Momentum"',
+    effect: 'May be used to instantly Charge a single ability by stating its name.',
+    limitation: 'Kill trigger.',
+    note: null
   },
-    {
+  {
     id: 101,
     name: 'Mutation',
     type: 'Enchantment',
@@ -909,6 +1217,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: null,
     incantation: null,
+    effect: 'Enchantments worn by the player are Persistent.',
+    limitation: null,
+    note: null
   },
   {
     id: 102,
@@ -918,6 +1229,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: null,
+    effect: 'Gain Force Bolt 4 Balls / Unlimited (m). Gain Suppression Bolt 2 Balls / Unlimited (m).',
+    limitation: 'May not wield Great weapons nor Heavy Thrown.',
+    note: null
   },
   {
     id: 103,
@@ -927,6 +1241,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: 'Three red strips',
     incantation: '"I shall restore the balance" x3',
+    effect: 'Bearer may cast Dispel Magic (m) by incanting "<player> thou art dispelled" and removing an enchantment strip. Enchantment is removed when the last strip is removed.',
+    limitation: null,
+    note: null
   },
   {
     id: 104,
@@ -936,6 +1253,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: null,
+    effect: 'All abilities purchased in the Death School become Charge x3. You may have a combined total of five Undead Minion Enchantments.',
+    limitation: 'You may not purchase any abilities from the Protection School.',
+    note: null
   },
   {
     id: 105,
@@ -945,6 +1265,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: '"Persistent"',
+    effect: 'Enchantment returns with the user after respawning until it has been otherwise removed.',
+    limitation: null,
+    note: 'Persistent is a Meta-Magic; it must be used before another incantation, and affects the next ability cast by that same caster. Persistent does not retroactively make an enchantment already on a player Persistent. Persistent Enchantments with limited uses (Mass Healing, Corrosive Mist, etc.) will retain the number of uses they had remaining. Persistent Magic Armor behaves like normal armor: it will be repaired upon respawning or retain any prior damage if the bearer is returned to life by some other method, such as Resurrect.'
   },
   {
     id: 106,
@@ -954,6 +1277,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: "Arrow with gray cover labeled 'Phase'",
     incantation: '"Phase Arrow"',
+    effect: "This arrow does not interact with other ongoing abilities nor Traits. Example: This arrow is not stopped by Stoneskin, Protection from Projectiles, and does not trigger the effects of Gift of Air, Troll Blood, Missile Block, or similar abilities.",
+    limitation: "This arrow does not supercede the Frozen, Insubstantial, or Invulnerable States.",
+    note: null
   },
   {
     id: 107,
@@ -963,6 +1289,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: 'Gray Magic Ball',
     incantation: '"The power of sorcery is mine to evoke" x3',
+    effect: "This Magic Ball does not interact with other ongoing abilities nor Traits. Example: This Magic Ball is not stopped by Stoneskin, Protection from Projectiles, and does not trigger the effects of Gift of Air, Troll Blood, Missile Block, or similar abilities. Will have one of the following effects: 1. A weapon hit is destroyed 2. Armor hit with Armor Points remaining is subject to Armor Breaking. 3. A player hit receives a wound in that hit location.",
+    limitation: "Does not supercede the Frozen, Insubstantial, or Invulnerable States.",
+    note: null
   },
   {
     id: 108,
@@ -972,6 +1301,15 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: 'Two white strips',
     incantation: '"May the tears of the phoenix wash over thee" x3',
+    effect: `Enchanted player does not die as normal. When the player would otherwise die they instead remove a strip and become Frozen for 30 seconds. When the Frozen State is ended, the bearer is affected as follows:
+1. All wounds are removed.
+2. All States that would be removed by death or Respawning are removed.
+3. All Ongoing Effects with a timer expire.
+4. All of their carried equipment is fully repaired.
+5. All non-persistent enchantments, other than Phoenix Tears, are removed.
+Additionally Phoenix Tears allows you to wear an extra Enchantment from the Protection School. This extra enchantment is considered Persistent as long as Phoenix Tears is present. The additional Enchantment is not removed once Phoenix Tears is removed.`,
+    limitation: 'Phoenix Tears is removed when the last strip is removed. If Phoenix Tears is removed, the bearer chooses which (m) Enchantments to lose to meet their new Enchantment limit, if necessary.',
+    note: null
   },
   {
     id: 109,
@@ -981,6 +1319,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: "Arrow with yellow head cover labeled 'Pinning'",
     incantation: '"Pinning Arrow"',
+    effect: 'A player struck by this arrow is Stopped for 30 seconds. Engulfing.',
+    limitation: null,
+    note: null
   },
   {
     id: 110,
@@ -990,6 +1331,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: "20'",
     materials: null,
     incantation: '"My power closes the aether to you" x3',
+    effect: 'Target player has their Insubstantial State removed and may not become Insubstantial for 30 seconds. May be cast on players who are not currently Insubstantial.',
+    limitation: null,
+    note: 'Planar Grounding causes Enchantments that automatically render their bearer Insubstantial, such as Gift of Air, to fail and be removed if they activate while Planar Grounding is in effect.'
   },
   {
     id: 111,
@@ -999,6 +1343,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: 'Red strip',
     incantation: '"I coat these weapons with a deadly poison" x2',
+    effect: 'The next wound dealt by the bearer with a wielded melee weapon is Wounds Kill.',
+    limitation: null,
+    note: 'If the target does not actually receive a wound, e.g. by a Resistance, Poison is not expended.'
   },
   {
     id: 112,
@@ -1008,6 +1355,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: "Arrow with green head cover labeled 'Poison'",
     incantation: '"Poison Arrow"',
+    effect: 'This arrow is Wounds Kill.',
+    limitation: null,
+    note: null
   },
   {
     id: 113,
@@ -1017,6 +1367,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: 'Red strip',
     incantation: '"Thou shalt secrete poison from thy venemous glands" x3',
+    effect: 'Bearer gains Poison (Self) 1/Refresh Charge x3 (ex).',
+    limitation: null,
+    note: null
   },
   {
     id: 114,
@@ -1026,6 +1379,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: null,
+    effect: 'Meta-Magic may only be used on Spirit abilities. AllMeta-Magics purchased become 1/Life Charge x3. Heal costs zero points.',
+    limitation: null,
+    note: null
   },
   {
     id: 115,
@@ -1035,6 +1391,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: "50'",
     materials: null,
     incantation: '"I call upon the element of flame to destroy thy belongings" x3',
+    effect: 'All shields and weapons carried by the target player are destroyed.',
+    limitation: 'Only affects shields and weapons carried when the Verbal is completed.',
+    note: 'Pyrotechnics targets the player but affects their equipment. Immunities, resistances, and other protections will only protect the equipment from Pyrotechnics if they specifically extend to the equipment, such as Blessed Aura or Flame Blade. Abilities like Enlightened Soul, Protection from Magic, and Adaptive Protection (Flame) do not extend to equipment and thus cannot protect from Pyrotechnics.'
   },
   {
     id: 116,
@@ -1044,6 +1403,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: null,
     incantation: '"I am filled with rage!"',
+    effect: "Caster is unaffected by Verbal abilities and their wielded melee weapons are Shield Crushing and Armor Breaking for seven seconds. Caster must count this time out loud, audible to 50'; failure to count ends the effect.",
+    limitation: null,
+    note: null
   },
   {
     id: 117,
@@ -1053,6 +1415,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: null,
+    effect: 'Player may choose to use Adrenaline for its usual effect or to instantly charge Brutal Strike. Brutal Strike becomes 3/Life Charge x3 (ex). Gain Harden (Self) 1/Life (ex).',
+    limitation: 'May not wield shields, and loses all instances of Rage.',
+    note: null
   },
   {
     id: 118,
@@ -1062,6 +1427,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: 'White strip',
     incantation: '"I enchant thee with protection from magic" x3',
+    effect: 'Bearer is unaffected by Magical abilities from any school. Upon death the player is Cursed.',
+    limitation: null,
+    note: 'This effect does not interact with other Enchantments worn by the bearer.'
   },
   {
     id: 119,
@@ -1071,6 +1439,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: 'White strip',
     incantation: '"I enchant thee with Protection from Projectiles" x3',
+    effect: 'Bearer is unaffected by ammunition, thrown javelins, rocks, and thrown weapons. Engulfing effects from those objects, such as Pinning Arrow, do not affect the player.',
+    limitation: null,
+    note: "Equipment can still be affected by the above. Does not protect bearer against Magic Balls."
   },
   {
     id: 120,
@@ -1080,6 +1451,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Touch',
     materials: null,
     incantation: '"Rise and fight again" x5',
+    effect: "Target dead player who has not moved more than 5' from where they died is returned to life and is Cursed. Target is also Suppressed for 30 seconds. Non-Persistent Enchantments on the player are removed before the player returns to life. Any wounds on the player are healed.",
+    limitation: null,
+    note: null
   },
   {
     id: 121,
@@ -1089,6 +1463,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: null,
+    effect: 'May use Bows. The cost of all available Equipment is reduced to zero points. Enchantment costs are doubled.',
+    limitation: null,
+    note: null
   },
   {
     id: 122,
@@ -1098,6 +1475,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: "20'",
     materials: null,
     incantation: '"Death shall make thee fragile" x3',
+    effect: 'Target player is Fragile.',
+    limitation: null,
+    note: null
   },
   {
     id: 123,
@@ -1107,6 +1487,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: 'Yellow strip',
     incantation: '"I grant thee the power of regeneration" x3',
+    effect: 'Bearer gains Heal (Self) Unlimited (m) (Swift).',
+    limitation: 'The Heal granted by Regeneration may not be used within 10\' of a living enemy.',
+    note: 'Bearer must state Swift normally.'
   },
   {
     id: 124,
@@ -1116,6 +1499,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Touch',
     materials: null,
     incantation: '"From thy bindings thou art released" x5',
+    effect: 'A single Ongoing Effect or State is removed from the target. Casters choice.',
+    limitation: 'Cannot remove Cursed. When used to end a State or Ongoing Effect imposed by an ability with multiple effects, all other States and Ongoing Effects from the same source are also ended.',
+    note: null
   },
   {
     id: 125,
@@ -1125,6 +1511,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: null,
     incantation: '"I nocked my arrows to my bow, I let them fly, my quiver is low. Now I pause to go reload." x3',
+    effect: 'Player becomes Invulnerable and may move about the field retrieving their arrows. The player may remove their Invulnerable State in the location they started or at base by stating, "I return with a full quiver" x3.',
+    limitation: 'Must stay at least 10\' away from other players at all times. A player may not exit Reload at an alternate base location, such as Heart of the Swarm, in this way.',
+    note: 'May ask reeve for assistance in retrieving arrows that are within 10\' of other players.'
   },
   {
     id: 126,
@@ -1134,6 +1523,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: null,
     incantation: '"I restore thee to thy full potency"',
+    effect: 'Player has all uses of their per-life abilities restored.',
+    limitation: 'Does not function on Empower, Confidence, or Restoration.',
+    note: null
   },
   {
     id: 127,
@@ -1142,7 +1534,17 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     school: 'Spirit',
     range: 'Other',
     materials: null,
-    incantation: `"Sword Cut, spear stab, mace smash, arrow jab, Let the white light of healing descend on thee. Let the white light of healing stop thy spilling blood. Let the white light of healing mend thy bones. Let the white light of healing close thy wounds. Let the white light of healing restore thy vigor. The white light of healing hath resurrected thee."`,
+    incantation: `
+      "Sword Cut, spear stab, mace smash, arrow jab, 
+      Let the white light of healing descend on thee. 
+      Let the white light of healing stop thy spilling blood. 
+      Let the white light of healing mend thy bones. 
+      Let the white light of healing close thy wounds. 
+      Let the white light of healing restore thy vigor. 
+      The white light of healing hath resurrected thee."`,
+    effect: "Target dead player who has not moved more than 5' from where they died is returned to life. Non-Persistent Enchantments on the player are removed before the player returns to life. Any wounds on the player are healed.",
+    limitation: null,
+    note: null
   },
   {
     id: 128,
@@ -1152,6 +1554,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: null,
     incantation: '"Sanctuary"',
+    effect: 'Player and their carried equipment are unaffected by hostile actions originating from within 20\'. Must Chant "sanctuary". Player may end Sanctuary at any time by ceasing to chant and declaring "No longer in sanctuary" or by picking up a weapon with their hand.',
+    limitation: 'If the player is voluntarily touching (other than blocking) or carrying weapons in any fashion (tucked under arms, tied to thongs, etc) at any point during Sanctuary then they may only voluntarily end Sanctuary within 20\' of a friendly base, and must continue chanting until there. Player may not cast this ability while they have any weapons in hand. Cannot interact with game items nor game objectives, nor impede the play of other people in any manner, and must immediately move to avoid such situations. May not come within 20\' of a non-friendly base.',
+    note: 'The exit declaration must be audible out to 20 feet.'
   },
   {
     id: 129,
@@ -1161,6 +1566,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: null,
     incantation: '"Scavenge"',
+    effect: 'Destroyed or damaged item is repaired, or one point of armor in one location is repaired.',
+    limitation: 'Kill Trigger.',
+    note: null
   },
   {
     id: 130,
@@ -1170,6 +1578,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: "20'",
     materials: null,
     incantation: '"The spirits lay a curse on thee." x3',
+    effect: 'May only target dead players. Player is Cursed. Any Enchantments on the player are removed.',
+    limitation: null,
+    note: 'Will always remove enchantments if successfully cast on a valid target, regardless of the player\'s Traits, States, Immunities, Ongoing Effects, or Enchantments.'
   },
   {
     id: 131,
@@ -1179,6 +1590,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: null,
     incantation: '"I step into the shadows"',
+    effect: 'Player becomes Insubstantial. Shadow Step may be cast while moving.',
+    limitation: null,
+    note: 'Caster may end this Insubstantial State at any time by using the exit incantation for Insubstantial.'
   },
   {
     id: 132,
@@ -1188,6 +1602,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: null,
     incantation: '"I shall overcome"',
+    effect: '10 seconds after casting Shake It Off the player may remove from themselves any number of States or Ongoing Effects of their choice. Shake It Off may be cast at any time the player is alive, even while the player would otherwise be prevented from casting abilities by Stunned, Suppressed, or similar.',
+    limitation: null,
+    note: null
   },
   {
     id: 133,
@@ -1197,6 +1614,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: "20'",
     materials: null,
     incantation: '"My power shatters thy body" x3',
+    effect: null,
+    limitation: null,
+    note: null
   },
   {
     id: 134,
@@ -1206,6 +1626,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: "20'",
     materials: null,
     incantation: '"My power shoves thee" x3',
+    effect: "Target player is moved back 20' in a straight line away from the caster. Works on Stopped players. If the caster is the target, the caster may choose the direction they move.",
+    limitation: null,
+    note: null
   },
   {
     id: 135,
@@ -1215,6 +1638,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Touch',
     materials: 'Yellow strip',
     incantation: '"My power quickens thine" x3',
+    effect: 'Bearer gains Swift 1/Refresh Charge x3 (m). Other sources of Swift may not be utilized while Silver Tongue is worn.',
+    limitation: null,
+    note: 'Does not use up any purchased instances of Swift.'
   },
   {
     id: 136,
@@ -1224,6 +1650,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: 'Yellow strip',
     incantation: '"May thy power remain" x3',
+    effect: 'Enchantments worn by the bearer, other than Sleight of Mind, are not removed by Dispel Magic or similar abilities. Does not count towards the bearer\'s Enchantment Limit.',
+    limitation: null,
+    note: null
   },
   {
     id: 137,
@@ -1233,6 +1662,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: 'Three red strips',
     incantation: '"The hands of the earth rise to your bidding" x3',
+    effect: 'Bearer may cast Hold Person (m) by incanting "<player> stop at my command" and removing an enchantment strip. Enchantment is removed when the last strip is removed.',
+    limitation: null,
+    note: null
   },
   {
     id: 138,
@@ -1242,6 +1674,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: "20'",
     materials: null,
     incantation: '"My power destroys thy [type of weapon]" x3',
+    effect: 'Target weapon is destroyed.',
+    limitation: null,
+    note: 'The equipment, not the person, is the target of Shatter Weapon. The equipment is the only thing required to be within range and visible for this ability to affect it.'
   },
   {
     id: 139,
@@ -1251,6 +1686,12 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: null,
+    effect: `May physically carry any number of Specialty Arrows of
+      each type. The frequency of each type of Specialty Arrow
+      ability becomes 1 Arrow/Life Charge x3. Gain Momentum
+      Unlimited (ex) (Ambulant).`,
+    limitation: 'May not fire normal arrows.',
+    note: null,
   },
   {
     id: 140,
@@ -1260,6 +1701,12 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: null,
     incantation: '"I sing of my legendary prowess"',
+    effect: `Bearer's wielded melee weapons are Armor Breaking.
+      Bearer must Chant “Song of Battle” or sing a song regarding
+      their martial prowess. Singing in place of the normal Chant
+      is still a Chant and must follow all Chant rules.`,
+    limitation: null,
+    note: null
   },
   {
     id: 141,
@@ -1269,6 +1716,14 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: null,
     incantation: '"I sing of my nimble acrobatics"',
+    effect: `Bearer is unaffected by ammunition, thrown Javelins,
+      Rocks, and thrown weapons. Engulfing effects from those
+      objects, such as Pinning Arrow, do not affect the player.
+      Bearer must Chant “Song of Deflection” or sing a song of
+      their acrobatic prowess. Singing in place of the normal
+      Chant is still a Chant and must follow all Chant rules.`,
+    limitation: null,
+    note: 'Does not protect the bearer against Magic Balls.'
   },
   {
     id: 142,
@@ -1278,6 +1733,12 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: null,
     incantation: '"I sing of my unwavering determination"',
+    effect: `Bearer is Immune to Command. Bearer must Chant
+      “Song of Determination” or sing a song regarding their
+      determination. Singing in place of the normal Chant is still
+      a Chant and must follow all Chant rules.`,
+    limitation: null,
+    note: null,
   },
   {
     id: 143,
@@ -1287,6 +1748,14 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: null,
     incantation: '"I sing of my unquenchable wanderlust"',
+    effect: `Bearer cannot receive the States Stopped, Frozen,
+      or Insubstantial unless caused by the bearer or other
+      enchantments they carry. Bearer must Chant “Song of
+      Freedom” or sing a song of roving or rambling. Singing in
+      place of the normal Chant is still a Chant and must follow
+      all Chant rules.`,
+    limitation: null,
+    note: null,
   },
   {
     id: 144,
@@ -1296,6 +1765,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: null,
     incantation: '"I sing a song of dark magic thwarted"',
+    effect: 'As per Enlightened Soul. Bearer must Chant “Song of Interference” or sing a song about defeating/resisting the forces of magic. Singing in place of the normal Chant is still a Chant and must follow all Chant rules.',
+    limitation: null,
+    note: null,
   },
   {
     id: 145,
@@ -1305,6 +1777,14 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: null,
     incantation: '"I sing to inspire my comrades-in-arms"',
+    effect: `Friendly players within 20' of the bearer have their 
+      Charging Incantation repetitions divided by 2, rounded 
+      down, to a minimum of 1. Bearer is Stopped. Bearer must 
+      Chant “Song of Power” or sing an inspiring song. Singing in 
+      place of the normal Chant is still a Chant and must follow 
+      all Chant rules.`,
+    limitation: 'Players can only benefit from one instance of Song of Power at a time.',
+    note: null
   },
   {
     id: 146,
@@ -1314,6 +1794,24 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: null,
     incantation: '"I sing of my numerous close calls"',
+    effect: `When the bearer would otherwise die, they instead 
+      declare “Song of Survival” and become Insubstantial. The 
+      caster treats the triggering event as though it had no 
+      effect on them other than triggering Song of Survival. 
+      Song of Survival immediately ends and bearer must stop 
+      their Chant. Bearer may choose to return directly to their 
+      base immediately after Song of Survival activates. Bearer 
+      must Chant “Song of Survival” or sing a song regarding 
+      their many escapes from certain doom. Singing in place 
+      of the normal Chant is still a Chant and must follow all 
+      Chant rules.`,
+    limitation: `Once Song of Survival has activated to protect the 
+      bearer it may not be cast nor activated again on the 
+      same life.`,
+    note: `Bearer may end the Insubstantial State caused by Song 
+      of Survival at any time with the standard incantation. If 
+      the Insubstantial State is ended by any means before 
+      reaching the base, the rest of the effect is ended as well.`
   },
   {
     id: 147,
@@ -1323,6 +1821,17 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: null,
     incantation: '"I sing to entertain friend and foe" x3',
+    effect: `Bearer cannot be wounded and is Immune to all 
+      Schools. Bearer is Stopped. Bearer must Chant “Song 
+      of Visit” or sing a song regarding their general good 
+      nature and friendly disposition. Singing in place of the 
+      normal Chant is still a Chant and must follow all Chant 
+      rules. When Song of Visit is removed player becomes 
+      Insubstantial and must immediately move directly to 
+      their base. Upon arrival, they must immediately end the 
+      effect as per Insubstantial.'`,
+    limitation: 'Bearer may not wield weapons, interact with game objects, impede play, gain further Enchantments, or target any player.',
+    note: 'This Enchantment can be removed by Dispel Magic and similar abilities. If the Insubstantial State is ended, the rest of the effect is ended as well.',
   },
   {
     id: 148,
@@ -1332,6 +1841,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: "20'",
     materials: null,
     incantation: '"By the power of white light I stun thee" x3',
+    effect: 'Target player is Stunned for 30 seconds.',
+    limitation: null,
+    note: null
   },
   {
     id: 149,
@@ -1341,6 +1853,12 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: 'Black Magic Ball',
     incantation: '"The power of void is mine to evoke" x3',
+    effect: `Sphere of Annihilation ignores armor and enchantments and will have one of the following effects on the object first struck:
+1. A weapon struck is destroyed
+2. A shield struck is subject to Shield Destroying.
+3. A player struck dies and is Cursed.`,
+    limitation: null,
+    note: 'Does not ignore Traits, such as Missile Block.'
   },
   {
     id: 150,
@@ -1350,6 +1868,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: null,
+    effect: 'Blink and Shadow Step become Charge x3 (ex).',
+    limitation: 'May not wear Armor.',
+    note: null
   },
   {
     id: 151,
@@ -1359,6 +1880,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Touch',
     materials: null,
     incantation: '"Steal life"',
+    effect: 'Caster may heal a wound or instantly Charge an ability. May only be used on a dead player. That player is Cursed.',
+    limitation: 'Does not work on Cursed players. The caster does not gain the effect if the dead player is unaffected.',
+    note: 'In order to charge an ability, the name of the ability being charged must still be stated immediately after the incantation.'
   },
   {
     id: 152,
@@ -1368,6 +1892,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: null,
     incantation: '"I take the form of stone"',
+    effect: 'Caster is Frozen. May end this State at any time by saying "The earth release me" x2.',
+    limitation: null,
+    note: null
   },
   {
     id: 153,
@@ -1377,6 +1904,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: 'White strip',
     incantation: '"May nature protect thee from all forms of attack" x3',
+    effect: 'Bearer gains 2 points of Magic Armor affected as per Ancestral Armor.',
+    limitation: null,
+    note: null
   },
   {
     id: 154,
@@ -1386,6 +1916,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: "50'",
     materials: null,
     incantation: '"I summon thy corpse" x5',
+    effect: 'Target willing dead player must go directly to the caster. Upon reaching the caster, Summon Dead immediately ends. Wherever the player is when Summon Dead ends is treated as where the player died.',
+    limitation: 'May be used on a dead player who has not moved more than 5\' from where they died or who is at their respawn.',
+    note: null
   },
   {
     id: 155,
@@ -1395,6 +1928,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: null,
+    effect: 'Each Enchantment purchased gives double the uses. Example: 1/Life Charge x3 becomes 2/Life Charge x3, 2/Life becomes 4/Life.',
+    limitation: 'May not purchase Verbals with a range other than Touch or Self. May not purchase equipment beyond 2nd level.',
+    note: null
   },
   {
     id: 156,
@@ -1404,6 +1940,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: "50'",
     materials: null,
     incantation: '"I command thee powerless" x3',
+    effect: 'Target is Suppressed for 30 seconds.',
+    limitation: null,
+    note: null
   },
   {
     id: 157,
@@ -1413,6 +1952,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: "Arrow with purple head cover labeled 'Suppression'",
     incantation: '"Suppression Arrow"',
+    effect: 'A player struck by this arrow is Suppressed for 30 seconds. Engulfing.',
+    limitation: null,
+    note: null
   },
   {
     id: 158,
@@ -1422,6 +1964,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: 'Purple Magic Ball',
     incantation: '"The strength of suppression is mine to evoke" x3',
+    effect: 'Target is Suppressed for 60 seconds. Engulfing.',
+    limitation: null,
+    note: null
   },
   {
     id: 159,
@@ -1431,17 +1976,23 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: '"Swift"',
+    effect: 'Abilities require only a single iteration of the incantation. For multi-line Incantations use the last line.',
+    limitation: 'May only be used on abilities at a range of Touch, Other, Self, or on Magic Balls. May not be used on the Charge Incantation.',
+    note: null
   },
   {
     id: 160,
     name: 'Teleport',
     type: 'Verbal',
     school: 'Sorcery',
-    range: "20'",
+    range: 'Touch',
     materials: null,
     incantation: '"I travel through the aether" x5',
+    effect: 'Target willing player becomes Insubstantial and moves directly to a chosen location chosen by the caster at the time of casting. This must be a fixed location (not relative to a player or to a moveable object). Upon arrival, they must immediately end the effect as per Insubstantial.',
+    limitation: null,
+    note: 'If the player\'s Insubstantial State is removed before they have reached their destination, the effects of Teleport end. If Teleport is cast on self, the caster may end this Insubstantial State at any time by using the exit incantation for Insubstantial.'
   },
-    {
+  {
     id: 161,
     name: 'Terror',
     type: 'Verbal',
@@ -1449,15 +2000,21 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: "20'",
     materials: null,
     incantation: '"Death makes thee terrified" x3',
+    effect: 'Target may not attack or cast Magical abilities at the caster or their carried equipment. Target must remain at least 50\' away from the caster unless forced there by another ability. Lasts 30 seconds.',
+    limitation: null,
+    note: 'If the caster attacks the target, begins casting another Magical ability at the target or their carried equipment, or dies, this ability\'s effect is negated.'
   },
   {
     id: 162,
     name: 'Throw',
     type: 'Verbal',
-    school: 'Death',
+    school: 'Sorcery',
     range: "20'",
     materials: null,
     incantation: '"My power throws thee" x3',
+    effect: 'Target player is moved 50\' in a straight line away from the caster. Works on Stopped players. If the caster is the target, the caster may choose the direction they move.',
+    limitation: null,
+    note: null
   },
   {
     id: 163,
@@ -1467,15 +2024,21 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: "20'",
     materials: null,
     incantation: '"Tracking" x3',
+    effect: 'Target Insubstantial player immediately has their Insubstantial effect ended.',
+    limitation: null,
+    note: null
   },
   {
     id: 164,
     name: 'Trickery',
     type: 'Enchantment',
     school: 'Sorcery',
-    range: "20'",
+    range: 'Self',
     materials: null,
     incantation: null,
+    effect: 'Bearer may cast Blink, Shadow Step, and Teleport on themselves while they are already Insubstantial, provided that they were the cause of the initial Insubstantial State and entered it voluntarily. Doing so removes the original Insubstantial effect.',
+    limitation: null,
+    note: null
   },
   {
     id: 165,
@@ -1483,8 +2046,11 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     type: 'Enchantment',
     school: 'Protection',
     range: 'Other',
-    materials: null,
+    materials: 'Three white strips',
     incantation: '"The blood of the trolls sustains thee" x3',
+    effect: `Enchanted player does not die as normal. When the player would otherwise die they instead ignore the triggering effect as though it had not occurred, remove a strip, and become Frozen for 30 seconds. The bearer is treated as though they have the effects of Regeneration in addition to the above.`,
+    limitation: null,
+    note: 'Troll Blood is removed when the last strip is removed.'
   },
   {
     id: 166,
@@ -1494,6 +2060,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: null,
     incantation: '"The wicked flee when I pursue"',
+    effect: 'Player returns to life with their wounds healed and is immediately Frozen for 30 seconds',
+    limitation: null,
+    note: 'Enchantments on the player are retained.'
   },
   {
     id: 167,
@@ -1503,13 +2072,16 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: 'Yellow strip',
     incantation: `
-    "Flesh rots, bones break, skulls sigh, spirits take, 
-    let the power of my will descend on thee
-    let the power of my will restore thy spirit
-    let the power of my will knit thy corpse
-    let the power of my will give thee direction
-    let the power of my will cheat thy death
-    by the power of my will, arise my minion!"`,
+      "Flesh rots, bones break, skulls sigh, spirits take, 
+      let the power of my will descend on thee
+      let the power of my will restore thy spirit
+      let the power of my will knit thy corpse
+      let the power of my will give thee direction
+      let the power of my will cheat thy death
+      by the power of my will, arise my minion!"`,
+    effect: `Bearer is Cursed. When the bearer dies, they must return to the caster. While the bearer is enchanted, the caster gains Raise Dead (Unlimited) (m) which can only be cast with the bearer as the target, and ignores the requirement for the bearer to have not moved from where they died. For the duration of the Enchantment, the bearer may treat the caster as a base for the purposes of the effects which require the bearer to go to their base. This enchantment is Persistent, and remains active while the bearer is dead.`,
+    limitation: 'The caster may not have more than three Undead Minion Enchantments.',
+    note: null
   },
   {
     id: 168,
@@ -1517,8 +2089,11 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     type: 'Enchantment',
     school: 'Death',
     range: 'Other',
-    materials: 'Yellow and white strip',
+    materials: 'Yellow strip and white strip',
     incantation: '"Thy hunger can never be sated" x3',
+    effect: 'Player gains Adrenaline Unlimited (ex), is Immune to Death, and is Cursed. Bearer\'s Adrenaline ability will work through their Cursed State.',
+    limitation: null,
+    note: null
   },
   {
     id: 169,
@@ -1526,8 +2101,11 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     type: 'Enchantment',
     school: 'Sorcery',
     range: 'Other',
-    materials: 'Red and white strip',
+    materials: 'Red strip and white strip',
     incantation: '"Embrace the old ones and surrender thyself" x3',
+    effect: `Bearer's wielded melee weapons are Armor Breaking. Bearer gains Shadow Step 1/Refresh Charge x30 (ex), Steal Life Essence Unlimited (ex), and is unaffected by Magical abilities from the Sorcery, Spirit, and Death Schools. May still benefit from their own Steal Life Essence. Player is Cursed.`,
+    limitation: null,
+    note: 'This effect does not interact with other Enchantments worn by the bearer.'
   },
   {
     id: 170,
@@ -1537,6 +2115,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Self',
     materials: 'White strip',
     incantation: '"The power of magic defends me" x3',
+    effect: 'Resistant to all effects from the next source which would inflict a wound, death, or State. Does not trigger against effects cast by the player.',
+    limitation: null,
+    note: null
   },
   {
     id: 171,
@@ -1546,6 +2127,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: null,
+    effect: 'All abilities purchased in the Protection School give double the uses. Example: 1/Life Charge x3 becomes 2/Life Charge x3, 2/Life becomes 4/Life.',
+    limitation: 'Player may not purchase any abilities from the Death, Command, or Subdual Schools.',
+    note: null
   },
   {
     id: 172,
@@ -1555,6 +2139,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: null,
+    effect: 'Each Verbal purchased in the Death and Flame Schools gives double the uses. Example: 1/Life Charge x3 becomes 2/Life Charge x3, 2/Life becomes 4/Life.',
+    limitation: 'Player may not purchase Verbals from any School other than the Death and Flame Schools.',
+    note: null
   },
   {
     id: 173,
@@ -1563,7 +2150,10 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     school: 'Sorcery',
     range: 'Touch',
     materials: null,
-    incantation: 'Spedoinkle',
+    incantation: '"Spedoinkle"',
+    effect: 'All equipment carried by target player is repaired. All armor worn by target player is restored to full value.',
+    limitation: 'May not be cast within 20\' of a living enemy.',
+    note: null
   },
   {
     id: 174,
@@ -1572,25 +2162,58 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     school: 'Death',
     range: "20'",
     materials: null,
-    incantation: '"Death strikes off why [left/right] [arm/leg]" x3',
+    incantation: '"Death strikes off thy [left/right] [arm/leg]" x3',
+    effect: 'Target hit location on target player is wounded.',
+    limitation: 'Has no effect on players already wounded.',
+    note: 'Wounding targets the player but affects the Hit Location. Visibility can be drawn to any part of the player, not just the desired Hit Location.'
   },
   {
     id: 175,
     name: 'Equipment: Weapon, Long',
     type: 'Neutral',
-    school: 'Neutral',
+    school: null,
     range: null,
     materials: null,
     incantation: null,
+    effect: 'May wield one Long weapon at a time for each instance purchased (but may carry extras).',
+    limitation: null,
+    note: null
   },
   {
     id: 176,
     name: 'Equipment: Weapon, Hinged',
     type: 'Neutral',
+    school: null,
+    range: null,
+    materials: null,
+    incantation: null,
+    effect: 'May wield one Hinged weapon at a time for each instance purchased (but may carry extras).',
+    limitation: null,
+    note: null
+  },
+  {
+    id: 177,
+    name: 'Equipment: Weapon, Great',
+    type: 'Neutral',
+    school: null,
+    range: null,
+    materials: null,
+    incantation: null,
+    effect: 'May wield one Great weapon at a time for each instance purchased (but may carry extras).',
+    limitation: null,
+    note: null
+  },
+  {
+    id: 178,
+    name: 'Marauder',
+    type: 'Archetype',
     school: 'Neutral',
     range: null,
     materials: null,
     incantation: null,
+    effect: 'Gain Momentum Unlimited (ex) (Ambulant). Insult becomes 1/Life Charge x5 (m) (Ambulant).',
+    limitation: 'Maximum Armor becomes 4pts. May not wield Large shields. Ancestral Armor is no longer chargeable.',
+    note: null
   },
 ]
 
