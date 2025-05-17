@@ -206,18 +206,6 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     note: null
   },
   {
-    id: 18,
-    name: 'Bear Strength',
-    type: 'Enchantment',
-    school: 'Sorcery',
-    range: 'Other',
-    materials: 'Red strip',
-    incantation: '"I enchant thee with the strength of the bear" x3',
-    effect: "May wear an additional Enchantment. Attuned does not count towards the bearer's Enchantment limit.",
-    limitation: 'This ability may not be used in conjunction with any other similar ability.',
-    note: 'If Attuned is removed, the bearer chooses which (m) Enchantments to lose to meet their new Enchantment limit, if necessary.'
-  },
-  {
     id: 19,
     name: 'Avatar of Nature',
     type: 'Archetype',
@@ -2215,6 +2203,30 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     limitation: 'Maximum Armor becomes 4pts. May not wield Large shields. Ancestral Armor is no longer chargeable.',
     note: null
   },
+  {
+    id: 179,
+    name: 'Bear Strength',
+    type: 'Enchantment',
+    school: 'Sorcery',
+    range: 'Other',
+    materials: 'Red strip',
+    incantation: '"I enchant thee with the strength of the bear" x3',
+    effect: "May wear an additional Enchantment. Attuned does not count towards the bearer's Enchantment limit.",
+    limitation: 'This ability may not be used in conjunction with any other similar ability.',
+    note: 'If Attuned is removed, the bearer chooses which (m) Enchantments to lose to meet their new Enchantment limit, if necessary.'
+  },
+  {
+    id: 180,
+    name: 'Imbue Weapon',
+    type: 'Enchantment',
+    school: 'Death',
+    range: 'Other',
+    materials: 'Red strip',
+    incantation: '"I enchant thee to slay all foes" x3',
+    effect: "Bearer's wielded melee weapons are Wounds Kill.",
+    limitation: null,
+    note: null,
+  }
 ]
 
 export const BARD_SPELLS = [
@@ -2449,7 +2461,7 @@ export const BARD_SPELLS = [
     {
       level: 6,
       spells: [
-        { id: 17, cost: 2, max: 1, frequency: null},
+        { id: 18, cost: 2, max: 1, frequency: null},
         { id: 45, cost: 1, max: 2, frequency: '1/Refresh'},
         { id: 54, cost: 2, max: 1, frequency: null},
         { id: 59, cost: 1, max: null, frequency: '1/Refresh'},
@@ -2457,6 +2469,90 @@ export const BARD_SPELLS = [
         { id: 118, cost: 1, max: null, frequency: '1/Refresh'},
         { id: 149, cost: 2, max: 1, frequency: '1 Ball / Unlimited'},
         { id: 172, cost: 2, max: 1, frequency: null},
+        { id: 173, cost: 1, max: null, frequency: '1/Refresh'},
+      ]
+    },
+  ]
+
+  export const DRUID_SPELLS = [
+    {
+      level: 1,
+      spells: [
+        { id: 14, cost: 1, max: 2, frequency: '1/Refresh Charge x10'},
+        { id: 48, cost: 1, max: 2, frequency: '2 Balls / Unlimited'},
+        { id: 52, cost: 2, max: 2, frequency: null},
+        { id: 56, cost: 2, max: 2, frequency: null},
+        { id: 78, cost: 1, max: null, frequency: '1/Life Charge x3'},
+        { id: 84, cost: 1, max: null, frequency: '1/Life'},
+        { id: 98, cost: 1, max: null, frequency: '1/Life'},
+      ]
+    },
+    {
+      level: 2,
+      spells: [
+        { id: 35, cost: 1, max: 1, frequency: '1/Refresh'},
+        { id: 51, cost: 4, max: 1, frequency: null},
+        { id: 61, cost: 1, max: 2, frequency: '2 Balls / Unlimited'},
+        { id: 63, cost: 1, max: 2, frequency: '1/Refresh'},
+        { id: 75, cost: 1, max: null, frequency: '1/Life'},
+        { id: 86, cost: 1, max: 4, frequency: '1/Refresh'},
+        { id: 111, cost: 1, max: null, frequency: '1/Life'},
+        { id: 124, cost: 1, max: null, frequency: '1/Life'},
+        { id: 152, cost: 1, max: null, frequency: '1/Refresh Charge x3'},
+
+      ]
+    },
+    {
+      level: 3,
+      spells: [
+        { id: 17, cost: 1, max: 2, frequency: '1/Refresh'},
+        { id: 179, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 43, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 58, cost: 1, max: 2, frequency: '1/Life'},
+        { id: 64, cost: 1, max: 2, frequency: '1/Refresh'},
+        { id: 68, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 83, cost: 1, max: 2, frequency: '1/Life'},
+        { id: 123, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 153, cost: 1, max: 2, frequency: '1/Refresh'},
+      ]
+    },
+    {
+      level: 4,
+      spells: [
+        { id: 175, cost: 4, max: 1, frequency: null},
+        { id: 65, cost: 2, max: 2, frequency: '1/Refresh'},
+        { id: 67, cost: 1, max: 2, frequency: '1/Refresh'},
+        { id: 68, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 82, cost: 1, max: 2, frequency: '1 Ball / Unlimited'},
+        { id: 94, cost: 1, max: 2, frequency: '1/Refresh'},
+        { id: 159, cost: 1, max: 2, frequency: '1/Life'},
+        { id: 160, cost: 1, max: 2, frequency: '1/Life'},
+      ]
+    },
+    {
+      level: 5,
+      spells: [
+        { id: 6, cost: 1, max: 2, frequency: '1/Life'},
+        { id: 177, cost: 5, max: 1, frequency: null},
+        { id: 53, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 62, cost: 1, max: 2, frequency: '1/Refresh'},
+        { id: 77, cost: 1, max: 2, frequency: '1/Refresh'},
+        { id: 89, cost: 1, max: 2, frequency: '1/Refresh'},
+        { id: 113, cost: 1, max: 2, frequency: '1/Refresh'},
+        { id: 127, cost: 2, max: null, frequency: '1/Refresh'},
+        { id: 165, cost: 1, max: 2, frequency: '1/Refresh'},
+      ]
+    },
+    {
+      level: 6,
+      spells: [
+        { id: 19, cost: 1, max: 1, frequency: null},
+        { id: 24, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 180, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 103, cost: 1, max: 2, frequency: '1/Refresh'},
+        { id: 121, cost: 2, max: 1, frequency: null},
+        { id: 137, cost: 1, max: 1, frequency: '1/Refresh'},
+        { id: 155, cost: 2, max: 1, frequency: null},
         { id: 173, cost: 1, max: null, frequency: '1/Refresh'},
       ]
     },
