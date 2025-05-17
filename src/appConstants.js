@@ -325,7 +325,13 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Touch',
     materials: null,
     incantation: '"Circle of Protection" x3',
-    effect: 'The caster and up to five willing players within Touch range of the caster immediately have all States and Ongoing Effects removed and then become Insubstantial. All targets: - May not move from their starting location, and are unaffected by abilities that allow or require the player to move. - May use abilities on players and their carried equipment who became Insubstantial due to the same casting of Circle of Protection as though they were not Insubstantial. - May end this Insubstantial State at any time by using the exit incantation for Insubstantial. The caster may end Circle of Protection for all targets at any time by using the exit incantation for Insubstantial. If the Insubstantial State is ended for a target, the Ongoing Effects of Circle of Protection no longer apply to that player.',
+    effect: `The caster and up to five willing players within Touch range of the caster immediately have all States and Ongoing Effects removed and then become Insubstantial.
+      \n>>All targets:
+      \n>> - May not move from their starting location, and are unaffected by abilities that allow or require the player to move.
+      \n>> - May use abilities on players and their carried equipment who became Insubstantial due to the same casting of Circle of Protection as though they were not Insubstantial.
+      \n>> - May end this Insubstantial State at any time by using the exit incantation for Insubstantial.
+      The caster may end Circle of Protection for all targets at any time by using the exit incantation for Insubstantial.
+      If the Insubstantial State is ended for a target, the Ongoing Effects of Circle of Protection no longer apply to that player.`,
     limitation: null,
     note: 'If a player is prevented from becoming Insubstantial, they are unaffected by Circle of Protection.'
   },
@@ -445,7 +451,7 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: '20"',
     materials: null,
     incantation: '"The power of the aether consumes thee" x3',
-    effect: 'Target insubstantial plater dies.',
+    effect: 'Target insubstantial player dies.',
     limitation: null,
     note: null
   },
@@ -713,7 +719,11 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: 'Red Magic Ball',
     incantation: '"The flame of fire is mine to evoke" x3',
-    effect: 'Fireball will have one of the following effects on the object first struck: 1. A weapon hit is destroyed 2. A Shield hit is subject to Shield Destroying 3. Armor hit with Armor Points remaining is subject to Armor Destroying. 4. A player hit dies.',
+    effect: `Fireball will have one of the following effects on the object first struck:
+    \n>>1. A weapon hit is destroyed
+    \n>>2. A Shield hit is subject to Shield Destroying
+    \n>>3. Armor hit with Armor Points remaining is subject to Armor Destroying.
+    \n>>4. A player hit dies.`,
     limitation: null,
     note: null
   },
@@ -725,7 +735,10 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: 'Blue Magic Ball',
     incantation: '"Forcebolt" x3',
-    effect: 'Force Bolt will have one of the following effects on the object first struck: 1. A weapon hit is destroyed 2. Armor hit with Armor Points remaining is subject to Armor Breaking. 3. A player hit receives a wound to that hit location.',
+    effect: `Force Bolt will have one of the following effects on the object first struck:
+    \n>>1. A weapon hit is destroyed
+    \n>>2. Armor hit with Armor Points remaining is subject to Armor Breaking.
+    \n>>3. A player hit receives a wound to that hit location.`,
     limitation: null,
     note: null
   },
@@ -845,7 +858,7 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Touch',
     materials: null,
     incantation: '"Return this <object name> to its former glory" x5',
-    effect: null,
+    effect: 'Will restore all armor points in one location or repair a damaged or broken item.',
     limitation: null,
     note: null
   },
@@ -1097,7 +1110,10 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: 'Yellow Magic Ball',
     incantation: '"The flame of storms is mine to evoke" x3',
-    effect: 'A player struck is subject to an Engulfing Stopped effect for 60 seconds. In addition Lightning Bolt will have one of the following effects on the object first struck: 1. A weapon hit is destroyed 2. Armor hit with Armor Points remaining is subject to Armor Breaking. 3. A player hit receives a wound in that hit location.',
+    effect: `A player struck is subject to an Engulfing Stopped effect for 60 seconds. In addition Lightning Bolt will have one of the following effects on the object first struck:
+    \n>>1. A weapon hit is destroyed
+    \n>>2. Armor hit with Armor Points remaining is subject to Armor Breaking.
+    \n>>3. A player hit receives a wound in that hit location.`,
     limitation: null,
     note: null
   },
@@ -1367,7 +1383,7 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     range: null,
     materials: null,
     incantation: null,
-    effect: 'Meta-Magic may only be used on Spirit abilities. AllMeta-Magics purchased become 1/Life Charge x3. Heal costs zero points.',
+    effect: 'Meta-Magic may only be used on Spirit abilities. All Meta-Magics purchased become 1/Life Charge x3. Heal costs zero points.',
     limitation: null,
     note: null
   },
@@ -1602,7 +1618,7 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     range: "20'",
     materials: null,
     incantation: '"My power shatters thy body" x3',
-    effect: null,
+    effect: 'Target Frozen player dies.',
     limitation: null,
     note: null
   },
@@ -1842,9 +1858,9 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     materials: 'Black Magic Ball',
     incantation: '"The power of void is mine to evoke" x3',
     effect: `Sphere of Annihilation ignores armor and enchantments and will have one of the following effects on the object first struck:
-1. A weapon struck is destroyed
-2. A shield struck is subject to Shield Destroying.
-3. A player struck dies and is Cursed.`,
+    \n>>1. A weapon struck is destroyed
+    \n>>2. A shield struck is subject to Shield Destroying.
+    \n>>3. A player struck dies and is Cursed.`,
     limitation: null,
     note: 'Does not ignore Traits, such as Missile Block.'
   },

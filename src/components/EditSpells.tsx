@@ -324,11 +324,29 @@ function EditSpells() {
             <span>This spell has no additional details.</span>
           </Modal.Body>
         )}
-        {selectedSpell?.effect && (
-          <Modal.Body className="modal-sm">
-            <span><strong>Effect: </strong>{selectedSpell?.effect}</span>
-          </Modal.Body>
-        )}
+        <Modal.Body>
+        {selectedSpell?.effect.split('\n').map((line, idx) => {
+          const isIndented = line.startsWith('>>');
+          const cleanLine = isIndented ? line.replace(/^>>/, '') : line;
+          return ( idx === 0 ? (
+            <span key={idx}>
+              <strong>Effect: </strong>{line}
+            </span>
+          ) : (
+            <span
+              key={idx}
+              style={{
+                display: 'block',
+                lineHeight: '1.2',
+                marginLeft: isIndented ? 15 : 0,
+                marginBottom: 1,
+              }}
+            >
+              {cleanLine}
+            </span>
+          ));
+        })}
+        </Modal.Body>
         {selectedSpell?.limitation && (
           <Modal.Body className="modal-sm">
             <span><strong>Limitation: </strong>{selectedSpell?.limitation}</span>
