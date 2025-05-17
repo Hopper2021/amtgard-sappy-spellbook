@@ -1,8 +1,21 @@
-import React from 'react'
-import { Container, Row, Accordion, Button, CardHeader } from 'react-bootstrap'
+import React, { useState } from 'react'
+import { Container, Row, Accordion, Button, CardHeader, Modal } from 'react-bootstrap'
 import { ALL_SPELLS, BARD_SPELLS, HEALER_SPELLS, WIZARD_SPELLS } from '../appConstants'
 import { useParams } from 'react-router-dom'
 import { Toast, ToastContainer } from 'react-bootstrap'
+
+type SelectedSpellType = {
+  id: number
+  name: string
+  type: string
+  school: string
+  range: string | null
+  materials: string | null
+  incantation: string
+  effect: string
+  limitation: string | null
+  note: string | null
+} | null
 
 interface Spell {
   id: number
@@ -26,10 +39,13 @@ interface SpellList {
 }
 
 function EditSpells() {
-  const [addOrRemoveSpells, setAddOrRemoveSpells] = React.useState('Add')
-  const [cannotAffordSpell, setCannotAffordSpell] = React.useState(false)
-  const [spellMaxReached, setSpellMaxReached] = React.useState(false)
-  const [showToast, setShowToast] = React.useState(false)
+  const [longPressTimeout, setLongPressTimeout] = useState<NodeJS.Timeout | null>(null)
+  const [selectedSpell, setSelectedSpell] = useState<SelectedSpellType>(null)
+  const [addOrRemoveSpells, setAddOrRemoveSpells] = useState('Add')
+  const [cannotAffordSpell, setCannotAffordSpell] = useState(false)
+  const [spellMaxReached, setSpellMaxReached] = useState(false)
+  const [showToast, setShowToast] = useState(false)
+  const [openModal, setOpenModal] = useState(false)
   const { id } = useParams<{ id: string }>()
 
   const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
@@ -49,7 +65,7 @@ function EditSpells() {
 		spells: spellListToEdit?.spells || [],
   })
 
-  const getSpellDetails = (spellId: number) => {
+  const getSpellName = (spellId: number) => {
     const spell = ALL_SPELLS.find(spell => spell.id === spellId)
     if (spell) {
       return spell.name
@@ -261,8 +277,62 @@ function EditSpells() {
     localStorage.setItem('allSpellLists', JSON.stringify(updatedSpellLists))
   }
 
+  
+  const getSpellDetails = (spellId) => {
+    const spell = ALL_SPELLS.find(spell => spell.id === spellId)
+    if (spell) {
+      setSelectedSpell(spell as SelectedSpellType)
+      return spell
+    }
+    const timeout = setTimeout(() => {
+      getSpellDetails(spellId)
+      setOpenModal(true)
+    }, 500)
+    setLongPressTimeout(timeout)
+  }
+
+  const handleLongPressStart = (spellId) => {
+  const timeout = setTimeout(() => {
+      getSpellDetails(spellId)
+      setOpenModal(true)
+    }, 500)
+    setLongPressTimeout(timeout)
+  }
+
+  const handleLongPressEnd = () => {
+    if (longPressTimeout) {
+      clearTimeout(longPressTimeout as unknown as number)
+    }
+  }
+
+  const handleClose = () => {
+    setOpenModal(false)
+    setSelectedSpell(null)
+  }
+
   return (
     <Container fluid className="p-3">
+      <Modal show={openModal} onHide={handleClose} centered>
+        <Modal.Header closeButton>
+          <Modal.Title className="d-flex align-items-center">
+            Spell Details
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="modal-sm">
+          <span><strong>Effect: </strong>{selectedSpell?.effect}</span>
+        </Modal.Body>
+        {selectedSpell?.limitation && (
+          <Modal.Body className="modal-sm">
+            <span><strong>Limitation: </strong>{selectedSpell?.limitation}</span>
+          </Modal.Body>
+        )}
+        {selectedSpell?.limitation && (
+          <Modal.Body className="modal-sm">
+            <span><strong>Note: </strong>{selectedSpell?.note}</span>
+          </Modal.Body>
+        )}
+      </Modal>
+
       <ToastContainer position="bottom-center" className="p-3">
         <Toast className="bg-info text-white" show={showToast} onClose={() => setShowToast(false)} autohide delay={3000}>
           <Toast.Body>
@@ -291,9 +361,14 @@ function EditSpells() {
                         <Button
                           variant="unknown"
                           className="text-start border-bottom"
+                          onMouseDown={() => handleLongPressStart(spellsByLevel.id)}
+                          onMouseUp={handleLongPressEnd}
+                          onMouseLeave={handleLongPressEnd}
+                          onTouchStart={() => handleLongPressStart(spellsByLevel.id)}
+                          onTouchEnd={handleLongPressEnd}
                           onClick={() => addSpellToList(spellsByLevel.id)}
                         >
-                          {getSpellDetails(spellsByLevel.id)} {getAmountPurchased(spellsByLevel.id)} (cost: {spellsByLevel.cost})
+                          {getSpellName(spellsByLevel.id)} {getAmountPurchased(spellsByLevel.id)} (cost: {spellsByLevel.cost})
                         </Button>
                       </Row>
                     ))
@@ -306,7 +381,7 @@ function EditSpells() {
                             className="text-start border-bottom"
                             onClick={() => removeSpellFromList(spellsByLevel.id)}
                           >
-                            {getSpellDetails(spellsByLevel.id)} {getAmountPurchased(spellsByLevel.id)} (cost: {
+                            {getSpellName(spellsByLevel.id)} {getAmountPurchased(spellsByLevel.id)} (cost: {
                               ALL_SPELLS.find(s => s.id === spellsByLevel.id)?.cost ?? ''
                             })
                           </Button>
