@@ -81,12 +81,24 @@ function ModifySpellList() {
 							</Dropdown.Toggle>
 
 							<Dropdown.Menu>
-								<Dropdown.Item onClick={() => setModifiedSpellList({ ...modifiedSpellList, maxLevel: 1 })}>1</Dropdown.Item>
-								<Dropdown.Item onClick={() => setModifiedSpellList({ ...modifiedSpellList, maxLevel: 2 })}>2</Dropdown.Item>
-								<Dropdown.Item onClick={() => setModifiedSpellList({ ...modifiedSpellList, maxLevel: 3 })}>3</Dropdown.Item>
-								<Dropdown.Item onClick={() => setModifiedSpellList({ ...modifiedSpellList, maxLevel: 4 })}>4</Dropdown.Item>
-								<Dropdown.Item onClick={() => setModifiedSpellList({ ...modifiedSpellList, maxLevel: 5 })}>5</Dropdown.Item>
-								<Dropdown.Item onClick={() => setModifiedSpellList({ ...modifiedSpellList, maxLevel: 6 })}>6</Dropdown.Item>
+								{[...Array(6)].map((_, index) => {
+									const level = index + 1  // Levels 1 through 6
+									return (
+										<Dropdown.Item
+											key={level}
+											onClick={() => {
+												const updatedSpells = Array.from({ length: level }, (_, index) => ({
+													level: index + 1,
+													points: modifiedSpellList.lookThePart && index + 1 === level ? 6 : 5,
+													spells: [],
+												}))
+												setModifiedSpellList({ ...modifiedSpellList, maxLevel: level, spells: updatedSpells })
+											}}
+										>
+											{level}
+										</Dropdown.Item>
+									)
+								})}
 							</Dropdown.Menu>
 						</Dropdown>
 					</InputGroup>
