@@ -76,7 +76,7 @@ function SpellListDetails() {
             },
             {
               id: "stripsCheckbox",
-              label: "show strips",
+              label: "show strips/matrials",
               checked: showStrips,
               onClick: () => setShowStrips(!showStrips),
             },
