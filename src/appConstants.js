@@ -349,9 +349,9 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: null,
     materials: null,
     incantation: null,
-    effect: "Player becomes Insubstantial. While Insubstantial in this way, player can move as they wish as long as they remain within 50' from their starting point.",
-    limitation: "Caster may not end State within 10' of a living enemy.",
-    note: "If the Insubstantial State is ended, the rest of the effect is ended as well. Caster may end this Insubstantial State at any time by using the exit incantation for Insubstantial."
+    effect: "Does not require an empty hand to cast abilities",
+    limitation: null,
+    note: null
   },
   {
     id: 30,
