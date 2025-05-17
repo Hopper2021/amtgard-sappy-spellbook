@@ -78,9 +78,12 @@ export const ALL_SPELLS = [
     school: 'Protection',
     range: 'Other',
     materials: 'White strip',
-    incantation: `"May this armor protect thee from all forms of harm. May the flames of the fire not burn thee.
-May the bolts from the heavens not strike thee.
-May the arrows of your enemies not pierce thee. May this armor protect thee from all forms of harm."`,
+    incantation: `
+      "May this armor protect thee from all forms of harm. 
+      May the flames of the fire not burn thee.
+      May the bolts from the heavens not strike thee.
+      May the arrows of your enemies not pierce thee.
+      May this armor protect thee from all forms of harm."`,
     effect: 'The effects of a Magic Ball, projectile weapon, or melee weapon which just struck armor worn by the player are ignored, even if the object would not otherwise affect the armor. The armor loses one point of value in the location struck. This effect will not trigger if the armor has no points left in the location struck. Ancestral Armor is not expended after use and will continue to provide protection until removed with Dispel Magic or similar abilities.',
     limitation: 'Phase Arrow and Phase Bolt interact with armor worn by the bearer as though Ancestral Armor was not present.',
     note: 'Engulfing Effects that do not strike the bearers armor and abilities that ignore armor entirely do not trigger Ancestral Armor.'
@@ -1305,12 +1308,13 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
     range: 'Other',
     materials: 'Two white strips',
     incantation: '"May the tears of the phoenix wash over thee" x3',
-    effect: `Enchanted player does not die as normal. When the player would otherwise die they instead remove a strip and become Frozen for 30 seconds. When the Frozen State is ended, the bearer is affected as follows:
-1. All wounds are removed.
-2. All States that would be removed by death or Respawning are removed.
-3. All Ongoing Effects with a timer expire.
-4. All of their carried equipment is fully repaired.
-5. All non-persistent enchantments, other than Phoenix Tears, are removed.
+    effect: `Enchanted player does not die as normal. When the player would otherwise die they instead remove a strip and become Frozen for 30 seconds. 
+    \n>>When the Frozen State is ended, the bearer is affected as follows:
+    \n>> 1. All wounds are removed.
+    \n>> 2. All States that would be removed by death or Respawning are removed.
+    \n>> 3. All Ongoing Effects with a timer expire.
+    \n>> 4. All of their carried equipment is fully repaired.
+    \n>> 5. All non-persistent enchantments, other than Phoenix Tears, are removed.
 Additionally Phoenix Tears allows you to wear an extra Enchantment from the Protection School. This extra enchantment is considered Persistent as long as Phoenix Tears is present. The additional Enchantment is not removed once Phoenix Tears is removed.`,
     limitation: 'Phoenix Tears is removed when the last strip is removed. If Phoenix Tears is removed, the bearer chooses which (m) Enchantments to lose to meet their new Enchantment limit, if necessary.',
     note: null
