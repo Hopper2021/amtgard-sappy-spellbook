@@ -1576,7 +1576,7 @@ May the arrows of your enemies not pierce thee. May this armor protect thee from
   },
   {
     id: 175,
-    name: 'EquipmentL Weapon, Long',
+    name: 'Equipment: Weapon, Long',
     type: 'Neutral',
     school: 'Neutral',
     range: null,
@@ -1753,3 +1753,171 @@ export const BARD_SPELLS = [
       ]
     },
   ]
+
+    export const WIZARD_SPELLS = [
+    {
+      level: 1,
+      spells: [
+        { id: 13, cost: 1, max: null, frequency: '1/Life'},
+        { id: 52, cost: 2, max: 1, frequency: null},
+        { id: 56, cost: 2, max: 2, frequency: null},
+        { id: 66, cost: 1, max: null, frequency: '!/Life'},
+        { id: 61, cost: 1, max: 8, frequency: '3 Balls / Unlimited'},
+        { id: 78, cost: 1, max: null, frequency: '1/Life'},
+        { id: 98, cost: 1, max: null, frequency: '1/Life'},
+        { id: 134, cost: 1, max: null, frequency: '1/Life Charge x3'},
+      ]
+    },
+    {
+      level: 2,
+      spells: [
+        { id: 12, cost: 1, max: null, frequency: '1/Life'},
+        { id: 31, cost: 1, max: null, frequency: '1/Life'},
+        { id: 48, cost: 1, max: 3, frequency: '2 Balls / Unlimited'},
+        { id: 86, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 110, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 124, cost: 1, max: null, frequency: '1/Life'},
+        { id: 158, cost: 1, max: 3, frequency: '1 Ball / Unlimited'},
+        { id: 160, cost: 1, max: 2, frequency: '1/Life'},
+      ]
+    },
+    {
+      level: 3,
+      spells: [
+        { id: 43, cost: 1, max: null, frequency: '1/Refresh Charge x3'},
+        { id: 44, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 58, cost: 1, max: 2, frequency: '1/Life'},
+        { id: 71, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 79, cost: 1, max: null, frequency: '1/Life'},
+        { id: 82, cost: 1, max: 3, frequency: '1 Ball / Unlimited'},
+        { id: 92, cost: 1, max: 4, frequency: '1 Ball / Unlimited'},
+        { id: 122, cost: 1, max: null, frequency: '2/Life'},
+        { id: 138, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 162, cost: 1, max: null, frequency: '1/Refresh'},
+      ]
+    },
+    {
+      level: 4,
+      spells: [
+        { id: 41, cost: 1, max: null, frequency: '2/Refresh'},
+        { id: 38, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 60, cost: 1, max: 4, frequency: '1 Ball / Unlimited'},
+        { id: 83, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 133, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 156, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 159, cost: 1, max: 2, frequency: '1/Life'},
+        { id: 168, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 174, cost: 1, max: null, frequency: '1/Refresh Charge x3'},
+      ]
+    },
+    {
+      level: 5,
+      spells: [
+        { id: 6, cost: 1, max: 2, frequency: '1/Life'},
+        { id: 34, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 175, cost: 4, max: 1, frequency: null},
+        { id: 107, cost: 1, max: 4, frequency: '1 Ball / Unlimited'},
+        { id: 115, cost: 1, max: 2, frequency: '1/Refresh'},
+        { id: 151, cost: 1, max: 2, frequency: '1/Life'},
+        { id: 169, cost: 1, max: 2, frequency: '1/Refresh'},
+        { id: 170, cost: 1, max: 2, frequency: '1/Refresh'},
+      ]
+    },
+    {
+      level: 6,
+      spells: [
+        { id: 17, cost: 2, max: 1, frequency: null},
+        { id: 45, cost: 1, max: 2, frequency: '1/Refresh'},
+        { id: 54, cost: 2, max: 1, frequency: null},
+        { id: 59, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 105, cost: 2, max: null, frequency: '1/Refresh'},
+        { id: 118, cost: 1, max: null, frequency: '1/Refresh'},
+        { id: 149, cost: 2, max: 1, frequency: '1 Ball / Unlimited'},
+        { id: 172, cost: 2, max: 1, frequency: null},
+        { id: 173, cost: 1, max: null, frequency: '1/Refresh'},
+      ]
+    },
+  ]
+
+  //   export const SPELL_LIST_TEMPLATE = [
+  //   {
+  //     level: 1,
+  //     spells: [
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //     ]
+  //   },
+  //   {
+  //     level: 2,
+  //     spells: [
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+
+  //     ]
+  //   },
+  //   {
+  //     level: 3,
+  //     spells: [
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //     ]
+  //   },
+  //   {
+  //     level: 4,
+  //     spells: [
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //     ]
+  //   },
+  //   {
+  //     level: 5,
+  //     spells: [
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //     ]
+  //   },
+  //   {
+  //     level: 6,
+  //     spells: [
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //       { id: , cost: , max: , frequency: ''},
+  //     ]
+  //   },
+  // ]
