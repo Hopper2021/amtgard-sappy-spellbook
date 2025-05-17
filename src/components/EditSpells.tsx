@@ -315,18 +315,25 @@ function EditSpells() {
       <Modal show={openModal} onHide={handleClose} centered>
         <Modal.Header closeButton>
           <Modal.Title className="d-flex align-items-center">
-            Spell Details
+            {selectedSpell?.name}
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body className="modal-sm">
-          <span><strong>Effect: </strong>{selectedSpell?.effect}</span>
-        </Modal.Body>
+        {!selectedSpell?.effect && !selectedSpell?.limitation && !selectedSpell?.note && (
+          <Modal.Body>
+            <span>This spell has no additional details.</span>
+          </Modal.Body>
+        )}
+        {selectedSpell?.effect && (
+          <Modal.Body className="modal-sm">
+            <span><strong>Effect: </strong>{selectedSpell?.effect}</span>
+          </Modal.Body>
+        )}
         {selectedSpell?.limitation && (
           <Modal.Body className="modal-sm">
             <span><strong>Limitation: </strong>{selectedSpell?.limitation}</span>
           </Modal.Body>
         )}
-        {selectedSpell?.limitation && (
+        {selectedSpell?.note && (
           <Modal.Body className="modal-sm">
             <span><strong>Note: </strong>{selectedSpell?.note}</span>
           </Modal.Body>
