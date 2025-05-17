@@ -76,7 +76,7 @@ function SpellListDetails() {
             },
             {
               id: "stripsCheckbox",
-              label: "show strips/matrials",
+              label: "show strips/materials",
               checked: showStrips,
               onClick: () => setShowStrips(!showStrips),
             },
@@ -143,7 +143,25 @@ function SpellListDetails() {
                       <span>( {spellSchool} )</span>
                     )}
                     <div style={{ marginLeft: '15px' }}>
-                      {showIncantation && <span style={{ fontStyle: 'italic' }}>{spellIncantation}</span>}
+                      {showIncantation && spellIncantation && spellIncantation.split('\n').map((line, idx) => {
+                        const isIndented = line.startsWith('>>');
+                        const cleanLine = isIndented ? line.replace(/^>>/, '') : line;
+                        return ((
+                            <span
+                              key={idx}
+                              style={{
+                                display: 'block',
+                                lineHeight: '1.2',
+                                marginLeft: isIndented ? 15 : 0,
+                                marginBottom: 1,
+                                fontStyle: 'italic',
+                              }}
+                            >
+                              {cleanLine}
+                            </span>
+                          )
+                        );
+                      })}
                     </div>
                     <div className="m-0">
                       {showStrips && spellMaterials
