@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Container, Row, Accordion, Button, CardHeader, Modal } from 'react-bootstrap'
-import { ALL_SPELLS, BARD_SPELLS, HEALER_SPELLS, WIZARD_SPELLS } from '../appConstants'
+import { ALL_SPELLS, BARD_SPELLS, HEALER_SPELLS, WIZARD_SPELLS, DRUID_SPELLS } from '../appConstants'
 import { useParams } from 'react-router-dom'
 import { Toast, ToastContainer } from 'react-bootstrap'
 
@@ -54,7 +54,8 @@ function EditSpells() {
   const spellsByClass = 
     (spellListToEdit?.class === 'Bard' &&  BARD_SPELLS) ||
     (spellListToEdit?.class === 'Healer' && HEALER_SPELLS) ||
-    (spellListToEdit?.class === 'Wizard' && WIZARD_SPELLS)
+    (spellListToEdit?.class === 'Wizard' && WIZARD_SPELLS) ||
+    (spellListToEdit?.class === 'Druid' && DRUID_SPELLS)
 
   const [modifiedSpellList, setModifiedSpellList] = React.useState<SpellList>({
 		id: parseInt(id || '0'),
