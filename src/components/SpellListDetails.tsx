@@ -124,30 +124,36 @@ function SpellListDetails() {
         {spellList.spells.map((level, levelIdx) => (
           <React.Fragment key={levelIdx}>
             <Form.Text className="fw-bold mb-0">{`Level ${level.level}`}</Form.Text>
-            {level.spells.map((spell, spellIdx) => (
-              <Row key={spellIdx} className="m-0">
-                <div>
-                  {spell.purchased}x{' '}
-                  <span style={{ textDecoration: 'underline' }}>
-                    {fetchSpellDetails('name', spell.id) || 'Unknown Spell'}
-                  </span>{' '}
-                  {showTypeAndSchool && <span>( {fetchSpellDetails('type', spell.id)} )</span>}
-                  {fetchSpellDetails('school', spell.id) && showTypeAndSchool && (
-                    <span>( {fetchSpellDetails('school', spell.id)} )</span>
-                  )}
-                  <div style={{ marginLeft: '15px' }}>
-                    {showIncantation && <span style={{ fontStyle: 'italic' }}>{fetchSpellDetails('incantation', spell.id)}</span>}
+            {level.spells.map((spell, spellIdx) => {
+              const spellName = fetchSpellDetails('name', spell.id) || 'Unknown Spell';
+              const spellType = fetchSpellDetails('type', spell.id);
+              const spellSchool = fetchSpellDetails('school', spell.id);
+              const spellIncantation = fetchSpellDetails('incantation', spell.id);
+              const spellMaterials = fetchSpellDetails('materials', spell.id);
+
+              return (
+                <Row key={spellIdx} className="m-0">
+                  <div>
+                    {spell.purchased}x{' '}
+                    <span style={{ textDecoration: 'underline' }}>
+                      {spellName}
+                    </span>{' '}
+                    {showTypeAndSchool && <span>( {spellType} )</span>}
+                    {spellSchool && showTypeAndSchool && (
+                      <span>( {spellSchool} )</span>
+                    )}
+                    <div style={{ marginLeft: '15px' }}>
+                      {showIncantation && <span style={{ fontStyle: 'italic' }}>{spellIncantation}</span>}
+                    </div>
+                    <div className="m-0">
+                      {showStrips && spellMaterials
+                        ? (<span>( {spellMaterials} )</span>)
+                        : null}
+                    </div>
                   </div>
-                  <div className="m-0">
-                      {showStrips && fetchSpellDetails('materials', spell.id) ? (
-                        <span>( {fetchSpellDetails('materials', spell.id)} )</span>
-                      ) : null}
-                    {/* "Magic ball" is being displayed in two places, in materials and type. 
-                    Consider removing Magic Ball from one of these keys in appConstants ALL_SPELLS */}
-                  </div>
-                </div>
-              </Row>
-            ))}
+                </Row>
+              );
+            })}
           </React.Fragment>
         ))}
       </Row>
