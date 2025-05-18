@@ -49,7 +49,10 @@ function EditSpells() {
   const { id } = useParams<{ id: string }>()
   const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
   const spellListToEdit = allSpellLists.find((list: SpellList) => list.id === parseInt(id || '0'))
-    const [modifiedSpellList, setModifiedSpellList] = React.useState<SpellList>({
+  const priestArchetype = ALL_SPELLS.find(spell => spell.name === 'Priest')
+  const warderArchetype = ALL_SPELLS.find(spell => spell.name === 'Warder')
+  const necromancerArchetype = ALL_SPELLS.find(spell => spell.name === 'Necromancer')
+  const [modifiedSpellList, setModifiedSpellList] = React.useState<SpellList>({
 		id: parseInt(id || '0'),
 		name: spellListToEdit?.name || 'My SpellBook',
 		class: spellListToEdit?.class || 'Bard',
@@ -60,9 +63,7 @@ function EditSpells() {
 
   // Healer Archetype list adjustments
   const getAdjustedHealerSpells = (baseHealerSpells, spellList) => {
-    const priestArchetype = ALL_SPELLS.find(spell => spell.name === 'Priest')
-    const warderArchetype = ALL_SPELLS.find(spell => spell.name === 'Warder')
-    const necromancerArchetype = ALL_SPELLS.find(spell => spell.name === 'Necromancer')
+    const healSpell = ALL_SPELLS.find(spell => spell.name === 'Heal')
     const priestPresent = spellList?.spells.some(level =>
       level.spells.some(spell => spell.id === priestArchetype?.id)
     )
@@ -73,52 +74,30 @@ function EditSpells() {
       level.spells.some(spell => spell.id === necromancerArchetype?.id)
     )
 
-    if (priestPresent) {
-      return baseHealerSpells.map(level => ({
-        ...level,
-        spells: level.spells.map(spell =>
-          spell.id === 75
-            ? { ...spell, cost: priestPresent ? 0 : spell.cost }
-            : spell
-        ),
-      }))
-    }
+    // Collect all restricted schools based on present archetypes
+    let restrictedSchools: string[] = []
+    if (warderPresent) restrictedSchools.push('Death', 'Command', 'Subdual')
+    if (necromancerPresent) restrictedSchools.push('Protection')
 
-    if (warderPresent) {
-      return baseHealerSpells.map(level => ({
-        ...level,
-        spells: level.spells.map(spell => {
-          const allSpell = ALL_SPELLS.find(s => s.id === spell.id)
-          if (
-            allSpell &&
-            allSpell.school &&
-            ['Death', 'Command', 'Subdual'].includes(allSpell.school)
-          ) {
-            return { ...spell, restricted: true }
-          }
-          return spell
-        }),
-      }))
-    }
-
-    if (necromancerPresent) {
-      return baseHealerSpells.map(level => ({
-        ...level,
-        spells: level.spells.map(spell => {
-          const allSpell = ALL_SPELLS.find(s => s.id === spell.id)
-          if (
-            allSpell &&
-            allSpell.school &&
-            ['Protection'].includes(allSpell.school)
-          ) {
-            return { ...spell, restricted: true }
-          }
-          return spell
-        }),
-      }))
-    }
-
-    return baseHealerSpells
+    // Always apply restrictions if any archetype is present
+    return baseHealerSpells.map(level => ({
+      ...level,
+      spells: level.spells.map(spell => {
+        const allSpell = ALL_SPELLS.find(s => s.id === spell.id)
+        let restricted = false
+        if (
+          allSpell &&
+          allSpell.school &&
+          restrictedSchools.includes(allSpell.school)
+        ) {
+          restricted = true
+        }
+        if (spell.id === healSpell?.id && priestPresent) {
+          return { ...spell, cost: 0, restricted }
+        }
+        return { ...spell, restricted }
+      }),
+    }))
   }
 
   const spellsByClass =
@@ -187,7 +166,6 @@ function EditSpells() {
         .filter(s => s.school !== null && ['Death', 'Command', 'Subdual'].includes(s.school))
         .map(s => s.id)
 
-      // Refund and remove each restricted spell
       restrictedIds.forEach(spellId => {
         cleanedSpellList = autoRemoveAndRefundSpell(spellId, cleanedSpellList)
       })
@@ -199,7 +177,6 @@ function EditSpells() {
         .filter(s => s.school === 'Protection')
         .map(s => s.id)
 
-      // Refund and remove each restricted spell
       restrictedIds.forEach(spellId => {
         cleanedSpellList = autoRemoveAndRefundSpell(spellId, cleanedSpellList)
       })
@@ -575,6 +552,8 @@ function EditSpells() {
           </Modal.Body>
         )}
       </Modal>
+
+      {console.log('modifiedspell list', modifiedSpellList)}
 
       <ToastContainer position="bottom-center" className="p-3">
         <Toast className="bg-info text-white" show={showToast} onClose={() => setShowToast(false)} autohide delay={3000}>
