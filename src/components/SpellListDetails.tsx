@@ -1,7 +1,13 @@
 import React from 'react'
 import { Container, Row, Button, Col, Form } from 'react-bootstrap'
 import { useNavigate, useParams } from 'react-router-dom'
-import { ALL_SPELLS } from '../appConstants'
+import {
+  ALL_SPELLS,
+  BARD_SPELLS,
+  HEALER_SPELLS,
+  DRUID_SPELLS,
+  WIZARD_SPELLS,
+} from '../appConstants'
 
 interface SpellLevel {
 	level: number
@@ -28,6 +34,12 @@ function SpellListDetails() {
   const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
   const spellList = allSpellLists.find((list: SpellList) => list.id === parseInt(id || '0'))
 
+  const spellsByClass = 
+    (spellList?.class === 'Bard' &&  BARD_SPELLS) ||
+    (spellList?.class === 'Healer' && HEALER_SPELLS) ||
+    (spellList?.class === 'Wizard' && WIZARD_SPELLS) ||
+    (spellList?.class === 'Druid' && DRUID_SPELLS)
+
   const fetchSpellDetails = (key: string, spellId: number) => {
     const spell = ALL_SPELLS.find(spell => spell.id === spellId)
 
@@ -52,6 +64,84 @@ function SpellListDetails() {
     } else if (key === 'materials') {
       return spell?.materials
     }
+  }
+
+  // maybe break this down by class?
+  const fetchSpellFrequency = (spellId: number) => {
+    let spellDetails
+    if (Array.isArray(spellsByClass)) {
+      for (const level of spellsByClass) {
+        if (level.spells) {
+          const found = level.spells.find(spell => spell.id === spellId)
+          if (found) {
+            spellDetails = found
+            break
+          }
+        } else if (level.id === spellId) {
+          spellDetails = level
+          break
+        }
+      }
+    }
+
+    const allSpell = ALL_SPELLS.find(s => Number(s.id) === Number(spellId))
+
+    const isWarder = spellList.spells.some(level =>
+      level.spells.some(spell => spell.id === 171)
+    )
+
+    const isNecromancer = spellList.spells.some(level =>
+      level.spells.some(spell => spell.id === 104)
+    )
+
+    let frequency = ''
+    const freq = spellDetails?.frequency
+    if (freq && typeof freq === 'object') {
+      const charge = freq.charge ?? freq.extra
+      let amount = freq.amount
+      if (
+        isWarder &&
+        allSpell &&
+        allSpell.school &&
+        allSpell.school.trim().toLowerCase() === 'protection' &&
+        typeof amount === 'number'
+      ) {
+        amount = amount * 2
+      }
+      if (amount != null && freq.per) {
+        frequency = `${amount}/${freq.per}`
+      } else if (freq.per) {
+        frequency = freq.per
+      }
+      if (charge) {
+        frequency += ` ${charge}`
+      }
+    } else if (typeof freq === 'string') {
+      frequency = freq
+    }
+
+    const isPriest = spellList.spells.some(level =>
+      level.spells.some(spell => spell.id === 114)
+    )
+
+    const isMetaMagic = ALL_SPELLS.some(spell =>
+      spell.id === spellId && spell.type === 'Meta-Magic'
+    )
+
+    if (isPriest && isMetaMagic) {
+      frequency += (frequency ? ' ' : '') + 'Charge x3'
+    }
+
+    if (
+      isNecromancer &&
+      allSpell &&
+      allSpell.school &&
+      allSpell.school.trim().toLowerCase() === 'death'
+    ) {
+      frequency += (frequency ? ' ' : '') + 'Charge x3'
+    }
+
+    return frequency
   }
 
   return (
@@ -125,11 +215,12 @@ function SpellListDetails() {
           <React.Fragment key={levelIdx}>
             <Form.Text className="fw-bold mb-0">{`Level ${level.level}`}</Form.Text>
             {level.spells.map((spell, spellIdx) => {
-              const spellName = fetchSpellDetails('name', spell.id) || 'Unknown Spell';
-              const spellType = fetchSpellDetails('type', spell.id);
-              const spellSchool = fetchSpellDetails('school', spell.id);
-              const spellIncantation = fetchSpellDetails('incantation', spell.id);
-              const spellMaterials = fetchSpellDetails('materials', spell.id);
+              const spellName = fetchSpellDetails('name', spell.id) || 'Unknown Spell'
+              const spellType = fetchSpellDetails('type', spell.id)
+              const spellSchool = fetchSpellDetails('school', spell.id)
+              const spellIncantation = fetchSpellDetails('incantation', spell.id)
+              const spellMaterials = fetchSpellDetails('materials', spell.id)
+              const spellFrequency = fetchSpellFrequency(spell.id)
 
               return (
                 <Row key={spellIdx} className="m-0">
@@ -138,14 +229,18 @@ function SpellListDetails() {
                     <span style={{ textDecoration: 'underline' }}>
                       {spellName}
                     </span>{' '}
+                    <span>
+                      {spellFrequency}
+                    </span>{' '}
                     {showTypeAndSchool && <span>( {spellType} )</span>}
                     {spellSchool && showTypeAndSchool && (
                       <span>( {spellSchool} )</span>
                     )}
                     <div style={{ marginLeft: '15px' }}>
                       {showIncantation && spellIncantation && spellIncantation.split('\n').map((line, idx) => {
-                        const isIndented = line.startsWith('>>');
-                        const cleanLine = isIndented ? line.replace(/^>>/, '') : line;
+                        const isIndented = line.startsWith('>>')
+                        const cleanLine = isIndented ? line.replace(/^>>/, '') : line
+                        
                         return ((
                             <span
                               key={idx}
@@ -160,7 +255,7 @@ function SpellListDetails() {
                               {cleanLine}
                             </span>
                           )
-                        );
+                        )
                       })}
                     </div>
                     <div className="m-0">
@@ -170,7 +265,7 @@ function SpellListDetails() {
                     </div>
                   </div>
                 </Row>
-              );
+              )
             })}
           </React.Fragment>
         ))}
