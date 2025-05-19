@@ -105,7 +105,7 @@ function EditSpells() {
     }))
   }
 
-    // Healer Archetype list adjustments
+  // Wizard Archetype list adjustments
   const getAdjustedWizardSpells = (baseWizardSpells, spellList) => {
     const evokerArchetype = ALL_SPELLS.find(spell => spell.name === 'Evoker')
     const evokerPresent = spellList?.spells.some(level =>
@@ -157,11 +157,63 @@ function EditSpells() {
     }))
   }
 
+  // Druid Archetype list adjustments
+  const getAdjustedDruidSpells = (baseDruidSpells, spellList) => {
+    const summonerArchetype = ALL_SPELLS.find(spell => spell.name === 'Summoner')
+    const summonerPresent = spellList?.spells.some(level =>
+      level.spells.some(spell => spell.id === summonerArchetype?.id)
+    )
+
+    // Collect all restricted schools based on present archetypes
+    let restrictedTypes: string[] = []
+    let restrictedRanges: string[] = []
+    let restrictedSchools: string[] = []
+    if (summonerArchetype) restrictedTypes.push('Verbal')
+    if (summonerArchetype) restrictedRanges.push("20'", "50'", 'Other')
+    // if (warlockPresent) restrictedSchools.push('Spirit', 'Sorcery', 'Command')
+
+    // Always apply restrictions if any archetype is present
+    return baseDruidSpells.map(level => ({
+      ...level,
+      spells: level.spells.map(spell => {
+      const allSpell = ALL_SPELLS.find(s => s.id === spell.id)
+      const spellInDruidList = baseDruidSpells.find(level => level.spells.some(s => s.id === spell.id))
+      let restricted = false
+
+      // Summoner: restrict Verbals that are not Touch or Self
+      if (
+        summonerPresent &&
+        allSpell &&
+        allSpell.type === 'Verbal' &&
+        (allSpell.range === "20'" || allSpell.range === "50'" || allSpell.range === 'Other')
+      ) {
+        restricted = true
+      }
+
+      // Restricts Equipment beyond level 2
+      if (
+        summonerPresent &&
+        allSpell &&
+        allSpell.name.includes('Equipment:') &&
+        spellInDruidList.level > 2
+      ) {
+        restricted = true
+      }
+      
+      // Ranger: May use bows. Cost of equipment is 0. Enchantment costs are doubled.
+
+      // Avatar of Nature: all enchantments of level 4 and below are now range self. Does not apply to golem.
+
+      return { ...spell, restricted }
+      }),
+    }))
+  }
+
   const spellsByClass =
     (spellListToEdit?.class === 'Bard' && BARD_SPELLS) ||
     (spellListToEdit?.class === 'Healer' && getAdjustedHealerSpells(HEALER_SPELLS, spellListToEdit)) ||
     (spellListToEdit?.class === 'Wizard' && getAdjustedWizardSpells(WIZARD_SPELLS, spellListToEdit)) ||
-    (spellListToEdit?.class === 'Druid' && DRUID_SPELLS)
+    (spellListToEdit?.class === 'Druid' && getAdjustedDruidSpells(DRUID_SPELLS, spellListToEdit))
 
   const autoRemoveAndRefundSpell = (spellId: number, spellList: SpellList) => {
     const spellLevel = findSpellLevel(spellId)

@@ -97,6 +97,9 @@ function SpellListDetails() {
     const isWarlock = spellList.spells.some(level =>
       level.spells.some(spell => spell.id === 172)
     )
+    const isSummoner = spellList.spells.some(level =>
+      level.spells.some(spell => spell.id === 155)
+    )
 
     let frequency = ''
     const freq = spellDetails?.frequency
@@ -104,7 +107,7 @@ function SpellListDetails() {
       const charge = freq.charge ?? freq.extra
       let amount = freq.amount
 
-      // warder gives double protection spells
+      // Warder gives double protection spells
       if (
         isWarder &&
         allSpell &&
@@ -115,12 +118,22 @@ function SpellListDetails() {
         amount = amount * 2
       }
       
-      // Warlock spell amount changes
+      // Warlock doubles verbal death/flame spells
       if (
         isWarlock &&
         allSpell &&
         allSpell.type === 'Verbal' &&
         (allSpell.school === 'Death' || allSpell.school === 'Flame') &&
+        typeof amount === 'number'
+      ) {
+        amount = amount * 2
+      }
+
+      // Summoner doubles enchantment spells
+      if (
+        isSummoner &&
+        allSpell &&
+        allSpell.type === 'Enchantment' &&
         typeof amount === 'number'
       ) {
         amount = amount * 2
