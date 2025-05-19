@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import FloatingActionButton from './FloatingActionButton.tsx'
-import { Container, Row, Button, Modal } from 'react-bootstrap'
+import { Container, Row, Button, Modal, Toast, Alert } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { IoIosWarning } from "react-icons/io"
 import { LuCirclePlus } from "react-icons/lu"
+import { IoMdInformationCircle } from "react-icons/io"
 
 function App() {
   const navigate = useNavigate()
@@ -19,8 +20,14 @@ function App() {
   }
   const [selectedSpellList, setSelectedSpellList] = useState(emptySpellList)
   const [longPressTimeout, setLongPressTimeout] = useState<NodeJS.Timeout | null>(null)
+  const [showAlert, setShowAlert] = useState(true)
 
-  console.log('selectedSpellList', selectedSpellList)
+  let enableTips = localStorage.getItem('enableTips')
+  if (enableTips === null) {
+    localStorage.setItem('enableTips', 'true')
+    enableTips = 'true'
+  }
+  const tipsEnabled = enableTips === 'true'
 
   const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
 
@@ -51,21 +58,30 @@ function App() {
 
   return (
     <>
-      <Modal show={openModal} onHide={handleClose} centered>
+      <Modal className="p-4" show={openModal} onHide={handleClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title className="d-flex align-items-center">
-            <IoIosWarning size={35} className="me-2" color="gold"/>
+          <Modal.Title>
+            <IoIosWarning size={35} className="me-2" color="gold"/> 
             {selectedSpellList?.name}
           </Modal.Title>
         </Modal.Header>
-        <Modal.Dialog className="modal-sm d-flex justify-content-around">
-          <Button variant="secondary" className="mb-4" onClick={() => navigate(`/modifyList/${selectedSpellList?.id}`)}>
+        <div className="d-flex flex-column align-items-center py-3">
+          <Button
+            variant="secondary"
+            className="mb-4"
+            style={{ width: "80%" }}
+            onClick={() => navigate(`/modifyList/${selectedSpellList?.id}`)}
+          >
             Modify
           </Button>
-          <Button variant="danger" onClick={handleToggleDeleteModal}>
+          <Button
+            variant="danger"
+            style={{ width: "80%" }}
+            onClick={handleToggleDeleteModal}
+          >
             Delete
           </Button>
-        </Modal.Dialog>
+        </div>
       </Modal>
 
       <Modal show={toggleDeleteModal} onHide={handleClose} centered>
@@ -92,12 +108,20 @@ function App() {
           </Modal.Footer>
       </Modal>
 
-      {console.log('allSpellLists', allSpellLists.length)}
-
       <Container fluid className="p-3">
-        {/* This looks better on desktop when its inside the below container instead */}
         <Container className="px-4 pt-1">
           <Row className="pb-2 fw-semibold">Spell Books</Row>
+          {tipsEnabled && (
+            <Alert
+              show={showAlert}
+              className="alert-primary"
+              dismissible
+              onClose={() => setShowAlert(false)}
+              >
+              <IoMdInformationCircle  size={25} className="me-2" color="blue"/>
+              <span>Long press on a spell book to modify name, level, look the part, or delete it.</span>
+            </Alert>
+          )}
           {allSpellLists.length === 0 ? (
             <Row className="d-flex justify-content-center">
               <h6 className="text-center">No Spell Books Found</h6>
