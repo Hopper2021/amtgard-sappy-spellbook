@@ -112,6 +112,8 @@ function CreateSpellList() {
 				</Col>
 			</Row>
 
+		<Row className="align-items-center">
+			<Col xs={4}>
 			<InputGroup className="mb-3">
 				<InputGroup.Text style={{ backgroundColor: 'transparent', border: 'none', paddingRight: 5 }}>
 					Class:
@@ -138,6 +140,34 @@ function CreateSpellList() {
 					</Dropdown.Menu>
 				</Dropdown>
 			</InputGroup>
+			</Col>
+			
+			<Col xs={8}>
+			<InputGroup className="mb-3">
+				<InputGroup.Text style={{ backgroundColor: 'transparent', border: 'none', paddingRight: 5 }}>
+					Version:
+				</InputGroup.Text>
+				<Dropdown>
+					<Dropdown.Toggle
+						style={{
+							backgroundColor: 'transparent',
+							color: 'black',
+							border: 'none',
+							borderBottom: '1px solid black',
+							borderRadius: 0,
+						}}
+						id="dropdown-basic"
+					>
+						V8.6.3 "Sappy Three"
+					</Dropdown.Toggle>
+
+					<Dropdown.Menu>
+						<Dropdown.Item>- V8.6.3 "Sappy Three"</Dropdown.Item>
+					</Dropdown.Menu>
+				</Dropdown>
+			</InputGroup>
+			</Col>
+		</Row>
 
 			<Form.Check
 				className="m-3"
