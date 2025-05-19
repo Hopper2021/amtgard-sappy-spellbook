@@ -68,6 +68,7 @@ function SpellListDetails() {
 
   // maybe break this down by class?
   const fetchSpellFrequency = (spellId: number) => {
+    // only check if spellList.class is Healer
     let spellDetails
     if (Array.isArray(spellsByClass)) {
       for (const level of spellsByClass) {
@@ -93,12 +94,17 @@ function SpellListDetails() {
     const isNecromancer = spellList.spells.some(level =>
       level.spells.some(spell => spell.id === 104)
     )
+    const isWarlock = spellList.spells.some(level =>
+      level.spells.some(spell => spell.id === 172)
+    )
 
     let frequency = ''
     const freq = spellDetails?.frequency
     if (freq && typeof freq === 'object') {
       const charge = freq.charge ?? freq.extra
       let amount = freq.amount
+
+      // warder gives double protection spells
       if (
         isWarder &&
         allSpell &&
@@ -108,6 +114,18 @@ function SpellListDetails() {
       ) {
         amount = amount * 2
       }
+      
+      // Warlock spell amount changes
+      if (
+        isWarlock &&
+        allSpell &&
+        allSpell.type === 'Verbal' &&
+        (allSpell.school === 'Death' || allSpell.school === 'Flame') &&
+        typeof amount === 'number'
+      ) {
+        amount = amount * 2
+      }
+
       if (amount != null && freq.per) {
         frequency = `${amount}/${freq.per}`
       } else if (freq.per) {
@@ -139,6 +157,26 @@ function SpellListDetails() {
       allSpell.school.trim().toLowerCase() === 'death'
     ) {
       frequency += (frequency ? ' ' : '') + 'Charge x3'
+    }
+
+    // Battlemage changes
+    const isBattleMage = spellList.spells.some(level =>
+      level.spells.some(spell => spell.id === 18)
+    )
+    const ambulantId = ALL_SPELLS.find(spell => spell.name === 'Ambulant')?.id
+
+    if (isBattleMage && spellId === ambulantId) {
+      frequency = 'Unlimited'
+    }
+
+    // Evoker Changes
+    const isEvoker = spellList.spells.some(level =>
+      level.spells.some(spell => spell.id === 54)
+    )
+    const elementalBarageId = ALL_SPELLS.find(spell => spell.name === 'Elemental Barrage')?.id
+
+    if (isEvoker && spellId === elementalBarageId) {
+      frequency += (frequency ? ' ' : '') + 'Charge x10'
     }
 
     return frequency

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Row, Accordion, Button, CardHeader, Modal } from 'react-bootstrap'
+import { Container, Row, Accordion, Button, CardHeader, Modal, Alert } from 'react-bootstrap'
 import { ALL_SPELLS, BARD_SPELLS, HEALER_SPELLS, WIZARD_SPELLS, DRUID_SPELLS } from '../appConstants'
 import { useParams } from 'react-router-dom'
 import { Toast, ToastContainer } from 'react-bootstrap'
+import { IoMdInformationCircle } from 'react-icons/io'
 
 type SelectedSpellType = {
   id: number
@@ -45,13 +46,14 @@ function EditSpells() {
   const [cannotAffordSpell, setCannotAffordSpell] = useState(false)
   const [spellMaxReached, setSpellMaxReached] = useState(false)
   const [showToast, setShowToast] = useState(false)
+  const [showDisabledToast, setShowDisabledSpellToast] = useState(false)
   const [openModal, setOpenModal] = useState(false)
   const { id } = useParams<{ id: string }>()
   const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
   const spellListToEdit = allSpellLists.find((list: SpellList) => list.id === parseInt(id || '0'))
-  const priestArchetype = ALL_SPELLS.find(spell => spell.name === 'Priest')
-  const warderArchetype = ALL_SPELLS.find(spell => spell.name === 'Warder')
-  const necromancerArchetype = ALL_SPELLS.find(spell => spell.name === 'Necromancer')
+  const [showAlert, setShowAlert] = useState(true)
+  let enableTips = localStorage.getItem('enableTips')
+  const tipsEnabled = enableTips === 'true'
   const [modifiedSpellList, setModifiedSpellList] = React.useState<SpellList>({
 		id: parseInt(id || '0'),
 		name: spellListToEdit?.name || 'My SpellBook',
@@ -63,6 +65,9 @@ function EditSpells() {
 
   // Healer Archetype list adjustments
   const getAdjustedHealerSpells = (baseHealerSpells, spellList) => {
+    const priestArchetype = ALL_SPELLS.find(spell => spell.name === 'Priest')
+    const warderArchetype = ALL_SPELLS.find(spell => spell.name === 'Warder')
+    const necromancerArchetype = ALL_SPELLS.find(spell => spell.name === 'Necromancer')
     const healSpell = ALL_SPELLS.find(spell => spell.name === 'Heal')
     const priestPresent = spellList?.spells.some(level =>
       level.spells.some(spell => spell.id === priestArchetype?.id)
@@ -100,10 +105,62 @@ function EditSpells() {
     }))
   }
 
+    // Healer Archetype list adjustments
+  const getAdjustedWizardSpells = (baseWizardSpells, spellList) => {
+    const evokerArchetype = ALL_SPELLS.find(spell => spell.name === 'Evoker')
+    const evokerPresent = spellList?.spells.some(level =>
+      level.spells.some(spell => spell.id === evokerArchetype?.id)
+    )
+    const warlockArchetype = ALL_SPELLS.find(spell => spell.name === 'Warlock')
+    const warlockPresent = spellList?.spells.some(level =>
+      level.spells.some(spell => spell.id === warlockArchetype?.id)
+    )
+
+    // Collect all restricted schools based on present archetypes
+    let restrictedTypes: string[] = []
+    let restrictedRanges: string[] = []
+    let restrictedSchools: string[] = []
+    if (evokerPresent) restrictedTypes.push('Verbal')
+    if (evokerPresent) restrictedRanges.push("20'", "50'")
+    if (warlockPresent) restrictedSchools.push('Spirit', 'Sorcery', 'Command')
+
+    // Always apply restrictions if any archetype is present
+    return baseWizardSpells.map(level => ({
+      ...level,
+      spells: level.spells.map(spell => {
+      const allSpell = ALL_SPELLS.find(s => s.id === spell.id)
+      let restricted = false
+
+      // Evoker: restrict Verbals with range 20' or 50'
+      if (
+        evokerPresent &&
+        allSpell &&
+        allSpell.type === 'Verbal' &&
+        (allSpell.range === "20'" || allSpell.range === "50'")
+      ) {
+        restricted = true
+      }
+
+      // Warlock: restrict Verbals in Spirit, Sorcery, or Command schools
+      if (
+        warlockPresent &&
+        allSpell &&
+        allSpell.type === 'Verbal' &&
+        allSpell.school !== null &&
+        ['Spirit', 'Sorcery', 'Command'].includes(allSpell.school)
+      ) {
+        restricted = true
+      }
+
+  return { ...spell, restricted }
+      }),
+    }))
+  }
+
   const spellsByClass =
     (spellListToEdit?.class === 'Bard' && BARD_SPELLS) ||
     (spellListToEdit?.class === 'Healer' && getAdjustedHealerSpells(HEALER_SPELLS, spellListToEdit)) ||
-    (spellListToEdit?.class === 'Wizard' && WIZARD_SPELLS) ||
+    (spellListToEdit?.class === 'Wizard' && getAdjustedWizardSpells(WIZARD_SPELLS, spellListToEdit)) ||
     (spellListToEdit?.class === 'Druid' && DRUID_SPELLS)
 
   const autoRemoveAndRefundSpell = (spellId: number, spellList: SpellList) => {
@@ -149,6 +206,7 @@ function EditSpells() {
   }
 
   useEffect(() => {
+    // Healer Archetype spell limitations
     const warderArchetype = ALL_SPELLS.find(spell => spell.name === 'Warder')
     const necromancerArchetype = ALL_SPELLS.find(spell => spell.name === 'Necromancer')
     const warderPresent = modifiedSpellList.spells.some(level =>
@@ -183,6 +241,36 @@ function EditSpells() {
       shouldUpdate = true
     }
 
+    // Wizard Archetype spell limitations
+    const evokerArchetype = ALL_SPELLS.find(spell => spell.name === 'Evoker')
+    const evokerPresent = modifiedSpellList.spells.some(level =>
+      level.spells.some(spell => spell.id === evokerArchetype?.id)
+    )
+    const warlockArchetype = ALL_SPELLS.find(spell => spell.name === 'Warlock')
+    const warlockPresent = modifiedSpellList.spells.some(level =>
+      level.spells.some(spell => spell.id === warlockArchetype?.id)
+    )
+
+    if (warlockPresent) {
+      const restrictedIds = ALL_SPELLS
+        .filter(s => s.school !== null && ['Spirit', 'Sorcery', 'Command'].includes(s.school))
+        .map(spell => spell.id)
+      restrictedIds.forEach(spellId => {
+        cleanedSpellList = autoRemoveAndRefundSpell(spellId, cleanedSpellList)
+      })
+      shouldUpdate = true
+    }
+
+    if (evokerPresent) {
+      const restrictedIds = ALL_SPELLS
+        .filter(spell => spell.type === 'Verbal' && (spell.range === "20'" || spell.range === "50'"))
+        .map(spell => spell.id)
+      restrictedIds.forEach(spellId => {
+        cleanedSpellList = autoRemoveAndRefundSpell(spellId, cleanedSpellList)
+      })
+      shouldUpdate = true
+    }
+
     if (
       shouldUpdate &&
       JSON.stringify(cleanedSpellList) !== JSON.stringify(modifiedSpellList)
@@ -193,6 +281,8 @@ function EditSpells() {
       )
       localStorage.setItem('allSpellLists', JSON.stringify(updatedSpellLists))
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modifiedSpellList, allSpellLists])
 
   const getSpellName = (spellId: number) => {
@@ -553,7 +643,14 @@ function EditSpells() {
         )}
       </Modal>
 
-      {console.log('modifiedspell list', modifiedSpellList)}
+      <ToastContainer position="bottom-center" className="p-3">
+        <Toast bg="info" show={showDisabledToast} onClose={() => setShowDisabledSpellToast(false)} autohide delay={3000}>
+          <Toast.Body className="d-flex-end align-items-center">
+            Unable to add spell due to archetype
+            { /* Display which archetype */}
+          </Toast.Body>
+        </Toast>
+      </ToastContainer>
 
       <ToastContainer position="bottom-center" className="p-3">
         <Toast className="bg-info text-white" show={showToast} onClose={() => setShowToast(false)} autohide delay={3000}>
@@ -563,15 +660,32 @@ function EditSpells() {
           </Toast.Body>
         </Toast>
       </ToastContainer>
-      <CardHeader className="d-flex justify-content-between">
+      <Container>
+        {tipsEnabled && (
+          <Alert
+            show={showAlert}
+            className="alert-primary align-items-center"
+            dismissible
+            onClose={() => setShowAlert(false)}
+            >
+            <IoMdInformationCircle size={25} className="me-1" color="blue"/>
+            <span>Long press on any spell below to view its effects and limitations.</span>
+            {/* <div
+              className="position-absolute end-0 bottom-0 m-3 text-muted small"
+              style={{ pointerEvents: 'none' }}
+            >
+              Disable tips in settings
+            </div> */}
+          </Alert>
+        )}
+        <CardHeader className="d-flex justify-content-between align-items-center">
         <h6>Edit {modifiedSpellList.class} Spells</h6>
-        <Button
-          className="mb-3"
-          onClick={() => setAddOrRemoveSpells(addOrRemoveSpells === 'Add' ? 'Remove' : 'Add')}>
-          {addOrRemoveSpells}
-        </Button>
-      </CardHeader>
-        <Container>
+          <Button
+            className="mb-3"
+            onClick={() => setAddOrRemoveSpells(addOrRemoveSpells === 'Add' ? 'Remove' : 'Add')}>
+            {addOrRemoveSpells}
+          </Button>
+        </CardHeader>
           {Array.isArray(spellsByClass) && spellsByClass.slice(0, modifiedSpellList.spells.length).map((level, index) => {
             const levelPointsAvailable = calculateLevelPointsAvailable(level.level)
             const trickleDownPointsAvailable = calculateTrickleDownPointsAvailable(level.level)
@@ -591,8 +705,13 @@ function EditSpells() {
                         const spellCost = spellsByLevel.cost
 
                         return (
-                          <Row className="d-flex justify-content-between" key={spellsByLevel.id}>
+                          <Row
+                            key={spellsByLevel.id}
+                            className="d-flex justify-content-between"
+                            onClick={() => spellsByLevel.restricted ? setShowDisabledSpellToast(true) : null}
+                          >
                             <Button
+                              style={spellsByLevel.restricted ? { textDecoration: 'line-through' } : undefined}
                               disabled={spellsByLevel.restricted}
                               variant={spellsByLevel.restricted ? "danger" : "unknown"}
                               className="text-start border-bottom"
@@ -601,7 +720,7 @@ function EditSpells() {
                               onMouseLeave={handleLongPressEnd}
                               onTouchStart={() => handleLongPressStart(spellsByLevel.id)}
                               onTouchEnd={handleLongPressEnd}
-                              onClick={() => addSpellToList(spellsByLevel.id)}
+                              onClick={() => spellsByLevel.restricted ? setShowDisabledSpellToast(true) : addSpellToList(spellsByLevel.id)}
                             >
                               {spellName} {amountPurchased} (cost: {spellCost})
                             </Button>
