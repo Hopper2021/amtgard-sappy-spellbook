@@ -1,8 +1,19 @@
 import { Dropdown } from 'react-bootstrap'
-import React from 'react'
 import { Navbar, Container } from 'react-bootstrap'
 
 function HeaderBar() {
+  const currentSetting = localStorage.getItem('enableTips')
+
+  const changeTipsSettings = () => {
+    if (currentSetting === 'true') {
+      localStorage.setItem('enableTips', 'false')
+    } else {
+      localStorage.setItem('enableTips', 'true')
+    }
+
+    window.location.reload()
+  }
+
   return (
     <>
       <Navbar bg="primary" variant="dark">
@@ -15,7 +26,10 @@ function HeaderBar() {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              <Dropdown.Item>Settings</Dropdown.Item>
+              <Dropdown.Item>Patch Notes</Dropdown.Item>
+              <Dropdown.Item onClick={() => changeTipsSettings()}>
+                {currentSetting === 'true' ? 'Disable' : 'Enable'} Tips
+              </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </Navbar.Collapse>
