@@ -4,6 +4,7 @@ import { ALL_SPELLS, BARD_SPELLS, HEALER_SPELLS, WIZARD_SPELLS, DRUID_SPELLS } f
 import { useParams } from 'react-router-dom'
 import { Toast, ToastContainer } from 'react-bootstrap'
 import { IoMdInformationCircle } from 'react-icons/io'
+import { IoEllipsisVertical } from "react-icons/io5"
 
 type SelectedSpellType = {
   id: number
@@ -666,7 +667,7 @@ function EditSpells() {
   const timeout = setTimeout(() => {
       getSpellDetails(spellId)
       setOpenModal(true)
-    }, 500)
+    }, 800)
     setLongPressTimeout(timeout)
   }
 
@@ -684,9 +685,10 @@ function EditSpells() {
   return (
     <Container fluid className="p-3">
       <Modal show={openModal} onHide={handleClose} centered>
-        <Modal.Header closeButton>
-          <Modal.Title className="d-flex align-items-center">
-            {selectedSpell?.name}
+        <Modal.Header className="pb-2" closeButton>
+          <Modal.Title>
+            <Row className="ps-3 pb-0">{selectedSpell?.name}</Row>
+            <Row className="text-secondary fs-6 ps-3 pt-0">{selectedSpell?.type}, {selectedSpell?.school}</Row>
           </Modal.Title>
         </Modal.Header>
         {!selectedSpell?.effect && !selectedSpell?.limitation && !selectedSpell?.note && (
@@ -757,12 +759,12 @@ function EditSpells() {
             >
             <IoMdInformationCircle size={25} className="me-1" color="blue"/>
             <span>Long press on any spell below to view its effects and limitations.</span>
-            {/* <div
-              className="position-absolute end-0 bottom-0 m-3 text-muted small"
+            <div
+              className="end-0 bottom-0 text-muted small"
               style={{ pointerEvents: 'none' }}
             >
-              Disable tips in settings
-            </div> */}
+              <span>Disable tips in settings <IoEllipsisVertical /></span>
+            </div>
           </Alert>
         )}
         <CardHeader className="d-flex justify-content-between align-items-center">
@@ -797,20 +799,48 @@ function EditSpells() {
                             className="d-flex justify-content-between"
                             onClick={() => spellsByLevel.restricted ? setShowDisabledSpellToast(true) : null}
                           >
-                            <Button
-                              style={spellsByLevel.restricted ? { textDecoration: 'line-through' } : undefined}
-                              disabled={spellsByLevel.restricted}
-                              variant={spellsByLevel.restricted ? "danger" : "unknown"}
-                              className="text-start border-bottom"
-                              onMouseDown={() => handleLongPressStart(spellsByLevel.id)}
-                              onMouseUp={handleLongPressEnd}
-                              onMouseLeave={handleLongPressEnd}
-                              onTouchStart={() => handleLongPressStart(spellsByLevel.id)}
-                              onTouchEnd={handleLongPressEnd}
-                              onClick={() => spellsByLevel.restricted ? setShowDisabledSpellToast(true) : addSpellToList(spellsByLevel.id)}
+                          <Button
+                            style={
+                              spellsByLevel.restricted
+                                ? { backgroundColor: '#f1b0b7', color: '#fff', border: 'none' }
+                                : undefined
+                            }
+                            variant={spellsByLevel.restricted ? "danger" : "unknown"}
+                            className="text-start border-bottom"
+                            onMouseDown={() => handleLongPressStart(spellsByLevel.id)}
+                            onMouseUp={handleLongPressEnd}
+                            onMouseLeave={handleLongPressEnd}
+                            onTouchStart={() => handleLongPressStart(spellsByLevel.id)}
+                            onTouchEnd={handleLongPressEnd}
+                            onClick={() =>
+                              spellsByLevel.restricted
+                                ? setShowDisabledSpellToast(true)
+                                : addSpellToList(spellsByLevel.id)
+                            }
+                          >
+                            <span
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                marginRight: '5px',
+                                width: '100%',
+                              }}
                             >
-                              {spellName} {amountPurchased} (cost: {spellCost})
-                            </Button>
+                              <span
+                                style={{
+                                  textDecoration: spellsByLevel.restricted ? 'line-through' : undefined,
+                                }}
+                              >
+                                {spellName} {amountPurchased}
+                              </span>
+                              <span
+                                className={spellsByLevel.restricted ? 'text-white small ms-1' : 'text-secondary small'}
+                                style={{ marginLeft: 3 }}
+                              >
+                                (cost: {spellCost})
+                              </span>
+                            </span>
+                          </Button>
                           </Row>
                         )
                       })
