@@ -1,4 +1,16 @@
-# Getting Started with Create React App
+# Helpful commands
+
+### `npm run deploy`
+
+This command will sometimes reset/remove the domain. When deploying, make
+
+When using the above command, double check the 'settings' tab to make sure the domain is still attached.
+
+______________________________________________________________________________________
+
+# Create React App Commands: 
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

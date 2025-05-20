@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Swiftgard</string>
+    <string name="title_activity_main">Swiftgard</string>
+    <string name="package_name">com.swiftgard.app</string>
+    <string name="custom_url_scheme">com.swiftgard.app</string>
+</resources>

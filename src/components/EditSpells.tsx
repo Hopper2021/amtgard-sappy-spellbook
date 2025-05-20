@@ -175,8 +175,6 @@ function EditSpells() {
     if (summonerArchetype) restrictedTypes.push('Verbal')
     if (summonerArchetype) restrictedRanges.push("20'", "50'", 'Other')
     
-    // if (warlockPresent) restrictedSchools.push('Spirit', 'Sorcery', 'Command')
-
     // Always apply restrictions if any archetype is present
     return baseDruidSpells.map(level => ({
       ...level,
