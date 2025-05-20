@@ -171,7 +171,6 @@ function EditSpells() {
     // Collect all restricted schools based on present archetypes
     let restrictedTypes: string[] = []
     let restrictedRanges: string[] = []
-    let restrictedSchools: string[] = []
     if (summonerArchetype) restrictedTypes.push('Verbal')
     if (summonerArchetype) restrictedRanges.push("20'", "50'", 'Other')
     
@@ -322,10 +321,6 @@ function EditSpells() {
     const warlockArchetype = ALL_SPELLS.find(spell => spell.name === 'Warlock')
     const warlockPresent = modifiedSpellList.spells.some(level =>
       level.spells.some(spell => spell.id === warlockArchetype?.id)
-    )
-    const rangerArchetype = ALL_SPELLS.find(spell => spell.name === 'Ranger')
-    const rangerPresent = modifiedSpellList.spells.some(level =>
-      level.spells.some(spell => spell.id === rangerArchetype?.id)
     )
 
     if (warlockPresent) {
