@@ -858,6 +858,11 @@ function EditSpells() {
                             <Button
                               variant="unknown"
                               className="text-start border-bottom"
+                              onMouseDown={() => handleLongPressStart(spellsByLevel.id)}
+                              onMouseUp={handleLongPressEnd}
+                              onMouseLeave={handleLongPressEnd}
+                              onTouchStart={() => handleLongPressStart(spellsByLevel.id)}
+                              onTouchEnd={handleLongPressEnd}
                               onClick={() => removeSpellFromList(spellsByLevel.id)}
                             >
                               {spellName} {amountPurchased} (cost: {spellCost})
