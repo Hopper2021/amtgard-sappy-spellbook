@@ -30,6 +30,7 @@ function SpellListDetails() {
   const [showTypeAndSchool, setShowTypeAndSchool] = React.useState(false)
   const [showIncantation, setShowIncantation] = React.useState(false)
   const [showStrips, setShowStrips] = React.useState(false)
+  const [showRange, setShowRange] = React.useState(false)
 
   const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
   const spellList = allSpellLists.find((list: SpellList) => list.id === parseInt(id || '0'))
@@ -239,6 +240,12 @@ function SpellListDetails() {
               checked: showStrips,
               onClick: () => setShowStrips(!showStrips),
             },
+            {
+              id: "rangeCheckbox",
+              label: "show range",
+              checked: showRange,
+              onClick: () => setShowRange(!showRange),
+            },
           ].map((item) => (
             <Form.Check
               key={item.id}
@@ -300,7 +307,7 @@ function SpellListDetails() {
                     </span>{' '}
                     <span>
                       {spellFrequency.frequency}
-                      {spellFrequency.range ? ` (${spellFrequency.range})` : ''}
+                      {showRange && spellFrequency.range ? ` (${spellFrequency.range})` : ''}
                     </span>{' '}
                     {showTypeAndSchool && <span>( {spellType} )</span>}
                     {spellSchool && showTypeAndSchool && (
