@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { IoIosWarning } from "react-icons/io"
 import { LuCirclePlus } from "react-icons/lu"
 import { IoMdInformationCircle } from "react-icons/io"
+import { IoEllipsisVertical } from 'react-icons/io5'
 
 function App() {
   const navigate = useNavigate()
@@ -23,12 +24,18 @@ function App() {
         {tipsEnabled && (
           <Alert
             show={showAlert}
-            className="alert-primary"
+            className="alert-primary align-items-center"
             dismissible
             onClose={() => setShowAlert(false)}
             >
-            <IoMdInformationCircle  size={25} className="me-2" color="blue"/>
-            <span>Below button will highlight blue when APK is available for download</span>
+            <IoMdInformationCircle size={25} className="me-1" color="blue"/>
+            <span>Below button will highlight blue when APK is available for download.</span>
+            <div
+              className="end-0 bottom-0 text-muted small"
+              style={{ pointerEvents: 'none' }}
+            >
+              <span>Disable tips in settings <IoEllipsisVertical /></span>
+            </div>
           </Alert>
         )}
         <Container className="px-4 pt-1 d-flex justify-content-center">
