@@ -1,7 +1,9 @@
 import { Dropdown } from 'react-bootstrap'
 import { Navbar, Container } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
 
 function HeaderBar() {
+  const navigate = useNavigate()
   const currentSetting = localStorage.getItem('enableTips')
 
   const changeTipsSettings = () => {
@@ -26,7 +28,7 @@ function HeaderBar() {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              <Dropdown.Item>Patch Notes</Dropdown.Item>
+              <Dropdown.Item onClick={() => navigate('/patchNotes')}>Download App</Dropdown.Item>
               <Dropdown.Item onClick={() => changeTipsSettings()}>
                 {currentSetting === 'true' ? 'Disable' : 'Enable'} Tips
               </Dropdown.Item>
