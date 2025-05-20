@@ -685,10 +685,10 @@ function EditSpells() {
   return (
     <Container fluid className="p-3">
       <Modal show={openModal} onHide={handleClose} centered>
-        <Modal.Header className="pb-2" closeButton>
+        <Modal.Header className="pb-2 pt-2" closeButton>
           <Modal.Title>
             <Row className="ps-3 pb-0">{selectedSpell?.name}</Row>
-            <Row className="text-secondary fs-6 ps-3 pt-0">{selectedSpell?.type}, {selectedSpell?.school}</Row>
+            <Row className="text-secondary fs-6 ps-3 pt-0">{selectedSpell?.type}{selectedSpell?.school && (`, ${selectedSpell?.school}`)}</Row>
           </Modal.Title>
         </Modal.Header>
         {!selectedSpell?.effect && !selectedSpell?.limitation && !selectedSpell?.note && (
