@@ -86,6 +86,7 @@ function SpellListDetails() {
     }
 
     const allSpell = ALL_SPELLS.find(s => Number(s.id) === Number(spellId))
+    let range = allSpell?.range || ''
 
     const isWarder = spellList.spells.some(level =>
       level.spells.some(spell => spell.id === 171)
@@ -192,7 +193,24 @@ function SpellListDetails() {
       frequency += (frequency ? ' ' : '') + 'Charge x10'
     }
 
-    return frequency
+    // Avatar of Nature: All enchantment spells level 4 or below now are range self. Unless the spell is golem.
+    const isAvatarOfNature = spellList.spells.some(level =>
+      level.spells.some(spell => spell.id === 19)
+    )
+    const isLevelFourOrBelow = DRUID_SPELLS.some(spell =>
+      spell.id === spellId && spell.level === 4
+    )
+    if (
+      isAvatarOfNature &&
+      allSpell &&
+      allSpell.type &&
+      allSpell.type.trim().toLowerCase() === 'enchantment' &&
+      isLevelFourOrBelow
+    ) {
+      range = 'Self'
+    }
+
+    return {frequency, range}
   }
 
   return (
@@ -281,7 +299,8 @@ function SpellListDetails() {
                       {spellName}
                     </span>{' '}
                     <span>
-                      {spellFrequency}
+                      {spellFrequency.frequency}
+                      {spellFrequency.range ? ` (${spellFrequency.range})` : ''}
                     </span>{' '}
                     {showTypeAndSchool && <span>( {spellType} )</span>}
                     {spellSchool && showTypeAndSchool && (

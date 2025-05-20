@@ -152,7 +152,7 @@ function EditSpells() {
         restricted = true
       }
 
-  return { ...spell, restricted }
+      return { ...spell, restricted }
       }),
     }))
   }
@@ -163,6 +163,10 @@ function EditSpells() {
     const summonerPresent = spellList?.spells.some(level =>
       level.spells.some(spell => spell.id === summonerArchetype?.id)
     )
+    const rangerArchetype = ALL_SPELLS.find(spell => spell.name === 'Ranger')
+    const rangerPresent = spellList?.spells.some(level =>
+      level.spells.some(spell => spell.id === rangerArchetype?.id)
+    )
 
     // Collect all restricted schools based on present archetypes
     let restrictedTypes: string[] = []
@@ -170,6 +174,7 @@ function EditSpells() {
     let restrictedSchools: string[] = []
     if (summonerArchetype) restrictedTypes.push('Verbal')
     if (summonerArchetype) restrictedRanges.push("20'", "50'", 'Other')
+    
     // if (warlockPresent) restrictedSchools.push('Spirit', 'Sorcery', 'Command')
 
     // Always apply restrictions if any archetype is present
@@ -179,6 +184,7 @@ function EditSpells() {
       const allSpell = ALL_SPELLS.find(s => s.id === spell.id)
       const spellInDruidList = baseDruidSpells.find(level => level.spells.some(s => s.id === spell.id))
       let restricted = false
+      let cost = allSpell && typeof allSpell.cost === 'number' ? allSpell.cost : 0
 
       // Summoner: restrict Verbals that are not Touch or Self
       if (
@@ -190,7 +196,7 @@ function EditSpells() {
         restricted = true
       }
 
-      // Restricts Equipment beyond level 2
+      // Summoner: Restricts Equipment beyond level 2
       if (
         summonerPresent &&
         allSpell &&
@@ -201,6 +207,23 @@ function EditSpells() {
       }
       
       // Ranger: May use bows. Cost of equipment is 0. Enchantment costs are doubled.
+      if (
+        rangerPresent &&
+        allSpell &&
+        allSpell.name.includes('Equipment:')
+      ) {
+        return { ...spell, cost: 0, restricted }
+      }
+
+      if (
+        rangerPresent &&
+        allSpell &&
+        allSpell.school &&
+        allSpell.type === 'Enchantment'
+      ) {
+        cost = spell?.cost * 2
+        return { ...spell, cost, restricted }
+      }
 
       // Avatar of Nature: all enchantments of level 4 and below are now range self. Does not apply to golem.
 
@@ -302,10 +325,14 @@ function EditSpells() {
     const warlockPresent = modifiedSpellList.spells.some(level =>
       level.spells.some(spell => spell.id === warlockArchetype?.id)
     )
+    const rangerArchetype = ALL_SPELLS.find(spell => spell.name === 'Ranger')
+    const rangerPresent = modifiedSpellList.spells.some(level =>
+      level.spells.some(spell => spell.id === rangerArchetype?.id)
+    )
 
     if (warlockPresent) {
       const restrictedIds = ALL_SPELLS
-        .filter(s => s.school !== null && ['Spirit', 'Sorcery', 'Command'].includes(s.school))
+        .filter(s => s.school !== null && s.type === 'Verbal' && ['Spirit', 'Sorcery', 'Command', 'Protection', 'Neutral', 'Spirit'].includes(s.school))
         .map(spell => spell.id)
       restrictedIds.forEach(spellId => {
         cleanedSpellList = autoRemoveAndRefundSpell(spellId, cleanedSpellList)
@@ -598,9 +625,24 @@ function EditSpells() {
       rolledDownMap
     )
 
-    const newSpellList: SpellList = {
+    let newSpellList: SpellList = {
       ...modifiedSpellList,
       spells: newSpellLevels,
+    }
+
+    // If removing Ranger, also remove all Equipment spells
+    const rangerArchetype = ALL_SPELLS.find(spell => spell.name === 'Ranger')
+    if (spellId === rangerArchetype?.id) {
+      newSpellList = {
+        ...newSpellList,
+        spells: newSpellList.spells.map(level => ({
+          ...level,
+          spells: level.spells.filter(spell => {
+            const allSpell = ALL_SPELLS.find(s => s.id === spell.id)
+            return !(allSpell && allSpell.name.includes('Equipment:'))
+          }),
+        })),
+      }
     }
 
     setModifiedSpellList(newSpellList)
