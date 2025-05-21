@@ -223,7 +223,34 @@ function EditSpells() {
         return { ...spell, cost, restricted }
       }
 
-      // Avatar of Nature: all enchantments of level 4 and below are now range self. Does not apply to golem.
+      return { ...spell, restricted }
+      }),
+    }))
+  }
+
+  // Bard Archetype list adjustments
+  const getAdjustedBardSpells = (baseBardSpells, spellList) => {
+    const dervishArcheType = ALL_SPELLS.find(spell => spell.name === 'Dervish')
+    const dervishPresent = spellList?.spells.some(level =>
+      level.spells.some(spell => spell.id === dervishArcheType?.id)
+    )
+
+    return baseBardSpells.map(level => ({
+      ...level,
+      spells: level.spells.map(spell => {
+      const allSpell = ALL_SPELLS.find(s => s.id === spell.id)
+      let restricted = false
+      let cost = allSpell && typeof allSpell.cost === 'number' ? allSpell.cost : 0
+
+      // Dervish: doubles equipment costs
+      if (
+        dervishPresent &&
+        allSpell &&
+        allSpell.name.includes('Equipment:')
+      ) {
+        cost = spell?.cost * 2
+        return { ...spell, cost, restricted }
+      }
 
       return { ...spell, restricted }
       }),
@@ -231,7 +258,7 @@ function EditSpells() {
   }
 
   const spellsByClass =
-    (spellListToEdit?.class === 'Bard' && BARD_SPELLS) ||
+    (spellListToEdit?.class === 'Bard' && getAdjustedBardSpells(BARD_SPELLS, spellListToEdit)) ||
     (spellListToEdit?.class === 'Healer' && getAdjustedHealerSpells(HEALER_SPELLS, spellListToEdit)) ||
     (spellListToEdit?.class === 'Wizard' && getAdjustedWizardSpells(WIZARD_SPELLS, spellListToEdit)) ||
     (spellListToEdit?.class === 'Druid' && getAdjustedDruidSpells(DRUID_SPELLS, spellListToEdit))
@@ -279,7 +306,6 @@ function EditSpells() {
   }
 
   useEffect(() => {
-    // Healer Archetype spell limitations
     const warderArchetype = ALL_SPELLS.find(spell => spell.name === 'Warder')
     const necromancerArchetype = ALL_SPELLS.find(spell => spell.name === 'Necromancer')
     const warderPresent = modifiedSpellList.spells.some(level =>
@@ -495,9 +521,25 @@ function EditSpells() {
 
     const newLevels = updateSpellPurchases(updatedLevels, spellLevel, spellId, rolledDown)
 
-    const newSpellList: SpellList = {
+    let newSpellList: SpellList = {
       ...modifiedSpellList,
       spells: newLevels,
+    }
+
+    const rangerArchetype = ALL_SPELLS.find(spell => spell.name === 'Ranger')
+    if (spellId === rangerArchetype?.id) {
+      const equipmentIds = ALL_SPELLS.filter(s => s.name.includes('Equipment:')).map(s => s.id)
+      equipmentIds.forEach(equipId => {
+        newSpellList = autoRemoveAndRefundSpell(equipId, newSpellList)
+      })
+    }
+
+    const dervishArchetype = ALL_SPELLS.find(spell => spell.name === 'Dervish')
+    if (spellId === dervishArchetype?.id) {
+      const equipmentIds = ALL_SPELLS.filter(s => s.name.includes('Equipment:')).map(s => s.id)
+      equipmentIds.forEach(equipId => {
+        newSpellList = autoRemoveAndRefundSpell(equipId, newSpellList)
+      })
     }
 
     setModifiedSpellList(newSpellList)
@@ -624,19 +666,22 @@ function EditSpells() {
       spells: newSpellLevels,
     }
 
-    // If removing Ranger, also remove all Equipment spells
+    // If removing Ranger, also remove and refund all Equipment spells
     const rangerArchetype = ALL_SPELLS.find(spell => spell.name === 'Ranger')
     if (spellId === rangerArchetype?.id) {
-      newSpellList = {
-        ...newSpellList,
-        spells: newSpellList.spells.map(level => ({
-          ...level,
-          spells: level.spells.filter(spell => {
-            const allSpell = ALL_SPELLS.find(s => s.id === spell.id)
-            return !(allSpell && allSpell.name.includes('Equipment:'))
-          }),
-        })),
-      }
+      const equipmentIds = ALL_SPELLS.filter(s => s.name.includes('Equipment:')).map(s => s.id)
+      equipmentIds.forEach(equipId => {
+        newSpellList = autoRemoveAndRefundSpell(equipId, newSpellList)
+      })
+    }
+
+    // If removing Dervish, also remove and refund all Equipment spells
+    const dervishArchetype = ALL_SPELLS.find(spell => spell.name === 'Dervish')
+    if (spellId === dervishArchetype?.id) {
+      const equipmentIds = ALL_SPELLS.filter(s => s.name.includes('Equipment:')).map(s => s.id)
+      equipmentIds.forEach(equipId => {
+        newSpellList = autoRemoveAndRefundSpell(equipId, newSpellList)
+      })
     }
 
     setModifiedSpellList(newSpellList)
@@ -684,7 +729,7 @@ function EditSpells() {
 
   return (
     <Container fluid className="p-3">
-      <Modal show={openModal} onHide={handleClose} centered>
+      <Modal className="p-4" show={openModal} onHide={handleClose} centered>
         <Modal.Header className="pb-2 pt-2" closeButton>
           <Modal.Title>
             <Row className="ps-3 pb-0">{selectedSpell?.name}</Row>
@@ -732,23 +777,108 @@ function EditSpells() {
         )}
       </Modal>
 
-      <ToastContainer position="bottom-center" className="p-3">
-        <Toast bg="info" show={showDisabledToast} onClose={() => setShowDisabledSpellToast(false)} autohide delay={3000}>
-          <Toast.Body className="d-flex-end align-items-center">
-            Unable to add spell due to archetype
-            { /* Display which archetype */}
+      <ToastContainer
+        className="position-fixed bottom-0 start-50 translate-middle-x mb-5"
+        style={{ zIndex: 9999 }}
+      >
+        <Toast
+          bg="info"
+          show={showDisabledToast}
+          onClose={() => setShowDisabledSpellToast(false)}
+          autohide
+          delay={3000}
+        >
+        <Toast.Body className="d-flex-end align-items-center">
+          Unable to add spell due to{selectedSpell && (
+            <span>
+            <strong className="ms-1">
+              {(() => {
+                // Find which archetype is causing the restriction
+                const spell = ALL_SPELLS.find(s => s.id === selectedSpell.id)
+                const archetypes: string[] = []
+                // Healer
+                const priestArchetype = ALL_SPELLS.find(s => s.name === 'Priest')
+                const warderArchetype = ALL_SPELLS.find(s => s.name === 'Warder')
+                const necromancerArchetype = ALL_SPELLS.find(s => s.name === 'Necromancer')
+                if (
+                  priestArchetype && modifiedSpellList.spells.some(level =>
+                    level.spells.some(s => s.id === priestArchetype.id)
+                  ) &&
+                  spell?.school === 'Death'
+                ) archetypes.push('Priest')
+                if (
+                  warderArchetype && modifiedSpellList.spells.some(level =>
+                    level.spells.some(s => s.id === warderArchetype.id)
+                  ) &&
+                  ['Death', 'Command', 'Subdual'].includes(spell?.school || '')
+                ) archetypes.push('Warder')
+                if (
+                  necromancerArchetype && modifiedSpellList.spells.some(level =>
+                    level.spells.some(s => s.id === necromancerArchetype.id)
+                  ) &&
+                  spell?.school === 'Protection'
+                ) archetypes.push('Necromancer')
+                // Wizard
+                const evokerArchetype = ALL_SPELLS.find(s => s.name === 'Evoker')
+                if (
+                  evokerArchetype && modifiedSpellList.spells.some(level =>
+                    level.spells.some(s => s.id === evokerArchetype.id)
+                  ) &&
+                  spell?.type === 'Verbal' &&
+                  (spell?.range === "20'" || spell?.range === "50'")
+                ) archetypes.push('Evoker')
+                const warlockArchetype = ALL_SPELLS.find(s => s.name === 'Warlock')
+                if (
+                  warlockArchetype && modifiedSpellList.spells.some(level =>
+                    level.spells.some(s => s.id === warlockArchetype.id)
+                  ) &&
+                  spell?.type === 'Verbal' &&
+                  ['Spirit', 'Sorcery', 'Command'].includes(spell?.school || '')
+                ) archetypes.push('Warlock')
+                // Druid
+                const summonerArchetype = ALL_SPELLS.find(s => s.name === 'Summoner')
+                if (
+                  summonerArchetype && modifiedSpellList.spells.some(level =>
+                    level.spells.some(s => s.id === summonerArchetype.id)
+                  ) &&
+                  spell?.type === 'Verbal' &&
+                  (spell?.range === "20'" || spell?.range === "50'" || spell?.range === 'Other')
+                ) archetypes.push('Summoner')
+                const rangerArchetype = ALL_SPELLS.find(s => s.name === 'Ranger')
+                if (
+                  rangerArchetype && modifiedSpellList.spells.some(level =>
+                    level.spells.some(s => s.id === rangerArchetype.id)
+                  ) &&
+                  spell?.name?.includes('Equipment:')
+                ) archetypes.push('Ranger')
+                if (archetypes.length > 0) {
+                  return `${archetypes.join(',')}`
+                }
+                return null
+              })()}
+            </strong> limitations.
+            </span>
+          )}
+        </Toast.Body>
+        </Toast>
+      </ToastContainer>
+
+      <ToastContainer
+        className="position-fixed bottom-0 start-50 translate-middle-x mb-5"
+        style={{ zIndex: 9999 }}>
+        <Toast
+          className="bg-info text-white"
+          show={showToast}
+          onClose={() => setShowToast(false)}
+          autohide delay={3000}
+        >
+          <Toast.Body>
+            {cannotAffordSpell && <span>You cannot afford this spell at this level.</span>}
+            {spellMaxReached && <span>Maximum spell purchase amount reached.</span>}
           </Toast.Body>
         </Toast>
       </ToastContainer>
 
-      <ToastContainer position="bottom-center" className="p-3">
-        <Toast className="bg-info text-white" show={showToast} onClose={() => setShowToast(false)} autohide delay={3000}>
-          <Toast.Body>
-            {cannotAffordSpell && <span>You cannot afford this spell at this level.</span>}
-            {spellMaxReached && <span>Maximum spell purchase number reached.</span>}
-          </Toast.Body>
-        </Toast>
-      </ToastContainer>
       <Container>
         {tipsEnabled && (
           <Alert
@@ -812,11 +942,14 @@ function EditSpells() {
                             onMouseLeave={handleLongPressEnd}
                             onTouchStart={() => handleLongPressStart(spellsByLevel.id)}
                             onTouchEnd={handleLongPressEnd}
-                            onClick={() =>
-                              spellsByLevel.restricted
-                                ? setShowDisabledSpellToast(true)
-                                : addSpellToList(spellsByLevel.id)
-                            }
+                            onClick={() => {
+                              if (spellsByLevel.restricted) {
+                                setSelectedSpell(ALL_SPELLS.find(s => s.id === spellsByLevel.id) as SelectedSpellType)
+                                setShowDisabledSpellToast(true)
+                              } else {
+                                addSpellToList(spellsByLevel.id)
+                              }
+                            }}
                           >
                             <span
                               style={{
