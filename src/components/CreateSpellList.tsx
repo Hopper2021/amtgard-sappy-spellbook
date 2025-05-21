@@ -44,52 +44,59 @@ function CreateSpellList() {
 	})
 
 	return (
-		<Container fluid className="p-2">
-			<Row className="align-items-center">
-				<Col xs={7}>
-					<InputGroup style={{ border: 'none' }} className="mb-3">
-						<InputGroup.Text style={{ backgroundColor: 'transparent', border: 'none', paddingRight: 5 }}>
-							Name:
-						</InputGroup.Text>
-						<Form.Control
-							placeholder="My SpellBook"
-							aria-label="My SpellBook"
-							style={{
-								backgroundColor: 'transparent',
-								border: 'none',
-								borderBottom: '1px solid black',
-								borderRadius: 0,
-							}}
-							onChange={(event) =>
-								setNewSpellList({...newSpellList, name: event.target.value })
-							}
-						/>
-					</InputGroup>
-				</Col>
+		<Container fluid className="p-4" style={{ maxWidth: 600 }}>
+			<InputGroup className="mb-4 w-100">
+				<InputGroup.Text>
+					Name:
+				</InputGroup.Text>
+				<Form.Control
+					placeholder="My SpellBook"
+					aria-label="My SpellBook"
+					onChange={(event) => setNewSpellList({...newSpellList, name: event.target.value })}
+				/>
+			</InputGroup>
 
-				<Col>
-					<InputGroup className="mb-3">
-						<InputGroup.Text style={{ backgroundColor: 'transparent', border: 'none', paddingRight: 5 }}>
-							Level:
-						</InputGroup.Text>
+			<Row className="mb-4 align-items-center flex-wrap">
+				<Col xs={7} md={6} className="mb-0 align-items-center">
+					<InputGroup>
+						<InputGroup.Text>Class:</InputGroup.Text>
 						<Dropdown>
 							<Dropdown.Toggle
 								style={{
-									backgroundColor: 'white',
+									borderColor: 'lightgrey',
+									borderWidth: 1,
 									color: 'black',
-									border: 'none',
-									paddingRight: 5,
-									borderBottom: '1px solid black',
-									borderRadius: 0,
+									backgroundColor: 'white',
 								}}
-								id="dropdown-basic"
+							>
+								{newSpellList.class}
+							</Dropdown.Toggle>
+							<Dropdown.Menu>
+								<Dropdown.Item onClick={() => setNewSpellList({ ...newSpellList, class: 'Bard' })}>Bard</Dropdown.Item>
+								<Dropdown.Item onClick={() => setNewSpellList({ ...newSpellList, class: 'Druid' })}>Druid</Dropdown.Item>
+								<Dropdown.Item onClick={() => setNewSpellList({ ...newSpellList, class: 'Healer' })}>Healer</Dropdown.Item>
+								<Dropdown.Item onClick={() => setNewSpellList({ ...newSpellList, class: 'Wizard' })}>Wizard</Dropdown.Item>
+							</Dropdown.Menu>
+						</Dropdown>
+					</InputGroup>
+				</Col>
+				<Col xs={5} md={6}>
+					<InputGroup className="w-100">
+						<InputGroup.Text>Level:</InputGroup.Text>
+						<Dropdown className="w-100">
+							<Dropdown.Toggle
+								variant="outline-secondary"
+								style={{
+									borderColor: 'lightgrey',
+									borderWidth: 1,
+									color: 'black',
+								}}
 							>
 								{newSpellList.maxLevel}
 							</Dropdown.Toggle>
-
 							<Dropdown.Menu>
 								{[...Array(6)].map((_, index) => {
-									const level = index + 1  // Levels 1 through 6
+									const level = index + 1
 									return (
 										<Dropdown.Item
 											key={level}
@@ -111,101 +118,67 @@ function CreateSpellList() {
 					</InputGroup>
 				</Col>
 			</Row>
-
-		<Row className="align-items-center">
-			<Col xs={4}>
-			<InputGroup className="mb-3">
-				<InputGroup.Text style={{ backgroundColor: 'transparent', border: 'none', paddingRight: 5 }}>
-					Class:
-				</InputGroup.Text>
-				<Dropdown>
-					<Dropdown.Toggle
-						style={{
-							backgroundColor: 'transparent',
-							color: 'black',
-							border: 'none',
-							borderBottom: '1px solid black',
-							borderRadius: 0,
-						}}
-						id="dropdown-basic"
-					>
-						{newSpellList.class}
-					</Dropdown.Toggle>
-
-					<Dropdown.Menu>
-						<Dropdown.Item onClick={() => setNewSpellList({ ...newSpellList, class: 'Bard' })}>Bard</Dropdown.Item>
-						<Dropdown.Item onClick={() => setNewSpellList({ ...newSpellList, class: 'Druid' })}>Druid</Dropdown.Item>
-						<Dropdown.Item onClick={() => setNewSpellList({ ...newSpellList, class: 'Healer' })}>Healer</Dropdown.Item>
-						<Dropdown.Item onClick={() => setNewSpellList({ ...newSpellList, class: 'Wizard' })}>Wizard</Dropdown.Item>
-					</Dropdown.Menu>
-				</Dropdown>
-			</InputGroup>
-			</Col>
 			
-			<Col xs={8}>
-			<InputGroup className="mb-3">
-				<InputGroup.Text style={{ backgroundColor: 'transparent', border: 'none', paddingRight: 5 }}>
-					Version:
-				</InputGroup.Text>
-				<Dropdown>
-					<Dropdown.Toggle
-						style={{
-							backgroundColor: 'transparent',
-							color: 'black',
-							border: 'none',
-							borderBottom: '1px solid black',
-							borderRadius: 0,
-						}}
-						id="dropdown-basic"
-					>
-						V8.6.3 "Sappy Three"
-					</Dropdown.Toggle>
-
-					<Dropdown.Menu>
-						<Dropdown.Item>- V8.6.3 "Sappy Three"</Dropdown.Item>
-					</Dropdown.Menu>
-				</Dropdown>
-			</InputGroup>
-			</Col>
-		</Row>
-
-			<Form.Check
-				className="m-3"
-				type={'checkbox'}
-				id="lookThePartCheckbox"
-				label={
-					<label
-						htmlFor="lookThePartCheckbox"
-						style={{ cursor: 'pointer', display: 'inline-block', marginLeft: '5px' }}
-					>
-						Look The Part
-					</label>
-				}
-				checked={newSpellList.lookThePart}
-				onChange={() => {
-						const updatedSpells = newSpellList.spells.map((spell) =>
-							spell.level === newSpellList.maxLevel
-								? {...spell, points: newSpellList.lookThePart ? 5 : 6}
-								: spell
-						)
-						setNewSpellList({
-							...newSpellList,
-							lookThePart: !newSpellList.lookThePart,
-							spells: updatedSpells,
-						})
-				}}
-			/>
+			<Row className="mb-3 align-items-center flex-wrap">
+				<Col xs={12} md={7} className="mb-2 mb-md-0">
+					<InputGroup className="border-color-primary w-100">
+						<InputGroup.Text>
+							Version:
+						</InputGroup.Text>
+						<Dropdown>
+							<Dropdown.Toggle variant="outline-secondary" style={{ borderColor: 'lightgrey', borderWidth: 1, color: 'black' }}>
+								V8.6.3 "Sappy Three"
+							</Dropdown.Toggle>
+							<Dropdown.Menu>
+								<Dropdown.Item>- V8.6.3 "Sappy Three"</Dropdown.Item>
+							</Dropdown.Menu>
+						</Dropdown>
+					</InputGroup>
+				</Col>
+				<Col xs={12} md={5}>
+					<InputGroup className="mb-3 ms-4 mt-3" style={{ cursor: 'pointer' }}>
+						<Form.Check
+							id="lookThePartCheckbox"
+							type="checkbox"
+							style={{
+								padding: 2,
+								borderRadius: 6,
+							}}
+							checked={newSpellList.lookThePart}
+							onChange={() => {
+								const updatedSpells = newSpellList.spells.map((spell) =>
+									spell.level === newSpellList.maxLevel
+										? { ...spell, points: newSpellList.lookThePart ? 5 : 6 }
+										: spell
+								)
+								setNewSpellList({
+									...newSpellList,
+									lookThePart: !newSpellList.lookThePart,
+									spells: updatedSpells,
+								})
+							}}
+							label={
+								<span
+									style={{
+										cursor: 'pointer',
+									}}
+								>
+									Look The Part
+								</span>
+							}
+						/>
+					</InputGroup>
+				</Col>
+			</Row>
 
 			<Button
 				className="w-100"
-				variant="unknown"
-				style={{ backgroundColor: 'lightgrey' }}
+				variant="primary"
 				onClick={() => {
 					const updatedAllSpellLists = [...allSpellLists, newSpellList]
 					localStorage.setItem('allSpellLists', JSON.stringify(updatedAllSpellLists))
 					navigate('/')
-				}}
-			>
+				}}>
 				CREATE
 			</Button>
 		</Container>
