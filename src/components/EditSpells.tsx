@@ -49,6 +49,7 @@ function EditSpells() {
   const [showToast, setShowToast] = useState(false)
   const [showDisabledToast, setShowDisabledSpellToast] = useState(false)
   const [openModal, setOpenModal] = useState(false)
+  // const [openExperiencedModal, setOpenExperiencedModal] = useState(false)
   const { id } = useParams<{ id: string }>()
   const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
   const spellListToEdit = allSpellLists.find((list: SpellList) => list.id === parseInt(id || '0'))
@@ -234,6 +235,10 @@ function EditSpells() {
     const dervishPresent = spellList?.spells.some(level =>
       level.spells.some(spell => spell.id === dervishArcheType?.id)
     )
+    const legendArcheType = ALL_SPELLS.find(spell => spell.name === 'Legend')
+    const legendPresent = spellList?.spells.some(level =>
+      level.spells.some(spell => spell.id === legendArcheType?.id)
+    )
 
     return baseBardSpells.map(level => ({
       ...level,
@@ -250,6 +255,15 @@ function EditSpells() {
       ) {
         cost = spell?.cost * 2
         return { ...spell, cost, restricted }
+      }
+
+      // Legend: restricts swift
+      if (
+        legendPresent &&
+        allSpell &&
+        allSpell.name === 'Swift'
+      ) {
+        restricted = true
       }
 
       return { ...spell, restricted }
@@ -732,8 +746,10 @@ function EditSpells() {
       <Modal className="p-4" show={openModal} onHide={handleClose} centered>
         <Modal.Header className="pb-2 pt-2" closeButton>
           <Modal.Title>
-            <Row className="ps-3 pb-0">{selectedSpell?.name}</Row>
-            <Row className="text-secondary fs-6 ps-3 pt-0">{selectedSpell?.type}{selectedSpell?.school && (`, ${selectedSpell?.school}`)}</Row>
+            <Row className="ps-3">{selectedSpell?.name}</Row>
+            <Row className="text-secondary fs-6 ps-3 pt-0">
+              {selectedSpell?.type}{selectedSpell?.school && (`, ${selectedSpell?.school}`)}{selectedSpell?.range && (` ( ${selectedSpell?.range} )`)}
+            </Row>
           </Modal.Title>
         </Modal.Header>
         {!selectedSpell?.effect && !selectedSpell?.limitation && !selectedSpell?.note && (
@@ -800,6 +816,7 @@ function EditSpells() {
                 const priestArchetype = ALL_SPELLS.find(s => s.name === 'Priest')
                 const warderArchetype = ALL_SPELLS.find(s => s.name === 'Warder')
                 const necromancerArchetype = ALL_SPELLS.find(s => s.name === 'Necromancer')
+                const legendArchetype = ALL_SPELLS.find(s => s.name === 'Legend')
                 if (
                   priestArchetype && modifiedSpellList.spells.some(level =>
                     level.spells.some(s => s.id === priestArchetype.id)
@@ -851,6 +868,12 @@ function EditSpells() {
                   ) &&
                   spell?.name?.includes('Equipment:')
                 ) archetypes.push('Ranger')
+                if (
+                  legendArchetype && modifiedSpellList.spells.some(level =>
+                    level.spells.some(s => s.id === legendArchetype.id)
+                  ) &&
+                  spell?.name?.includes('Swift')
+                ) archetypes.push('Legend')
                 if (archetypes.length > 0) {
                   return `${archetypes.join(',')}`
                 }
