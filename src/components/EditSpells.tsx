@@ -6,6 +6,19 @@ import { Toast, ToastContainer } from 'react-bootstrap'
 import { IoMdInformationCircle } from 'react-icons/io'
 import { IoEllipsisVertical } from "react-icons/io5"
 
+type VerbalSpell = {
+  id: number
+  name: string
+  type: string
+  school: string
+  range: string | null
+  materials: string | null
+  incantation: string
+  effect: string
+  limitation: string | null
+  note: string | null
+}
+
 type SelectedSpellType = {
   id: number
   name: string
@@ -47,9 +60,10 @@ function EditSpells() {
   const [cannotAffordSpell, setCannotAffordSpell] = useState(false)
   const [spellMaxReached, setSpellMaxReached] = useState(false)
   const [showToast, setShowToast] = useState(false)
+  const [showExperiencedToast, setShowExperiencedToast] = useState(false)
   const [showDisabledToast, setShowDisabledSpellToast] = useState(false)
   const [openModal, setOpenModal] = useState(false)
-  // const [openExperiencedModal, setOpenExperiencedModal] = useState(false)
+  const [openExperiencedModal, setOpenExperiencedModal] = useState(false)
   const { id } = useParams<{ id: string }>()
   const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
   const spellListToEdit = allSpellLists.find((list: SpellList) => list.id === parseInt(id || '0'))
@@ -64,6 +78,31 @@ function EditSpells() {
 		lookThePart: spellListToEdit?.lookThePart || false,
 		spells: spellListToEdit?.spells || [],
   })
+  const spellListHasVerbals = modifiedSpellList.spells
+    .flatMap(level => level.spells)
+    .some(spellObj => {
+      const spellDetails = ALL_SPELLS.find(s => s.id === spellObj.id)
+      return spellDetails?.type === 'Verbal'
+    })
+
+  const getAllVerbals = (modifiedSpellList) => {
+    const verbals: VerbalSpell[] = []
+    modifiedSpellList.spells
+      .filter((level: SpellLevel) => level.level <= 4)
+      .forEach((level: SpellLevel) => {
+        level.spells.forEach((spellObj: Spell) => {
+          const spellDetails = ALL_SPELLS.find(s => s.id === spellObj.id) as VerbalSpell | undefined
+          if (spellDetails?.type === 'Verbal') {
+            verbals.push(spellDetails)
+          }
+        })
+      })
+    return verbals
+  }
+
+  const modifiedSpellListVerbals = getAllVerbals(modifiedSpellList)
+
+  console.log('spell list has verbals', modifiedSpellListVerbals)
 
   // Healer Archetype list adjustments
   const getAdjustedHealerSpells = (baseHealerSpells, spellList) => {
@@ -556,6 +595,15 @@ function EditSpells() {
       })
     }
 
+    // const isExperienced = spellId === 56
+    // const hasVerbals = modifiedSpellList.spells.some(level =>
+    //   level.spells.some(spell => spell.id === spellId && spell.type === 'Verbal')
+    // )
+
+    // if (isExperienced) {
+    //   setOpenExperiencedModal(true)
+    // }
+
     setModifiedSpellList(newSpellList)
     updateLocalStorage(newSpellList)
   }
@@ -737,6 +785,7 @@ function EditSpells() {
   }
 
   const handleClose = () => {
+    setOpenExperiencedModal(false)
     setOpenModal(false)
     setSelectedSpell(null)
   }
@@ -755,6 +804,63 @@ function EditSpells() {
         {!selectedSpell?.effect && !selectedSpell?.limitation && !selectedSpell?.note && (
           <Modal.Body>
             <span>This spell has no additional details.</span>
+          </Modal.Body>
+        )}
+        <Modal.Body>
+        {selectedSpell?.effect.split('\n').map((line, idx) => {
+          const isIndented = line.startsWith('>>')
+          const cleanLine = isIndented ? line.replace(/^>>/, '') : line
+          
+          return ( idx === 0 ? (
+            <span key={idx}>
+              <strong>Effect: </strong>{line}
+            </span>
+          ) : (
+            <span
+              key={idx}
+              style={{
+                display: 'block',
+                lineHeight: '1.2',
+                marginLeft: isIndented ? 15 : 0,
+                marginBottom: 1,
+              }}
+            >
+              {cleanLine}
+            </span>
+          ))
+        })}
+        </Modal.Body>
+        {selectedSpell?.limitation && (
+          <Modal.Body className="modal-sm">
+            <span><strong>Limitation: </strong>{selectedSpell?.limitation}</span>
+          </Modal.Body>
+        )}
+        {selectedSpell?.note && (
+          <Modal.Body className="modal-sm">
+            <span><strong>Note: </strong>{selectedSpell?.note}</span>
+          </Modal.Body>
+        )}
+      </Modal>
+
+      <Modal className="p-3" show={openExperiencedModal} onHide={handleClose} centered>
+        <Modal.Header className="pb-2 pt-2" closeButton>
+          <Modal.Title>
+            <Row className="ps-3">Apply Experience to:</Row>
+          </Modal.Title>
+        </Modal.Header>
+        {!selectedSpell?.effect && !selectedSpell?.limitation && !selectedSpell?.note && (
+          <Modal.Body>
+            {modifiedSpellListVerbals.map((spell: VerbalSpell, index) => (
+              <div key={index} className="d-flex justify-content-center">
+                <Button
+                  key={index}
+                  variant="primary"
+                  className="pe-3 mb-3"
+                  onClick={() => addSpellToList(spell.id)}>
+                    {spell.name} ( {spell.range} )
+                </Button>
+              </div>
+            ))}
           </Modal.Body>
         )}
         <Modal.Body>
@@ -891,13 +997,14 @@ function EditSpells() {
         style={{ zIndex: 9999 }}>
         <Toast
           className="bg-info text-white"
-          show={showToast}
-          onClose={() => setShowToast(false)}
+          show={showToast || showExperiencedToast}
+          onClose={() => [setShowToast(false), setShowExperiencedToast(false)]}
           autohide delay={3000}
         >
           <Toast.Body>
             {cannotAffordSpell && <span>You cannot afford this spell at this level.</span>}
             {spellMaxReached && <span>Maximum spell purchase amount reached.</span>}
+            {showExperiencedToast && <span>No valid Spells to apply Experienced to.</span>}
           </Toast.Body>
         </Toast>
       </ToastContainer>
@@ -969,6 +1076,10 @@ function EditSpells() {
                               if (spellsByLevel.restricted) {
                                 setSelectedSpell(ALL_SPELLS.find(s => s.id === spellsByLevel.id) as SelectedSpellType)
                                 setShowDisabledSpellToast(true)
+                              } else if (spellsByLevel.id === 56) {
+                                spellListHasVerbals
+                                ? setOpenExperiencedModal(true)
+                                : setShowExperiencedToast(true)
                               } else {
                                 addSpellToList(spellsByLevel.id)
                               }
