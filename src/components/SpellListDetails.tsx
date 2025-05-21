@@ -69,7 +69,6 @@ function SpellListDetails() {
 
   // maybe break this down by class?
   const fetchSpellFrequency = (spellId: number) => {
-    // only check if spellList.class is Healer
     let spellDetails
     if (Array.isArray(spellsByClass)) {
       for (const level of spellsByClass) {
@@ -92,7 +91,6 @@ function SpellListDetails() {
     const isWarder = spellList.spells.some(level =>
       level.spells.some(spell => spell.id === 171)
     )
-
     const isNecromancer = spellList.spells.some(level =>
       level.spells.some(spell => spell.id === 104)
     )
@@ -102,6 +100,18 @@ function SpellListDetails() {
     const isSummoner = spellList.spells.some(level =>
       level.spells.some(spell => spell.id === 155)
     )
+    const isDervish = spellList.spells.some(level =>
+      level.spells.some(spell => spell.id === 40)
+    )
+    const isLegend = spellList.spells.some(level =>
+      level.spells.some(spell => spell.id === 91)
+    )
+    const hasExtention = spellList.spells.some(level =>
+      level.spells.some(spell => spell.id === 58)
+    )
+    // const hasSilverTongue = spellList.spells.some(level =>
+    //   level.spells.some(spell => spell.id === 135)
+    // )
 
     let frequency = ''
     const freq = spellDetails?.frequency
@@ -135,11 +145,34 @@ function SpellListDetails() {
       if (
         isSummoner &&
         allSpell &&
-        allSpell.type === 'Enchantment' &&
+        allSpell.type === 'Verbal' &&
         typeof amount === 'number'
       ) {
         amount = amount * 2
       }
+
+      // Dervish doubles verbal spells
+      if (
+        isDervish &&
+        allSpell &&
+        allSpell.type &&
+        allSpell.type.trim().toLowerCase() === 'verbal' &&
+        typeof amount === 'number'
+      ) {
+        amount = amount * 2
+      }
+
+      // Legend double the amount of Extension
+      if (
+        allSpell &&
+        isLegend &&
+        hasExtention &&
+        typeof amount === 'number'
+      ) {
+        amount = amount * 2
+      }
+
+      // Silver Tongue adds Swift 1/Refresh Charge x3 at no cost
 
       if (amount != null && freq.per) {
         frequency = `${amount}/${freq.per}`
@@ -198,15 +231,27 @@ function SpellListDetails() {
     const isAvatarOfNature = spellList.spells.some(level =>
       level.spells.some(spell => spell.id === 19)
     )
-    const isLevelFourOrBelow = DRUID_SPELLS.some(spell =>
-      spell.id === spellId && spell.level === 4
-    )
+
+    let isLevelFourOrBelow = false;
+    for (const levelObj of DRUID_SPELLS) {
+      if (levelObj.level <= 4) {
+        if (levelObj.spells.some(spell => spell.id === spellId)) {
+          isLevelFourOrBelow = true;
+          break;
+        }
+      }
+    }
+
+    const golemId = ALL_SPELLS.find(spell => spell.name === 'Golem')?.id;
+    const isGolemSpell = spellId === golemId;
+
     if (
       isAvatarOfNature &&
+      isLevelFourOrBelow &&
+      !isGolemSpell &&
       allSpell &&
       allSpell.type &&
-      allSpell.type.trim().toLowerCase() === 'enchantment' &&
-      isLevelFourOrBelow
+      allSpell.type.trim().toLowerCase() === 'enchantment'
     ) {
       range = 'Self'
     }
