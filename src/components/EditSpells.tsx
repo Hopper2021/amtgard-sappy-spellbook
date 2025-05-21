@@ -856,7 +856,9 @@ function EditSpells() {
                   key={index}
                   variant="primary"
                   className="pe-3 mb-3"
-                  onClick={() => addSpellToList(spell.id)}>
+                  onClick={() => console.log('Clicked', spell.name)}
+                  // onClick={() => addSpellToList(spell.id)}
+                  >
                     {spell.name} ( {spell.range} )
                 </Button>
               </div>

@@ -110,7 +110,6 @@ function App() {
       </Modal>
 
       <Container fluid className="p-3">
-        <Container className="px-4 pt-1">
           {tipsEnabled && (
             <Alert
               show={showAlert}
@@ -128,6 +127,7 @@ function App() {
               </div>
             </Alert>
           )}
+        <Container className="px-4 pt-1">
           <Row className="pb-2 fw-semibold">Spell Books</Row>
           {allSpellLists.length === 0 ? (
             <Row className="d-flex justify-content-center">

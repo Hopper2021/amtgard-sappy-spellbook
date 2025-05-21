@@ -1,9 +1,7 @@
 import { useState } from 'react'
 import FloatingActionButton from './FloatingActionButton.tsx'
-import { Container, Row, Button, Modal, Alert, CardHeader, Accordion } from 'react-bootstrap'
+import { Container, Row, Button, Alert, Accordion } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
-import { IoIosWarning } from "react-icons/io"
-import { LuCirclePlus } from "react-icons/lu"
 import { IoMdInformationCircle } from "react-icons/io"
 import { IoEllipsisVertical } from 'react-icons/io5'
 
@@ -56,6 +54,26 @@ function App() {
             </Button>
         </Container>
         <Row className="ps-4 pb-2 pt-3 fw-semibold text-decoration-underline">Patch Notes</Row>
+
+        <Container className="ps-4">
+          <span className="fw-semibold">Version: 0.0.5</span>
+          <Container className="ps-2 pt-1">
+              <Row className="ps-4">Added Bard Archetypes, Add Remove page long press details, and Archetype clarifications</Row>
+              <Accordion className="ps-3">
+                <Accordion.Header className="border" >Details</Accordion.Header>
+                <Accordion.Body>
+                  <ul>
+                    <li>Added Bard Archetypes limitations and spell frequency changes.</li>
+                    <li>Archetype Error popup message now includes the archtype that is limiting the spell when restricted spell is clicked.</li>
+                    <li>Add helper text in tips to describe where tips can be disabled.</li>
+                    <li>Add range checkbox option to spell details.</li>
+                    <li>Give Create page a facelift</li>
+                    <li>Added Experience logic part 1 - modal created, data flows to it, select for experienced to come in part 2.</li>
+                  </ul>
+                </Accordion.Body>
+              </Accordion>
+          </Container>
+        </Container>
 
         <Container className="ps-4">
           <span className="fw-semibold">Version: 0.0.4</span>
