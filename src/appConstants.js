@@ -2246,6 +2246,54 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     effect: "Bearer's wielded melee weapons are Wounds Kill.",
     limitation: null,
     note: null,
+  },
+  {
+    id: 181,
+    name: 'Ruffian',
+    type: 'Archetype',
+    school: 'Neutral',
+    range: null,
+    materials: null,
+    incantation: null,
+    effect: "Regain a use of Coup de Grace if you successfully cast Assassinate on a player after killing them with a thrown weapon. You do not gain the effect if the dead player is unaffected by Assassinate.",
+    limitation: 'May not wield Long weapons or Bows.',
+    note: null,
+  },
+  {
+    id: 182,
+    name: 'Immune to Command',
+    type: 'Trait',
+    school: null,
+    range: null,
+    materials: null,
+    incantation: null,
+    effect: 'Player is Immune to Command.',
+    limitation: null,
+    note: null,
+  },
+  {
+    id: 183,
+    name: 'Immune to Flame',
+    type: 'Trait',
+    school: null,
+    range: null,
+    materials: null,
+    incantation: null,
+    effect: 'Player is Immune to Flame.',
+    limitation: null,
+    note: null,
+  },
+  {
+    id: 184,
+    name: 'Immune to Subdual',
+    type: 'Trait',
+    school: null,
+    range: null,
+    materials: null,
+    incantation: null,
+    effect: 'Player is Immune to Subdual.',
+    limitation: null,
+    note: null,
   }
 ]
 
@@ -2573,6 +2621,227 @@ export const DRUID_SPELLS = [
       { id: 155, cost: 2, max: 1, frequency: null, restricted: false },
       { id: 173, cost: 1, max: null, frequency: { amount: 1, per: 'Refresh', charge: null }, restricted: false },
     ]
+  },
+]
+
+export const AVATAR_OF_NATURE_SWIFT = { id: 24, cost: 1, max: null, frequency: { amount: 1, per: 'Refresh', charge: null }, restricted: false }
+
+export const ANTIPALADIN_LIST = [
+  { 
+    level: 1,
+    spells: [
+      { id: 182, cost: null, max: null, frequency: { amount: null, per: null, charge: null }, trait: true, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
+      { id: 183, cost: null, max: null, frequency: { amount: null, per: null, charge: null }, trait: true, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
+    ],
+  },
+  {
+    level: 2,
+    spells: [
+      { id: 111, cost: null, max: null, frequency: { amount: 1, per: 'Life', charge: 'Charge x3' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+    ],
+  },
+  { 
+    level: 3,
+    spells: [
+      { id: 151, cost: null, max: null, frequency: { amount: 1, per: 'Life', charge: 'Charge x5' }, trait: false, extrordinary: false, magical: true, ambulant: false, restricted: false, chosen: null, },
+    ],
+  },
+  { 
+    level: 4,
+    spells: [
+      { id: 32, cost: null, max: null, frequency: { amount: 1, per: 'Life', charge: 'Charge x10' }, trait: false, extrordinary: true, magical: false, ambulant: true, restricted: false, chosen: null, },
+    ],
+  },
+  { 
+    level: 5,
+    spells: [
+      { id: 161, cost: null, max: null, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extrordinary: false, magical: true, ambulant: false, restricted: false, chosen: null, },
+    ],
+  },
+  { 
+    level: 6,
+    spells: [
+      { id: 65, cost: null, max: null, frequency: { amount: 2, per: 'Refresh', charge: null }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+      { id: 85, cost: null, max: null, frequency: { amount: null, per: null, charge: null }, trait: false, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+      { id: 36, cost: null, max: null, frequency: { amount: null, per: null, charge: null }, trait: false, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+    ],
+  },
+]
+
+export const ARCHER_LIST = [
+  { 
+    level: 1,
+    spells: [
+      { id: 125, cost: null, max: null, frequency: { amount: 1, per: 'Refresh', charge: 'Charge x3' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+      { id: 37, cost: null, max: null, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+      { id: 109, cost: null, max: null, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+      { id: 112, cost: null, max: null, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+    ],
+  },
+  { 
+    level: 2,
+    spells: [
+      { id: 98, cost: null, max: null, frequency: { amount: 1, per: 'Life', charge: 'Charge x5' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+    ],
+  },
+  { 
+    level: 3,
+    spells: [
+      { id: 37, cost: null, max: null, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+      { id: 109, cost: null, max: null, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+      { id: 112, cost: null, max: null, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+    ],
+  },
+  { 
+    level: 4,
+    spells: [
+      { id: 157, cost: null, max: null, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+    ],
+  },
+  { 
+    level: 5,
+    spells: [
+      { id: 37, cost: null, max: null, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+      { id: 109, cost: null, max: null, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+      { id: 112, cost: null, max: null, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+    ],
+  },
+  { 
+    level: 6,
+    spells: [
+      { id: 106, cost: null, max: null, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+      { id: 139, cost: null, max: null, frequency: { amount: null, per: null, charge: null }, trait: false, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+      { id: 10, cost: null, max: null, frequency: { amount: null, per: null, charge: null }, trait: false, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+    ],
+  },
+]
+
+export const ASSASSIN_LIST = [
+  { 
+    level: 1,
+    spells: [
+      { id: 164, cost: null, max: null, frequency: { amount: null, per: null, charge: null }, trait: true, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+      { id: 11, cost: null, max: null, frequency: { amount: null, per: null, charge: 'Unlimited' }, trait: false, extrordinary: false, magical: false, ambulant: true, restricted: false, chosen: null, },
+      { id: 131, cost: null, max: null, frequency: { amount: 2, per: 'Life', charge: null }, trait: false, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
+    ],
+  },
+  {
+    level: 2,
+    spells: [
+      { id: 111, cost: null, max: null, frequency: { amount: 1, per: 'Life', charge: 'Charge x3' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+      { id: 112, cost: null, max: null, frequency: { amount: 2, per: 'Arrows', charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+    ],
+  },
+  { 
+    level: 3,
+    spells: [
+      { id: 27, cost: null, max: null, frequency: { amount: 2, per: 'Life', charge: null }, trait: false, extrordinary: true, magical: false, ambulant: true, restricted: false, chosen: null, },
+    ],
+  },
+  { 
+    level: 4,
+    spells: [
+      { id: 79, cost: null, max: null, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extrordinary: false, magical: true, ambulant: false, restricted: false, chosen: null, },
+    ],
+  },
+  { 
+    level: 5,
+    spells: [
+      { id: 160, cost: null, max: null, frequency: { amount: 2, per: 'Life', charge: null }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+    ],
+  },
+  { 
+    level: 6,
+    spells: [
+      { id: 39, cost: null, max: null, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extrordinary: false, magical: true, ambulant: false, restricted: false, chosen: null, },
+      { id: 181, cost: null, max: null, frequency: { amount: null, per: null, charge: null }, trait: false, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+      { id: 150, cost: null, max: null, frequency: { amount: null, per: null, charge: null }, trait: false, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+    ],
+  },
+]
+
+export const BARBARIAN_LIST = [
+  { 
+    level: 1,
+    spells: [
+      { id: 21, cost: null, max: null, frequency: { amount: null, per: null, charge: null }, trait: true, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
+      { id: 182, cost: null, max: null, frequency: { amount: null, per: null, charge: null }, trait: true, extrordinary: false, magical: false, ambulant: true, restricted: false, chosen: null, },
+      { id: 184, cost: null, max: null, frequency: { amount: null, per: null, charge: null }, trait: true, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
+    ],
+  },
+  {
+    level: 2,
+    spells: [
+      { id: 116, cost: null, max: null, frequency: { amount: 1, per: 'Refresh', charge: 'Charge x10' }, trait: false, extrordinary: true, magical: false, ambulant: true, restricted: false, chosen: null, },
+    ],
+  },
+  { 
+    level: 3,
+    spells: [
+      { id: 4, cost: null, max: null, frequency: { amount: null, per: null, charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+    ],
+  },
+  { 
+    level: 4,
+    spells: [
+      { id: 116, cost: null, max: null, frequency: { amount: 1, per: 'Refresh', charge: 'Charge x10' }, trait: false, extrordinary: true, magical: false, ambulant: true, restricted: false, chosen: null, },
+    ],
+  },
+  { 
+    level: 5,
+    spells: [
+      { id: 32, cost: null, max: null, frequency: { amount: 1, per: 'Life', charge: 'Charge x3' }, trait: false, extrordinary: true, magical: false, ambulant: true, restricted: false, chosen: null, },
+    ],
+  },
+  { 
+    level: 6,
+    spells: [
+      { id: 30, cost: null, max: null, frequency: { amount: null, per: null, charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+      { id: 117, cost: null, max: null, frequency: { amount: null, per: null, charge: null }, trait: false, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+      { id: 22, cost: null, max: null, frequency: { amount: null, per: null, charge: null }, trait: false, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+    ],
+  },
+]
+
+export const MONK_LIST = [
+  { 
+    level: 1,
+    spells: [
+      { id: 47, cost: null, max: null, frequency: { amount: null, per: null, charge: null }, trait: true, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
+      { id: 99, cost: null, max: null, frequency: { amount: null, per: null, charge: null }, trait: true, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
+    ],
+  },
+  {
+    level: 2,
+    spells: [
+      { id: 13, cost: null, max: null, frequency: { amount: 1, per: 'Life', charge: 'Charge x5' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+    ],
+  },
+  { 
+    level: 3,
+    spells: [
+      { id: 128, cost: null, max: null, frequency: { amount: 1, per: 'Life', charge: 'Charge x5' }, trait: false, extrordinary: true, magical: false, ambulant: true, restricted: false, chosen: null, },
+    ],
+  },
+  { 
+    level: 4,
+    spells: [
+      { id: 75, cost: null, max: null, frequency: { amount: 1, per: 'Life', charge: 'Charge x3' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+    ],
+  },
+  { 
+    level: 5,
+    spells: [
+      { id: 127, cost: null, max: null, frequency: { amount: 1, per: 'Refresh', charge: 'Charge x5' }, trait: false, extrordinary: false, magical: true, ambulant: false, restricted: false, chosen: null, },
+    ],
+  },
+  { 
+    level: 6,
+    spells: [
+      { id: 86, cost: null, max: null, frequency: { amount: 1, per: 'Life', charge: 'Charge x5' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+      { id: 97, cost: null, max: null, frequency: { amount: null, per: null, charge: null }, trait: false, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+      { id: 102, cost: null, max: null, frequency: { amount: null, per: null, charge: null }, trait: false, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+    ],
   },
 ]
 
