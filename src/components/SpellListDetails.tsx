@@ -67,210 +67,209 @@ function SpellListDetails() {
     }
   }
 
-  // maybe break this down by class?
-  const fetchSpellFrequency = (spellId: number) => {
-    let spellDetails
-    if (Array.isArray(spellsByClass)) {
-      for (const level of spellsByClass) {
-        if (level.spells) {
-          const found = level.spells.find(spell => spell.id === spellId)
-          if (found) {
-            spellDetails = found
-            break
-          }
-        } else if (level.id === spellId) {
-          spellDetails = level
+const fetchSpellFrequency = (spellId: number) => {
+  let spellDetails
+  if (Array.isArray(spellsByClass)) {
+    for (const level of spellsByClass) {
+      if (level.spells) {
+        const found = level.spells.find(spell => spell.id === spellId)
+        if (found) {
+          spellDetails = found
           break
         }
-      }
-    }
-
-    const allSpell = ALL_SPELLS.find(s => Number(s.id) === Number(spellId))
-    let range = allSpell?.range || ''
-
-    const isWarder = spellList.spells.some(level =>
-      level.spells.some(spell => spell.id === 171)
-    )
-    const isNecromancer = spellList.spells.some(level =>
-      level.spells.some(spell => spell.id === 104)
-    )
-    const isWarlock = spellList.spells.some(level =>
-      level.spells.some(spell => spell.id === 172)
-    )
-    const isSummoner = spellList.spells.some(level =>
-      level.spells.some(spell => spell.id === 155)
-    )
-    const isDervish = spellList.spells.some(level =>
-      level.spells.some(spell => spell.id === 40)
-    )
-    const isLegend = spellList.spells.some(level =>
-      level.spells.some(spell => spell.id === 91)
-    )
-    const hasExtention = spellList.spells.some(level =>
-      level.spells.some(spell => spell.id === 58)
-    )
-
-    let frequency = ''
-    const freq = spellDetails?.frequency
-    let amount = freq?.amount
-    let charge = freq?.charge ?? freq?.extra
-
-    // Warder gives double protection spells
-    if (
-      isWarder &&
-      allSpell &&
-      allSpell.school &&
-      allSpell.school.trim().toLowerCase() === 'protection' &&
-      typeof amount === 'number'
-    ) {
-      amount = amount * 2
-    }
-    
-    // Warlock doubles verbal death/flame spells
-    if (
-      isWarlock &&
-      allSpell &&
-      allSpell.type === 'Verbal' &&
-      (allSpell.school === 'Death' || allSpell.school === 'Flame') &&
-      typeof amount === 'number'
-    ) {
-      amount = amount * 2
-    }
-
-    // Summoner doubles enchantment spells
-    if (
-      isSummoner &&
-      allSpell &&
-      allSpell.type === 'Verbal' &&
-      typeof amount === 'number'
-    ) {
-      amount = amount * 2
-    }
-
-    // Dervish doubles verbal spells
-    if (
-      isDervish &&
-      allSpell &&
-      allSpell.type &&
-      allSpell.type.trim().toLowerCase() === 'verbal' &&
-      typeof amount === 'number'
-    ) {
-      amount = amount * 2
-    }
-
-    // Legend double the amount of Extension
-    if (
-      allSpell &&
-      isLegend &&
-      hasExtention &&
-      typeof amount === 'number'
-    ) {
-      amount = amount * 2
-    }
-
-    // Silver Tongue adds Swift 1/Refresh Charge x3 at no cost
-
-    // Experienced logic
-    let experienced = false
-    for (const level of spellList.spells) {
-      const found = level.spells.find(s => s.id === spellId)
-      if (found && found.experienced) {
-        experienced = true
+      } else if (level.id === spellId) {
+        spellDetails = level
         break
       }
     }
-
-    if (freq && typeof freq === 'object') {
-      if (experienced) {
-        if (freq.per === 'Life') {
-          charge = 'Charge x5'
-        }
-        if (freq.per === 'Refresh') {
-          charge = 'Charge x10'
-        }
-      }
-
-      if (amount != null && freq.per) {
-        frequency = `${amount}/${freq.per}`
-      } else if (freq.per) {
-        frequency = freq.per
-      }
-      if (charge) {
-        frequency += ` ${charge}`
-      }
-    } else if (typeof freq === 'string') {
-      frequency = freq
-    }
-
-    // --- Special-case frequency modifications (must come last!) ---
-
-    // Priest + Meta-Magic
-    const isPriest = spellList.spells.some(level =>
-      level.spells.some(spell => spell.id === 114)
-    )
-    const isMetaMagic = ALL_SPELLS.some(spell =>
-      spell.id === spellId && spell.type === 'Meta-Magic'
-    )
-    if (isPriest && isMetaMagic) {
-      frequency += (frequency ? ' ' : '') + 'Charge x3'
-    }
-
-    // Necromancer + Death school
-    if (
-      isNecromancer &&
-      allSpell &&
-      allSpell.school &&
-      allSpell.school.trim().toLowerCase() === 'death'
-    ) {
-      frequency += (frequency ? ' ' : '') + 'Charge x3'
-    }
-
-    // Battlemage changes
-    const isBattleMage = spellList.spells.some(level =>
-      level.spells.some(spell => spell.id === 18)
-    )
-    const ambulantId = ALL_SPELLS.find(spell => spell.name === 'Ambulant')?.id
-    if (isBattleMage && spellId === ambulantId) {
-      frequency = 'Unlimited'
-    }
-
-    // Evoker Changes
-    const isEvoker = spellList.spells.some(level =>
-      level.spells.some(spell => spell.id === 54)
-    )
-    const elementalBarageId = ALL_SPELLS.find(spell => spell.name === 'Elemental Barrage')?.id
-    if (isEvoker && spellId === elementalBarageId) {
-      frequency += (frequency ? ' ' : '') + 'Charge x10'
-    }
-
-    // Avatar of Nature: All enchantment spells level 4 or below now are range self. Unless the spell is golem.
-    const isAvatarOfNature = spellList.spells.some(level =>
-      level.spells.some(spell => spell.id === 19)
-    )
-    let isLevelFourOrBelow = false;
-    for (const levelObj of DRUID_SPELLS) {
-      if (levelObj.level <= 4) {
-        if (levelObj.spells.some(spell => spell.id === spellId)) {
-          isLevelFourOrBelow = true;
-          break;
-        }
-      }
-    }
-    const golemId = ALL_SPELLS.find(spell => spell.name === 'Golem')?.id;
-    const isGolemSpell = spellId === golemId;
-    if (
-      isAvatarOfNature &&
-      isLevelFourOrBelow &&
-      !isGolemSpell &&
-      allSpell &&
-      allSpell.type &&
-      allSpell.type.trim().toLowerCase() === 'enchantment'
-    ) {
-      range = 'Self'
-    }
-
-    return { frequency, range }
   }
+
+  const allSpell = ALL_SPELLS.find(s => Number(s.id) === Number(spellId))
+  let range = allSpell?.range || ''
+
+  // Archetype checks
+  const isWarder = spellList.spells.some(level =>
+    level.spells.some(spell => spell.id === 171)
+  )
+  const isNecromancer = spellList.spells.some(level =>
+    level.spells.some(spell => spell.id === 104)
+  )
+  const isWarlock = spellList.spells.some(level =>
+    level.spells.some(spell => spell.id === 172)
+  )
+  const isSummoner = spellList.spells.some(level =>
+    level.spells.some(spell => spell.id === 155)
+  )
+  const isDervish = spellList.spells.some(level =>
+    level.spells.some(spell => spell.id === 40)
+  )
+  const isLegend = spellList.spells.some(level =>
+    level.spells.some(spell => spell.id === 91)
+  )
+  const hasExtention = spellList.spells.some(level =>
+    level.spells.some(spell => spell.id === 58)
+  )
+
+  let frequency = ''
+  const freq = spellDetails?.frequency
+  let baseAmount = freq?.amount ?? 1
+  let charge = freq?.charge ?? freq?.extra
+
+  // Archetype multipliers
+  let archetypeMultiplier = 1
+  if (
+    isWarder &&
+    allSpell &&
+    allSpell.school &&
+    allSpell.school.trim().toLowerCase() === 'protection'
+  ) {
+    archetypeMultiplier *= 2
+  }
+  if (
+    isWarlock &&
+    allSpell &&
+    allSpell.type === 'Verbal' &&
+    (allSpell.school === 'Death' || allSpell.school === 'Flame')
+  ) {
+    archetypeMultiplier *= 2
+  }
+  if (
+    isSummoner &&
+    allSpell &&
+    allSpell.type === 'Verbal'
+  ) {
+    archetypeMultiplier *= 2
+  }
+  if (
+    isDervish &&
+    allSpell &&
+    allSpell.type &&
+    allSpell.type.trim().toLowerCase() === 'verbal'
+  ) {
+    archetypeMultiplier *= 2
+  }
+  if (
+    allSpell &&
+    isLegend &&
+    hasExtention
+  ) {
+    archetypeMultiplier *= 2
+  }
+
+  // Get how many times this spell is purchased
+  let purchased = 1
+  for (const level of spellList.spells) {
+    const found = level.spells.find(s => s.id === spellId)
+    if (found && typeof found.purchased === 'number') {
+      purchased = found.purchased
+      break
+    }
+  }
+
+  // Calculate total amount
+  let amount = baseAmount * archetypeMultiplier * purchased
+
+  // Experienced logic
+  let experienced = false
+  for (const level of spellList.spells) {
+    const found = level.spells.find(s => s.id === spellId)
+    if (found && found.experienced) {
+      experienced = true
+      break
+    }
+  }
+
+  if (freq && typeof freq === 'object') {
+    if (experienced) {
+      if (freq.per === 'Life') {
+        charge = 'Charge x5'
+      }
+      if (freq.per === 'Refresh') {
+        charge = 'Charge x10'
+      }
+    }
+
+    if (amount != null && freq.per) {
+      frequency = `${amount}/${freq.per}`
+    } else if (freq.per) {
+      frequency = freq.per
+    }
+    if (charge) {
+      frequency += ` ${charge}`
+    }
+  } else if (typeof freq === 'string') {
+    frequency = freq
+  }
+
+  // --- Special-case frequency modifications (must come last!) ---
+
+  // Priest + Meta-Magic
+  const isPriest = spellList.spells.some(level =>
+    level.spells.some(spell => spell.id === 114)
+  )
+  const isMetaMagic = ALL_SPELLS.some(spell =>
+    spell.id === spellId && spell.type === 'Meta-Magic'
+  )
+  if (isPriest && isMetaMagic) {
+    frequency += (frequency ? ' ' : '') + 'Charge x3'
+  }
+
+  // Necromancer + Death school
+  if (
+    isNecromancer &&
+    allSpell &&
+    allSpell.school &&
+    allSpell.school.trim().toLowerCase() === 'death'
+  ) {
+    frequency += (frequency ? ' ' : '') + 'Charge x3'
+  }
+
+  // Battlemage changes
+  const isBattleMage = spellList.spells.some(level =>
+    level.spells.some(spell => spell.id === 18)
+  )
+  const ambulantId = ALL_SPELLS.find(spell => spell.name === 'Ambulant')?.id
+  if (isBattleMage && spellId === ambulantId) {
+    frequency = 'Unlimited'
+  }
+
+  // Evoker Changes
+  const isEvoker = spellList.spells.some(level =>
+    level.spells.some(spell => spell.id === 54)
+  )
+  const elementalBarageId = ALL_SPELLS.find(spell => spell.name === 'Elemental Barrage')?.id
+  if (isEvoker && spellId === elementalBarageId) {
+    frequency += (frequency ? ' ' : '') + 'Charge x10'
+  }
+
+  // Avatar of Nature: All enchantment spells level 4 or below now are range self. Unless the spell is golem.
+  const isAvatarOfNature = spellList.spells.some(level =>
+    level.spells.some(spell => spell.id === 19)
+  )
+  let isLevelFourOrBelow = false;
+  for (const levelObj of DRUID_SPELLS) {
+    if (levelObj.level <= 4) {
+      if (levelObj.spells.some(spell => spell.id === spellId)) {
+        isLevelFourOrBelow = true;
+        break;
+      }
+    }
+  }
+  const golemId = ALL_SPELLS.find(spell => spell.name === 'Golem')?.id;
+  const isGolemSpell = spellId === golemId;
+  if (
+    isAvatarOfNature &&
+    isLevelFourOrBelow &&
+    !isGolemSpell &&
+    allSpell &&
+    allSpell.type &&
+    allSpell.type.trim().toLowerCase() === 'enchantment'
+  ) {
+    range = 'Self'
+  }
+
+  return { frequency, range }
+}
 
   return (
     <Container className="pt-3 mb-4">
