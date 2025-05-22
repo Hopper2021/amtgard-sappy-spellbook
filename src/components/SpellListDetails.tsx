@@ -256,6 +256,37 @@ function SpellListDetails() {
       range = 'Self'
     }
 
+    let experienced = false
+    for (const level of spellList.spells) {
+      const found = level.spells.find(s => s.id === spellId)
+      if (found && found.experienced) {
+        experienced = true
+        break
+      }
+    }
+
+    if (freq && typeof freq === 'object') {
+      let charge = freq.charge ?? freq.extra
+      if (experienced) {
+        if (freq.per === 'Life') {
+          charge = 'Charge x5'
+        }
+        if (freq.per === 'Refresh') {
+          charge = 'Charge x10'
+        }
+      }
+
+      let amount = freq.amount
+      if (amount != null && freq.per) {
+        frequency = `${amount}/${freq.per}`
+      } else if (freq.per) {
+        frequency = freq.per
+      }
+      if (charge) {
+        frequency += ` ${charge}`
+      }
+    }
+
     return {frequency, range}
   }
 
