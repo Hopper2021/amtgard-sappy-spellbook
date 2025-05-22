@@ -56,7 +56,7 @@ function App() {
         <Row className="ps-4 pb-2 pt-3 fw-semibold text-decoration-underline">Patch Notes</Row>
 
         <Container className="ps-4">
-          <span className="fw-semibold">Version: 0.0.5</span>
+          <span className="fw-semibold">Version: 0.0.6</span>
           <Container className="ps-2 pt-1">
               <Row className="ps-4">Martial classes, Experienced part 2.</Row>
               <Accordion className="ps-3">
@@ -65,6 +65,10 @@ function App() {
                   <ul>
                     <li>Created base lists for all martial classes</li>
                     <li>Experienced logic part 2</li>
+                    <li>Update CNAME</li>
+                    <li>Update styling on Add and Remove toggle on Edit Spell Page to be more easily understood.</li>
+                    <li>Add "Done Editing" Button to bottom of Edit Spells page to return to the spell details page</li>
+                    <li>Bug Fix: Prevent spell details modal from opening when scrolling</li>
                   </ul>
                 </Accordion.Body>
               </Accordion>
