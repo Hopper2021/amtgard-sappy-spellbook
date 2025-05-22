@@ -110,8 +110,6 @@ function EditSpells() {
 
   const modifiedSpellListVerbals = getAllVerbals(modifiedSpellList)
 
-  console.log('spell list has verbals', modifiedSpellListVerbals)
-
   // Healer Archetype list adjustments
   const getAdjustedHealerSpells = (baseHealerSpells, spellList) => {
     const priestArchetype = ALL_SPELLS.find(spell => spell.name === 'Priest')
@@ -569,7 +567,6 @@ function EditSpells() {
     const isExperienced = ALL_SPELLS.find(s => s.id === spellId)?.name === "Experienced"
     if (isExperienced) {
       if (!targetSpellId) {
-        // No target, open modal as before
         setOpenExperiencedModal(true)
         return
       }
@@ -606,8 +603,7 @@ function EditSpells() {
         : null
       const experiencedCost = experiencedSpellData?.cost ?? 0
 
-      // Use deductPointsForSpell starting at level 1 for Experienced
-      const spellLevel = { level: 1 } // Always start at level 1 for Experienced
+      const spellLevel = { level: 1 }
       const { updatedLevels, rolledDown, remainingCost } = deductPointsForSpell(experiencedCost, spellLevel, modifiedSpellList)
 
       if (remainingCost > 0) {
@@ -617,7 +613,6 @@ function EditSpells() {
         return
       }
 
-      // Update the spell's experienced value
       const updatedLevelsWithExp = updatedLevels.map(level => ({
         ...level,
         spells: level.spells.map(spell =>
@@ -627,7 +622,7 @@ function EditSpells() {
                 experienced: newExperienced,
                 experiencedRolledDown: [
                   ...(spell.experiencedRolledDown || []),
-                  rolledDown // <-- store this instance's trickle-down
+                  rolledDown
                 ]
               }
             : spell
@@ -639,7 +634,6 @@ function EditSpells() {
         if (level.level === 1) {
           const existingExperienced = level.spells.find(s => s.id === experiencedSpell?.id)
           if (existingExperienced) {
-            // Merge rolledDown for each additional purchase
             const mergedRolledDown = { ...existingExperienced.rolledDown }
             for (const key in rolledDown) {
               mergedRolledDown[key] = (mergedRolledDown[key] || 0) + rolledDown[key]
@@ -827,12 +821,9 @@ function EditSpells() {
 
     let modifiedList = modifiedSpellList
 
-    // --- If spell has experienced > 0, refund Experienced and return ---
     if (spellExists.experienced && spellExists.experienced > 0 && Array.isArray(spellExists.experiencedRolledDown)) {
-      // Get the last experiencedRolledDown map (LIFO)
       const lastRolledDown = spellExists.experiencedRolledDown[spellExists.experiencedRolledDown.length - 1] || {}
 
-      // Refund points for this Experienced using its rolledDown map
       const expSpellLevel = { level: 1 }
       const experiencedSpellObj = ALL_SPELLS.find(s => s.name === "Experienced")
       const expSpellByClassLevel = experiencedSpellObj ? findSpellLevel(experiencedSpellObj.id) : undefined
@@ -849,7 +840,6 @@ function EditSpells() {
         modifiedList.maxLevel
       )
 
-      // Remove the last experiencedRolledDown entry and decrement experienced
       let newLevels = modifiedList.spells.map(level => ({
         ...level,
         points: refundedLevels.find(l => l.level === level.level)?.points ?? level.points,
@@ -864,14 +854,12 @@ function EditSpells() {
         ),
       }))
 
-      // Update state and return (do NOT continue to refund the base spell in this call)
       modifiedList = { ...modifiedList, spells: newLevels }
       setModifiedSpellList(modifiedList)
       updateLocalStorage(modifiedList)
       return
     }
 
-    // --- Continue with your existing removal logic for the spell itself ---
     let rolledDownMap = getRolledDownMap(spellExists)
     let refundRolledDownMap = { ...rolledDownMap }
     const maxLevel = modifiedList.maxLevel
@@ -1185,9 +1173,9 @@ function EditSpells() {
             <span>
             <strong className="ms-1">
               {(() => {
-                // Find which archetype is causing the restriction
                 const spell = ALL_SPELLS.find(s => s.id === selectedSpell.id)
                 const archetypes: string[] = []
+
                 // Healer
                 const priestArchetype = ALL_SPELLS.find(s => s.name === 'Priest')
                 const warderArchetype = ALL_SPELLS.find(s => s.name === 'Warder')
