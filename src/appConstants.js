@@ -3099,3 +3099,84 @@ export const WARRIOR_LIST = [
 //       ]
 //     },
 //   ]
+
+export const PATCH_NOTES = [
+    {
+    version: "0.0.7",
+    title: "Fix archetype logic, spell frequencies and add style updates.",
+    details: [
+      "Give modify spell list the same facelift as create page.",
+      "When adding an archetype, remove the spells that have changes costs.",
+      "BUG FIX: Correct logic for spell frequencies when adding an archetype.",
+      "Small styling updates for tips."
+    ]
+  },
+  {
+    version: "0.0.6",
+    title: "Martial classes, Experienced part 2.",
+    details: [
+      "Created base lists for all martial classes",
+      "Experienced logic part 2",
+      "Update CNAME",
+      "Update styling on Add and Remove toggle on Edit Spell Page to be more easily understood.",
+      "Add \"Done Editing\" Button to bottom of Edit Spells page to return to the spell details page",
+      "Bug Fix: Prevent spell details modal from opening when scrolling"
+    ]
+  },
+  {
+    version: "0.0.5",
+    title: "Added Bard Archetypes, Add Remove page long press details, and Archetype clarifications",
+    details: [
+      "Added Bard Archetypes limitations and spell frequency changes.",
+      "Archetype Error popup message now includes the archtype that is limiting the spell when restricted spell is clicked.",
+      "Add helper text in tips to describe where tips can be disabled.",
+      "Add range checkbox option to spell details.",
+      "Give Create page a facelift",
+      "Added Experience logic part 1 - modal created, data flows to it, select for experienced to come in part 2."
+    ]
+  },
+  {
+    version: "0.0.4",
+    title: "Added Druid Archetypes and Error messaging",
+    details: [
+      "Added Druid Archetypes limitations and spell frequency changes.",
+      "When clicking on a restricted spell due to archetype, and error message will popup to explain why this cannot be added.",
+      "Enable archetypes to function simultaniously.",
+      "When spell is purchased, then archetype is added that would otherwise limit said spell, that spell is removed.",
+      "Added Download Page"
+    ]
+  },
+  {
+    version: "0.0.3",
+    title: "Added Wizard Archetypes and Tips",
+    details: [
+      "Added Wizard Archetypes limitations and spell frequency changes.",
+      "Added tips around the app for long press features and clarifications",
+      "Added Disable Tips setting in ellipsis ( Top right-hand corner 3 dot menu ) to perminantly disable tip appearance. This can be enabled anytime through the same button.",
+      "For spell Add or Remove pages, popup messages will now appear when attempting to add a spell that has reached maximum purchase limit or when the user has no more points left to spend."
+    ]
+  },
+  {
+    version: "0.0.2",
+    title: "Added Healer Archetypes and long-press features",
+    details: [
+      "Added Healer Archetypes limitations and spell frequency changes.",
+      "On long-press of a spell when addeing or removing spells, a modal appears to describe that spells effects, limitations, and notes.",
+      "Minor spell fixes to master spell list",
+      "On long-press of spell list name on home page, a modal opens to give the user the option to modify base data or delete the list."
+    ]
+  },
+  {
+    version: "0.0.1",
+    title: "Created Base web application",
+    details: [
+      "Added spellcaster lists: Bard, Druid, Healer, Wizard",
+      "Add master spell list",
+      "Include spell ball colors for materials, show spell ball color on \"show strips/materials\" click on details page",
+      "Create and connect base routes for create, read, update, delete",
+      "Create base pages",
+      "Enable data flow",
+      "Lots of Edit and Remove spell list logic"
+    ]
+  }
+]
