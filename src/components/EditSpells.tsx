@@ -35,7 +35,9 @@ type SelectedSpellType = {
 interface Spell {
   id: number
   purchased: number
+  experienced?: number
   rolledDown?: { [level: number]: number}
+  experiencedRolledDown?: { [level: number]: number }[]
 }
 
 interface SpellLevel {
@@ -78,12 +80,13 @@ function EditSpells() {
 		lookThePart: spellListToEdit?.lookThePart || false,
 		spells: spellListToEdit?.spells || [],
   })
-  const spellListHasVerbals = modifiedSpellList.spells
+  const experiencedMax = ALL_SPELLS.find(s => s.name === "Experienced")?.max ?? 2
+  const experiencedSpell = modifiedSpellList.spells
     .flatMap(level => level.spells)
-    .some(spellObj => {
-      const spellDetails = ALL_SPELLS.find(s => s.id === spellObj.id)
-      return spellDetails?.type === 'Verbal'
-    })
+    .find(spell => {
+      const expSpell = ALL_SPELLS.find(s => s.name === "Experienced")
+      return expSpell && spell.id === expSpell.id
+  })
 
   const getAllVerbals = (modifiedSpellList) => {
     const verbals: VerbalSpell[] = []
@@ -91,6 +94,8 @@ function EditSpells() {
       .filter((level: SpellLevel) => level.level <= 4)
       .forEach((level: SpellLevel) => {
         level.spells.forEach((spellObj: Spell) => {
+          // Only include if experienced is 0 or undefined
+          if (spellObj.experienced && spellObj.experienced !== 0) return
           const spellDetails = ALL_SPELLS.find(s => s.id === spellObj.id) as VerbalSpell | undefined
           if (spellDetails?.type === 'Verbal') {
             verbals.push(spellDetails)
@@ -335,7 +340,7 @@ function EditSpells() {
     const eligibleLevels = getEligibleLevels(spellList, spellLevel)
     const refundedLevels = refundPointsToLevels(
       eligibleLevels,
-      rolledDownMap,
+      { ...rolledDownMap },
       spellLevel,
       spellCost,
       lookThePart,
@@ -350,7 +355,7 @@ function EditSpells() {
       spellLevel,
       spellExists,
       spellId,
-      rolledDownMap
+      { ...(spellExists?.rolledDown || {}) }
     )
     return {
       ...spellList,
@@ -518,25 +523,155 @@ function EditSpells() {
           }
           updatedSpells = level.spells.map((spell: Spell) =>
             spell.id === spellId
-              ? { ...spell, purchased: spell.purchased + 1, rolledDown: mergedRolledDown }
-              : spell
+              ? { ...spell, purchased: spell.purchased + 1, rolledDown: mergedRolledDown, experienced: typeof spell.experienced === 'number' ? spell.experienced : 0 }
+              : { ...spell, experienced: typeof spell.experienced === 'number' ? spell.experienced : 0 }
           )
         } else {
-          updatedSpells = [...level.spells, { id: spellId, purchased: 1, rolledDown }]
+          updatedSpells = [
+  ...level.spells.map((spell: Spell) => ({
+    ...spell,
+    experienced: typeof spell.experienced === 'number' ? spell.experienced : 0,
+    experiencedRolledDown: spell.experiencedRolledDown || [], // <-- add this line
+  })),
+  {
+    id: spellId,
+    purchased: 1,
+    rolledDown,
+    experienced: 0,
+    experiencedRolledDown: [], // <-- add this line
+  }
+]
         }
         return { ...level, spells: updatedSpells }
       }
-      return level
+      return {
+        ...level,
+        spells: level.spells.map((spell: Spell) => ({
+          ...spell,
+          experienced: typeof spell.experienced === 'number' ? spell.experienced : 0,
+        })),
+      }
     })
   }
 
-  const addSpellToList = (spellId: number) => {
+    const addSpellToList = (spellId: number, targetSpellId?: number) => {
     const spellLevel = findSpellLevel(spellId)
     if (!spellLevel) return
 
     const spellData = getSpellData(spellLevel, spellId)
     let spellCost = spellData?.cost ?? 0
     const spellMax = spellData?.max ?? Infinity
+
+    // Handle Experienced spell
+    const isExperienced = ALL_SPELLS.find(s => s.id === spellId)?.name === "Experienced"
+    if (isExperienced) {
+      if (!targetSpellId) {
+        // No target, open modal as before
+        setOpenExperiencedModal(true)
+        return
+      }
+
+      let spellBeingExperienced: Spell | null = null
+      let highestExperienced = 0
+      for (const level of modifiedSpellList.spells) {
+        for (const spell of level.spells) {
+          if (spell.id === targetSpellId) {
+            spellBeingExperienced = spell
+          }
+          if (typeof spell.experienced === 'number' && spell.experienced > highestExperienced) {
+            highestExperienced = spell.experienced
+          }
+        }
+      }
+
+      let newExperienced = 0
+      if (highestExperienced === 0) {
+        newExperienced = 1
+      } else if (highestExperienced === 1) {
+        newExperienced = 2
+      } else {
+        setSpellMaxReached(true)
+        setShowToast(true)
+        return
+      }
+
+      const experiencedSpellData = Array.isArray(spellsByClass)
+        ? spellsByClass.flatMap(level => level.spells).find(spell => {
+            const expSpell = ALL_SPELLS.find(s => s.name === "Experienced")
+            return expSpell && spell.id === expSpell.id
+          })
+        : null
+      const experiencedCost = experiencedSpellData?.cost ?? 0
+
+      // Use deductPointsForSpell starting at level 1 for Experienced
+      const spellLevel = { level: 1 } // Always start at level 1 for Experienced
+      const { updatedLevels, rolledDown, remainingCost } = deductPointsForSpell(experiencedCost, spellLevel, modifiedSpellList)
+
+      if (remainingCost > 0) {
+        setCannotAffordSpell(true)
+        setShowToast(true)
+        setSpellMaxReached(false)
+        return
+      }
+
+      // Update the spell's experienced value
+      const updatedLevelsWithExp = updatedLevels.map(level => ({
+        ...level,
+        spells: level.spells.map(spell =>
+          spell.id === targetSpellId
+            ? {
+                ...spell,
+                experienced: newExperienced,
+                experiencedRolledDown: [
+                  ...(spell.experiencedRolledDown || []),
+                  rolledDown // <-- store this instance's trickle-down
+                ]
+              }
+            : spell
+        ),
+      }))
+
+      const experiencedSpell = ALL_SPELLS.find(s => s.name === "Experienced")
+      let finalLevels = updatedLevelsWithExp.map(level => {
+        if (level.level === 1) {
+          const existingExperienced = level.spells.find(s => s.id === experiencedSpell?.id)
+          if (existingExperienced) {
+            // Merge rolledDown for each additional purchase
+            const mergedRolledDown = { ...existingExperienced.rolledDown }
+            for (const key in rolledDown) {
+              mergedRolledDown[key] = (mergedRolledDown[key] || 0) + rolledDown[key]
+            }
+            return {
+              ...level,
+              spells: level.spells.map(s =>
+                s.id === experiencedSpell?.id
+                  ? { ...s, purchased: (s.purchased || 0) + 1, rolledDown: mergedRolledDown }
+                  : s
+              ),
+            }
+          } else {
+            return {
+              ...level,
+              spells: [
+                ...level.spells,
+                { id: experiencedSpell?.id, purchased: 1, experienced: 0, rolledDown }
+              ]
+            }
+          }
+        }
+        return level
+      })
+
+      let newSpellList: SpellList = {
+        ...modifiedSpellList,
+        spells: finalLevels,
+      }
+
+      setModifiedSpellList(newSpellList)
+      updateLocalStorage(newSpellList)
+      handleClose()
+      return
+    }
 
     const currentLevelObj = modifiedSpellList.spells.find(level => level.level === spellLevel.level)
     if (!currentLevelObj) {
@@ -595,15 +730,6 @@ function EditSpells() {
       })
     }
 
-    // const isExperienced = spellId === 56
-    // const hasVerbals = modifiedSpellList.spells.some(level =>
-    //   level.spells.some(spell => spell.id === spellId && spell.type === 'Verbal')
-    // )
-
-    // if (isExperienced) {
-    //   setOpenExperiencedModal(true)
-    // }
-
     setModifiedSpellList(newSpellList)
     updateLocalStorage(newSpellList)
   }
@@ -653,6 +779,7 @@ function EditSpells() {
   }
 
   const updateSpellPurchasesAfterRemoval = (newLevels, spellByClassLevel, spellExists, spellId, rolledDownMap) => {
+    let safeRolledDownMap = { ...(rolledDownMap || {}) }
     return newLevels.map(level => {
       if (level.level === spellByClassLevel.level) {
         if (spellExists) {
@@ -662,7 +789,7 @@ function EditSpells() {
               spells: level.spells.filter((spell: Spell) => spell.id !== spellId),
             }
           } else {
-            let newRolledDown = { ...rolledDownMap }
+            let newRolledDown = { ...safeRolledDownMap }
             Object.keys(newRolledDown).forEach(key => {
               if (newRolledDown[key] <= 0) delete newRolledDown[key]
             })
@@ -670,8 +797,8 @@ function EditSpells() {
               ...level,
               spells: level.spells.map((spell: Spell) =>
                 spell.id === spellId
-                  ? { ...spell, purchased: spell.purchased - 1, rolledDown: newRolledDown }
-                  : spell
+                  ? { ...spell, purchased: spell.purchased - 1, rolledDown: newRolledDown, experienced: typeof spell.experienced === 'number' ? spell.experienced : 0 }
+                  : { ...spell, experienced: typeof spell.experienced === 'number' ? spell.experienced : 0 }
               ),
             }
           }
@@ -693,24 +820,147 @@ function EditSpells() {
     if (!currentLevelObj) return
 
     const spellExists = currentLevelObj.spells.find((spell: Spell) => spell.id === spellId)
+    if (!spellExists) return
 
+    let modifiedList = modifiedSpellList
+
+    // --- If spell has experienced > 0, refund Experienced and return ---
+    if (spellExists.experienced && spellExists.experienced > 0 && Array.isArray(spellExists.experiencedRolledDown)) {
+      // Get the last experiencedRolledDown map (LIFO)
+      const lastRolledDown = spellExists.experiencedRolledDown[spellExists.experiencedRolledDown.length - 1] || {}
+
+      // Refund points for this Experienced using its rolledDown map
+      const expSpellLevel = { level: 1 }
+      const experiencedSpellObj = ALL_SPELLS.find(s => s.name === "Experienced")
+      const expSpellByClassLevel = experiencedSpellObj ? findSpellLevel(experiencedSpellObj.id) : undefined
+      const expSpellByClassLevelData = experiencedSpellObj && expSpellByClassLevel ? getSpellData(expSpellByClassLevel, experiencedSpellObj.id) : undefined
+      const expSpellCost = expSpellByClassLevelData?.cost ?? 0
+      const eligibleLevels = getEligibleLevels(modifiedList, expSpellLevel)
+      const refundRolledDownMap = { ...lastRolledDown }
+      const refundedLevels = refundPointsToLevels(
+        eligibleLevels,
+        refundRolledDownMap,
+        expSpellLevel,
+        expSpellCost,
+        modifiedList.lookThePart,
+        modifiedList.maxLevel
+      )
+
+      // Remove the last experiencedRolledDown entry and decrement experienced
+      let newLevels = modifiedList.spells.map(level => ({
+        ...level,
+        points: refundedLevels.find(l => l.level === level.level)?.points ?? level.points,
+        spells: level.spells.map(spell =>
+          spell.id === spellId
+            ? {
+                ...spell,
+                experienced: spell.experienced - 1,
+                experiencedRolledDown: spell.experiencedRolledDown.slice(0, -1)
+              }
+            : spell
+        ),
+      }))
+
+      // Update state and return (do NOT continue to refund the base spell in this call)
+      modifiedList = { ...modifiedList, spells: newLevels }
+      setModifiedSpellList(modifiedList)
+      updateLocalStorage(modifiedList)
+      return
+    }
+
+    // --- Continue with your existing removal logic for the spell itself ---
     let rolledDownMap = getRolledDownMap(spellExists)
+    let refundRolledDownMap = { ...rolledDownMap }
+    const maxLevel = modifiedList.maxLevel
+    const lookThePart = modifiedList.lookThePart
+    const eligibleLevels = getEligibleLevels(modifiedList, spellByClassLevel)
 
-    const maxLevel = modifiedSpellList.maxLevel
-    const lookThePart = modifiedSpellList.lookThePart
+    const experiencedSpell = ALL_SPELLS.find(spell => spell.name === 'Experienced')
+    if (spellId === experiencedSpell?.id) {
+      const refundedLevels = refundPointsToLevels(
+        eligibleLevels,
+        refundRolledDownMap,
+        spellByClassLevel,
+        spellCost,
+        lookThePart,
+        maxLevel
+      )
 
-    const eligibleLevels = getEligibleLevels(modifiedSpellList, spellByClassLevel)
+      const newLevels = modifiedList.spells.map(level => {
+        if (level.level === 1) {
+          const expSpell = level.spells.find(spell => spell.id === experiencedSpell.id)
+          if (expSpell) {
+            if (expSpell.purchased > 1) {
+              return {
+                ...level,
+                points: refundedLevels.find(l => l.level === level.level)?.points ?? level.points,
+                spells: level.spells.map(spell =>
+                  spell.id === experiencedSpell.id
+                    ? { ...spell, purchased: spell.purchased - 1 }
+                    : spell
+                ),
+              }
+            } else {
+              return {
+                ...level,
+                points: refundedLevels.find(l => l.level === level.level)?.points ?? level.points,
+                spells: level.spells.filter(spell => spell.id !== experiencedSpell.id),
+              }
+            }
+          }
+        }
+        return {
+          ...level,
+          points: refundedLevels.find(l => l.level === level.level)?.points ?? level.points,
+        }
+      })
+
+      let highestExp = 0
+      let spellToReset: { levelIdx: number, spellIdx: number } | null = null
+      newLevels.forEach((level, levelIdx) => {
+        level.spells.forEach((spell, spellIdx) => {
+          if (typeof spell.experienced === 'number' && spell.experienced > highestExp) {
+            highestExp = spell.experienced
+            spellToReset = { levelIdx, spellIdx }
+          }
+        })
+      })
+      let finalLevels = newLevels
+      if (spellToReset) {
+        finalLevels = newLevels.map((level, lIdx) =>
+          lIdx === spellToReset!.levelIdx
+            ? {
+                ...level,
+                spells: level.spells.map((spell, sIdx) =>
+                  sIdx === spellToReset!.spellIdx
+                    ? { ...spell, experienced: 0 }
+                    : spell
+                ),
+              }
+            : level
+        )
+      }
+
+      let newSpellList: SpellList = {
+        ...modifiedList,
+        spells: finalLevels,
+      }
+
+      setModifiedSpellList({ ...modifiedList, spells: newLevels })
+      updateLocalStorage({ ...modifiedList, spells: newLevels })
+      return
+    }
 
     const refundedLevels = refundPointsToLevels(
       eligibleLevels,
-      rolledDownMap,
+      { ...rolledDownMap },
       spellByClassLevel,
       spellCost,
       lookThePart,
       maxLevel
     )
 
-    const newLevels = modifiedSpellList.spells.map(level => {
+    const newLevels = modifiedList.spells.map(level => {
       const refunded = refundedLevels.find(l => l.level === level.level)
       return refunded ? refunded : level
     })
@@ -720,15 +970,14 @@ function EditSpells() {
       spellByClassLevel,
       spellExists,
       spellId,
-      rolledDownMap
+      { ...(spellExists?.rolledDown || {}) }
     )
 
     let newSpellList: SpellList = {
-      ...modifiedSpellList,
+      ...modifiedList,
       spells: newSpellLevels,
     }
 
-    // If removing Ranger, also remove and refund all Equipment spells
     const rangerArchetype = ALL_SPELLS.find(spell => spell.name === 'Ranger')
     if (spellId === rangerArchetype?.id) {
       const equipmentIds = ALL_SPELLS.filter(s => s.name.includes('Equipment:')).map(s => s.id)
@@ -737,7 +986,6 @@ function EditSpells() {
       })
     }
 
-    // If removing Dervish, also remove and refund all Equipment spells
     const dervishArchetype = ALL_SPELLS.find(spell => spell.name === 'Dervish')
     if (spellId === dervishArchetype?.id) {
       const equipmentIds = ALL_SPELLS.filter(s => s.name.includes('Equipment:')).map(s => s.id)
@@ -855,9 +1103,8 @@ function EditSpells() {
                 <Button
                   key={index}
                   variant="primary"
-                  className="pe-3 mb-3"
-                  onClick={() => console.log('Clicked', spell.name)}
-                  // onClick={() => addSpellToList(spell.id)}
+                  className="pe-3 mb-4 w-100"
+                  onClick={() => addSpellToList(56, spell.id)}
                   >
                     {spell.name} ( {spell.range} )
                 </Button>
@@ -1000,13 +1247,17 @@ function EditSpells() {
         <Toast
           className="bg-info text-white"
           show={showToast || showExperiencedToast}
-          onClose={() => [setShowToast(false), setShowExperiencedToast(false)]}
+            onClose={() => {
+              setShowToast(false)
+              setShowExperiencedToast(false)
+              setSpellMaxReached(false)
+            }}
           autohide delay={3000}
         >
           <Toast.Body>
             {cannotAffordSpell && <span>You cannot afford this spell at this level.</span>}
             {spellMaxReached && <span>Maximum spell purchase amount reached.</span>}
-            {showExperiencedToast && <span>No valid Spells to apply Experienced to.</span>}
+            {showExperiencedToast && <span>No valid spells to apply Experienced to.</span>}
           </Toast.Body>
         </Toast>
       </ToastContainer>
@@ -1045,10 +1296,12 @@ function EditSpells() {
             return (
               <Accordion key={index} defaultActiveKey="1" flush>
                 <Accordion.Item eventKey="0" className="border-bottom">
-                  <Accordion.Header>
-                    Level {level.level}  ({levelPointsAvailable}) available: {trickleDownPointsAvailable}
+                  <Accordion.Header className="compact">
+                    <span style={{ fontWeight: 500, fontSize: '1rem', paddingTop: 0, paddingBottom: 0 }}>
+                      Level {level.level}  ({levelPointsAvailable}) available: {trickleDownPointsAvailable}
+                    </span>
                   </Accordion.Header>
-                  <Accordion.Body>
+                  <Accordion.Body className="py-0">
                     {addOrRemoveSpells === 'Add' ? (
                       level.spells.map((spellsByLevel) => {
                         const spellName = getSpellName(spellsByLevel.id)
@@ -1065,7 +1318,7 @@ function EditSpells() {
                             style={
                               spellsByLevel.restricted
                                 ? { backgroundColor: '#f1b0b7', color: '#fff', border: 'none' }
-                                : undefined
+                                : { padding: 7 }
                             }
                             variant={spellsByLevel.restricted ? "danger" : "unknown"}
                             className="text-start border-bottom"
@@ -1079,9 +1332,14 @@ function EditSpells() {
                                 setSelectedSpell(ALL_SPELLS.find(s => s.id === spellsByLevel.id) as SelectedSpellType)
                                 setShowDisabledSpellToast(true)
                               } else if (spellsByLevel.id === 56) {
-                                spellListHasVerbals
-                                ? setOpenExperiencedModal(true)
-                                : setShowExperiencedToast(true)
+                                if (experiencedSpell && experiencedSpell.purchased >= experiencedMax) {
+                                  setSpellMaxReached(true)
+                                  setShowToast(true)
+                                } else if (modifiedSpellListVerbals.length > 0) {
+                                  setOpenExperiencedModal(true)
+                                } else {
+                                  setShowExperiencedToast(true)
+                                }
                               } else {
                                 addSpellToList(spellsByLevel.id)
                               }

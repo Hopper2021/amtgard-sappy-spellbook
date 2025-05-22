@@ -58,6 +58,22 @@ function App() {
         <Container className="ps-4">
           <span className="fw-semibold">Version: 0.0.5</span>
           <Container className="ps-2 pt-1">
+              <Row className="ps-4">Martial classes, Experienced part 2.</Row>
+              <Accordion className="ps-3">
+                <Accordion.Header className="border" >Details</Accordion.Header>
+                <Accordion.Body>
+                  <ul>
+                    <li>Created base lists for all martial classes</li>
+                    <li>Experienced logic part 2</li>
+                  </ul>
+                </Accordion.Body>
+              </Accordion>
+          </Container>
+        </Container>
+
+        <Container className="ps-4">
+          <span className="fw-semibold">Version: 0.0.5</span>
+          <Container className="ps-2 pt-1">
               <Row className="ps-4">Added Bard Archetypes, Add Remove page long press details, and Archetype clarifications</Row>
               <Accordion className="ps-3">
                 <Accordion.Header className="border" >Details</Accordion.Header>
