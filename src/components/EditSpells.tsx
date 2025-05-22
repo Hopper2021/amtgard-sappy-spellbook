@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Container, Row, Accordion, Button, CardHeader, Modal, Alert } from 'react-bootstrap'
 import { ALL_SPELLS, BARD_SPELLS, HEALER_SPELLS, WIZARD_SPELLS, DRUID_SPELLS } from '../appConstants'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Toast, ToastContainer } from 'react-bootstrap'
 import { IoMdInformationCircle } from 'react-icons/io'
 import { IoEllipsisVertical } from "react-icons/io5"
@@ -56,6 +56,7 @@ interface SpellList {
 }
 
 function EditSpells() {
+  const navigate = useNavigate()
   const [pressStartPos, setPressStartPos] = useState<{x: number, y: number} | null>(null)
   const [pressCancelled, setPressCancelled] = useState(false)
   const [longPressTimeout, setLongPressTimeout] = useState<NodeJS.Timeout | null>(null)
@@ -1460,6 +1461,13 @@ function EditSpells() {
               </Accordion>
             )
           })}
+          <div className="d-flex justify-content-center mt-3">
+            <Button variant="primary" onClick={() => {
+              navigate(`/listDetails/${modifiedSpellList.id}`)
+            }}>
+              Done Editing
+            </Button>
+          </div>
         </Container>
     </Container>
   )
