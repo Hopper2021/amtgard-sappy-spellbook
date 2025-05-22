@@ -109,70 +109,86 @@ function SpellListDetails() {
     const hasExtention = spellList.spells.some(level =>
       level.spells.some(spell => spell.id === 58)
     )
-    // const hasSilverTongue = spellList.spells.some(level =>
-    //   level.spells.some(spell => spell.id === 135)
-    // )
 
     let frequency = ''
     const freq = spellDetails?.frequency
+    let amount = freq?.amount
+    let charge = freq?.charge ?? freq?.extra
+
+    // Warder gives double protection spells
+    if (
+      isWarder &&
+      allSpell &&
+      allSpell.school &&
+      allSpell.school.trim().toLowerCase() === 'protection' &&
+      typeof amount === 'number'
+    ) {
+      amount = amount * 2
+    }
+    
+    // Warlock doubles verbal death/flame spells
+    if (
+      isWarlock &&
+      allSpell &&
+      allSpell.type === 'Verbal' &&
+      (allSpell.school === 'Death' || allSpell.school === 'Flame') &&
+      typeof amount === 'number'
+    ) {
+      amount = amount * 2
+    }
+
+    // Summoner doubles enchantment spells
+    if (
+      isSummoner &&
+      allSpell &&
+      allSpell.type === 'Verbal' &&
+      typeof amount === 'number'
+    ) {
+      amount = amount * 2
+    }
+
+    // Dervish doubles verbal spells
+    if (
+      isDervish &&
+      allSpell &&
+      allSpell.type &&
+      allSpell.type.trim().toLowerCase() === 'verbal' &&
+      typeof amount === 'number'
+    ) {
+      amount = amount * 2
+    }
+
+    // Legend double the amount of Extension
+    if (
+      allSpell &&
+      isLegend &&
+      hasExtention &&
+      typeof amount === 'number'
+    ) {
+      amount = amount * 2
+    }
+
+    // Silver Tongue adds Swift 1/Refresh Charge x3 at no cost
+
+    // Experienced logic
+    let experienced = false
+    for (const level of spellList.spells) {
+      const found = level.spells.find(s => s.id === spellId)
+      if (found && found.experienced) {
+        experienced = true
+        break
+      }
+    }
+
     if (freq && typeof freq === 'object') {
-      const charge = freq.charge ?? freq.extra
-      let amount = freq.amount
-
-      // Warder gives double protection spells
-      if (
-        isWarder &&
-        allSpell &&
-        allSpell.school &&
-        allSpell.school.trim().toLowerCase() === 'protection' &&
-        typeof amount === 'number'
-      ) {
-        amount = amount * 2
+      if (experienced) {
+        if (freq.per === 'Life') {
+          charge = 'Charge x5'
+        }
+        if (freq.per === 'Refresh') {
+          charge = 'Charge x10'
+        }
       }
-      
-      // Warlock doubles verbal death/flame spells
-      if (
-        isWarlock &&
-        allSpell &&
-        allSpell.type === 'Verbal' &&
-        (allSpell.school === 'Death' || allSpell.school === 'Flame') &&
-        typeof amount === 'number'
-      ) {
-        amount = amount * 2
-      }
-
-      // Summoner doubles enchantment spells
-      if (
-        isSummoner &&
-        allSpell &&
-        allSpell.type === 'Verbal' &&
-        typeof amount === 'number'
-      ) {
-        amount = amount * 2
-      }
-
-      // Dervish doubles verbal spells
-      if (
-        isDervish &&
-        allSpell &&
-        allSpell.type &&
-        allSpell.type.trim().toLowerCase() === 'verbal' &&
-        typeof amount === 'number'
-      ) {
-        amount = amount * 2
-      }
-
-      // Legend double the amount of Extension
-      if (
-        allSpell &&
-        isLegend &&
-        hasExtention &&
-        typeof amount === 'number'
-      ) {
-        amount = amount * 2
-      }
-
-      // Silver Tongue adds Swift 1/Refresh Charge x3 at no cost
 
       if (amount != null && freq.per) {
         frequency = `${amount}/${freq.per}`
@@ -186,18 +202,20 @@ function SpellListDetails() {
       frequency = freq
     }
 
+    // --- Special-case frequency modifications (must come last!) ---
+
+    // Priest + Meta-Magic
     const isPriest = spellList.spells.some(level =>
       level.spells.some(spell => spell.id === 114)
     )
-
     const isMetaMagic = ALL_SPELLS.some(spell =>
       spell.id === spellId && spell.type === 'Meta-Magic'
     )
-
     if (isPriest && isMetaMagic) {
       frequency += (frequency ? ' ' : '') + 'Charge x3'
     }
 
+    // Necromancer + Death school
     if (
       isNecromancer &&
       allSpell &&
@@ -212,7 +230,6 @@ function SpellListDetails() {
       level.spells.some(spell => spell.id === 18)
     )
     const ambulantId = ALL_SPELLS.find(spell => spell.name === 'Ambulant')?.id
-
     if (isBattleMage && spellId === ambulantId) {
       frequency = 'Unlimited'
     }
@@ -222,7 +239,6 @@ function SpellListDetails() {
       level.spells.some(spell => spell.id === 54)
     )
     const elementalBarageId = ALL_SPELLS.find(spell => spell.name === 'Elemental Barrage')?.id
-
     if (isEvoker && spellId === elementalBarageId) {
       frequency += (frequency ? ' ' : '') + 'Charge x10'
     }
@@ -231,7 +247,6 @@ function SpellListDetails() {
     const isAvatarOfNature = spellList.spells.some(level =>
       level.spells.some(spell => spell.id === 19)
     )
-
     let isLevelFourOrBelow = false;
     for (const levelObj of DRUID_SPELLS) {
       if (levelObj.level <= 4) {
@@ -241,10 +256,8 @@ function SpellListDetails() {
         }
       }
     }
-
     const golemId = ALL_SPELLS.find(spell => spell.name === 'Golem')?.id;
     const isGolemSpell = spellId === golemId;
-
     if (
       isAvatarOfNature &&
       isLevelFourOrBelow &&
@@ -256,38 +269,7 @@ function SpellListDetails() {
       range = 'Self'
     }
 
-    let experienced = false
-    for (const level of spellList.spells) {
-      const found = level.spells.find(s => s.id === spellId)
-      if (found && found.experienced) {
-        experienced = true
-        break
-      }
-    }
-
-    if (freq && typeof freq === 'object') {
-      let charge = freq.charge ?? freq.extra
-      if (experienced) {
-        if (freq.per === 'Life') {
-          charge = 'Charge x5'
-        }
-        if (freq.per === 'Refresh') {
-          charge = 'Charge x10'
-        }
-      }
-
-      let amount = freq.amount
-      if (amount != null && freq.per) {
-        frequency = `${amount}/${freq.per}`
-      } else if (freq.per) {
-        frequency = freq.per
-      }
-      if (charge) {
-        frequency += ` ${charge}`
-      }
-    }
-
-    return {frequency, range}
+    return { frequency, range }
   }
 
   return (
