@@ -36,53 +36,60 @@ function ModifySpellList() {
   })
 
   return (
-    <Container fluid className="p-2">
-			<Row className="align-items-center">
-				<Col xs={7}>
-					<InputGroup style={{ border: 'none' }} className="mb-3">
-						<InputGroup.Text style={{ backgroundColor: 'transparent', border: 'none', paddingRight: 5 }}>
-							Name:
-						</InputGroup.Text>
-						<Form.Control
-							placeholder="Spell List Name"
-							value={modifiedSpellList.name}
-							aria-label="My SpellBook"
-							style={{
-								backgroundColor: 'transparent',
-								border: 'none',
-								borderBottom: '1px solid black',
-								borderRadius: 0,
-							}}
-							onChange={(event) =>
-								setModifiedSpellList({...modifiedSpellList, name: event.target.value })
-							}
-						/>
-					</InputGroup>
-				</Col>
+    <Container fluid className="p-4" style={{ maxWidth: 600 }}>
+			<InputGroup className="mb-4 w-100">
+				<InputGroup.Text>
+					Name:
+				</InputGroup.Text>
+				<Form.Control
+					value={modifiedSpellList.name}
+					placeholder="My SpellBook"
+					aria-label="My SpellBook"
+					onChange={(event) =>
+						setModifiedSpellList({...modifiedSpellList, name: event.target.value })
+					}
+				/>
+			</InputGroup>
 
-				<Col>
-					<InputGroup className="mb-3">
-						<InputGroup.Text style={{ backgroundColor: 'transparent', border: 'none', paddingRight: 5 }}>
-							Level:
-						</InputGroup.Text>
+			<Row className="mb-4 align-items-center flex-wrap">
+
+				<Col xs={7} md={6} className="mb-0 align-items-center">
+					<InputGroup>
+						<InputGroup.Text>Class:</InputGroup.Text>
 						<Dropdown>
 							<Dropdown.Toggle
 								style={{
-									backgroundColor: 'white',
+									borderColor: 'lightgrey',
+									borderWidth: 1,
 									color: 'black',
-									border: 'none',
-									paddingRight: 5,
-									borderBottom: '1px solid black',
-									borderRadius: 0,
+									backgroundColor: 'lightgrey',
 								}}
-								id="dropdown-basic"
+								disabled
+							>
+								{modifiedSpellList.class}
+							</Dropdown.Toggle>
+						</Dropdown>
+					</InputGroup>
+				</Col>
+
+				<Col xs={5} md={6}>
+					<InputGroup className="w-100">
+						<InputGroup.Text>Level:</InputGroup.Text>
+						<Dropdown className="w-100">
+							<Dropdown.Toggle
+								variant="outline-secondary"
+								style={{
+									borderColor: 'lightgrey',
+									borderWidth: 1,
+									color: 'black',
+								}}
 							>
 								{modifiedSpellList.maxLevel}
 							</Dropdown.Toggle>
 
 							<Dropdown.Menu>
 								{[...Array(6)].map((_, index) => {
-									const level = index + 1  // Levels 1 through 6
+									const level = index + 1
 									return (
 										<Dropdown.Item
 											key={level}
@@ -103,54 +110,54 @@ function ModifySpellList() {
 						</Dropdown>
 					</InputGroup>
 				</Col>
+
 			</Row>
 
-			<InputGroup className="mb-3">
-				<InputGroup.Text style={{ backgroundColor: 'transparent', border: 'none', paddingRight: 5 }}>
-					Class:
-				</InputGroup.Text>
-				<Dropdown>
-					<Dropdown.Toggle
-						style={{
-							backgroundColor: 'transparent',
-							color: 'black',
-							border: 'none',
-							borderBottom: '1px solid black',
-							borderRadius: 0,
-						}}
-						disabled
-						id="dropdown-basic"
-					>
-						{modifiedSpellList.class}
-					</Dropdown.Toggle>
-				</Dropdown>
-			</InputGroup>
+			<Row className="mb-4 align-items-center flex-wrap">
 
-			<Form.Check
-				className="m-3"
-				type={'checkbox'}
-				id="lookThePartCheckbox"
-				label={
-					<label
-						htmlFor="lookThePartCheckbox"
-						style={{ cursor: 'pointer', display: 'inline-block', marginLeft: '5px' }}
-					>
-						Look The Part
-					</label>
-				}
-				checked={modifiedSpellList.lookThePart}
-				onChange={() =>
-					setModifiedSpellList({
-						...modifiedSpellList,
-						lookThePart: !modifiedSpellList.lookThePart,
-					})
-				}
-			/>
+				<Col xs={12} md={7} className="mb-2 mb-md-0">
+					<InputGroup className="border-color-primary w-100">
+						<InputGroup.Text>
+							Version:
+						</InputGroup.Text>
+						<Dropdown>
+							<Dropdown.Toggle variant="outline-secondary" style={{ borderColor: 'lightgrey', borderWidth: 1, color: 'black' }}>
+								V8.6.3 "Sappy Three"
+							</Dropdown.Toggle>
+							<Dropdown.Menu>
+								<Dropdown.Item>- V8.6.3 "Sappy Three"</Dropdown.Item>
+							</Dropdown.Menu>
+						</Dropdown>
+					</InputGroup>
+				</Col>
+
+				<Col xs={12} md={5}>
+					<Form.Check
+						className="m-3"
+						type={'checkbox'}
+						id="lookThePartCheckbox"
+						label={
+							<label
+								htmlFor="lookThePartCheckbox"
+								style={{ cursor: 'pointer', display: 'inline-block', marginLeft: '5px' }}
+							>
+								Look The Part
+							</label>
+						}
+						checked={modifiedSpellList.lookThePart}
+						onChange={() =>
+							setModifiedSpellList({
+								...modifiedSpellList,
+								lookThePart: !modifiedSpellList.lookThePart,
+							})
+						}
+					/>
+					</Col>
+				</Row>
 
 			<Button
 				className="w-100"
-				variant="unknown"
-				style={{ backgroundColor: 'lightgrey' }}
+				variant="primary"
 				onClick={() => {
 					const updatedAllSpellLists = allSpellLists.map((list: SpellList) =>
 						list.id === modifiedSpellList.id ? modifiedSpellList : list

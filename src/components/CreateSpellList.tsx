@@ -57,6 +57,7 @@ function CreateSpellList() {
 			</InputGroup>
 
 			<Row className="mb-4 align-items-center flex-wrap">
+
 				<Col xs={7} md={6} className="mb-0 align-items-center">
 					<InputGroup>
 						<InputGroup.Text>Class:</InputGroup.Text>
@@ -80,6 +81,7 @@ function CreateSpellList() {
 						</Dropdown>
 					</InputGroup>
 				</Col>
+
 				<Col xs={5} md={6}>
 					<InputGroup className="w-100">
 						<InputGroup.Text>Level:</InputGroup.Text>
@@ -117,9 +119,11 @@ function CreateSpellList() {
 						</Dropdown>
 					</InputGroup>
 				</Col>
+
 			</Row>
 			
 			<Row className="mb-3 align-items-center flex-wrap">
+				
 				<Col xs={12} md={7} className="mb-2 mb-md-0">
 					<InputGroup className="border-color-primary w-100">
 						<InputGroup.Text>
@@ -135,6 +139,7 @@ function CreateSpellList() {
 						</Dropdown>
 					</InputGroup>
 				</Col>
+
 				<Col xs={12} md={5}>
 					<InputGroup className="mb-3 ms-4 mt-3" style={{ cursor: 'pointer' }}>
 						<Form.Check
