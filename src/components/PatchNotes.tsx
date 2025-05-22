@@ -29,7 +29,7 @@ function App() {
             <IoMdInformationCircle size={25} className="me-1" color="blue"/>
             <span>Below button will highlight blue when APK is available for download.</span>
             <div
-              className="end-0 bottom-0 text-muted small"
+              className="end-0 bottom-0 text-muted small mt-1"
               style={{ pointerEvents: 'none' }}
             >
               <span>Disable tips in settings <IoEllipsisVertical /></span>

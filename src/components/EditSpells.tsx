@@ -1304,7 +1304,7 @@ const addSpellToList = (spellId: number, targetSpellId?: number) => {
             <IoMdInformationCircle size={25} className="me-1" color="blue"/>
             <span>Long press on any spell below to view its effects and limitations.</span>
             <div
-              className="end-0 bottom-0 text-muted small"
+              className="end-0 bottom-0 text-muted small mt-1"
               style={{ pointerEvents: 'none' }}
             >
               <span>Disable tips in settings <IoEllipsisVertical /></span>
