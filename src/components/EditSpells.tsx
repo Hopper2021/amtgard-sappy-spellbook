@@ -56,6 +56,8 @@ interface SpellList {
 }
 
 function EditSpells() {
+  const [pressStartPos, setPressStartPos] = useState<{x: number, y: number} | null>(null)
+  const [pressCancelled, setPressCancelled] = useState(false)
   const [longPressTimeout, setLongPressTimeout] = useState<NodeJS.Timeout | null>(null)
   const [selectedSpell, setSelectedSpell] = useState<SelectedSpellType>(null)
   const [addOrRemoveSpells, setAddOrRemoveSpells] = useState('Add')
@@ -1018,18 +1020,36 @@ function EditSpells() {
     setLongPressTimeout(timeout)
   }
 
-  const handleLongPressStart = (spellId) => {
-  const timeout = setTimeout(() => {
-      getSpellDetails(spellId)
-      setOpenModal(true)
+  const handleLongPressStart = (spellId, e) => {
+    const x = e.touches ? e.touches[0].clientX : e.clientX
+    const y = e.touches ? e.touches[0].clientY : e.clientY
+    setPressStartPos({ x, y })
+    setPressCancelled(false)
+    const timeout = setTimeout(() => {
+      if (!pressCancelled) {
+        getSpellDetails(spellId)
+        setOpenModal(true)
+      }
     }, 800)
     setLongPressTimeout(timeout)
   }
 
-  const handleLongPressEnd = () => {
-    if (longPressTimeout) {
-      clearTimeout(longPressTimeout as unknown as number)
+  const handleLongPressMove = (e) => {
+    if (!pressStartPos) return
+    const x = e.touches ? e.touches[0].clientX : e.clientX
+    const y = e.touches ? e.touches[0].clientY : e.clientY
+    const dx = Math.abs(x - pressStartPos.x)
+    const dy = Math.abs(y - pressStartPos.y)
+    if (dx > 10 || dy > 10) { // 10px threshold
+      setPressCancelled(true)
+      if (longPressTimeout) clearTimeout(longPressTimeout)
     }
+  }
+
+  const handleLongPressEnd = () => {
+    setPressStartPos(null)
+    setPressCancelled(false)
+    if (longPressTimeout) clearTimeout(longPressTimeout)
   }
 
   const handleClose = () => {
@@ -1355,10 +1375,12 @@ function EditSpells() {
                             }
                             variant={spellsByLevel.restricted ? "danger" : "unknown"}
                             className="text-start border-bottom"
-                            onMouseDown={() => handleLongPressStart(spellsByLevel.id)}
+                            onMouseDown={e => handleLongPressStart(spellsByLevel.id, e)}
+                            onMouseMove={handleLongPressMove}
                             onMouseUp={handleLongPressEnd}
                             onMouseLeave={handleLongPressEnd}
-                            onTouchStart={() => handleLongPressStart(spellsByLevel.id)}
+                            onTouchStart={e => handleLongPressStart(spellsByLevel.id, e)}
+                            onTouchMove={handleLongPressMove}
                             onTouchEnd={handleLongPressEnd}
                             onClick={() => {
                               if (spellsByLevel.restricted) {
@@ -1418,10 +1440,12 @@ function EditSpells() {
                             <Button
                               variant="unknown"
                               className="text-start border-bottom"
-                              onMouseDown={() => handleLongPressStart(spellsByLevel.id)}
+                              onMouseDown={e => handleLongPressStart(spellsByLevel.id, e)}
+                              onMouseMove={handleLongPressMove}
                               onMouseUp={handleLongPressEnd}
                               onMouseLeave={handleLongPressEnd}
-                              onTouchStart={() => handleLongPressStart(spellsByLevel.id)}
+                              onTouchStart={e => handleLongPressStart(spellsByLevel.id, e)}
+                              onTouchMove={handleLongPressMove}
                               onTouchEnd={handleLongPressEnd}
                               onClick={() => removeSpellFromList(spellsByLevel.id)}
                             >
