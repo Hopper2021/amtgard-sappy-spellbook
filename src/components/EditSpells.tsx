@@ -1281,12 +1281,45 @@ function EditSpells() {
           </Alert>
         )}
         <CardHeader className="d-flex justify-content-between align-items-center">
-        <h6>Edit {modifiedSpellList.class} Spells</h6>
+        <h6>{addOrRemoveSpells} {modifiedSpellList.class} Spells</h6>
+        <div>
           <Button
-            className="mb-3"
+            className="mb-3 rounded-end-0 border-0"
+            style={
+              addOrRemoveSpells === 'Add'
+                ? {
+                    backgroundColor: '#007bff',
+                    boxShadow: 'inset 2px 2px 6px darkblue, inset -2px -2px 6px #007bff',
+                    border: '1px solid #ccc',
+                  }
+                : {
+                    background: 'linear-gradient(to bottom, #bdbdbd 0%, #888888 44%, #444444 100%)',
+                    boxShadow:  '4px 4px 5px 1px rgba(155, 155, 155, .5)',
+                    border: '1px solid #bbb',
+                  }
+            }
             onClick={() => setAddOrRemoveSpells(addOrRemoveSpells === 'Add' ? 'Remove' : 'Add')}>
-            {addOrRemoveSpells}
+            Add
           </Button>
+          <Button
+            className="mb-3 rounded-start-0 border-0"
+            style={
+              addOrRemoveSpells === 'Remove'
+                ? {
+                    backgroundColor: '#007bff',
+                    boxShadow: 'inset 2px 2px 6px darkblue, inset -2px -2px 6px #007bff',
+                    border: '1px solid #ccc',
+                  }
+                : {
+                    background: 'linear-gradient(to bottom, #bdbdbd 0%, #888888 44%, #444444 100%)',
+                    boxShadow:  '4px 4px 5px 1px rgba(155, 155, 155, .5)',
+                    border: '1px solid #bbb',
+                  }
+            }
+            onClick={() => setAddOrRemoveSpells(addOrRemoveSpells === 'Add' ? 'Remove' : 'Add')}>
+              Remove
+          </Button>
+        </div>
         </CardHeader>
           {Array.isArray(spellsByClass) && spellsByClass.slice(0, modifiedSpellList.spells.length).map((level, index) => {
             const levelPointsAvailable = calculateLevelPointsAvailable(level.level)
