@@ -3109,7 +3109,8 @@ export const PATCH_NOTES = [
       "Give modify spell list the same facelift as create page.",
       "When adding an archetype, remove the spells that have changes costs.",
       "BUG FIX: Correct logic for spell frequencies when adding an archetype.",
-      "Small styling updates for tips."
+      "Small styling updates for tips.",
+      "Adjust header size to account for mobile top drag down menus."
     ]
   },
   {
