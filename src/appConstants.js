@@ -3101,7 +3101,15 @@ export const WARRIOR_LIST = [
 //   ]
 
 export const PATCH_NOTES = [
-    {
+  {
+    version: "0.0.8",
+    title: "Add APK v1",
+    details: [
+      "Add APK v1 file to downloads page.",
+      "Adjust header and Done Editing button to be more mobile friendly.",
+    ]
+  },
+  {
     version: "0.0.7",
     title: "Add logo, fix archetype logic, spell frequencies and add style updates.",
     details: [

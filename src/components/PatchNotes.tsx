@@ -29,9 +29,9 @@ function App() {
             >
             <IoMdInformationCircle size={25} className="me-1" color="blue"/>
             <div className="d-flex flex-column">
-              <span>Open Beta APK is now available!</span>
+              <span>Open Beta APK <strong>v1</strong> is now available!</span>
               <br />
-              <span>Ignore the warnings, its fine to download. ;D</span>
+              <span>Ignore the warnings, its fine to download.</span>
               <div
                 className="end-0 bottom-0 text-muted small mt-1"
                 style={{ pointerEvents: 'none' }}
@@ -48,7 +48,7 @@ function App() {
             download
             style={{ minWidth: 200, textAlign: 'center' }}
           >
-            Download Android APK
+            Download Android APK v1
           </a>
         </Container>
         <Row className="ps-4 pb-2 pt-3 fw-semibold text-decoration-underline">Patch Notes</Row>
