@@ -2,10 +2,6 @@
 
 ### `npm run deploy`
 
-This command will sometimes reset/remove the domain. When deploying, make
-
-When using the above command, double check the 'settings' tab to make sure the domain is still attached.
-
 ______________________________________________________________________________________
 
 # Create React App Commands: 
