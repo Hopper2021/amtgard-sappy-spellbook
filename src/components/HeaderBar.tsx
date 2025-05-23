@@ -24,8 +24,8 @@ function HeaderBar() {
           fluid
           className="align-items-end"
         >
-            <Navbar.Brand href="/" className="mb-2 ms-2">Swiftgard</Navbar.Brand>
-            <Dropdown drop="start" className="mt-auto mb-2">
+            <Navbar.Brand href="/" className="mb-1 ms-2">Swiftgard</Navbar.Brand>
+            <Dropdown drop="start" className="mt-auto mb-1">
               <Dropdown.Toggle bsPrefix="custom-dropdown-toggle">
                 <IoEllipsisVertical size={25} className="me-0" color="white"/>
               </Dropdown.Toggle>
