@@ -3103,8 +3103,9 @@ export const WARRIOR_LIST = [
 export const PATCH_NOTES = [
     {
     version: "0.0.7",
-    title: "Fix archetype logic, spell frequencies and add style updates.",
+    title: "Add logo, fix archetype logic, spell frequencies and add style updates.",
     details: [
+      "Add Swiftgard Logo",
       "Give modify spell list the same facelift as create page.",
       "When adding an archetype, remove the spells that have changes costs.",
       "BUG FIX: Correct logic for spell frequencies when adding an archetype.",
