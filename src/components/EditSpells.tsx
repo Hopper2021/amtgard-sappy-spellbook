@@ -571,6 +571,7 @@ const addSpellToList = (spellId: number, targetSpellId?: number) => {
       return
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let spellBeingExperienced: Spell | null = null
     let highestExperienced = 0
     for (const level of modifiedSpellList.spells) {
@@ -659,6 +660,7 @@ const addSpellToList = (spellId: number, targetSpellId?: number) => {
       return level
     })
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let newSpellList: SpellList = {
       ...modifiedSpellList,
       spells: finalLevels,
