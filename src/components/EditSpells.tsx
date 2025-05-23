@@ -571,8 +571,7 @@ const addSpellToList = (spellId: number, targetSpellId?: number) => {
       return
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    let spellBeingExperienced: Spell | null = null
+    let spellBeingExperienced: Spell | null = null;
     let highestExperienced = 0
     for (const level of modifiedSpellList.spells) {
       for (const spell of level.spells) {
@@ -583,6 +582,10 @@ const addSpellToList = (spellId: number, targetSpellId?: number) => {
           highestExperienced = spell.experienced
         }
       }
+    }
+
+    if (process.env.NODE_ENV === "development") {
+      console.debug("spellBeingExperienced:", spellBeingExperienced);
     }
 
     let newExperienced = 0
@@ -660,14 +663,14 @@ const addSpellToList = (spellId: number, targetSpellId?: number) => {
       return level
     })
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    let newSpellList: SpellList = {
+    setModifiedSpellList({
       ...modifiedSpellList,
       spells: finalLevels,
-    }
-
-    setModifiedSpellList(newSpellList)
-    updateLocalStorage(newSpellList)
+    })
+    updateLocalStorage({
+      ...modifiedSpellList,
+      spells: finalLevels,
+    })
     handleClose()
     return
   }
@@ -931,6 +934,7 @@ const addSpellToList = (spellId: number, targetSpellId?: number) => {
           }
         })
       })
+      
       let finalLevels = newLevels
       if (spellToReset) {
         finalLevels = newLevels.map((level, lIdx) =>
@@ -947,13 +951,8 @@ const addSpellToList = (spellId: number, targetSpellId?: number) => {
         )
       }
 
-      let newSpellList: SpellList = {
-        ...modifiedList,
-        spells: finalLevels,
-      }
-
-      setModifiedSpellList({ ...modifiedList, spells: newLevels })
-      updateLocalStorage({ ...modifiedList, spells: newLevels })
+      setModifiedSpellList({ ...modifiedList, spells: finalLevels })
+      updateLocalStorage({ ...modifiedList, spells: finalLevels })
       return
     }
 
