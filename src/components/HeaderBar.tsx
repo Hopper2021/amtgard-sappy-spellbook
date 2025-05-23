@@ -24,7 +24,7 @@ function HeaderBar() {
           <Navbar.Collapse className="justify-content-end">
           <Dropdown drop="start">
             <Dropdown.Toggle bsPrefix="custom-dropdown-toggle">
-              <span className="text-white" style={{ fontSize: '24px', lineHeight: '1' }}>⋮</span>
+              <span className="text-white" style={{ fontSize: '24px', lineHeight: '2.5' }}>⋮</span>
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
