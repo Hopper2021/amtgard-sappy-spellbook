@@ -1472,7 +1472,7 @@ const addSpellToList = (spellId: number, targetSpellId?: number) => {
               </Accordion>
             )
           })}
-          <div className="d-flex justify-content-center mt-3">
+          <div className="d-flex justify-content-center mt-3 mb-4">
             <Button variant="primary" onClick={() => {
               navigate(`/listDetails/${modifiedSpellList.id}`)
             }}>
