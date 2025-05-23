@@ -23,29 +23,33 @@ function App() {
         {tipsEnabled && (
           <Alert
             show={showAlert}
-            className="alert-primary align-items-center"
+            className="d-flex alert-primary"
             dismissible
             onClose={() => setShowAlert(false)}
             >
             <IoMdInformationCircle size={25} className="me-1" color="blue"/>
-            <span>Below button will highlight blue when APK is available for download.</span>
-            <div
-              className="end-0 bottom-0 text-muted small mt-1"
-              style={{ pointerEvents: 'none' }}
-            >
-              <span>Disable tips in settings <IoEllipsisVertical /></span>
+            <div className="d-flex flex-column">
+              <span>Open Beta APK is now available!</span>
+              <br />
+              <span>Ignore the warnings, its fine to download. ;D</span>
+              <div
+                className="end-0 bottom-0 text-muted small mt-1"
+                style={{ pointerEvents: 'none' }}
+              >
+                <span>Disable tips in settings <IoEllipsisVertical /></span>
+              </div>
             </div>
           </Alert>
         )}
         <Container className="px-4 pt-1 d-flex justify-content-center">
-          <Button
-            disabled
-            variant="secondary"
-            className="mb-1"
-            onClick={() => navigate('/download')}
-            >
-              Download Android APK
-            </Button>
+          <a
+            href="/downloads/swiftgard-main-744763-release.apk"
+            className="btn btn-primary mb-1"
+            download
+            style={{ minWidth: 200, textAlign: 'center' }}
+          >
+            Download Android APK
+          </a>
         </Container>
         <Row className="ps-4 pb-2 pt-3 fw-semibold text-decoration-underline">Patch Notes</Row>
 
