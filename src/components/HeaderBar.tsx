@@ -1,6 +1,7 @@
 import { Dropdown } from 'react-bootstrap'
 import { Navbar, Container } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
+import { IoEllipsisVertical } from "react-icons/io5"
 
 function HeaderBar() {
   const navigate = useNavigate()
@@ -18,23 +19,23 @@ function HeaderBar() {
 
   return (
     <>
-      <Navbar bg="primary" variant="dark">
-        <Container>
-          <Navbar.Brand href="/">Swiftgard</Navbar.Brand>
-          <Navbar.Collapse className="justify-content-end">
-          <Dropdown drop="start">
-            <Dropdown.Toggle bsPrefix="custom-dropdown-toggle">
-              <span className="text-white" style={{ fontSize: '24px', lineHeight: '2.5' }}>⋮</span>
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu>
-              <Dropdown.Item onClick={() => navigate('/patchNotes')}>Download App</Dropdown.Item>
-              <Dropdown.Item onClick={() => changeTipsSettings()}>
-                {currentSetting === 'true' ? 'Disable' : 'Enable'} Tips
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </Navbar.Collapse>
+      <Navbar className="d-flex justify-content-between align-items-end pt-5" bg="primary" variant="dark">
+        <Container
+          fluid
+          className="align-items-end"
+        >
+            <Navbar.Brand href="/" className="mb-2 ms-2">Swiftgard</Navbar.Brand>
+            <Dropdown drop="start" className="mt-auto mb-2">
+              <Dropdown.Toggle bsPrefix="custom-dropdown-toggle">
+                <IoEllipsisVertical size={25} className="me-0" color="white"/>
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={() => navigate('/patchNotes')}>Download App</Dropdown.Item>
+                <Dropdown.Item onClick={() => changeTipsSettings()}>
+                  {currentSetting === 'true' ? 'Disable' : 'Enable'} Tips
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
         </Container>
       </Navbar>
     </>
