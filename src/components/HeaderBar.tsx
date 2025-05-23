@@ -19,7 +19,7 @@ function HeaderBar() {
 
   return (
     <>
-      <Navbar className="d-flex justify-content-between align-items-end pt-5" bg="primary" variant="dark">
+      <Navbar className="d-flex justify-content-between align-items-end pt-2" bg="primary" variant="dark">
         <Container
           fluid
           className="align-items-end"
