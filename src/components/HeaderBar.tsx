@@ -41,7 +41,7 @@ function HeaderBar() {
                 <IoEllipsisVertical size={25} className="me-0" color="white"/>
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item onClick={() => navigate('/patchNotes')}>Download App</Dropdown.Item>
+                <Dropdown.Item onClick={() => navigate('/patchNotes')}>{IS_APK ? 'Patch Notes' : 'Download App'}</Dropdown.Item>
                 <Dropdown.Item onClick={() => changeTipsSettings()}>
                   {currentSetting === 'true' ? 'Disable' : 'Enable'} Tips
                 </Dropdown.Item>
