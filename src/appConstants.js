@@ -2306,7 +2306,19 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     effect: 'Player is Immune to Death.',
     limitation: null,
     note: null,
-  }
+  },
+  {
+    id: 186,
+    name: 'Equipment: Armor, 1 Point',
+    type: 'Neutral',
+    school: null,
+    range: null,
+    materials: null,
+    incantation: null,
+    effect: 'Your class maximum armor limit increases one additional point.',
+    limitation: null,
+    note: null
+  },
 ]
 
 export const BARD_SPELLS = [
@@ -2376,7 +2388,7 @@ export const BARD_SPELLS = [
     spells: [
       { id: 29, cost: 2, max: 1, frequency: null, restricted: false },
       { id: 40, cost: 2, max: 1, frequency: null, restricted: false },
-      { id: 49, cost: 2, max: 1, frequency: null, restricted: false },
+      { id: 186, cost: 2, max: 1, frequency: null, restricted: false },
       { id: 91, cost: 1, max: 1, frequency: null, restricted: false },
       { id: 135, cost: 1, max: null, frequency: { amount: 1, per: 'Refresh', charge: null }, restricted: false },
       { id: 144, cost: 1, max: 1, frequency: { amount: 1, per: 'Refresh', charge: 'Charge x5' }, restricted: false },
