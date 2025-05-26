@@ -3119,6 +3119,8 @@ export const PATCH_NOTES = [
     details: [
       "Add APK v1 file to downloads page.",
       "Adjust header and Done Editing button to be more mobile friendly.",
+      "Add Header back button to go back in history by one page. If no history, it will return to the home page.",
+      "Fix Bard Armor purchase bug. Level 6 Armor now takes points from appropriate level.",
     ]
   },
   {
