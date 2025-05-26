@@ -2,6 +2,8 @@
 
 ### `git push`
 
+### `npm run build`
+
 ### `npx cap sync android`
 
 ### `npm run deploy`
