@@ -1,3 +1,5 @@
+export const IS_APK = true
+
 export const ALL_SPELLS = [
   {
     id: 1,

@@ -3,10 +3,12 @@ import { Navbar, Container } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { IoEllipsisVertical } from "react-icons/io5"
 import { IoIosArrowBack } from "react-icons/io"
+import { IS_APK } from '../appConstants'
 
 function HeaderBar() {
   const navigate = useNavigate()
   const currentSetting = localStorage.getItem('enableTips')
+  const apkPadding = IS_APK ? 'd-flex pt-5' : 'd-flex pt-2'
 
   const changeTipsSettings = () => {
     if (currentSetting === 'true') {
@@ -20,7 +22,7 @@ function HeaderBar() {
 
   return (
     <>
-      <Navbar className="d-flex pt-2" bg="primary" variant="dark">
+      <Navbar className={apkPadding} bg="primary" variant="dark">
         <Container className="align-items-center" >
             <Button
               className="align-items-center p-1"
@@ -50,7 +52,5 @@ function HeaderBar() {
     </>
   )
 }
-
-// points dropped to a lower level when refunded to the highest level, leaves teh current level without points
 
 export default HeaderBar
