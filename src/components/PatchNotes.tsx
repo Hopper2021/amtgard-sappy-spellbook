@@ -1,13 +1,11 @@
 import { useState } from 'react'
 import FloatingActionButton from './FloatingActionButton.tsx'
-import { Container, Row, Button, Alert, Accordion } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom'
+import { Container, Row, Alert, Accordion } from 'react-bootstrap'
 import { IoMdInformationCircle } from "react-icons/io"
 import { IoEllipsisVertical } from 'react-icons/io5'
 import { PATCH_NOTES } from '../appConstants.js'
 
 function App() {
-  const navigate = useNavigate()
   const [showAlert, setShowAlert] = useState(true)
 
   let enableTips = localStorage.getItem('enableTips')
@@ -29,7 +27,7 @@ function App() {
             >
             <IoMdInformationCircle size={25} className="me-1" color="blue"/>
             <div className="d-flex flex-column">
-              <span>Open Beta APK <strong>v1</strong> is now available!</span>
+              <span>Open Beta APK <strong>v2</strong> is now available!</span>
               <br />
               <span>Ignore the warnings, its fine to download.</span>
               <div
