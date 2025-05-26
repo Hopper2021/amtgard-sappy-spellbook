@@ -18,7 +18,7 @@ function App() {
   return (
     <>
       <Container fluid className="p-3">
-        <Container className="px-4 pt-1">
+        <Container className="px-3 pt-1">
           {IS_APK ? null 
             : ( <>
               {tipsEnabled && (
@@ -57,7 +57,7 @@ function App() {
 
         <Row className="pb-2 fw-semibold">Patch Notes</Row>
         {PATCH_NOTES.map(note => (
-          <Container className="ps-4" key={note.version}>
+          <Container className="ps-1" key={note.version}>
             <span className="fw-semibold">Version: {note.version}</span>
             <Container className="ps-2 pt-1">
               <Row className="ps-4">{note.title}</Row>
