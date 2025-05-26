@@ -1037,7 +1037,7 @@ const addSpellToList = (spellId: number, targetSpellId?: number) => {
         getSpellDetails(spellId)
         setOpenModal(true)
       }
-    }, 800)
+    }, 500)
     setLongPressTimeout(timeout)
   }
 
