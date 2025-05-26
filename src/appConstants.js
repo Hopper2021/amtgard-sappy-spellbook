@@ -3116,8 +3116,8 @@ export const WARRIOR_LIST = [
 
 export const PATCH_NOTES = [
   {
-    version: "0.0.8",
-    title: "Add APK v2",
+    version: "0.0.9",
+    title: "Add APK v2, Bard Bug fix, header back button and APK conditional styling",
     details: [
       "Add APK v2 file to downloads page.",
       "Add back button to Header go back in history by one page. If no history, will instead return to the home page.",
