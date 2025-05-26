@@ -3117,12 +3117,20 @@ export const WARRIOR_LIST = [
 export const PATCH_NOTES = [
   {
     version: "0.0.8",
+    title: "Add APK v2",
+    details: [
+      "Add APK v2 file to downloads page.",
+      "Add back button to Header go back in history by one page. If no history, will instead return to the home page.",
+      "Fix Bard Armor purchase bug. Level 6 Armor now takes points from the appropriate level.",
+      "Change some styling and, Download App button in settings to Patch Notes when using APK",
+    ]
+  },
+  {
+    version: "0.0.8",
     title: "Add APK v1",
     details: [
       "Add APK v1 file to downloads page.",
       "Adjust header and Done Editing button to be more mobile friendly.",
-      "Add Header back button to go back in history by one page. If no history, it will return to the home page.",
-      "Fix Bard Armor purchase bug. Level 6 Armor now takes points from appropriate level.",
     ]
   },
   {
