@@ -1,7 +1,8 @@
-import { Dropdown } from 'react-bootstrap'
+import { Button, Dropdown } from 'react-bootstrap'
 import { Navbar, Container } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { IoEllipsisVertical } from "react-icons/io5"
+import { IoIosArrowBack } from "react-icons/io"
 
 function HeaderBar() {
   const navigate = useNavigate()
@@ -19,12 +20,14 @@ function HeaderBar() {
 
   return (
     <>
-      <Navbar className="d-flex justify-content-between align-items-end pt-2" bg="primary" variant="dark">
-        <Container
-          fluid
-          className="align-items-end"
-        >
-            <Navbar.Brand href="/" className="mb-1 ms-2">Swiftgard</Navbar.Brand>
+      <Navbar className="d-flex pt-2" bg="primary" variant="dark">
+        <Container className="align-items-center" >
+            <Button
+              className="align-items-center p-1"
+              onClick={() => navigate(-1)}>
+                <IoIosArrowBack size={30} color="white" />
+            </Button>
+            <Navbar.Brand href="/" className="m-0">Swiftgard</Navbar.Brand>
             <Dropdown drop="start" className="mt-auto mb-1">
               <Dropdown.Toggle bsPrefix="custom-dropdown-toggle">
                 <IoEllipsisVertical size={25} className="me-0" color="white"/>

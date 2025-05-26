@@ -30,7 +30,6 @@ function CreateSpellList() {
 
 	const generateNewId = () => {
 		const maxId = allSpellLists.reduce((max, spellList) => Math.max(max, spellList.id), 0)
-		console.log('maxId', maxId + 1)
 		return maxId + 1
 	}
 
