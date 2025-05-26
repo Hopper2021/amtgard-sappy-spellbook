@@ -110,24 +110,26 @@ function App() {
       </Modal>
 
       <Container fluid className="p-3">
+        <Container className="px-4 pt-1">
           {tipsEnabled && (
             <Alert
               show={showAlert}
-              className="alert-primary align-items-center"
+              className="d-flex alert-primary"
               dismissible
               onClose={() => setShowAlert(false)}
               >
               <IoMdInformationCircle size={25} className="me-1" color="blue"/>
-              <span>Long press on a spell book to modify its base data or delete it.</span>
-              <div
-                className="end-0 bottom-0 text-muted small mt-1"
-                style={{ pointerEvents: 'none' }}
-              >
-                <span>Disable tips in settings <IoEllipsisVertical /></span>
+              <div className="d-flex flex-column">
+                <span>Long press on a spell book to modify its base data or delete it.</span>
+                <div
+                  className="end-0 bottom-0 text-muted small mt-1"
+                  style={{ pointerEvents: 'none' }}
+                >
+                  <span>Disable tips in settings <IoEllipsisVertical /></span>
+                </div>
               </div>
             </Alert>
           )}
-        <Container className="px-4 pt-1">
           <Row className="pb-2 fw-semibold">Spell Books</Row>
           {allSpellLists.length === 0 ? (
             <Row className="d-flex justify-content-center">
