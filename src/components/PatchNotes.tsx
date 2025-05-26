@@ -18,6 +18,7 @@ function App() {
   return (
     <>
       <Container fluid className="p-3">
+        <Container className="px-4 pt-1">
         {tipsEnabled && (
           <Alert
             show={showAlert}
@@ -69,6 +70,7 @@ function App() {
             </Container>
           </Container>
         ))}
+        </Container>
       </Container>
       <FloatingActionButton />
     </>
