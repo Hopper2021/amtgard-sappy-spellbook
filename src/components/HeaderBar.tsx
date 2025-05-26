@@ -24,7 +24,13 @@ function HeaderBar() {
         <Container className="align-items-center" >
             <Button
               className="align-items-center p-1"
-              onClick={() => navigate(-1)}>
+              onClick={() => {
+                if (window.history.length > 1) {
+                  navigate(-1)
+                } else {
+                  navigate('/')
+                }
+              }}>
                 <IoIosArrowBack size={30} color="white" />
             </Button>
             <Navbar.Brand href="/" className="m-0">Swiftgard</Navbar.Brand>
