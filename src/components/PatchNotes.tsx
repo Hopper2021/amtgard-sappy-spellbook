@@ -44,7 +44,7 @@ function App() {
               )}
               <Container className="px-4 pt-1 d-flex justify-content-center">
                 <a
-                  href="/downloads/swiftgard-main-v3-release.apk"
+                  href="/downloads/swiftgard-main-73b32c-release.apk"
                   className="btn btn-primary mb-1"
                   download
                   style={{ minWidth: 200, textAlign: 'center' }}
