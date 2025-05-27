@@ -30,7 +30,7 @@ function App() {
                   >
                   <IoMdInformationCircle size={25} className="me-1" color="blue"/>
                   <div className="d-flex flex-column">
-                    <span>Open Beta APK <strong>v2</strong> is now available!</span>
+                    <span>Open Beta APK <strong>v3</strong> is now available!</span>
                     <br />
                     <span>Ignore the warnings, its fine to download.</span>
                     <div
@@ -49,7 +49,7 @@ function App() {
                   download
                   style={{ minWidth: 200, textAlign: 'center' }}
                 >
-                  Download Android APK v2
+                  Download Android APK v3
                 </a>
               </Container>
             </>
