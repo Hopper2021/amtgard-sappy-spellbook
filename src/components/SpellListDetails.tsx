@@ -272,9 +272,9 @@ const fetchSpellFrequency = (spellId: number) => {
 }
 
   return (
-    <Container className="pt-3 mb-4">
+    <Container className="pt-3 mb-4 m-1">
       <Row className="d-flex">
-        <Col xs="auto" className="pr-0">
+        <Col xs="auto" className="pe-0">
           <h4>Overview</h4>
         </Col>
         <Col className="flex-grow-1">

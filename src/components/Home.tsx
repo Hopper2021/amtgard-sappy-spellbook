@@ -58,7 +58,7 @@ function App() {
   }
 
   return (
-    <>
+    <Container className="p-3 px-3">
       <Modal className="p-4" show={openModal} onHide={handleClose} centered>
         <Modal.Header closeButton>
           <Modal.Title>
@@ -109,8 +109,7 @@ function App() {
           </Modal.Footer>
       </Modal>
 
-      <Container fluid className="p-3">
-        <Container className="px-4 pt-1">
+        <Container className="px-0 pt-1">
           {tipsEnabled && (
             <Alert
               show={showAlert}
@@ -118,7 +117,7 @@ function App() {
               dismissible
               onClose={() => setShowAlert(false)}
               >
-              <IoMdInformationCircle size={25} className="me-1" color="blue"/>
+              <IoMdInformationCircle size={35} className="me-1" color="blue"/>
               <div className="d-flex flex-column">
                 <span>Long press on a spell book to modify its base data or delete it.</span>
                 <div
@@ -130,33 +129,34 @@ function App() {
               </div>
             </Alert>
           )}
+          <Container>
           <Row className="pb-2 fw-semibold">Spell Books</Row>
-          {allSpellLists.length === 0 ? (
-            <Row className="d-flex justify-content-center">
-              <h6 className="text-center">No Spell Books Found</h6>
-              <h6 className="text-center">Click the <LuCirclePlus size={20} /> on the bottom right to create one</h6>
-            </Row>)
-            : (allSpellLists.map((spellList) => (
-            <Row key={spellList.id} className="border-bottom mb-3">
-              <Button
-                className="p-1 text-start w-100"
-                variant="link"
-                style={{ textDecoration: 'none', color: 'inherit' }}
-                onMouseDown={() => handleLongPressStart(spellList)}
-                onMouseUp={handleLongPressEnd}
-                onMouseLeave={handleLongPressEnd}
-                onTouchStart={() => handleLongPressStart(spellList)}
-                onTouchEnd={handleLongPressEnd}
-                onClick={() => navigate(`/listDetails/${spellList.id}`)}
-              >
-                {spellList.name} ({spellList.class}, level {spellList.maxLevel})
-              </Button>
-            </Row>
-          )))}
+            {allSpellLists.length === 0 ? (
+              <Row className="d-flex justify-content-center">
+                <h6 className="text-center">No Spell Books Found</h6>
+                <h6 className="text-center">Click the <LuCirclePlus size={20} /> on the bottom right to create one</h6>
+              </Row>)
+              : (allSpellLists.map((spellList) => (
+              <Row key={spellList.id} className="border-bottom mb-3">
+                <Button
+                  className="p-1 text-start w-100"
+                  variant="link"
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                  onMouseDown={() => handleLongPressStart(spellList)}
+                  onMouseUp={handleLongPressEnd}
+                  onMouseLeave={handleLongPressEnd}
+                  onTouchStart={() => handleLongPressStart(spellList)}
+                  onTouchEnd={handleLongPressEnd}
+                  onClick={() => navigate(`/listDetails/${spellList.id}`)}
+                >
+                  {spellList.name} ({spellList.class}, level {spellList.maxLevel})
+                </Button>
+              </Row>
+            )))}
+          </Container>
         </Container>
-      </Container>
       <FloatingActionButton />
-    </>
+    </Container>
   )
 }
 
