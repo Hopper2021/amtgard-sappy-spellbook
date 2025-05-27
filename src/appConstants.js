@@ -1,4 +1,4 @@
-export const IS_APK = false
+export const IS_APK = true
 
 export const ALL_SPELLS = [
   {
@@ -3036,7 +3036,7 @@ export const PATCH_NOTES = [
     title: "Add APK v3, Spell Frequency addition, shorten long press time and master spell list fixes.",
     details: [
       "Add APK v3 file to downloads page.",
-      "On long click of spell on edit page, spell frequency now appears in spell details modal specific to the class on the spell list being edited.",
+      "On long click of spell on edit page, spell frequency now appears in spell details modal specific to the spell list's class.",
       "Shorten long press time from 800 to 500..",
       "Master spell list fixes: Heal frequency",
     ]
