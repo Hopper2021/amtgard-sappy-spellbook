@@ -1,4 +1,4 @@
-export const IS_APK = true
+export const IS_APK = false
 
 export const ALL_SPELLS = [
   {
