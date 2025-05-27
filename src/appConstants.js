@@ -3030,89 +3030,17 @@ export const WARRIOR_LIST = [
   }
 ]
 
-//   export const SPELL_LIST_TEMPLATE = [
-//     {
-//       level: 1,
-//       spells: [
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//       ]
-//     },
-//     {
-//       level: 2,
-//       spells: [
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//       ]
-//     },
-//     {
-//       level: 3,
-//       spells: [
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//       ]
-//     },
-//     {
-//       level: 4,
-//       spells: [
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//       ]
-//     },
-//     {
-//       level: 5,
-//       spells: [
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//       ]
-//     },
-//     {
-//       level: 6,
-//       spells: [
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//         { id: null, cost: null, max: null, frequency: { amount: null, per: '', charge: null }, restricted: false },
-//       ]
-//     },
-//   ]
-
 export const PATCH_NOTES = [
+  {
+    version: "0.1.0",
+    title: "Add APK v3, Spell Frequency addition, shorten long press time and master spell list fixes.",
+    details: [
+      "Add APK v3 file to downloads page.",
+      "On long click of spell on edit page, spell frequency now appears in spell details modal specific to the class on the spell list being edited.",
+      "Shorten long press time from 800 to 500..",
+      "Master spell list fixes: Heal frequency",
+    ]
+  },
   {
     version: "0.0.9",
     title: "Add APK v2, Bard Bug fix, header back button and APK conditional styling",
