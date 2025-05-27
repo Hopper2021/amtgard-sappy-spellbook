@@ -55,6 +55,25 @@ interface SpellList {
   spells: SpellLevel[]
 }
 
+interface FrequencyByClass {
+  amount: number
+  per: string
+  charge: null | string
+}
+
+interface SpellsByClass {
+  id: number
+  cost: number
+  max: number
+  frequency: FrequencyByClass
+  restricted: false
+}
+
+interface LevelsByClass {
+  level: number
+  spells: Spell[]
+}
+
 function EditSpells() {
   const navigate = useNavigate()
   const [pressStartPos, setPressStartPos] = useState<{x: number, y: number} | null>(null)
@@ -1027,6 +1046,37 @@ const addSpellToList = (spellId: number, targetSpellId?: number) => {
     setLongPressTimeout(timeout)
   }
 
+  const buildFrequencyString = (masterSpell: any) => {
+    let spell: (SpellsByClass | Spell) | null = null;
+    if (Array.isArray(spellsByClass)) {
+      for (const level of spellsByClass as LevelsByClass[]) {
+        const match = level.spells.find(s => s.id === masterSpell?.id);
+        if (match) {
+          spell = match;
+          break;
+        }
+      }
+    }
+
+    const freq: FrequencyByClass | null = (spell && 'frequency' in (spell as any)) ? (spell as any).frequency : null
+    const amount = freq?.amount
+    const per = freq?.per
+    const charge = freq?.charge
+
+    if (amount != null && per != null) {
+      return `${amount}/${per}${charge ? ` ${charge}` : ''}`
+    }
+    if ((amount == null && !per) && charge === 'Unlimited') {
+      return charge
+    }
+    if ((amount == null && !per) && charge) {
+      return charge
+    }
+    return null
+  }
+
+  const spellFrequency = buildFrequencyString(selectedSpell)
+
   const handleLongPressStart = (spellId, e) => {
     const x = e.touches ? e.touches[0].clientX : e.clientX
     const y = e.touches ? e.touches[0].clientY : e.clientY
@@ -1066,58 +1116,67 @@ const addSpellToList = (spellId: number, targetSpellId?: number) => {
   }
 
   return (
-    <Container fluid className="p-3">
-      <Modal className="p-4" show={openModal} onHide={handleClose} centered>
+    <Container fluid className="p-2">
+      <Modal className="p-2" show={openModal} onHide={handleClose} centered>
         <Modal.Header className="pb-2 pt-2" closeButton>
           <Modal.Title>
             <Row className="ps-3">{selectedSpell?.name}</Row>
             <Row className="text-secondary fs-6 ps-3 pt-0">
-              {selectedSpell?.type}{selectedSpell?.school && (`, ${selectedSpell?.school}`)}{selectedSpell?.range && (` ( ${selectedSpell?.range} )`)}
+              {selectedSpell?.type}{selectedSpell?.school && 
+              (`, ${selectedSpell?.school}`)}{selectedSpell?.range && (` ( ${selectedSpell?.range} )`)}
             </Row>
           </Modal.Title>
         </Modal.Header>
-        {!selectedSpell?.effect && !selectedSpell?.limitation && !selectedSpell?.note && (
-          <Modal.Body>
-            <span>This spell has no additional details.</span>
+        <Modal.Body className="p-3">
+          {!selectedSpell?.effect && !selectedSpell?.limitation && !selectedSpell?.note && (
+            <Modal.Body>
+              <span>This spell has no additional details.</span>
+            </Modal.Body>
+          )}
+          <Modal.Body className="modal-sm pb-1 p-0">
+            <span>
+              <strong>Base Frequency for {modifiedSpellList.class}: </strong>
+              {spellFrequency ? spellFrequency : 'N/A'}
+            </span>
           </Modal.Body>
-        )}
-        <Modal.Body>
-        {selectedSpell?.effect.split('\n').map((line, idx) => {
-          const isIndented = line.startsWith('>>')
-          const cleanLine = isIndented ? line.replace(/^>>/, '') : line
-          
-          return ( idx === 0 ? (
-            <span key={idx}>
-              <strong>Effect: </strong>{line}
-            </span>
-          ) : (
-            <span
-              key={idx}
-              style={{
-                display: 'block',
-                lineHeight: '1.2',
-                marginLeft: isIndented ? 15 : 0,
-                marginBottom: 1,
-              }}
-            >
-              {cleanLine}
-            </span>
-          ))
-        })}
+          <Modal.Body className="modal-sm p-0 pt-2">
+          {selectedSpell?.effect.split('\n').map((line, idx) => {
+            const isIndented = line.startsWith('>>')
+            const cleanLine = isIndented ? line.replace(/^>>/, '') : line
+            
+            return ( idx === 0 ? (
+              <span key={idx}>
+                <strong>Effect: </strong>{line}
+              </span>
+            ) : (
+              <span
+                key={idx}
+                style={{
+                  display: 'block',
+                  lineHeight: '1',
+                  marginLeft: isIndented ? 15 : 0,
+                  marginBottom: '10px',
+                }}
+              >
+                {cleanLine}
+              </span>
+            ))
+          })}
+          </Modal.Body>
+          {selectedSpell?.limitation && (
+            <Modal.Body className="modal-sm p-0 pt-2 pb-1">
+              <span><strong>Limitation: </strong>{selectedSpell?.limitation}</span>
+            </Modal.Body>
+          )}
+          {selectedSpell?.note && (
+            <Modal.Body className="modal-sm p-0 pt-2 pb-1">
+              <span><strong>Note: </strong>{selectedSpell?.note}</span>
+            </Modal.Body>
+          )}
         </Modal.Body>
-        {selectedSpell?.limitation && (
-          <Modal.Body className="modal-sm">
-            <span><strong>Limitation: </strong>{selectedSpell?.limitation}</span>
-          </Modal.Body>
-        )}
-        {selectedSpell?.note && (
-          <Modal.Body className="modal-sm">
-            <span><strong>Note: </strong>{selectedSpell?.note}</span>
-          </Modal.Body>
-        )}
       </Modal>
 
-      <Modal className="p-3" show={openExperiencedModal} onHide={handleClose} centered>
+      <Modal className="p-2" show={openExperiencedModal} onHide={handleClose} centered>
         <Modal.Header className="pb-2 pt-2" closeButton>
           <Modal.Title>
             <Row className="ps-3">Apply Experience to:</Row>
@@ -1130,47 +1189,13 @@ const addSpellToList = (spellId: number, targetSpellId?: number) => {
                 <Button
                   key={index}
                   variant="primary"
-                  className="pe-3 mb-4 w-100"
+                  className="pe-3 mb-3 w-100"
                   onClick={() => addSpellToList(56, spell.id)}
                   >
-                    {spell.name} ( {spell.range} )
+                    {spell.name} ( {buildFrequencyString(spell)} )
                 </Button>
               </div>
             ))}
-          </Modal.Body>
-        )}
-        <Modal.Body>
-        {selectedSpell?.effect.split('\n').map((line, idx) => {
-          const isIndented = line.startsWith('>>')
-          const cleanLine = isIndented ? line.replace(/^>>/, '') : line
-          
-          return ( idx === 0 ? (
-            <span key={idx}>
-              <strong>Effect: </strong>{line}
-            </span>
-          ) : (
-            <span
-              key={idx}
-              style={{
-                display: 'block',
-                lineHeight: '1.2',
-                marginLeft: isIndented ? 15 : 0,
-                marginBottom: 1,
-              }}
-            >
-              {cleanLine}
-            </span>
-          ))
-        })}
-        </Modal.Body>
-        {selectedSpell?.limitation && (
-          <Modal.Body className="modal-sm">
-            <span><strong>Limitation: </strong>{selectedSpell?.limitation}</span>
-          </Modal.Body>
-        )}
-        {selectedSpell?.note && (
-          <Modal.Body className="modal-sm">
-            <span><strong>Note: </strong>{selectedSpell?.note}</span>
           </Modal.Body>
         )}
       </Modal>
