@@ -3032,6 +3032,13 @@ export const WARRIOR_LIST = [
 
 export const PATCH_NOTES = [
   {
+    version: "0.1.1",
+    title: "Remove extra create button.",
+    details: [
+      "Remove Create button from Patch Notes/Downloads page.",
+    ]
+  },
+  {
     version: "0.1.0",
     title: "Add APK v3, Spell Frequency addition, shorten long press time and master spell list fixes.",
     details: [
