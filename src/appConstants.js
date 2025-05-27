@@ -540,9 +540,7 @@ export const ALL_SPELLS = [
     range: 'Self',
     materials: null,
     incantation: '"I am filled with the power of magic"',
-    effect: `Caster may use Magic Balls they are currently carrying
-      by stating the name of the Magic Ball immediately prior to
-      throwing the ball in place of the incantation.`,
+    effect: `Caster may use Magic Balls they are currently carrying by stating the name of the Magic Ball immediately prior to throwing the ball in place of the incantation.`,
     limitation: `This magic ends if the caster picks up any additional
       Magic Balls or begins casting any new Magical abilities.`,
     note: `The effect is not an incantation, and so is not stopped
@@ -2409,7 +2407,7 @@ export const HEALER_SPELLS = [
       { id: 52, cost: 3, max: 2, frequency: null, restricted: false },
       { id: 56, cost: 2, max: 2, frequency: null, restricted: false },
       { id: 74, cost: 1, max: null, frequency: { amount: 1, per: 'Refresh', charge: null }, restricted: false },
-      { id: 75, cost: 1, max: 1, frequency: { amount: null, per: 'Unlimited', charge: null }, restricted: false },
+      { id: 75, cost: 1, max: 1, frequency: { amount: null, per: null, charge: 'Unlimited' }, restricted: false },
       { id: 124, cost: 1, max: null, frequency: { amount: 2, per: 'Life', charge: 'Charge x3' }, restricted: false },
     ]
   },
