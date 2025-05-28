@@ -3033,8 +3033,9 @@ export const WARRIOR_LIST = [
 export const PATCH_NOTES = [
   {
     version: "0.1.1",
-    title: "Remove extra create button.",
+    title: "Fix Experienced logic, Remove extra create button.",
     details: [
+      "Fix Experienced logic: When removing the spell `Experienced`, details page will update accordingly with proper charge amounts. When removing an experienced spell ( Ex. Mend or Shove ), 1 purchase of Experienced will also be removed and refunded. If only one Experienced had been purchased when spell is removed, Experienced is removed from that level.",
       "Remove Create button from Patch Notes/Downloads page.",
     ]
   },
