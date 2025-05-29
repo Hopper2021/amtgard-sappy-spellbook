@@ -7,6 +7,14 @@ import {
   HEALER_SPELLS,
   DRUID_SPELLS,
   WIZARD_SPELLS,
+  ANTIPALADIN_LIST,
+  ARCHER_LIST,
+  ASSASSIN_LIST,
+  BARBARIAN_LIST,
+  MONK_LIST,
+  PALADIN_LIST,
+  SCOUT_LIST,
+  WARRIOR_LIST,
 } from '../appConstants'
 
 interface SpellLevel {
@@ -39,7 +47,26 @@ function SpellListDetails() {
     (spellList?.class === 'Bard' &&  BARD_SPELLS) ||
     (spellList?.class === 'Healer' && HEALER_SPELLS) ||
     (spellList?.class === 'Wizard' && WIZARD_SPELLS) ||
-    (spellList?.class === 'Druid' && DRUID_SPELLS)
+    (spellList?.class === 'Druid' && DRUID_SPELLS) ||
+    (spellList?.class === 'Anti-paladin' && ANTIPALADIN_LIST) ||
+    (spellList?.class === 'Archer' && ARCHER_LIST) ||
+    (spellList?.class === 'Assassin' && ASSASSIN_LIST) ||
+    (spellList?.class === 'Barbarian' && BARBARIAN_LIST) ||
+    (spellList?.class === 'Monk' && MONK_LIST) ||
+    (spellList?.class === 'Paladin' && PALADIN_LIST) ||
+    (spellList?.class === 'Scout' && SCOUT_LIST) ||
+    (spellList?.class === 'Warrior' && WARRIOR_LIST) ||
+    []
+
+  const isMartialClass = spellList.class === 
+    'Anti-paladin' || 
+    'Archer' || 
+    'Assassin' || 
+    'Barbarian' ||
+    'Monk' ||
+    'Paladin' ||
+    'Scout' ||
+    'Warrior'
 
   const fetchSpellDetails = (key: string, spellId: number) => {
     const spell = ALL_SPELLS.find(spell => spell.id === spellId)
@@ -324,7 +351,9 @@ const fetchSpellFrequency = (spellId: number) => {
         <Col xs="auto">
           <Button
             className="ms-auto d-block"
-            onClick={() => navigate(`/editList/${spellList.id}`)}>
+            onClick={() => 
+              isMartialClass ? navigate(`/editMartialList/${spellList.id}`)
+              : navigate(`/editList/${spellList.id}`)}>
               Edit
           </Button>
         </Col>
@@ -344,63 +373,93 @@ const fetchSpellFrequency = (spellId: number) => {
           )}
         </div>
         <Form.Text>**** Spells ****</Form.Text>
+        {console.log('Spell List:', spellList)}
         {spellList.spells.map((level, levelIdx) => (
           <React.Fragment key={levelIdx}>
             <Form.Text className="fw-bold mb-0">{`Level ${level.level}`}</Form.Text>
-            {level.spells.map((spell, spellIdx) => {
-              const spellName = fetchSpellDetails('name', spell.id) || 'Unknown Spell'
-              const spellType = fetchSpellDetails('type', spell.id)
-              const spellSchool = fetchSpellDetails('school', spell.id)
-              const spellIncantation = fetchSpellDetails('incantation', spell.id)
-              const spellMaterials = fetchSpellDetails('materials', spell.id)
-              const spellFrequency = fetchSpellFrequency(spell.id)
+            {level.spells.map((spells, spellIdx) => (
+              <React.Fragment key={spellIdx}>
+              {Array.isArray(spells.base) && spells.base.map((spell, index) => {
+                  const spellName = fetchSpellDetails('name', spell.id) || 'Unknown Spell'
+                  const spellType = fetchSpellDetails('type', spell.id)
+                  const spellSchool = fetchSpellDetails('school', spell.id)
+                  const spellIncantation = fetchSpellDetails('incantation', spell.id)
+                  const spellMaterials = fetchSpellDetails('materials', spell.id)
+                  const spellFrequency = fetchSpellFrequency(spell.id)
 
-              return (
-                <Row key={spellIdx} className="m-0">
-                  <div>
-                    {spell.purchased}x{' '}
-                    <span style={{ textDecoration: 'underline' }}>
-                      {spellName}
-                    </span>{' '}
-                    <span>
-                      {spellFrequency.frequency}
-                      {showRange && spellFrequency.range ? ` (${spellFrequency.range})` : ''}
-                    </span>{' '}
-                    {showTypeAndSchool && <span>( {spellType} )</span>}
-                    {spellSchool && showTypeAndSchool && (
-                      <span>( {spellSchool} )</span>
-                    )}
-                    <div style={{ marginLeft: '15px' }}>
-                      {showIncantation && spellIncantation && spellIncantation.split('\n').map((line, idx) => {
-                        const isIndented = line.startsWith('>>')
-                        const cleanLine = isIndented ? line.replace(/^>>/, '') : line
-                        
-                        return ((
-                            <span
-                              key={idx}
-                              style={{
-                                display: 'block',
-                                lineHeight: '1.2',
-                                marginLeft: isIndented ? 15 : 0,
-                                marginBottom: 1,
-                                fontStyle: 'italic',
-                              }}
-                            >
-                              {cleanLine}
-                            </span>
-                          )
-                        )
-                      })}
+                  return (
+                    <Row key={index} className="m-0">
+                      <div>
+                        <span style={{ textDecoration: 'underline' }}>
+                          {spellName}
+                        </span>{' '}
+                        <span>
+                          {spellFrequency.frequency}
+                          {showRange && spellFrequency.range ? ` (${spellFrequency.range})` : ''}
+                        </span>{' '}
+                        {showTypeAndSchool && <span>( {spellType} )</span>}
+                        {spellSchool && showTypeAndSchool && (
+                          <span>( {spellSchool} )</span>
+                        )}
+                        <div style={{ marginLeft: '15px' }}>
+                          {showIncantation && spellIncantation && spellIncantation.split('\n').map((line, idx) => {
+                            const isIndented = line.startsWith('>>')
+                            const cleanLine = isIndented ? line.replace(/^>>/, '') : line
+                            
+                            return (
+                              <span
+                                key={idx}
+                                style={{
+                                  display: 'block',
+                                  lineHeight: '1.2',
+                                  marginLeft: isIndented ? 15 : 0,
+                                  marginBottom: 1,
+                                  fontStyle: 'italic',
+                                }}
+                              >
+                                {cleanLine}
+                              </span>
+                            )
+                          })}
+                        </div>
+                        <div className="m-0">
+                          {showStrips && spellMaterials
+                            ? (<span>( {spellMaterials} )</span>)
+                            : null}
+                        </div>
+                      </div>
+                    </Row>
+                  )
+                })}
+                {Array.isArray(spells.pickOne) && spells.pickOne.map((spell, index) => (
+                  <Row key={index} className="m-0">
+                    <div>
+                      <span style={{ textDecoration: 'underline' }}>
+                        {fetchSpellDetails('name', spell.id) || 'Unknown Spell'}
+                      </span>
                     </div>
-                    <div className="m-0">
-                      {showStrips && spellMaterials
-                        ? (<span>( {spellMaterials} )</span>)
-                        : null}
+                  </Row>
+                ))}
+                {Array.isArray(spells.pickTwoOfThree) && spells.pickTwoOfThree.map((spell, index) => (
+                  <Row key={index} className="m-0">
+                    <div>
+                      <span style={{ textDecoration: 'underline' }}>
+                        {fetchSpellDetails('name', spell.id) || 'Unknown Spell'}
+                      </span>
                     </div>
-                  </div>
-                </Row>
-              )
-            })}
+                  </Row>
+                ))}
+                {Array.isArray(spells.optionalPickOne) && spells.optionalPickOne.map((spell, index) => (
+                  <Row key={index} className="m-0">
+                    <div>
+                      <span style={{ textDecoration: 'underline' }}>
+                        {fetchSpellDetails('name', spell.id) || 'Unknown Spell'}
+                      </span>
+                    </div>
+                  </Row>
+                ))}
+              </React.Fragment>
+            ))}
           </React.Fragment>
         ))}
       </Row>
