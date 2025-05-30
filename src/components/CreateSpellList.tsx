@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Col, Container, Dropdown, Row } from 'react-bootstrap'
 import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
@@ -29,6 +29,27 @@ function CreateSpellList() {
 		localStorage.setItem('allSpellLists', JSON.stringify([]))
 	}
 	const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
+	const martialClasses = [
+		'Anti-Paladin',
+		'Archer',
+		'Assassin',
+		'Barbarian',
+		'Monk',
+		'Paladin',
+		'Scout',
+		'Warrior'
+	]
+
+	const classSpellLists: Record<string, any[]> = {
+		'Anti-Paladin': ANTIPALADIN_LIST,
+		'Archer': ARCHER_LIST,
+		'Assassin': ASSASSIN_LIST,
+		'Barbarian': BARBARIAN_LIST,
+		'Monk': MONK_LIST,
+		'Paladin': PALADIN_LIST,
+		'Scout': SCOUT_LIST,
+		'Warrior': WARRIOR_LIST,
+	}
 
 	const generateNewId = () => {
 		const maxId = allSpellLists.reduce((max, spellList) => Math.max(max, spellList.id), 0)
@@ -74,42 +95,86 @@ function CreateSpellList() {
 								{newSpellList.class}
 							</Dropdown.Toggle>
 							<Dropdown.Menu>
-								<Dropdown.Item onClick={() => {
-									setNewSpellList({ ...newSpellList, class: 'Bard', spells: [{ level: 1, points: 5, spells: [] }] })
-								}}>Bard</Dropdown.Item>
-								<Dropdown.Item onClick={() => {
-									setNewSpellList({ ...newSpellList, class: 'Druid', spells: [{ level: 1, points: 5, spells: [] }] })}}>
-										Druid</Dropdown.Item>
-								<Dropdown.Item onClick={() => {
-									setNewSpellList({ ...newSpellList, class: 'Healer', spells: [{ level: 1, points: 5, spells: [] }] })}}>
-										Healer</Dropdown.Item>
-								<Dropdown.Item onClick={() => {
-									setNewSpellList({ ...newSpellList, class: 'Wizard', spells: [{ level: 1, points: 5, spells: [] }] })}}>
-										Wizard</Dropdown.Item>
-								<Dropdown.Item onClick={() => {
-									setNewSpellList({ ...newSpellList, class: 'Anti-Paladin', spells: ANTIPALADIN_LIST });
-								}}>Anti-Paladin</Dropdown.Item>
-								<Dropdown.Item onClick={() => {
-									setNewSpellList({ ...newSpellList, class: 'Archer', spells: ARCHER_LIST });
-								}}>Archer</Dropdown.Item>
-								<Dropdown.Item onClick={() => {
-									setNewSpellList({ ...newSpellList, class: 'Assassin', spells: ASSASSIN_LIST });
-								}}>Assassin</Dropdown.Item>
-								<Dropdown.Item onClick={() => {
-									setNewSpellList({ ...newSpellList, class: 'Barbarian', spells: BARBARIAN_LIST });
-								}}>Barbarian</Dropdown.Item>
-								<Dropdown.Item onClick={() => {
-									setNewSpellList({ ...newSpellList, class: 'Monk', spells: MONK_LIST });
-								}}>Monk</Dropdown.Item>
-								<Dropdown.Item onClick={() => {
-									setNewSpellList({ ...newSpellList, class: 'Paladin', spells: PALADIN_LIST });
-								}}>Paladin</Dropdown.Item>
-								<Dropdown.Item onClick={() => {
-									setNewSpellList({ ...newSpellList, class: 'Scout', spells: SCOUT_LIST });
-								}}>Scout</Dropdown.Item>
-								<Dropdown.Item onClick={() => {
-									setNewSpellList({ ...newSpellList, class: 'Warrior', spells: WARRIOR_LIST });
-								}}>Warrior</Dropdown.Item>
+							<Dropdown.Item onClick={() => {
+							const newSpells = Array.from({ length: newSpellList.maxLevel }, (_, index) => ({
+								level: index + 1,
+								points: newSpellList.lookThePart && index + 1 === newSpellList.maxLevel ? 6 : 5,
+								spells: [],
+							}));
+							setNewSpellList({ ...newSpellList, class: 'Bard', spells: newSpells });
+							}}>Bard</Dropdown.Item>
+							<Dropdown.Item onClick={() => {
+							const newSpells = Array.from({ length: newSpellList.maxLevel }, (_, index) => ({
+								level: index + 1,
+								points: newSpellList.lookThePart && index + 1 === newSpellList.maxLevel ? 6 : 5,
+								spells: [],
+							}));
+							setNewSpellList({ ...newSpellList, class: 'Druid', spells: newSpells });
+							}}>Druid</Dropdown.Item>
+							<Dropdown.Item onClick={() => {
+							const newSpells = Array.from({ length: newSpellList.maxLevel }, (_, index) => ({
+								level: index + 1,
+								points: newSpellList.lookThePart && index + 1 === newSpellList.maxLevel ? 6 : 5,
+								spells: [],
+							}));
+							setNewSpellList({ ...newSpellList, class: 'Healer', spells: newSpells });
+							}}>Healer</Dropdown.Item>
+							<Dropdown.Item onClick={() => {
+							const newSpells = Array.from({ length: newSpellList.maxLevel }, (_, index) => ({
+								level: index + 1,
+								points: newSpellList.lookThePart && index + 1 === newSpellList.maxLevel ? 6 : 5,
+								spells: [],
+							}));
+							setNewSpellList({ ...newSpellList, class: 'Wizard', spells: newSpells });
+							}}>Wizard</Dropdown.Item>
+							<Dropdown.Item onClick={() => {
+							const newSpells = (classSpellLists['Anti-Paladin'] || []).filter(
+								(levelObj) => levelObj.level <= newSpellList.maxLevel
+							);
+							setNewSpellList({ ...newSpellList, class: 'Anti-Paladin', spells: newSpells });
+							}}>Anti-Paladin</Dropdown.Item>
+							<Dropdown.Item onClick={() => {
+							const newSpells = (classSpellLists['Archer'] || []).filter(
+								(levelObj) => levelObj.level <= newSpellList.maxLevel
+							);
+							setNewSpellList({ ...newSpellList, class: 'Archer', spells: newSpells });
+							}}>Archer</Dropdown.Item>
+							<Dropdown.Item onClick={() => {
+							const newSpells = (classSpellLists['Assassin'] || []).filter(
+								(levelObj) => levelObj.level <= newSpellList.maxLevel
+							);
+							setNewSpellList({ ...newSpellList, class: 'Assassin', spells: newSpells });
+							}}>Assassin</Dropdown.Item>
+							<Dropdown.Item onClick={() => {
+							const newSpells = (classSpellLists['Barbarian'] || []).filter(
+								(levelObj) => levelObj.level <= newSpellList.maxLevel
+							);
+							setNewSpellList({ ...newSpellList, class: 'Barbarian', spells: newSpells });
+							}}>Barbarian</Dropdown.Item>
+							<Dropdown.Item onClick={() => {
+							const newSpells = (classSpellLists['Monk'] || []).filter(
+								(levelObj) => levelObj.level <= newSpellList.maxLevel
+							);
+							setNewSpellList({ ...newSpellList, class: 'Monk', spells: newSpells });
+							}}>Monk</Dropdown.Item>
+							<Dropdown.Item onClick={() => {
+							const newSpells = (classSpellLists['Paladin'] || []).filter(
+								(levelObj) => levelObj.level <= newSpellList.maxLevel
+							);
+							setNewSpellList({ ...newSpellList, class: 'Paladin', spells: newSpells });
+							}}>Paladin</Dropdown.Item>
+							<Dropdown.Item onClick={() => {
+							const newSpells = (classSpellLists['Scout'] || []).filter(
+								(levelObj) => levelObj.level <= newSpellList.maxLevel
+							);
+							setNewSpellList({ ...newSpellList, class: 'Scout', spells: newSpells });
+							}}>Scout</Dropdown.Item>
+							<Dropdown.Item onClick={() => {
+							const newSpells = (classSpellLists['Warrior'] || []).filter(
+								(levelObj) => levelObj.level <= newSpellList.maxLevel
+							);
+							setNewSpellList({ ...newSpellList, class: 'Warrior', spells: newSpells });
+							}}>Warrior</Dropdown.Item>
 							</Dropdown.Menu>
 						</Dropdown>
 					</InputGroup>
@@ -136,7 +201,19 @@ function CreateSpellList() {
 										<Dropdown.Item
 											key={level}
 											onClick={() => {
-												setNewSpellList({ ...newSpellList, maxLevel: level })
+											if (martialClasses.includes(newSpellList.class)) {
+												const newSpells = (classSpellLists[newSpellList.class] || []).filter(
+												(levelObj) => levelObj.level <= level
+												);
+												setNewSpellList({ ...newSpellList, maxLevel: level, spells: newSpells });
+											} else {
+												const newSpells = Array.from({ length: level }, (_, index) => ({
+												level: index + 1,
+												points: newSpellList.lookThePart && index + 1 === level ? 6 : 5,
+												spells: [],
+												}));
+												setNewSpellList({ ...newSpellList, maxLevel: level, spells: newSpells });
+											}
 											}}
 										>
 											{level}
@@ -179,10 +256,16 @@ function CreateSpellList() {
 							}}
 							checked={newSpellList.lookThePart}
 							onChange={() => {
-								setNewSpellList({
-									...newSpellList,
-									lookThePart: true,
-								})
+								const nextLookThePart = !newSpellList.lookThePart;
+								const updatedSpells = newSpellList.spells.map((spell) => ({
+									...spell,
+									points: nextLookThePart && spell.level === newSpellList.maxLevel ? 6 : 5,
+								}));
+								if (martialClasses.includes(newSpellList.class)) {
+									setNewSpellList({ ...newSpellList, lookThePart: nextLookThePart });
+								} else {
+									setNewSpellList({ ...newSpellList, lookThePart: nextLookThePart, spells: updatedSpells });
+								}
 							}}
 							label={
 								<span
