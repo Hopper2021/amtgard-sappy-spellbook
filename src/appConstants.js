@@ -3189,10 +3189,14 @@ export const WARRIOR_LIST = [
 export const PATCH_NOTES = [
   {
     version: "0.1.1",
-    title: "Fix Experienced logic, Remove extra create button.",
+    title: "Fix battlemage limitations, Add martial classes, Fix Experienced logic, Remove extra create button.",
     details: [
       "Fix Experienced logic: When removing the spell `Experienced`, details page will update accordingly with proper charge amounts. When removing an experienced spell ( Ex. Mend or Shove ), 1 purchase of Experienced will also be removed and refunded. If only one Experienced had been purchased when spell is removed, Experienced is removed from that level.",
       "Remove Create button from Patch Notes/Downloads page.",
+      "Add martial classes to create list options.",
+      "Create new flow for choices on edit martial class lists.",
+      "Fix create bug to account for any changes on any dropdown through create flow.",
+      "Fix Battlemage limitations. Battlemage archetype now shows restrictions for enchantments and magic balls.",
     ]
   },
   {
