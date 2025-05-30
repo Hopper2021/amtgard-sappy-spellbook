@@ -3189,14 +3189,18 @@ export const WARRIOR_LIST = [
 export const PATCH_NOTES = [
   {
     version: "0.1.1",
-    title: "Fix battlemage limitations, Add martial classes, Fix Experienced logic, Remove extra create button.",
+    title: "Add APK v4, Fix battlemage limitations, martial class flow (in progress), Fix Experienced logic, Remove extra create button.",
     details: [
-      "Fix Experienced logic: When removing the spell `Experienced`, details page will update accordingly with proper charge amounts. When removing an experienced spell ( Ex. Mend or Shove ), 1 purchase of Experienced will also be removed and refunded. If only one Experienced had been purchased when spell is removed, Experienced is removed from that level.",
-      "Remove Create button from Patch Notes/Downloads page.",
-      "Add martial classes to create list options.",
-      "Create new flow for choices on edit martial class lists.",
-      "Fix create bug to account for any changes on any dropdown through create flow.",
+      "Add APK v4 file to downloads page.",
       "Fix Battlemage limitations. Battlemage archetype now shows restrictions for enchantments and magic balls.",
+      "Fix Experienced logic: When removing the spell `Experienced`, details page will update accordingly with proper charge amounts.",
+      "When removing an experienced spell ( Ex. Mend or Shove ), 1 purchase of Experienced will also be removed and refunded. If only one Experienced had been purchased when spell is removed, Experienced is removed from that level.",
+      "Remove Create button from Patch Notes/Downloads page.",
+      "Work in progress: Building Martial class flow behind the scenes. Projected release date is on or before 06/06/25",
+      "Create new flow for choices on edit martial class lists.",
+      "Fix create bug to account for any changes on dropdowns through create flow.",
+      "Fix toast message to only show 1 archetype when explaining why a spell can't be chosen.",
+      "Consolidate spell list details code to be less repetitive."
     ]
   },
   {
