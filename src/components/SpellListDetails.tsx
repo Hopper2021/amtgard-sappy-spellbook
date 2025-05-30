@@ -58,15 +58,16 @@ function SpellListDetails() {
     (spellList?.class === 'Warrior' && WARRIOR_LIST) ||
     []
 
-  const isMartialClass = spellList.class === 
-    'Anti-paladin' || 
-    'Archer' || 
-    'Assassin' || 
-    'Barbarian' ||
-    'Monk' ||
-    'Paladin' ||
-    'Scout' ||
-    'Warrior'
+	const martialClasses = [
+		'Anti-Paladin',
+		'Archer',
+		'Assassin',
+		'Barbarian',
+		'Monk',
+		'Paladin',
+		'Scout',
+		'Warrior'
+	]
 
   const fetchSpellDetails = (key: string, spellId: number) => {
     const spell = ALL_SPELLS.find(spell => spell.id === spellId)
@@ -352,8 +353,9 @@ const fetchSpellFrequency = (spellId: number) => {
           <Button
             className="ms-auto d-block"
             onClick={() => 
-              isMartialClass ? navigate(`/editMartialList/${spellList.id}`)
-              : navigate(`/editList/${spellList.id}`)}>
+              martialClasses.includes(spellList.class)
+                ? navigate(`/editMartialList/${spellList.id}`)
+                : navigate(`/editList/${spellList.id}`)}>
               Edit
           </Button>
         </Col>

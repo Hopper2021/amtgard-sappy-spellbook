@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Row, Accordion, Button, CardHeader, Modal, Alert } from 'react-bootstrap'
+import { Container, Row, Accordion, Button, CardHeader, Modal, Alert, Form } from 'react-bootstrap'
 import { ALL_SPELLS, BARD_SPELLS, HEALER_SPELLS, WIZARD_SPELLS, DRUID_SPELLS } from '../appConstants'
 import {
 	ANTIPALADIN_LIST,
@@ -16,10 +16,10 @@ import { Toast, ToastContainer } from 'react-bootstrap'
 import { IoMdInformationCircle } from 'react-icons/io'
 import { IoEllipsisVertical } from "react-icons/io5"
 
-type spellFrequency = {
+type SpellFrequency = {
   amount: number | null
-	per: string | null
-	charge: string | null
+  per: string | null
+  charge: string | null
 }
 
 type SelectedSpellType = {
@@ -35,19 +35,43 @@ type SelectedSpellType = {
   note: string | null
 } | null
 
+// This is a single spell instance (from appConstants lists)
+interface MartialSpell {
+  id: number
+  frequency: SpellFrequency
+  trait: boolean
+  extrordinary: boolean
+  magical: boolean
+  ambulant: boolean
+  restricted: boolean
+  chosen: boolean | null
+}
+
+// This is a spell as it appears in a user's spell list (with purchase info)
 interface Spell {
   id: number
   purchased: number
   experienced?: number
   rolledDown?: { [level: number]: number }
+  restricted?: boolean
 }
 
+// This is a group of spells for a level (from appConstants lists)
+interface SpellsByLevel {
+  base?: MartialSpell[]
+  optionalPickOne?: MartialSpell[]
+  pickOneOfTwo?: MartialSpell[]
+  pickTwoOfThree?: MartialSpell[]
+}
+
+// This is a level in the user's spell list
 interface SpellLevel {
   level: number
   points: number
-  spells: any[]
+  spells: SpellsByLevel[] // <-- spells is an array of SpellsByLevel objects
 }
 
+// The user's spell list
 interface SpellList {
   id: number
   name: string
@@ -55,25 +79,6 @@ interface SpellList {
   maxLevel: number
   lookThePart: boolean
   spells: SpellLevel[]
-}
-
-interface FrequencyByClass {
-  amount: number
-  per: string
-  charge: null | string
-}
-
-interface SpellsByClass {
-  id: number
-  cost: number
-  max: number
-  frequency: FrequencyByClass
-  restricted: false
-}
-
-interface LevelsByClass {
-  level: number
-  spells: Spell[]
 }
 
 function EditMartialList() {
@@ -1267,12 +1272,6 @@ const removeSpellFromList = (spellId: number) => {
         )}
 
         {modifiedSpellList.spells.map((level, index) => {
-          // const levelPointsAvailable = calculateLevelPointsAvailable(level.level)
-          // const trickleDownPointsAvailable = calculateTrickleDownPointsAvailable(level.level)
-          const currentLevelSpells = modifiedSpellList.spells.find(lvl => lvl.level === level.level)?.spells || []
-
-					console.log('modified spell list', modifiedSpellList)
-
           return (
             <Accordion key={index} defaultActiveKey="1" flush>
               <Accordion.Item eventKey="0" className="border-bottom">
@@ -1283,103 +1282,143 @@ const removeSpellFromList = (spellId: number) => {
                 </Accordion.Header>
 
                 <Accordion.Body className="py-0">
-                  {/* {addOrRemoveSpells === 'Add' ? ( */}
-                    {level.spells.map((spellsByLevel) => {
-                      const spellName = getSpellName(spellsByLevel.id)
-                      // const amountPurchased = getAmountPurchased(spellsByLevel.id)
-                      // const spellCost = spellsByLevel.cost
+                  {level.spells.map((spellsByLevel, idx) => {
+                    const rows: React.ReactNode[] = [];
 
-                      return (
-                        <Row
-                          key={spellsByLevel.id}
-                          className="d-flex justify-content-between"
-                          // onClick={() => spellsByLevel.restricted ? setShowDisabledSpellToast(true) : null}
-                        >
-                          <Button
-                            style={
-                              spellsByLevel.restricted
-                                ? { backgroundColor: '#f1b0b7', color: '#fff', border: 'none' }
-                                : { padding: 7 }
-                            }
-                            variant={spellsByLevel.restricted ? "danger" : "unknown"}
-                            className="text-start border-bottom"
-                            onMouseDown={e => handleLongPressStart(spellsByLevel.id, e)}
-                            onMouseMove={handleLongPressMove}
-                            onMouseUp={handleLongPressEnd}
-                            onMouseLeave={handleLongPressEnd}
-                            onTouchStart={e => handleLongPressStart(spellsByLevel.id, e)}
-                            onTouchMove={handleLongPressMove}
-                            onTouchEnd={handleLongPressEnd}
-                            onClick={() => {
-                              if (spellsByLevel.restricted) {
-                                // setSelectedSpell(ALL_SPELLS.find(s => s.id === spellsByLevel.id) as SelectedSpellType)
-                                setShowDisabledSpellToast(true)
-                              }
-                              // else if (spellsByLevel.id === 56) {
-                              //   if (experiencedSpell && experiencedSpell.purchased >= experiencedMax) {
-                              //     setSpellMaxReached(true)
-                              //     setShowToast(true)
-                              //   } else if (modifiedSpellListVerbals.length > 0) {
-                              //     setOpenExperiencedModal(true)
-                              //   } else {
-                              //     setShowExperiencedToast(true)
-                              //   }
-                              // } else {
-                              //   addSpellToList(spellsByLevel.id)
-                              // }
-                            }}
-                          >
-                            <span
-                              style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                marginRight: '5px',
-                                width: '100%',
-                              }}>
-                              <span style={{ textDecoration: spellsByLevel.restricted ? 'line-through' : undefined }}>
-                                {spellName}
-                              </span>
-                              {/* <span
-                                className={spellsByLevel.restricted ? 'text-white small ms-1' : 'text-secondary small'}
-                                style={{ marginLeft: 3 }}
+                    if (Array.isArray(spellsByLevel.base)) {
+                      rows.push(
+                        ...spellsByLevel.base.map((spell: MartialSpell) => {
+                          const spellName = getSpellName(spell.id);
+                          return (
+                            <Row
+                              key={`base-${spell.id}`}
+                              className="d-flex justify-content-between">
+                              <Button
+                                style={
+                                  spell.restricted
+                                    ? { backgroundColor: '#f1b0b7', color: '#fff', border: 'none' }
+                                    : { padding: 7 }
+                                }
+                                variant={spell.restricted ? "danger" : "unknown"}
+                                className="text-start border-bottom"
+                                onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => handleLongPressStart(spell.id, e)}
+                                onMouseMove={handleLongPressMove}
+                                onMouseUp={handleLongPressEnd}
+                                onMouseLeave={handleLongPressEnd}
+                                onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => handleLongPressStart(spell.id, e)}
+                                onTouchMove={handleLongPressMove}
+                                onTouchEnd={handleLongPressEnd}
+                                onClick={() => {
+                                  if (spell.restricted) {
+                                    setShowDisabledSpellToast(true)
+                                  }
+                                }}
                               >
-                                (cost: {spellCost})
-                              </span> */}
-                            </span>
-                          </Button>
-                        </Row>
-                      )
-                    })
-                  // ) : (
-                  //   currentLevelSpells.map((spellsByLevel) => {
-                  //     const spellName = getSpellName(spellsByLevel.id)
-                  //     const amountPurchased = getAmountPurchased(spellsByLevel.id)
-                  //     const spellCost =
-                  //       spellsByClass
-                  //         .flatMap(level => level.spells)
-                  //         .find(spell => spell.id === spellsByLevel.id)?.cost ?? ''
+                                <span
+                                  style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    marginRight: '5px',
+                                    width: '100%',
+                                  }}>
+                                  <span style={{ textDecoration: spell.restricted ? 'line-through' : undefined }}>
+                                    {spellName}
+                                  </span>
+                                </span>
+                              </Button>
+                            </Row>
+                          );
+                        })
+                      );
+                    }
 
-                  //     return (
-                  //       <Row className="d-flex justify-content-between" key={spellsByLevel.id}>
-                  //         <Button
-                  //           variant="unknown"
-                  //           className="text-start border-bottom"
-                  //           onMouseDown={e => handleLongPressStart(spellsByLevel.id, e)}
-                  //           onMouseMove={handleLongPressMove}
-                  //           onMouseUp={handleLongPressEnd}
-                  //           onMouseLeave={handleLongPressEnd}
-                  //           onTouchStart={e => handleLongPressStart(spellsByLevel.id, e)}
-                  //           onTouchMove={handleLongPressMove}
-                  //           onTouchEnd={handleLongPressEnd}
-                  //           onClick={() => removeSpellFromList(spellsByLevel.id)}
-                  //         >
-                  //           {spellName} {amountPurchased} (cost: {spellCost})
-                  //         </Button>
-                  //       </Row>
-                  //     )
-                  //   })
-                  // )}
-									}
+                    if (Array.isArray(spellsByLevel.optionalPickOne)) {
+                      rows.push(
+                        ...spellsByLevel.optionalPickOne.map((spell: MartialSpell) => {
+                          const spellName = getSpellName(spell.id);
+                          return (
+                            <Row key={`optionalPickOne-${spell.id}`} className="d-flex justify-content-between">
+                              <Button
+                                type="radio"
+                                style={{ padding: 7 }}
+                                variant="secondary"
+                                className="text-start border-bottom"
+                                onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => handleLongPressStart(spell.id, e)}
+                                onMouseMove={handleLongPressMove}
+                                onMouseUp={handleLongPressEnd}
+                                onMouseLeave={handleLongPressEnd}
+                                onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => handleLongPressStart(spell.id, e)}
+                                onTouchMove={handleLongPressMove}
+                                onTouchEnd={handleLongPressEnd}
+                              >
+                                <span style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                                  <span>{spellName}</span>
+                                </span>
+                              </Button>
+                            </Row>
+                          );
+                        })
+                      );
+                    }
+
+                    if (Array.isArray(spellsByLevel.pickOneOfTwo)) {
+                      rows.push(
+                        ...spellsByLevel.pickOneOfTwo.map((spell: Spell) => {
+                          const spellName = getSpellName(spell.id);
+                          return (
+                            <Row key={`pickOneOfTwo-${spell.id}`} className="d-flex justify-content-between">
+                              <Button
+                                style={{ padding: 7 }}
+                                variant="secondary"
+                                className="text-start border-bottom"
+                                onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => handleLongPressStart(spell.id, e)}
+                                onMouseMove={handleLongPressMove}
+                                onMouseUp={handleLongPressEnd}
+                                onMouseLeave={handleLongPressEnd}
+                                onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => handleLongPressStart(spell.id, e)}
+                                onTouchMove={handleLongPressMove}
+                                onTouchEnd={handleLongPressEnd}
+                              >
+                                <span style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                                  <span>{spellName}</span>
+                                </span>
+                              </Button>
+                            </Row>
+                          );
+                        })
+                      );
+                    }
+
+                    if (Array.isArray(spellsByLevel.pickTwoOfThree)) {
+                      rows.push(
+                        ...spellsByLevel.pickTwoOfThree.map((spell: MartialSpell) => {
+                          const spellName = getSpellName(spell.id);
+                          return (
+                            <Row key={`pickTwoOfThree-${spell.id}`} className="d-flex justify-content-between">
+                              <Button
+                                style={{ padding: 7 }}
+                                variant="secondary"
+                                className="text-start border-bottom"
+                                onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => handleLongPressStart(spell.id, e)}
+                                onMouseMove={handleLongPressMove}
+                                onMouseUp={handleLongPressEnd}
+                                onMouseLeave={handleLongPressEnd}
+                                onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => handleLongPressStart(spell.id, e)}
+                                onTouchMove={handleLongPressMove}
+                                onTouchEnd={handleLongPressEnd}
+                              >
+                                <span style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                                  <span>{spellName}</span>
+                                </span>
+                              </Button>
+                            </Row>
+                          );
+                        })
+                      );
+                    }
+
+                    return <React.Fragment key={idx}>{rows}</React.Fragment>;
+                  })}
                 </Accordion.Body>
               </Accordion.Item>
             </Accordion>
