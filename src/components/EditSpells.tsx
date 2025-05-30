@@ -180,6 +180,10 @@ function EditSpells() {
     const warlockPresent = spellList?.spells.some(level =>
       level.spells.some(spell => spell.id === warlockArchetype?.id)
     )
+    const battleMadeArchetype = ALL_SPELLS.find(spell => spell.name === 'Battlemage')
+    const battleMagePresent = spellList?.spells.some(level =>
+      level.spells.some(spell => spell.id === battleMadeArchetype?.id)
+    )
 
     // Collect all restricted schools based on present archetypes
     let restrictedTypes: string[] = []
@@ -188,6 +192,7 @@ function EditSpells() {
     if (evokerPresent) restrictedTypes.push('Verbal')
     if (evokerPresent) restrictedRanges.push("20'", "50'")
     if (warlockPresent) restrictedSchools.push('Spirit', 'Sorcery', 'Command')
+    if (battleMagePresent) restrictedTypes.push('Enchantment', 'Magic Ball')
 
     // Always apply restrictions if any archetype is present
     return baseWizardSpells.map(level => ({
@@ -195,6 +200,16 @@ function EditSpells() {
       spells: level.spells.map(spell => {
         const allSpell = ALL_SPELLS.find(s => s.id === spell.id)
         let restricted = false
+
+        // Battle Mage: restrict Enchantments and Magic Balls
+        if (
+          battleMagePresent &&
+          allSpell &&
+          allSpell.type !== null &&
+          ['Enchantment', 'Magic Ball'].includes(allSpell.type)
+        ) {
+          restricted = true
+        }
 
         // Evoker: restrict Verbals with range 20' or 50'
         if (
@@ -426,6 +441,20 @@ function EditSpells() {
     const warlockPresent = modifiedSpellList.spells.some(level =>
       level.spells.some(spell => spell.id === warlockArchetype?.id)
     )
+    const battleMageArchetype = ALL_SPELLS.find(spell => spell.name === 'Battlemage')
+    const battleMagePresent = modifiedSpellList.spells.some(level =>
+      level.spells.some(spell => spell.id === battleMageArchetype?.id)
+    )
+
+    if (battleMagePresent) {
+      const restrictedIds = ALL_SPELLS
+        .filter(s => s.type !== null && ['Enchantment', 'Magic Ball'].includes(s.type))
+        .map(spell => spell.id)
+      restrictedIds.forEach(spellId => {
+        cleanedSpellList = autoRemoveAndRefundSpell(spellId, cleanedSpellList)
+      })
+      shouldUpdate = true
+    }
 
     if (warlockPresent) {
       const restrictedIds = ALL_SPELLS
@@ -1215,6 +1244,13 @@ const removeSpellFromList = (spellId: number) => {
                       spell?.type === 'Verbal' &&
                       ['Spirit', 'Sorcery', 'Command'].includes(spell?.school || '')
                     ) archetypes.push('Warlock')
+                    const battleMageArchetype = ALL_SPELLS.find(s => s.name === 'Battlemage')
+                    if (
+                      battleMageArchetype && modifiedSpellList.spells.some(level =>
+                        level.spells.some(s => s.id === battleMageArchetype.id)
+                      ) &&
+                      spell?.type === 'Enchantment' || spell?.type === 'Magic Ball'
+                    ) archetypes.push('Battlemage')
                     // Druid
                     const summonerArchetype = ALL_SPELLS.find(s => s.name === 'Summoner')
                     if (

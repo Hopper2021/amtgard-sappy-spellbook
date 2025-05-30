@@ -207,7 +207,7 @@ export const ALL_SPELLS = [
     materials: null,
     incantation: null,
     effect: 'Use of Ambulant becomes unlimited.',
-    limitation: null,
+    limitation: 'May not purchase Enchantments or Magic Balls.',
     note: null
   },
   {
