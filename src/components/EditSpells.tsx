@@ -1204,11 +1204,16 @@ const removeSpellFromList = (spellId: number) => {
                     const spell = ALL_SPELLS.find(s => s.id === selectedSpell.id)
                     const archetypes: string[] = []
 
-                    // Healer
                     const priestArchetype = ALL_SPELLS.find(s => s.name === 'Priest')
                     const warderArchetype = ALL_SPELLS.find(s => s.name === 'Warder')
                     const necromancerArchetype = ALL_SPELLS.find(s => s.name === 'Necromancer')
                     const legendArchetype = ALL_SPELLS.find(s => s.name === 'Legend')
+                    const evokerArchetype = ALL_SPELLS.find(s => s.name === 'Evoker')
+                    const warlockArchetype = ALL_SPELLS.find(s => s.name === 'Warlock')
+                    const battleMageArchetype = ALL_SPELLS.find(s => s.name === 'Battlemage')
+                    const summonerArchetype = ALL_SPELLS.find(s => s.name === 'Summoner')
+
+                    // Healer
                     if (
                       priestArchetype && modifiedSpellList.spells.some(level =>
                         level.spells.some(s => s.id === priestArchetype.id)
@@ -1228,7 +1233,6 @@ const removeSpellFromList = (spellId: number) => {
                       spell?.school === 'Protection'
                     ) archetypes.push('Necromancer')
                     // Wizard
-                    const evokerArchetype = ALL_SPELLS.find(s => s.name === 'Evoker')
                     if (
                       evokerArchetype && modifiedSpellList.spells.some(level =>
                         level.spells.some(s => s.id === evokerArchetype.id)
@@ -1236,7 +1240,6 @@ const removeSpellFromList = (spellId: number) => {
                       spell?.type === 'Verbal' &&
                       (spell?.range === "20'" || spell?.range === "50'")
                     ) archetypes.push('Evoker')
-                    const warlockArchetype = ALL_SPELLS.find(s => s.name === 'Warlock')
                     if (
                       warlockArchetype && modifiedSpellList.spells.some(level =>
                         level.spells.some(s => s.id === warlockArchetype.id)
@@ -1244,15 +1247,14 @@ const removeSpellFromList = (spellId: number) => {
                       spell?.type === 'Verbal' &&
                       ['Spirit', 'Sorcery', 'Command'].includes(spell?.school || '')
                     ) archetypes.push('Warlock')
-                    const battleMageArchetype = ALL_SPELLS.find(s => s.name === 'Battlemage')
                     if (
-                      battleMageArchetype && modifiedSpellList.spells.some(level =>
+                      battleMageArchetype &&
+                      modifiedSpellList.spells.some(level =>
                         level.spells.some(s => s.id === battleMageArchetype.id)
                       ) &&
-                      spell?.type === 'Enchantment' || spell?.type === 'Magic Ball'
+                      (spell?.type === 'Enchantment' || spell?.type === 'Magic Ball')
                     ) archetypes.push('Battlemage')
                     // Druid
-                    const summonerArchetype = ALL_SPELLS.find(s => s.name === 'Summoner')
                     if (
                       summonerArchetype && modifiedSpellList.spells.some(level =>
                         level.spells.some(s => s.id === summonerArchetype.id)
