@@ -54,14 +54,14 @@ function CreateSpellList() {
 	const casterClasses = ['Bard', 'Druid', 'Healer', 'Wizard']
 	const allClasses = [
 		...casterClasses,
-		'Anti-Paladin',
-		'Archer',
-		'Assassin',
-		'Barbarian',
-		'Monk',
-		'Paladin',
-		'Scout',
-		'Warrior'
+		// 'Anti-Paladin',
+		// 'Archer',
+		// 'Assassin',
+		// 'Barbarian',
+		// 'Monk',
+		// 'Paladin',
+		// 'Scout',
+		// 'Warrior'
 	]
 
 	const generateNewId = () => {
