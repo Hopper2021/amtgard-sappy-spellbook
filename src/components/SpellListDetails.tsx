@@ -231,8 +231,6 @@ function SpellListDetails() {
       frequency = freq
     }
 
-    // --- Special-case frequency modifications (must come last!) ---
-
     // Priest + Meta-Magic
     const isPriest = spellList.spells.some(level =>
       level.spells.some(spell => spell.id === 114)
@@ -244,7 +242,7 @@ function SpellListDetails() {
       frequency += (frequency ? ' ' : '') + 'Charge x3'
     }
 
-    // Necromancer + Death school
+    // Necromancer changes
     if (
       isNecromancer &&
       allSpell &&
@@ -272,21 +270,21 @@ function SpellListDetails() {
       frequency += (frequency ? ' ' : '') + 'Charge x10'
     }
 
-    // Avatar of Nature: All enchantment spells level 4 or below now are range self. Unless the spell is golem.
+    // Avatar of Nature changes
     const isAvatarOfNature = spellList.spells.some(level =>
       level.spells.some(spell => spell.id === 19)
     )
-    let isLevelFourOrBelow = false;
+    let isLevelFourOrBelow = false
     for (const levelObj of DRUID_SPELLS) {
       if (levelObj.level <= 4) {
         if (levelObj.spells.some(spell => spell.id === spellId)) {
-          isLevelFourOrBelow = true;
-          break;
+          isLevelFourOrBelow = true
+          break
         }
       }
     }
-    const golemId = ALL_SPELLS.find(spell => spell.name === 'Golem')?.id;
-    const isGolemSpell = spellId === golemId;
+    const golemId = ALL_SPELLS.find(spell => spell.name === 'Golem')?.id
+    const isGolemSpell = spellId === golemId
     if (
       isAvatarOfNature &&
       isLevelFourOrBelow &&
@@ -315,6 +313,7 @@ function SpellListDetails() {
       return (
         <Row key={index} className="m-0">
           <div>
+            {!isMartialClass && (<span>{spell.purchased}x </span>)}
             <span style={{ textDecoration: 'underline' }}>
               {spellName}
             </span>{' '}
