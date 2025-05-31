@@ -28,7 +28,7 @@ function App() {
                 >
                 <IoMdInformationCircle size={25} className="me-1" color="blue"/>
                 <div className="d-flex flex-column">
-                  <span>Open Beta APK <strong>v4</strong> is now available!</span>
+                  <span>Open Beta APK <strong>v5</strong> is now available!</span>
                   <span>Ignore the warnings, it's fine to download.</span>
                   <div
                     className="end-0 bottom-0 text-muted small mt-1"
@@ -41,12 +41,12 @@ function App() {
             )}
             <Container className="d-flex justify-content-center mb-2">
               <a
-                href="/downloads/swiftgard-main-c73659-release.apk"
+                href="/downloads/swiftgard-main-9eefd3-release.apk" 
                 className="btn btn-primary mb-1"
                 download
                 style={{ minWidth: 200, textAlign: 'center' }}
               >
-                Download Android APK v4
+                Download Android APK v5
               </a>
             </Container>
           </>
