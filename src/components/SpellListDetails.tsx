@@ -42,6 +42,7 @@ function SpellListDetails() {
 
   const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
   const spellList = allSpellLists.find((list: SpellList) => list.id === parseInt(id || '0'))
+  const allPointsSpent = spellList.spells.every(level => level.points === 0)
 
   const spellsByClass =
     (spellList?.class === 'Bard' && BARD_SPELLS) ||
@@ -166,7 +167,7 @@ function SpellListDetails() {
     if (
       isSummoner &&
       allSpell &&
-      allSpell.type === 'Verbal'
+      allSpell.type === 'Enchantment'
     ) {
       archetypeMultiplier *= 2
     }
@@ -423,20 +424,29 @@ function SpellListDetails() {
       </Row>
       <Row>
         <Form.Text>Class: {spellList.class}</Form.Text>
-        { /* For Martial Classes, instead of points remaining, add Class specifics
-            Like weapons they can use, Look the part bonus, etc... */ }
-        <Form.Text>Points Remaining...</Form.Text>
-        <div>
-          {spellList.spells.map((level: SpellLevel, index) =>
-            level.points === 0 ? null : (
-              <Form.Text
-                key={index}
-                className="me-3">
-                L{level.level}: {level.points},
-              </Form.Text>
-            )
-          )}
-        </div>
+        {console.log('all points spent:', allPointsSpent)}
+        {!isMartialClass && (
+          <>
+            {allPointsSpent ? (
+              <Form.Text className="text-success">All points spent!</Form.Text>
+            ) : (
+              <>
+                <Form.Text>Points Remaining...</Form.Text>
+                <div>
+                  {spellList.spells.map((level: SpellLevel, index) =>
+                    level.points === 0 ? null : (
+                      <Form.Text
+                        key={index}
+                        className="me-3">
+                        L{level.level}: {level.points},
+                      </Form.Text>
+                    )
+                  )}
+                </div>
+              </>
+            )}
+          </>
+        )}
         <Form.Text>**** Spells ****</Form.Text>
         {spellList.spells.map((level, levelIdx) => (
           <React.Fragment key={levelIdx}>
