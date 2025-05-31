@@ -1131,7 +1131,7 @@ function EditMartialList() {
                   key={idx}
                   style={{
                     display: 'block',
-                    lineHeight: '1',
+                    lineHeight: '1.3',
                     marginLeft: isIndented ? 15 : 0,
                     marginBottom: '10px',
                   }}
