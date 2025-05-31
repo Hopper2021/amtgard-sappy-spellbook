@@ -3193,10 +3193,10 @@ export const WARRIOR_LIST = [
 export const PATCH_NOTES = [
   {
     version: "0.1.2",
-    title: "Add APK v5, Fix evoker multiplier, fix dimensional rift typo, small style changes.",
+    title: "Add APK v5, Fix Summoner multiplier, fix Dimensional Rift typo, All points spent message, small style changes.",
     details: [
       "Add APK v5 file to downloads page.",
-      "Fix Evoker archetype multiplier for enchantments on details page.",
+      "Fix Summoner archetype multiplier for enchantments on details page.",
       "Add 'All points spent!' message to details page when all points have been used in all levels.",
       "Slightly increase line height for numbered items in spell details modal.",
       "Fix dimensional rift range typo. Dimensional rift is now restricted when evoker is taken.",
