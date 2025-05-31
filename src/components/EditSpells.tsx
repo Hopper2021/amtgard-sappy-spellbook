@@ -1138,7 +1138,7 @@ const removeSpellFromList = (spellId: number) => {
                   key={idx}
                   style={{
                     display: 'block',
-                    lineHeight: '1',
+                    lineHeight: '1.3',
                     marginLeft: isIndented ? 15 : 0,
                     marginBottom: '10px',
                   }}
@@ -1177,7 +1177,7 @@ const removeSpellFromList = (spellId: number) => {
                   className="pe-3 mb-3 w-100"
                   onClick={() => addSpellToList(56, spell.id)}
                 >
-                  {spell.name} ( {buildFrequencyString(spell)} )
+                  {spell.name}
                 </Button>
               </div>
             ))}
