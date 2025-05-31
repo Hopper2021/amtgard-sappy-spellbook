@@ -453,7 +453,7 @@ export const ALL_SPELLS = [
     name: 'Dimensional Rift',
     type: 'Verbal',
     school: 'Sorcery',
-    range: '20"',
+    range: "20'",
     materials: null,
     incantation: '"The power of the aether consumes thee" x3',
     effect: 'Target insubstantial player dies.',
@@ -723,10 +723,10 @@ export const ALL_SPELLS = [
     materials: 'Red Magic Ball',
     incantation: '"The flame of fire is mine to evoke" x3',
     effect: `Fireball will have one of the following effects on the object first struck:
-    \n>>1. A weapon hit is destroyed
-    \n>>2. A Shield hit is subject to Shield Destroying
-    \n>>3. Armor hit with Armor Points remaining is subject to Armor Destroying.
-    \n>>4. A player hit dies.`,
+    \n>> 1. A weapon hit is destroyed
+    \n>> 2. A Shield hit is subject to Shield Destroying
+    \n>> 3. Armor hit with Armor Points remaining is subject to Armor Destroying.
+    \n>> 4. A player hit dies.`,
     limitation: null,
     note: null
   },
@@ -739,9 +739,9 @@ export const ALL_SPELLS = [
     materials: 'Blue Magic Ball',
     incantation: '"Forcebolt" x3',
     effect: `Force Bolt will have one of the following effects on the object first struck:
-    \n>>1. A weapon hit is destroyed
-    \n>>2. Armor hit with Armor Points remaining is subject to Armor Breaking.
-    \n>>3. A player hit receives a wound to that hit location.`,
+    \n>> 1. A weapon hit is destroyed
+    \n>> 2. Armor hit with Armor Points remaining is subject to Armor Breaking.
+    \n>> 3. A player hit receives a wound to that hit location.`,
     limitation: null,
     note: null
   },
@@ -1114,9 +1114,9 @@ export const ALL_SPELLS = [
     materials: 'Yellow Magic Ball',
     incantation: '"The flame of storms is mine to evoke" x3',
     effect: `A player struck is subject to an Engulfing Stopped effect for 60 seconds. In addition Lightning Bolt will have one of the following effects on the object first struck:
-    \n>>1. A weapon hit is destroyed
-    \n>>2. Armor hit with Armor Points remaining is subject to Armor Breaking.
-    \n>>3. A player hit receives a wound in that hit location.`,
+    \n>> 1. A weapon hit is destroyed
+    \n>> 2. Armor hit with Armor Points remaining is subject to Armor Breaking.
+    \n>> 3. A player hit receives a wound in that hit location.`,
     limitation: null,
     note: null
   },
@@ -1296,7 +1296,11 @@ export const ALL_SPELLS = [
     range: null,
     materials: 'Gray Magic Ball',
     incantation: '"The power of sorcery is mine to evoke" x3',
-    effect: "This Magic Ball does not interact with other ongoing abilities nor Traits. Example: This Magic Ball is not stopped by Stoneskin, Protection from Projectiles, and does not trigger the effects of Gift of Air, Troll Blood, Missile Block, or similar abilities. Will have one of the following effects: 1. A weapon hit is destroyed 2. Armor hit with Armor Points remaining is subject to Armor Breaking. 3. A player hit receives a wound in that hit location.",
+    effect: `This Magic Ball does not interact with other ongoing abilities nor Traits. Example: This Magic Ball is not stopped by Stoneskin, Protection from Projectiles, and does not trigger the effects of Gift of Air, Troll Blood, Missile Block, or similar abilities.
+    \n>>Will have one of the following effects:
+    \n>> 1. A weapon hit is destroyed
+    \n>> 2. Armor hit with Armor Points remaining is subject to Armor Breaking.
+    \n>> 3. A player hit receives a wound in that hit location.`,
     limitation: "Does not supercede the Frozen, Insubstantial, or Invulnerable States.",
     note: null
   },
@@ -1862,9 +1866,9 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     materials: 'Black Magic Ball',
     incantation: '"The power of void is mine to evoke" x3',
     effect: `Sphere of Annihilation ignores armor and enchantments and will have one of the following effects on the object first struck:
-    \n>>1. A weapon struck is destroyed
-    \n>>2. A shield struck is subject to Shield Destroying.
-    \n>>3. A player struck dies and is Cursed.`,
+    \n>> 1. A weapon struck is destroyed
+    \n>> 2. A shield struck is subject to Shield Destroying.
+    \n>> 3. A player struck dies and is Cursed.`,
     limitation: null,
     note: 'Does not ignore Traits, such as Missile Block.'
   },
