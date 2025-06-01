@@ -2440,7 +2440,7 @@ export const HEALER_SPELLS = [
       { id: 82, cost: 1, max: 3, frequency: { amount: 1, per: 'Ball', charge: 'Unlimited' }, restricted: false },
       { id: 98, cost: 1, max: null, frequency: { amount: 1, per: 'Life', charge: null }, restricted: false },
       { id: 120, cost: 1, max: null, frequency: { amount: 1, per: 'Life', charge: null }, restricted: false },
-      { id: 127, cost: 1, max: null, frequency: { amount: 1, per: 'Refresh', charge: 'Charge x3' }, restricted: false },
+      { id: 127, cost: 1, max: null, frequency: { amount: 1, per: 'Refresh', charge: 'Charge x5' }, restricted: false },
     ]
   },
   {
