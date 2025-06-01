@@ -3196,6 +3196,15 @@ export const WARRIOR_LIST = [
 
 export const PATCH_NOTES = [
   {
+    version: "0.1.3",
+    title: "",
+    details: [
+      "Add APK v...",
+      "Fix healer Resurrect charge to charge x5.",
+      "Progress on Martial class archetypes flows",
+    ]
+  },
+  {
     version: "0.1.2",
     title: "Add APK v5, Fix Summoner multiplier, fix Dimensional Rift typo, All points spent message, small style changes.",
     details: [
