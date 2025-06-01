@@ -2722,6 +2722,10 @@ export const ANTIPALADIN_LIST = [
   },
 ]
 
+export const INFERNAL_LIST = [
+  { id: 60, frequency: { amount: 2, per: 'Balls', charge: 'Unlimited' }, trait: false, extrordinary: false, magical: true, ambulant: false, restricted: false, chosen: false, },
+]
+
 export const ARCHER_LIST = [
   {
     level: 1,
