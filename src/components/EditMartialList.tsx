@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Row, Accordion, Button, Modal, Alert } from 'react-bootstrap'
+import { Container, Row, Accordion, Button, Modal, Alert, Col } from 'react-bootstrap'
 import {
   ALL_SPELLS,
 	ANTIPALADIN_LIST,
@@ -10,6 +10,8 @@ import {
 	PALADIN_LIST,
 	SCOUT_LIST,
 	WARRIOR_LIST,
+  INFERNAL_SPELLS,
+  CORRUPTOR_SPELLS,
 } from '../appConstants'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Toast, ToastContainer } from 'react-bootstrap'
@@ -94,6 +96,7 @@ function EditMartialList() {
   const [selectedSpell, setSelectedSpell] = useState<SelectedSpellType>(null)
   const [showDisabledToast, setShowDisabledSpellToast] = useState(false)
   const [openModal, setOpenModal] = useState(false)
+  const [chosenArchetype, setChosenArchetype] = useState<string | null>(null)
   const { id } = useParams<{ id: string }>()
   const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
   const spellListToEdit = allSpellLists.find((list: SpellList) => list.id === parseInt(id || '0'))
@@ -101,7 +104,11 @@ function EditMartialList() {
   let enableTips = localStorage.getItem('enableTips')
   const tipsEnabled = enableTips === 'true'
 
-  console.log('selectedSpell:', selectedSpell)
+  const subclassSpellsMap = {
+  "Infernal": INFERNAL_SPELLS,
+  "Corruptor": CORRUPTOR_SPELLS,
+  // Add other subclasses here
+  }
   
   const [modifiedSpellList, setModifiedSpellList] = React.useState<SpellList>({
     id: parseInt(id || '0'),
@@ -129,31 +136,61 @@ function EditMartialList() {
     return false
   }
 
-  const updateRestrictedSpells = (spellList: SpellList): SpellList => {
-    const infernalArchetype = ALL_SPELLS.find(spell => spell.name === 'Infernal')
-    const infernalChosen = infernalArchetype
-      ? isSpellChosen(spellList, infernalArchetype.id)
-      : false
+const updateRestrictedSpells = (spellList: SpellList): SpellList => {
+  // Archetypes
+  const infernalArchetype = ALL_SPELLS.find(spell => spell.name === 'Infernal')
+  const corruptorArchetype = ALL_SPELLS.find(spell => spell.name === 'Corruptor')
+  const infernalChosen = infernalArchetype ? isSpellChosen(spellList, infernalArchetype.id) : false
+  const corruptorChosen = corruptorArchetype ? isSpellChosen(spellList, corruptorArchetype.id) : false
 
-    // List of spell IDs to restrict if Infernal is chosen
-    const restrictedSpellIds = infernalChosen ? [151] : []
+  // Possible restricted spells
+  const stealLifeEssenceId = ALL_SPELLS.find(spell => spell.name === 'Steal Life Essence')?.id || 0
+  const flameBladeId = ALL_SPELLS.find(spell => spell.name === 'Flame Blade')?.id || 0
 
-    // Deep copy and update restricted property
-    const newList = JSON.parse(JSON.stringify(spellList))
-    for (const level of newList.spells) {
-      for (const sbl of level.spells) {
-        if (Array.isArray(sbl.base)) {
-          sbl.base = sbl.base.map(spell =>
-            restrictedSpellIds.includes(spell.id)
-              ? { ...spell, restricted: true }
-              : { ...spell, restricted: false }
-          )
-        }
-        // Repeat for optionalPickOne, pickOneOfTwo, pickTwoOfThree if needed
+  // Only one restriction at a time, based on which archetype is chosen
+  let restrictedSpellIds: number[] = []
+  if (infernalChosen) {
+    restrictedSpellIds = [stealLifeEssenceId]
+  } else if (corruptorChosen) {
+    restrictedSpellIds = [flameBladeId]
+  }
+
+  // Deep copy and update restricted property for all spell arrays
+  const newList = JSON.parse(JSON.stringify(spellList))
+  for (const level of newList.spells) {
+    for (const spellsByLevel of level.spells) {
+      if (Array.isArray(spellsByLevel.base)) {
+        spellsByLevel.base = spellsByLevel.base.map(spell =>
+          restrictedSpellIds.includes(spell.id)
+            ? { ...spell, restricted: true }
+            : { ...spell, restricted: false }
+        )
+      }
+      if (Array.isArray(spellsByLevel.optionalPickOne)) {
+        spellsByLevel.optionalPickOne = spellsByLevel.optionalPickOne.map(spell =>
+          restrictedSpellIds.includes(spell.id)
+            ? { ...spell, restricted: true }
+            : { ...spell, restricted: false }
+        )
+      }
+      if (Array.isArray(spellsByLevel.pickOneOfTwo)) {
+        spellsByLevel.pickOneOfTwo = spellsByLevel.pickOneOfTwo.map(spell =>
+          restrictedSpellIds.includes(spell.id)
+            ? { ...spell, restricted: true }
+            : { ...spell, restricted: false }
+        )
+      }
+      if (Array.isArray(spellsByLevel.pickTwoOfThree)) {
+        spellsByLevel.pickTwoOfThree = spellsByLevel.pickTwoOfThree.map(spell =>
+          restrictedSpellIds.includes(spell.id)
+            ? { ...spell, restricted: true }
+            : { ...spell, restricted: false }
+        )
       }
     }
-    return newList
   }
+  return newList
+}
 
 	const spellsByClass = 
   (spellListToEdit?.class === 'Anti-Paladin' && ANTIPALADIN_LIST) ||
@@ -209,8 +246,12 @@ function EditMartialList() {
 
   useEffect(() => {
     const infernalArchetype = ALL_SPELLS.find(spell => spell.name === 'Infernal')
+    const corruptorArchetype = ALL_SPELLS.find(spell => spell.name === 'Corruptor')
     const infernalPresent = infernalArchetype
       ? isSpellChosen(modifiedSpellList, infernalArchetype.id)
+      : false
+    const corruptorPresent = corruptorArchetype
+      ? isSpellChosen(modifiedSpellList, corruptorArchetype.id)
       : false
 
     let cleanedSpellList = modifiedSpellList
@@ -219,6 +260,17 @@ function EditMartialList() {
     if (infernalPresent) {
       const restrictedIds = ALL_SPELLS
         .filter(s => s.name !== null && ['Steal Life Essence'].includes(s.name))
+        .map(s => s.id)
+
+      restrictedIds.forEach(spellId => {
+        cleanedSpellList = autoRemoveAndRefundSpell(spellId, cleanedSpellList)
+      })
+      shouldUpdate = true
+    }
+
+    if (corruptorPresent) {
+      const restrictedIds = ALL_SPELLS
+        .filter(s => s.name !== null && ['Flame Blade'].includes(s.name))
         .map(s => s.id)
 
       restrictedIds.forEach(spellId => {
@@ -361,13 +413,20 @@ function EditMartialList() {
     setLongPressTimeout(timeout)
   }
 
-  const buildFrequencyString = (masterSpell: any) => {
+  const buildFrequencyString = (
+    masterSpell: any,
+    subclassName?: string
+  ) => {
     let spell: (MartialSpell | Spell) | null = null
-    if (Array.isArray(spellsByClass)) {
+
+    // If a subclass is chosen and exists in the map, search there
+    if (subclassName && subclassSpellsMap[subclassName]) {
+      spell = subclassSpellsMap[subclassName].find(s => s.id === masterSpell?.id) || null
+    } else if (Array.isArray(spellsByClass)) {
+      // Otherwise, search the base class list
       for (const level of spellsByClass) {
         if (Array.isArray(level.spells)) {
           for (const spellsByLevel of level.spells) {
-            // Check all possible arrays
             const allArrays = [
               ...(spellsByLevel.base ?? []),
               ...(spellsByLevel.optionalPickOne ?? []),
@@ -402,20 +461,56 @@ function EditMartialList() {
     return null
   }
 
-  const spellFrequency = buildFrequencyString(selectedSpell)
+  // const spellFrequency = buildFrequencyString(selectedSpell)
 
-  const setOptionalPickOneChosen = (spellList: SpellList, spellId: number): SpellList => {
+  const setOptionalPickOneChosen = (
+    spellList: SpellList,
+    levelIdx: number,
+    spellsByLevelIdx: number,
+    spellIdx?: number,
+    clear: boolean = false
+  ): SpellList => {
     const newList = JSON.parse(JSON.stringify(spellList))
-    for (const level of newList.spells) {
-      for (const sbl of level.spells) {
-        if (Array.isArray(sbl.optionalPickOne)) {
-          sbl.optionalPickOne = sbl.optionalPickOne.map(s =>
-            s.id === spellId ? { ...s, chosen: true } : { ...s, chosen: false }
-          )
-        }
+    const levelObj = newList.spells[levelIdx]
+    if (levelObj) {
+      const sbl = levelObj.spells[spellsByLevelIdx]
+      if (sbl && Array.isArray(sbl.optionalPickOne)) {
+        sbl.optionalPickOne = sbl.optionalPickOne.map((s, i) =>
+          clear ? { ...s, chosen: false } : (i === spellIdx ? { ...s, chosen: true } : { ...s, chosen: false })
+        )
       }
     }
-    return newList
+    let updated = updateRestrictedSpells(newList)
+    updateLocalStorage(updated)
+    return updated
+  }
+
+  const renderSubclassSpells = (
+    subclassName: string,
+    subclassSpells: { id: number }[],
+    getSpellName: (id: number) => string | null
+  ) => {
+    if (!subclassSpells || subclassSpells.length === 0) return null
+    return (
+      <Row className="ms-4 my-1">
+        <span>
+          {subclassSpells.map((spell) => {
+            const spellName = getSpellName(spell.id)
+            return (
+              <Button
+                key={spell.id}
+                variant="unknown"
+                className="text-start d-block w-100"
+                onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
+                  setChosenArchetype(subclassName)
+                  handleLongPressStart(spell.id, e)}}>
+                {spellName}
+              </Button>
+            )
+          })}
+        </span>
+      </Row>
+    )
   }
 
   const handleLongPressStart = (spellId, e) => {
@@ -451,7 +546,6 @@ function EditMartialList() {
   }
 
   const handleClose = () => {
-    // setOpenExperiencedModal(false)
     setOpenModal(false)
     setSelectedSpell(null)
   }
@@ -476,8 +570,8 @@ function EditMartialList() {
           )}
           <Modal.Body className="modal-sm pb-1 p-0">
             <span>
-              <strong>Base Frequency for {modifiedSpellList.class}: </strong>
-              {spellFrequency ? spellFrequency : 'N/A'}
+              <strong>{chosenArchetype ? chosenArchetype : "Base"} Frequency for {modifiedSpellList.class}: </strong>
+              {buildFrequencyString(selectedSpell, chosenArchetype ?? undefined) ?? 'N/A'}
             </span>
           </Modal.Body>
           <Modal.Body className="modal-sm p-0 pt-2">
@@ -528,13 +622,13 @@ function EditMartialList() {
           autohide
           delay={3000}
         >
-          {console.log('selectedSpell:', selectedSpell)}
           <Toast.Body className="d-flex-end align-items-center">
             Spell no longer available due to{selectedSpell && (
               <span>
                 <strong className="ms-1">
                   {(() => {
                     const spell = ALL_SPELLS.find(s => s.id === selectedSpell.id)
+                    console.log('spell:', spell)
                     const archetypes: string[] = []
 
                     // const priestArchetype = ALL_SPELLS.find(s => s.name === 'Priest')
@@ -543,9 +637,15 @@ function EditMartialList() {
                     // const legendArchetype = ALL_SPELLS.find(s => s.name === 'Legend')
 
                     const infernalArchetype = ALL_SPELLS.find(s => s.name === 'Infernal')
+                    const corruptorArchetype = ALL_SPELLS.find(s => s.name === 'Corruptor')
                     const hasInfernal = infernalArchetype
                       ? isSpellChosen(modifiedSpellList, infernalArchetype.id)
                       : false
+                    const hasCorruptor = corruptorArchetype
+                      ? isSpellChosen(modifiedSpellList, corruptorArchetype.id)
+                      : false
+
+                    console.log('hasInfernal:', hasInfernal)
                     
                     // Anti-Paladin
                     if (
@@ -553,73 +653,14 @@ function EditMartialList() {
                       spell?.name === 'Steal Life Essence'
                     ) archetypes.push('Infernal')
 
-                    // Archer
-                    
-                    // if (
-                    //   priestArchetype && modifiedSpellList.spells.some(level =>
-                    //     level.spells.some(s => s.id === priestArchetype.id)
-                    //   ) &&
-                    //   spell?.school === 'Death'
-                    // ) archetypes.push('Priest')
-                    // if (
-                    //   warderArchetype && modifiedSpellList.spells.some(level =>
-                    //     level.spells.some(s => s.id === warderArchetype.id)
-                    //   ) &&
-                    //   ['Death', 'Command', 'Subdual'].includes(spell?.school || '')
-                    // ) archetypes.push('Warder')
-                    // if (
-                    //   necromancerArchetype && modifiedSpellList.spells.some(level =>
-                    //     level.spells.some(s => s.id === necromancerArchetype.id)
-                    //   ) &&
-                    //   spell?.school === 'Protection'
-                    // ) archetypes.push('Necromancer')
-                    // // Wizard
-                    // const evokerArchetype = ALL_SPELLS.find(s => s.name === 'Evoker')
-                    // if (
-                    //   evokerArchetype && modifiedSpellList.spells.some(level =>
-                    //     level.spells.some(s => s.id === evokerArchetype.id)
-                    //   ) &&
-                    //   spell?.type === 'Verbal' &&
-                    //   (spell?.range === "20'" || spell?.range === "50'")
-                    // ) archetypes.push('Evoker')
-                    // const warlockArchetype = ALL_SPELLS.find(s => s.name === 'Warlock')
-                    // if (
-                    //   warlockArchetype && modifiedSpellList.spells.some(level =>
-                    //     level.spells.some(s => s.id === warlockArchetype.id)
-                    //   ) &&
-                    //   spell?.type === 'Verbal' &&
-                    //   ['Spirit', 'Sorcery', 'Command'].includes(spell?.school || '')
-                    // ) archetypes.push('Warlock')
-                    // // Druid
-                    // const summonerArchetype = ALL_SPELLS.find(s => s.name === 'Summoner')
-                    // if (
-                    //   summonerArchetype && modifiedSpellList.spells.some(level =>
-                    //     level.spells.some(s => s.id === summonerArchetype.id)
-                    //   ) &&
-                    //   spell?.type === 'Verbal' &&
-                    //   (spell?.range === "20'" || spell?.range === "50'" || spell?.range === 'Other')
-                    // ) archetypes.push('Summoner')
-                    // if (
-                    //   summonerArchetype && modifiedSpellList.spells.some(level =>
-                    //     level.spells.some(s => s.id === summonerArchetype.id)
-                    //   ) &&
-                    //   spell?.name?.includes('Equipment:') &&
-                    //   (() => {
-                    //     const spellInDruidList = DRUID_SPELLS.find(level =>
-                    //       level.spells.some(s => s.id === spell.id)
-                    //     )
-                    //     return spellInDruidList && spellInDruidList.level > 2
-                    //   })()
-                    // ) archetypes.push('Summoner')
-                    // if (
-                    //   legendArchetype && modifiedSpellList.spells.some(level =>
-                    //     level.spells.some(s => s.id === legendArchetype.id)
-                    //   ) &&
-                    //   spell?.name?.includes('Swift')
-                    // ) archetypes.push('Legend')
-                    // if (archetypes.length > 0) {
-                    //   return `${archetypes.join(',')}`
-                    // }
+                    if (
+                      corruptorArchetype && hasCorruptor &&
+                      spell?.name === 'Flame Blade'
+                    ) archetypes.push('Corruptor')
+
+                    if (archetypes.length > 0) {
+                      return `${archetypes.join(',')}`
+                    }
                     return null
                   })()}
                 </strong> limitations.
@@ -678,11 +719,15 @@ function EditMartialList() {
                                 }
                                 variant={spell.restricted ? "danger" : "unknown"}
                                 className="text-start border-bottom"
-                                onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => handleLongPressStart(spell.id, e)}
+                                onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
+                                  setChosenArchetype(null)
+                                  handleLongPressStart(spell.id, e)}}
                                 onMouseMove={handleLongPressMove}
                                 onMouseUp={handleLongPressEnd}
                                 onMouseLeave={handleLongPressEnd}
-                                onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => handleLongPressStart(spell.id, e)}
+                                onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => {
+                                  setChosenArchetype(null)
+                                  handleLongPressStart(spell.id, e)}}
                                 onTouchMove={handleLongPressMove}
                                 onTouchEnd={handleLongPressEnd}
                                 onClick={() => {
@@ -712,36 +757,76 @@ function EditMartialList() {
 
                     if (Array.isArray(spellsByLevel.optionalPickOne)) {
                       rows.push(
-                        ...spellsByLevel.optionalPickOne.map((spell: MartialSpell) => {
+                        <Row
+                          key={`optionalPickOne-label-${index}-${idx}`}
+                          className="d-flex justify-content-between align-items-center fw-bold text-secondary my-1">
+                          <Col className="text-start">
+                            <span>Optional, Pick one:</span>
+                          </Col>
+                          <Col className="text-end">
+                            <Button
+                              className="py-0"
+                              onClick={() => {
+                                setModifiedSpellList(prevList =>
+                                  setOptionalPickOneChosen(prevList, index, idx, undefined, true)
+                                )
+                              }}
+                            >
+                              Clear
+                            </Button>
+                          </Col>
+                        </Row>
+                      )
+                      rows.push(
+                        ...spellsByLevel.optionalPickOne.map((spell: MartialSpell, spellIdx) => {
                           const spellName = getSpellName(spell.id)
+                          
                           return (
-                            <Row key={`optionalPickOne-${spell.id}`} className="d-flex justify-content-between">
-                              <Button
-                                type="radio"
-                                style={{ padding: 7 }}
-                                variant="secondary"
-                                className="text-start border-bottom"
-                                onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => handleLongPressStart(spell.id, e)}
-                                onMouseMove={handleLongPressMove}
-                                onMouseUp={handleLongPressEnd}
-                                onMouseLeave={handleLongPressEnd}
-                                onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => handleLongPressStart(spell.id, e)}
-                                onTouchMove={handleLongPressMove}
-                                onTouchEnd={handleLongPressEnd}
-                                onClick={() => {
-                                  setModifiedSpellList(prevList => {
-                                    let updated = setOptionalPickOneChosen(prevList, spell.id)
-                                    updated = updateRestrictedSpells(updated)
-                                    updateLocalStorage(updated)
-                                    return updated
-                                  })
-                                }}
-                              >
-                                <span style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                                  <span>{spellName}</span>
-                                </span>
-                              </Button>
-                            </Row>
+                            <React.Fragment key={`optionalPickOne-${spell.id}`}>
+                              <Row className="d-flex justify-content-between ms-1">
+                                <Button
+                                  style={
+                                    spell.chosen
+                                      ? { backgroundColor: '#b8e0b8', color: '#222', border: '2px solid #198754', padding: 7 }
+                                      : { padding: 7 }
+                                  }
+                                  variant={spell.chosen ? "primary" : "outline-secondary"}
+                                  className="text-start border-bottom"
+                                  onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => 
+                                    handleLongPressStart(spell.id, e)}
+                                  onMouseMove={handleLongPressMove}
+                                  onMouseUp={handleLongPressEnd}
+                                  onMouseLeave={handleLongPressEnd}
+                                  onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => 
+                                    handleLongPressStart(spell.id, e)}
+                                  onTouchMove={handleLongPressMove}
+                                  onTouchEnd={handleLongPressEnd}
+                                  onClick={() => {
+                                    setModifiedSpellList(prevList => {
+                                      // Set the chosen archetype if this spell is an archetype
+                                      const spellName = getSpellName(spell.id)
+                                      if (spellName && subclassSpellsMap[spellName]) {
+                                        setChosenArchetype(null)
+                                      } else {
+                                        setChosenArchetype(null)
+                                      }
+                                      return setOptionalPickOneChosen(prevList, index, idx, spellIdx)
+                                    })
+                                  }}
+                                >
+                                  <span style={{ display: 'flex', width: '100%' }}>
+                                    <span>{spellName}</span>
+                                  </span>
+                                </Button>
+                              </Row>
+                              {spell.chosen &&
+                                renderSubclassSpells(
+                                  spellName ?? 'Unknown Spell',
+                                  subclassSpellsMap[spellName ?? 'Unknown Spell'] || [],
+                                  getSpellName
+                                )
+                              }
+                            </React.Fragment>
                           )
                         })
                       )
@@ -749,19 +834,26 @@ function EditMartialList() {
 
                     if (Array.isArray(spellsByLevel.pickOneOfTwo)) {
                       rows.push(
-                        ...spellsByLevel.pickOneOfTwo.map((spell: Spell) => {
+                        <Row key={`optionalPickOne-label-${index}-${idx}`} className="fw-bold text-secondary mb-1">
+                          Pick one of two:
+                        </Row>
+                      )
+                      rows.push(
+                        ...spellsByLevel.pickOneOfTwo.map((spell: MartialSpell) => {
                           const spellName = getSpellName(spell.id)
                           return (
-                            <Row key={`pickOneOfTwo-${spell.id}`} className="d-flex justify-content-between">
+                            <Row key={`pickOneOfTwo-${spell.id}`} className="d-flex justify-content-between ms-1">
                               <Button
                                 style={{ padding: 7 }}
                                 variant="secondary"
                                 className="text-start border-bottom"
-                                onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => handleLongPressStart(spell.id, e)}
+                                onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => 
+                                  handleLongPressStart(spell.id, e)}
                                 onMouseMove={handleLongPressMove}
                                 onMouseUp={handleLongPressEnd}
                                 onMouseLeave={handleLongPressEnd}
-                                onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => handleLongPressStart(spell.id, e)}
+                                onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => 
+                                  handleLongPressStart(spell.id, e)}
                                 onTouchMove={handleLongPressMove}
                                 onTouchEnd={handleLongPressEnd}
                               >
@@ -777,10 +869,15 @@ function EditMartialList() {
 
                     if (Array.isArray(spellsByLevel.pickTwoOfThree)) {
                       rows.push(
+                        <Row key={`optionalPickOne-label-${index}-${idx}`} className="fw-bold text-secondary mb-1">
+                          Pick two of three:
+                        </Row>
+                      )
+                      rows.push(
                         ...spellsByLevel.pickTwoOfThree.map((spell: MartialSpell) => {
                           const spellName = getSpellName(spell.id)
                           return (
-                            <Row key={`pickTwoOfThree-${spell.id}`} className="d-flex justify-content-between">
+                            <Row key={`pickTwoOfThree-${spell.id}`} className="d-flex justify-content-between ms-1">
                               <Button
                                 style={{ padding: 7 }}
                                 variant="secondary"
