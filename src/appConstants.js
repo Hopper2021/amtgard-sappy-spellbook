@@ -2654,6 +2654,13 @@ export const DRUID_SPELLS = [
 
 export const AVATAR_OF_NATURE_SWIFT = { id: 24, cost: 1, max: null, frequency: { amount: 1, per: 'Refresh', charge: null }, restricted: false }
 
+export const ANTIPALADIN_EQUIPMENT = {
+  lookThePart: 'Terror 1/Life',
+  armor: '4pts',
+  shields: 'Large',
+  weapons: 'All Melee, Javelins'
+}
+
 export const ANTIPALADIN_LIST = [
   {
     level: 1,
@@ -2722,8 +2729,12 @@ export const ANTIPALADIN_LIST = [
   },
 ]
 
-export const INFERNAL_LIST = [
+export const INFERNAL_SPELLS = [
   { id: 60, frequency: { amount: 2, per: 'Balls', charge: 'Unlimited' }, trait: false, extrordinary: false, magical: true, ambulant: false, restricted: false, chosen: false, },
+]
+
+export const CORRUPTOR_SPELLS = [
+  { id: 169, frequency: { amount: 2, per: 'Refresh', charge: null }, trait: false, extrordinary: false, magical: true, ambulant: false, restricted: false, chosen: false, },
 ]
 
 export const ARCHER_LIST = [
