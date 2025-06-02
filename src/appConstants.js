@@ -1713,10 +1713,7 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     range: 'Self',
     materials: null,
     incantation: '"I sing of my legendary prowess"',
-    effect: `Bearer's wielded melee weapons are Armor Breaking.
-      Bearer must Chant “Song of Battle” or sing a song regarding
-      their martial prowess. Singing in place of the normal Chant
-      is still a Chant and must follow all Chant rules.`,
+    effect: `Bearer's wielded melee weapons are Armor Breaking. Bearer must Chant “Song of Battle” or sing a song regarding their martial prowess. Singing in place of the normal Chant is still a Chant and must follow all Chant rules.`,
     limitation: null,
     note: null
   },
@@ -1728,12 +1725,7 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     range: 'Self',
     materials: null,
     incantation: '"I sing of my nimble acrobatics"',
-    effect: `Bearer is unaffected by ammunition, thrown Javelins,
-      Rocks, and thrown weapons. Engulfing effects from those
-      objects, such as Pinning Arrow, do not affect the player.
-      Bearer must Chant “Song of Deflection” or sing a song of
-      their acrobatic prowess. Singing in place of the normal
-      Chant is still a Chant and must follow all Chant rules.`,
+    effect: `Bearer is unaffected by ammunition, thrown Javelins, Rocks, and thrown weapons. Engulfing effects from those objects, such as Pinning Arrow, do not affect the player. Bearer must Chant “Song of Deflection” or sing a song of their acrobatic prowess. Singing in place of the normal Chant is still a Chant and must follow all Chant rules.`,
     limitation: null,
     note: 'Does not protect the bearer against Magic Balls.'
   },
@@ -1745,10 +1737,7 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     range: 'Self',
     materials: null,
     incantation: '"I sing of my unwavering determination"',
-    effect: `Bearer is Immune to Command. Bearer must Chant
-      “Song of Determination” or sing a song regarding their
-      determination. Singing in place of the normal Chant is still
-      a Chant and must follow all Chant rules.`,
+    effect: `Bearer is Immune to Command. Bearer must Chant “Song of Determination” or sing a song regarding their determination. Singing in place of the normal Chant is still a Chant and must follow all Chant rules.`,
     limitation: null,
     note: null,
   },
@@ -1760,12 +1749,7 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     range: 'Self',
     materials: null,
     incantation: '"I sing of my unquenchable wanderlust"',
-    effect: `Bearer cannot receive the States Stopped, Frozen,
-      or Insubstantial unless caused by the bearer or other
-      enchantments they carry. Bearer must Chant “Song of
-      Freedom” or sing a song of roving or rambling. Singing in
-      place of the normal Chant is still a Chant and must follow
-      all Chant rules.`,
+    effect: `Bearer cannot receive the States Stopped, Frozen, or Insubstantial unless caused by the bearer or other enchantments they carry. Bearer must Chant “Song of Freedom” or sing a song of roving or rambling. Singing in place of the normal Chant is still a Chant and must follow all Chant rules.`,
     limitation: null,
     note: null,
   },
@@ -1789,12 +1773,7 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     range: 'Self',
     materials: null,
     incantation: '"I sing to inspire my comrades-in-arms"',
-    effect: `Friendly players within 20' of the bearer have their 
-      Charging Incantation repetitions divided by 2, rounded 
-      down, to a minimum of 1. Bearer is Stopped. Bearer must 
-      Chant “Song of Power” or sing an inspiring song. Singing in 
-      place of the normal Chant is still a Chant and must follow 
-      all Chant rules.`,
+    effect: `Friendly players within 20' of the bearer have their Charging Incantation repetitions divided by 2, rounded down, to a minimum of 1. Bearer is Stopped. Bearer must Chant “Song of Power” or sing an inspiring song. Singing in place of the normal Chant is still a Chant and must follow all Chant rules.`,
     limitation: 'Players can only benefit from one instance of Song of Power at a time.',
     note: null
   },
@@ -1806,24 +1785,9 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     range: 'Self',
     materials: null,
     incantation: '"I sing of my numerous close calls"',
-    effect: `When the bearer would otherwise die, they instead 
-      declare “Song of Survival” and become Insubstantial. The 
-      caster treats the triggering event as though it had no 
-      effect on them other than triggering Song of Survival. 
-      Song of Survival immediately ends and bearer must stop 
-      their Chant. Bearer may choose to return directly to their 
-      base immediately after Song of Survival activates. Bearer 
-      must Chant “Song of Survival” or sing a song regarding 
-      their many escapes from certain doom. Singing in place 
-      of the normal Chant is still a Chant and must follow all 
-      Chant rules.`,
-    limitation: `Once Song of Survival has activated to protect the 
-      bearer it may not be cast nor activated again on the 
-      same life.`,
-    note: `Bearer may end the Insubstantial State caused by Song 
-      of Survival at any time with the standard incantation. If 
-      the Insubstantial State is ended by any means before 
-      reaching the base, the rest of the effect is ended as well.`
+    effect: `When the bearer would otherwise die, they instead declare “Song of Survival” and become Insubstantial. The caster treats the triggering event as though it had no effect on them other than triggering Song of Survival. Song of Survival immediately ends and bearer must stop their Chant. Bearer may choose to return directly to their base immediately after Song of Survival activates. Bearer must Chant “Song of Survival” or sing a song regarding their many escapes from certain doom. Singing in place of the normal Chant is still a Chant and must follow all Chant rules.`,
+    limitation: `Once Song of Survival has activated to protect the bearer it may not be cast nor activated again on the same life.`,
+    note: `Bearer may end the Insubstantial State caused by Song of Survival at any time with the standard incantation. If the Insubstantial State is ended by any means before reaching the base, the rest of the effect is ended as well.`
   },
   {
     id: 147,
@@ -1833,15 +1797,7 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     range: 'Self',
     materials: null,
     incantation: '"I sing to entertain friend and foe" x3',
-    effect: `Bearer cannot be wounded and is Immune to all 
-      Schools. Bearer is Stopped. Bearer must Chant “Song 
-      of Visit” or sing a song regarding their general good 
-      nature and friendly disposition. Singing in place of the 
-      normal Chant is still a Chant and must follow all Chant 
-      rules. When Song of Visit is removed player becomes 
-      Insubstantial and must immediately move directly to 
-      their base. Upon arrival, they must immediately end the 
-      effect as per Insubstantial.'`,
+    effect: `Bearer cannot be wounded and is Immune to all Schools. Bearer is Stopped. Bearer must Chant “Song of Visit” or sing a song regarding their general good nature and friendly disposition. Singing in place of the normal Chant is still a Chant and must follow all Chant rules. When Song of Visit is removed player becomes Insubstantial and must immediately move directly to their base. Upon arrival, they must immediately end the effect as per Insubstantial.'`,
     limitation: 'Bearer may not wield weapons, interact with game objects, impede play, gain further Enchantments, or target any player.',
     note: 'This Enchantment can be removed by Dispel Magic and similar abilities. If the Insubstantial State is ended, the rest of the effect is ended as well.',
   },
@@ -2235,9 +2191,9 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     range: 'Other',
     materials: 'Red strip',
     incantation: '"I enchant thee with the strength of the bear" x3',
-    effect: "May wear an additional Enchantment. Attuned does not count towards the bearer's Enchantment limit.",
-    limitation: 'This ability may not be used in conjunction with any other similar ability.',
-    note: 'If Attuned is removed, the bearer chooses which (m) Enchantments to lose to meet their new Enchantment limit, if necessary.'
+    effect: "Bearer's wielded melee weapons are Shield Crushing.",
+    limitation: null,
+    note: null
   },
   {
     id: 180,
