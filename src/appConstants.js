@@ -3168,6 +3168,8 @@ export const PATCH_NOTES = [
     details: [
       "Add APK v...",
       "Fix healer Resurrect charge to charge x5.",
+      "Fix Bear Strength effect description",
+      "Fix weird spacing for effect description for Songs",
       "Progress on Martial class archetypes flows",
     ]
   },
