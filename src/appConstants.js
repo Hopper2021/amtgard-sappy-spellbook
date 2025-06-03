@@ -969,7 +969,7 @@ export const ALL_SPELLS = [
     range: null,
     materials: null,
     incantation: null,
-    effect: 'May wield Great weapons and Javelins. Imbue Weapon: Pick one: -Hold Person becomes 1/Life Charge x3 (m). -Pinning Arrow becomes 2 Arrows / Unlimited (ex)',
+    effect: 'May wield Great weapons and Javelins. Pick one: -Hold Person becomes 1/Life Charge x3 (m). -Pinning Arrow becomes 2 Arrows / Unlimited (ex)',
     limitation: 'May not wield shields. Loses all instances of Release and Evolution.',
     note: 'You only gain the benefit of an option if you already have that ability.'
   },
@@ -1698,10 +1698,7 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     range: null,
     materials: null,
     incantation: null,
-    effect: `May physically carry any number of Specialty Arrows of
-      each type. The frequency of each type of Specialty Arrow
-      ability becomes 1 Arrow/Life Charge x3. Gain Momentum
-      Unlimited (ex) (Ambulant).`,
+    effect: `May physically carry any number of Specialty Arrows of each type. The frequency of each type of Specialty Arrow ability becomes 1 Arrow/Life Charge x3. Gain Momentum Unlimited (ex) (Ambulant).`,
     limitation: 'May not fire normal arrows.',
     note: null
   },
@@ -2279,6 +2276,18 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     limitation: null,
     note: null
   },
+  {
+    id: 187,
+    name: 'Sacred Blades',
+    type: 'Enchantment',
+    school: 'Sorcery',
+    range: 'Self',
+    materials: 'White strip and Red strip',
+    incantation: '"I sanctify these weapons to smite the wicked" x2',
+    effect: "Bearer's wielded weapons are affected as per Harden. Bearer's wielded melee weapons and any special effects delivered by them ignore magic armor and resistances that prevent wounds.",
+    limitation: null,
+    note: null
+  },
 ]
 
 export const BARD_SPELLS = [
@@ -2623,8 +2632,8 @@ export const ANTIPALADIN_LIST = [
     spells: [
       { 
         base: [
-          { id: 182, frequency: { amount: null, per: null, charge: null }, trait: true, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
-          { id: 183, frequency: { amount: null, per: null, charge: null }, trait: true, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 182, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 183, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
         ]
       }
     ]
@@ -2634,7 +2643,7 @@ export const ANTIPALADIN_LIST = [
     spells: [
       { 
         base: [
-          { id: 111, frequency: { amount: 1, per: 'Life', charge: 'Charge x3' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 111, frequency: { amount: 1, per: 'Life', charge: 'Charge x3' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
         ]
       }
     ]
@@ -2644,7 +2653,7 @@ export const ANTIPALADIN_LIST = [
     spells: [
       { 
         base: [
-          { id: 151, frequency: { amount: 1, per: 'Life', charge: 'Charge x5' }, trait: false, extrordinary: false, magical: true, ambulant: false, restricted: false, chosen: null, },
+          { id: 151, frequency: { amount: 1, per: 'Life', charge: 'Charge x5' }, trait: false, extraordinary: false, magical: true, ambulant: false, restricted: false, chosen: null, },
         ]
       }
     ]
@@ -2654,7 +2663,7 @@ export const ANTIPALADIN_LIST = [
     spells: [
       { 
         base: [
-          { id: 32, frequency: { amount: 1, per: 'Life', charge: 'Charge x10' }, trait: false, extrordinary: true, magical: false, ambulant: true, restricted: false, chosen: null, },
+          { id: 32, frequency: { amount: 1, per: 'Life', charge: 'Charge x10' }, trait: false, extraordinary: true, magical: false, ambulant: true, restricted: false, chosen: null, },
         ]
       }
     ]
@@ -2664,7 +2673,7 @@ export const ANTIPALADIN_LIST = [
     spells: [
       { 
         base: [
-          { id: 161, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extrordinary: false, magical: true, ambulant: false, restricted: false, chosen: null, },
+          { id: 161, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: false, magical: true, ambulant: false, restricted: false, chosen: null, },
         ]
       }
     ]
@@ -2674,11 +2683,11 @@ export const ANTIPALADIN_LIST = [
     spells: [
       { 
         base: [
-          { id: 65, frequency: { amount: 2, per: 'Refresh', charge: null }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 65, frequency: { amount: 2, per: 'Refresh', charge: null }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
         ],
         optionalPickOne: [
-          { id: 85, frequency: { amount: null, per: null, charge: null }, trait: false, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
-          { id: 36, frequency: { amount: null, per: null, charge: null }, trait: false, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+          { id: 85, frequency: { amount: null, per: null, charge: null }, trait: false, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+          { id: 36, frequency: { amount: null, per: null, charge: null }, trait: false, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
         ]
       }
     ]
@@ -2686,12 +2695,23 @@ export const ANTIPALADIN_LIST = [
 ]
 
 export const INFERNAL_SPELLS = [
-  { id: 60, frequency: { amount: 2, per: 'Balls', charge: 'Unlimited' }, trait: false, extrordinary: false, magical: true, ambulant: false, restricted: false, chosen: false, },
+  { id: 60, frequency: { amount: 2, per: 'Balls', charge: 'Unlimited' }, range: null, trait: false, extraordinary: false, magical: true, ambulant: false, restricted: false, chosen: false, },
 ]
 
 export const CORRUPTOR_SPELLS = [
-  { id: 169, frequency: { amount: 2, per: 'Refresh', charge: null }, trait: false, extrordinary: false, magical: true, ambulant: false, restricted: false, chosen: false, },
+  { id: 169, frequency: { amount: 2, per: 'Refresh', charge: null }, range: 'Self', trait: false, extraordinary: false, magical: true, ambulant: false, restricted: false, chosen: false, },
 ]
+
+export const ARCHER_EQUIPMENT = {
+  lookThePart: `Pick One:
+    Destruction Arrow
+    Poison Arrow
+    Pinning Arrow,
+    1 Arrow / Unlimited (ex)`,
+  armor: '2pts',
+  shields: 'None',
+  weapons: 'Daggers, Short, Bow'
+}
 
 export const ARCHER_LIST = [
   {
@@ -2699,12 +2719,12 @@ export const ARCHER_LIST = [
     spells: [
       { 
         base: [
-          { id: 125, frequency: { amount: 1, per: 'Refresh', charge: 'Charge x3' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 125, frequency: { amount: 1, per: 'Refresh', charge: 'Charge x3' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
         ],
         pickTwoOfThree: [
-          { id: 37, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
-          { id: 109, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
-          { id: 112, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+          { id: 37, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+          { id: 109, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+          { id: 112, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
         ]
       }
     ],
@@ -2714,7 +2734,7 @@ export const ARCHER_LIST = [
     spells: [
       { 
         base: [
-          { id: 98, frequency: { amount: 1, per: 'Life', charge: 'Charge x5' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 98, frequency: { amount: 1, per: 'Life', charge: 'Charge x5' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
         ]
       }
     ],
@@ -2724,9 +2744,9 @@ export const ARCHER_LIST = [
     spells: [
       { 
         pickTwoOfThree: [
-          { id: 37, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
-          { id: 109, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
-          { id: 112, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+          { id: 37, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+          { id: 109, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+          { id: 112, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
         ],
       }
     ]
@@ -2736,7 +2756,7 @@ export const ARCHER_LIST = [
     spells: [
       { 
         base: [
-          { id: 157, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 157, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
         ]
       }
     ],
@@ -2746,9 +2766,9 @@ export const ARCHER_LIST = [
     spells: [
       { 
         pickTwoOfThree: [
-          { id: 37, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
-          { id: 109, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
-          { id: 112, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+          { id: 37, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+          { id: 109, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+          { id: 112, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
         ]
       }
     ],
@@ -2758,16 +2778,31 @@ export const ARCHER_LIST = [
     spells: [
       { 
         base: [
-          { id: 106, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 106, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
         ],
         optionalPickOne: [
-          { id: 139, frequency: { amount: null, per: null, charge: null }, trait: false, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
-          { id: 10, frequency: { amount: null, per: null, charge: null }, trait: false, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+          { id: 139, frequency: { amount: null, per: null, charge: null }, trait: false, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+          { id: 10, frequency: { amount: null, per: null, charge: null }, trait: false, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
         ]
       }
     ],
   },
 ]
+
+export const SNIPER_SPELLS = [
+  { id: 100, frequency: { amount: null, per: null, charge: 'Unlimited' }, range: null, trait: false, extraordinary: true, magical: false, ambulant: true, restricted: false, chosen: false, },
+]
+
+export const ARTIFICER_SPELLS = [
+  { id: 71, frequency: { amount: 2, per: 'Refresh', charge: 'Charge x10' }, range: null, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+]
+
+export const ASSASSIN_EQUIPMENT = {
+  lookThePart: 'Pick One: Poison (Self) 1/Life Charge x3, Poison Arrow - 1 Arrow / Unlimited (ex)',
+  armor: '2pts',
+  shields: 'None',
+  weapons: 'Dagger, Short, Long, Light Thrown, Heavy Thrown, Bow',
+}
 
 export const ASSASSIN_LIST = [
   {
@@ -2775,9 +2810,9 @@ export const ASSASSIN_LIST = [
     spells: [
       { 
         base: [
-          { id: 164, frequency: { amount: null, per: null, charge: null }, trait: true, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
-          { id: 11, frequency: { amount: null, per: null, charge: 'Unlimited' }, trait: false, extrordinary: false, magical: false, ambulant: true, restricted: false, chosen: null, },
-          { id: 131, frequency: { amount: 2, per: 'Life', charge: null }, trait: false, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 164, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 11, frequency: { amount: null, per: null, charge: 'Unlimited' }, trait: false, extraordinary: false, magical: false, ambulant: true, restricted: false, chosen: null, },
+          { id: 131, frequency: { amount: 2, per: 'Life', charge: null }, trait: false, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
         ]
       }
     ],
@@ -2787,8 +2822,8 @@ export const ASSASSIN_LIST = [
     spells: [
       { 
         base: [
-          { id: 111, frequency: { amount: 1, per: 'Life', charge: 'Charge x3' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
-          { id: 112, frequency: { amount: 2, per: 'Arrows', charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+          { id: 111, frequency: { amount: 1, per: 'Life', charge: 'Charge x3' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+          { id: 112, frequency: { amount: 2, per: 'Arrows', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
         ]
       }
     ],
@@ -2798,7 +2833,7 @@ export const ASSASSIN_LIST = [
     spells: [
       { 
         base: [
-          { id: 27, frequency: { amount: 2, per: 'Life', charge: null }, trait: false, extrordinary: true, magical: false, ambulant: true, restricted: false, chosen: null, },
+          { id: 27, frequency: { amount: 2, per: 'Life', charge: null }, trait: false, extraordinary: true, magical: false, ambulant: true, restricted: false, chosen: null, },
         ]
       }
     ],
@@ -2808,7 +2843,7 @@ export const ASSASSIN_LIST = [
     spells: [
       { 
         base: [
-          { id: 79, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extrordinary: false, magical: true, ambulant: false, restricted: false, chosen: null, },
+          { id: 79, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: false, magical: true, ambulant: false, restricted: false, chosen: null, },
         ]
       }
     ],
@@ -2818,7 +2853,7 @@ export const ASSASSIN_LIST = [
     spells: [
       { 
         base: [
-          { id: 160, frequency: { amount: 2, per: 'Life', charge: null }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 160, frequency: { amount: 2, per: 'Life', charge: null }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
         ]
       }
     ],
@@ -2828,16 +2863,27 @@ export const ASSASSIN_LIST = [
     spells: [
       { 
         base: [
-          { id: 39, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extrordinary: false, magical: true, ambulant: false, restricted: false, chosen: null, },
+          { id: 39, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: false, magical: true, ambulant: false, restricted: false, chosen: null, },
         ],
         optionalPickOne: [
-          { id: 181, frequency: { amount: null, per: null, charge: null }, trait: false, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
-          { id: 150, frequency: { amount: null, per: null, charge: null }, trait: false, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+          { id: 181, frequency: { amount: null, per: null, charge: null }, trait: false, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+          { id: 150, frequency: { amount: null, per: null, charge: null }, trait: false, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
         ]
       }
     ],
   },
 ]
+
+export const RUFFIAN_SPELLS = [{}]
+
+export const SPY_SPELLS = [{}]
+
+export const BARBARIAN_EQUIPMENT = {
+  lookThePart: 'Rage 1/Refresh Charge x10 (ex)',
+  armor: '3pts',
+  shields: 'Medium',
+  weapons: 'All Melee, Javelins, Rocks',
+}
 
 export const BARBARIAN_LIST = [
   {
@@ -2845,9 +2891,9 @@ export const BARBARIAN_LIST = [
     spells: [
       { 
         base: [
-          { id: 21, frequency: { amount: null, per: null, charge: null }, trait: true, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
-          { id: 182, frequency: { amount: null, per: null, charge: null }, trait: true, extrordinary: false, magical: false, ambulant: true, restricted: false, chosen: null, },
-          { id: 184, frequency: { amount: null, per: null, charge: null }, trait: true, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 21, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 182, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: false, magical: false, ambulant: true, restricted: false, chosen: null, },
+          { id: 184, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
         ]
       }
     ],
@@ -2857,7 +2903,7 @@ export const BARBARIAN_LIST = [
     spells: [
       { 
         base: [
-          { id: 116, frequency: { amount: 1, per: 'Refresh', charge: 'Charge x10' }, trait: false, extrordinary: true, magical: false, ambulant: true, restricted: false, chosen: null, },
+          { id: 116, frequency: { amount: 1, per: 'Refresh', charge: 'Charge x10' }, trait: false, extraordinary: true, magical: false, ambulant: true, restricted: false, chosen: null, },
         ],
       }
     ]
@@ -2867,7 +2913,7 @@ export const BARBARIAN_LIST = [
     spells: [
       { 
         base: [
-          { id: 4, frequency: { amount: null, per: null, charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 4, frequency: { amount: null, per: null, charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
         ],
       }
     ],
@@ -2877,7 +2923,7 @@ export const BARBARIAN_LIST = [
     spells: [
       { 
         base: [
-          { id: 116, frequency: { amount: 1, per: 'Refresh', charge: 'Charge x10' }, trait: false, extrordinary: true, magical: false, ambulant: true, restricted: false, chosen: null, },
+          { id: 116, frequency: { amount: 1, per: 'Refresh', charge: 'Charge x10' }, trait: false, extraordinary: true, magical: false, ambulant: true, restricted: false, chosen: null, },
         ],
       }
     ],
@@ -2887,7 +2933,7 @@ export const BARBARIAN_LIST = [
     spells: [
       { 
         base: [
-          { id: 32, frequency: { amount: 1, per: 'Life', charge: 'Charge x3' }, trait: false, extrordinary: true, magical: false, ambulant: true, restricted: false, chosen: null, },
+          { id: 32, frequency: { amount: 1, per: 'Life', charge: 'Charge x3' }, trait: false, extraordinary: true, magical: false, ambulant: true, restricted: false, chosen: null, },
         ],
       }
     ],
@@ -2897,16 +2943,29 @@ export const BARBARIAN_LIST = [
     spells: [
       { 
         base: [
-          { id: 30, frequency: { amount: null, per: null, charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 30, frequency: { amount: null, per: null, charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
         ],
         optionalPickOne: [
-          { id: 117, frequency: { amount: null, per: null, charge: null }, trait: false, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
-          { id: 22, frequency: { amount: null, per: null, charge: null }, trait: false, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+          { id: 117, frequency: { amount: null, per: null, charge: null }, trait: false, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+          { id: 22, frequency: { amount: null, per: null, charge: null }, trait: false, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
         ],
       }
     ],
   },
 ]
+
+export const RAIDER_SPELLS = [{}]
+
+export const BERSERKER_SPELLS = [
+  { id: 100, frequency: { amount: null, per: null, charge: 'Unlimited' }, range: null, trait: false, extraordinary: true, magical: false, ambulant: true, restricted: false, chosen: false, },
+]
+
+export const MONK_EQUIPMENT = {
+  lookThePart: 'Heal 1/Life (ex)',
+  armor: '1pt',
+  shields: 'None',
+  weapons: 'All Melee, Heavy Thrown',
+}
 
 export const MONK_LIST = [
   {
@@ -2914,8 +2973,8 @@ export const MONK_LIST = [
     spells: [
       { 
         base: [
-          { id: 47, frequency: { amount: null, per: null, charge: null }, trait: true, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
-          { id: 99, frequency: { amount: null, per: null, charge: null }, trait: true, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 47, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 99, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
         ]
       }
     ],
@@ -2925,7 +2984,7 @@ export const MONK_LIST = [
     spells: [
       { 
         base: [
-          { id: 13, frequency: { amount: 1, per: 'Life', charge: 'Charge x5' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 13, frequency: { amount: 1, per: 'Life', charge: 'Charge x5' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
         ]
       }
     ],
@@ -2935,7 +2994,7 @@ export const MONK_LIST = [
     spells: [
       { 
         base: [
-          { id: 128, frequency: { amount: 1, per: 'Life', charge: 'Charge x5' }, trait: false, extrordinary: true, magical: false, ambulant: true, restricted: false, chosen: null }
+          { id: 128, frequency: { amount: 1, per: 'Life', charge: 'Charge x5' }, trait: false, extraordinary: true, magical: false, ambulant: true, restricted: false, chosen: null }
         ]
       }
     ],
@@ -2945,7 +3004,7 @@ export const MONK_LIST = [
     spells: [
       { 
         base: [
-          { id: 75, frequency: { amount: 1, per: 'Life', charge: 'Charge x3' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null }
+          { id: 75, frequency: { amount: 1, per: 'Life', charge: 'Charge x3' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null }
         ]
       }
     ],
@@ -2955,7 +3014,7 @@ export const MONK_LIST = [
     spells: [
       { 
         base: [
-          { id: 127, frequency: { amount: 1, per: 'Refresh', charge: 'Charge x5' }, trait: false, extrordinary: false, magical: true, ambulant: false, restricted: false, chosen: null }
+          { id: 127, frequency: { amount: 1, per: 'Refresh', charge: 'Charge x5' }, trait: false, extraordinary: false, magical: true, ambulant: false, restricted: false, chosen: null }
         ]
       }
     ],
@@ -2965,16 +3024,34 @@ export const MONK_LIST = [
     spells: [
       { 
         base: [
-          { id: 86, frequency: { amount: 1, per: 'Life', charge: 'Charge x5' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, }
+          { id: 86, frequency: { amount: 1, per: 'Life', charge: 'Charge x5' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, }
         ],
         optionalPickOne: [
-          { id: 97, frequency: { amount: null, per: null, charge: null }, trait: false, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
-          { id: 102, frequency: { amount: null, per: null, charge: null }, trait: false, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+          { id: 97, frequency: { amount: null, per: null, charge: null }, trait: false, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+          { id: 102, frequency: { amount: null, per: null, charge: null }, trait: false, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
         ]
       }
     ],
   },
 ]
+
+export const MEDIUM_SPELLS = [
+  { id: 26, frequency: { amount: 1, per: 'Life', charge: null }, range: 'Touch', trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false },
+  { id: 130, frequency: { amount: 1, per: 'Life', charge: 'Charge x3' }, range: "20'", trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false },
+  { id: 159, frequency: { amount: 2, per: 'Life', charge: null }, range: null, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false }
+]
+
+export const MYSTIC_SPELLS = [
+  { id: 61, frequency: { amount: 4, per: 'Balls', charge: 'Unlimited' }, range: null, trait: false, extraordinary: false, magical: true, ambulant: false, restricted: false, chosen: false, },
+  { id: 158, frequency: { amount: 2, per: 'Balls', charge: 'Unlimited' }, range: null, trait: false, extraordinary: false, magical: true, ambulant: false, restricted: false, chosen: false, }
+]
+
+export const PALADIN_EQUIPMENT = {
+  lookThePart: 'Awe 1/Life (m)',
+  armor: '4pts',
+  shields: 'Large',
+  weapons: 'All Melee, Javelins',
+}
 
 export const PALADIN_LIST = [
   {
@@ -2982,8 +3059,8 @@ export const PALADIN_LIST = [
     spells: [
       {
         base: [
-          { id: 182, frequency: { amount: null, per: null, charge: null }, trait: true, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
-          { id: 185, frequency: { amount: null, per: null, charge: null }, trait: true, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 182, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 185, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
         ]
       }
     ],
@@ -2991,25 +3068,25 @@ export const PALADIN_LIST = [
   {
     level: 2,
     spells: [
-      { base: [{ id: 70, frequency: { amount: 1, per: 'Life', charge: 'Charge x3' }, trait: false, extrordinary: false, magical: true, ambulant: false, restricted: false, chosen: null, },]}
+      { base: [{ id: 70, frequency: { amount: 1, per: 'Life', charge: 'Charge x3' }, trait: false, extraordinary: false, magical: true, ambulant: false, restricted: false, chosen: null, },]}
     ],
   },
   {
     level: 3,
     spells: [
-      { base: [{ id: 57, frequency: { amount: 1, per: 'Refresh', charge: 'Charge x5' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },]}
+      { base: [{ id: 57, frequency: { amount: 1, per: 'Refresh', charge: 'Charge x5' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },]}
     ],
   },
   {
     level: 4,
     spells: [
-      { base: [{ id: 77, frequency: { amount: 1, per: 'Refresh', charge: null }, trait: false, extrordinary: false, magical: true, ambulant: false, restricted: false, chosen: null, },]}
+      { base: [{ id: 72, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: false, magical: true, ambulant: false, restricted: false, chosen: null, },]}
     ],
   },
   {
     level: 5,
     spells: [
-      { base: [{ id: 20, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extrordinary: false, magical: true, ambulant: false, restricted: false, chosen: null, },]}
+      { base: [{ id: 20, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: false, magical: true, ambulant: false, restricted: false, chosen: null, },]}
     ],
   },
   {
@@ -3017,16 +3094,33 @@ export const PALADIN_LIST = [
     spells: [
       { 
         base: [
-          { id: 118, frequency: { amount: 2, per: 'Refresh', charge: null }, trait: false, extrordinary: false, magical: true, ambulant: false, restricted: false, chosen: null, }
+          { id: 118, frequency: { amount: 2, per: 'Refresh', charge: null }, trait: false, extraordinary: false, magical: true, ambulant: false, restricted: false, chosen: null, }
         ],
         optionalPickOne: [
-          { id: 73, frequency: { amount: null, per: null, charge: null }, trait: false, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
-          { id: 87, frequency: { amount: null, per: null, charge: null }, trait: false, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+          { id: 73, frequency: { amount: null, per: null, charge: null }, trait: false, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+          { id: 87, frequency: { amount: null, per: null, charge: null }, trait: false, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
         ],
       }
     ],
   },
 ]
+
+export const GUARDIAN_SPELLS = [
+  { id: 81, frequency: { amount: 1, per: 'Life', charge: null }, range: 'Touch', trait: false, extraordinary: false, magical: true, ambulant: false, restricted: false, chosen: false },
+  { id: 95, frequency: { amount: 2, per: 'Life', charge: 'Charge x3' }, range: 'Other', trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false },
+]
+
+export const INQUISITOR_SPELLS = [
+  { id: 187, frequency: { amount: 1, per: 'Life', charge: null }, range: 'Self', trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+]
+
+
+export const SCOUT_EQUIPMENT = {
+  lookThePart: 'Heal 1/Life (ex)',
+  armor: '3pts',
+  shields: 'Small',
+  weapons: 'Dagger, Short, Long, Heavy Thrown, Bow',
+}
 
 export const SCOUT_LIST = [
   {
@@ -3034,7 +3128,7 @@ export const SCOUT_LIST = [
     spells: [
       { 
         base: [
-          { id: 163, frequency: { amount: 2, per: 'Life', charge: 'Charge x3' }, trait: false, extrordinary: true, magical: false, ambulant: true, restricted: false, chosen: null, },
+          { id: 163, frequency: { amount: 2, per: 'Life', charge: 'Charge x3' }, trait: false, extraordinary: true, magical: false, ambulant: true, restricted: false, chosen: null, },
         ]
       }
     ],
@@ -3044,8 +3138,8 @@ export const SCOUT_LIST = [
     spells: [
       { 
         base: [
-          { id: 75, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
-          { id: 124, frequency: { amount: 1, per: 'Life', charge: 'Charge x3' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 75, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 124, frequency: { amount: 1, per: 'Life', charge: 'Charge x3' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
         ]
       }
     ],
@@ -3055,8 +3149,8 @@ export const SCOUT_LIST = [
     spells: [
       { 
         base: [
-          { id: 43, frequency: { amount: 1, per: 'Refresh', charge: 'Charge x5' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
-          { id: 131, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 43, frequency: { amount: 1, per: 'Refresh', charge: 'Charge x5' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 131, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
         ]
       }
     ],
@@ -3066,8 +3160,8 @@ export const SCOUT_LIST = [
     spells: [
       {
         pickOne: [
-          { id: 79, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extrordinary: false, magical: true, ambulant: false, restricted: false, chosen: false, },
-          { id: 109, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+          { id: 79, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: false, magical: true, ambulant: false, restricted: false, chosen: false, },
+          { id: 109, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
         ]
       }
     ],
@@ -3075,7 +3169,7 @@ export const SCOUT_LIST = [
   {
     level: 5,
     spells: [
-      { base: [{ id: 55, frequency: { amount: null, per: null, charge: null }, trait: true, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },]}
+      { base: [{ id: 55, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },]}
     ],
   },
   {
@@ -3083,16 +3177,30 @@ export const SCOUT_LIST = [
     spells: [
       { 
         base: [
-          { id: 3, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extrordinary: true, magical: true, ambulant: false, restricted: false, chosen: null, }
+          { id: 3, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: true, magical: true, ambulant: false, restricted: false, chosen: null, }
         ],
         optionalPickOne: [
-          { id: 80, frequency: { amount: null, per: null, charge: null }, trait: false, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
-          { id: 9, frequency: { amount: null, per: null, charge: null }, trait: false, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+          { id: 80, frequency: { amount: null, per: null, charge: null }, trait: false, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+          { id: 9, frequency: { amount: null, per: null, charge: null }, trait: false, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
         ],
       },
     ],
   },
 ]
+
+export const HUNTER_SPELLS = [{}]
+
+export const APEX_SPELLS = [
+  { id: 101, frequency: { amount: null, per: null, charge: null }, range: null, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+  { id: 2, frequency: { amount: 1, per: 'Life', charge: 'Charge x5' }, swift: true, range: null, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+]
+
+export const WARRIOR_EQUIPMENT = {
+  lookThePart: 'Insult 1/Life (m) (Ambulant)',
+  armor: '6pts',
+  shields: 'Large',
+  weapons: 'All Melee, Javelins',
+}
 
 export const WARRIOR_LIST = [
   {
@@ -3100,7 +3208,7 @@ export const WARRIOR_LIST = [
     spells: [
       { 
         base: [
-          { id: 74, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null },
+          { id: 74, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null },
         ]
       }
     ],
@@ -3110,7 +3218,7 @@ export const WARRIOR_LIST = [
     spells: [
       { 
         base: [
-          { id: 129, frequency: { amount: null, per: null, charge: 'Unlimited' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null },
+          { id: 129, frequency: { amount: null, per: null, charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null },
         ]
       }
     ],
@@ -3120,7 +3228,7 @@ export const WARRIOR_LIST = [
     spells: [
       { 
         base: [
-          { id: 166, frequency: { amount: 2, per: 'Refresh', charge: null }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 166, frequency: { amount: 2, per: 'Refresh', charge: null }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
         ]
       }
     ],
@@ -3130,7 +3238,7 @@ export const WARRIOR_LIST = [
     spells: [
       { 
         base: [
-          { id: 88, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extrordinary: false, magical: true, ambulant: true, restricted: false, chosen: false, }
+          { id: 88, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: false, magical: true, ambulant: true, restricted: false, chosen: false, }
         ]
       }
     ],
@@ -3140,7 +3248,7 @@ export const WARRIOR_LIST = [
     spells: [
       { 
         base: [
-          { id: 132, frequency: { amount: 1, per: 'Refresh', charge: 'Charge x3' }, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null }
+          { id: 132, frequency: { amount: 1, per: 'Refresh', charge: 'Charge x3' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null }
         ]
       }
     ],
@@ -3150,15 +3258,25 @@ export const WARRIOR_LIST = [
     spells: [
       {
         base: [
-          { id: 7, frequency: { amount: 3, per: 'Refresh', charge: 'Charge x10' }, swift: true, trait: false, extrordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 7, frequency: { amount: 3, per: 'Refresh', charge: 'Charge x10' }, swift: true, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
         ],
         optionalPickOne: [
-          { id: 178, frequency: { amount: null, per: null, charge: null }, trait: false, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
-          { id: 90, frequency: { amount: null, per: null, charge: null }, trait: false, extrordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+          { id: 178, frequency: { amount: null, per: null, charge: null }, trait: false, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+          { id: 90, frequency: { amount: null, per: null, charge: null }, trait: false, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
         ],
       },
     ]
   }
+]
+
+export const MARAUDER_SPELLS = [
+  { id: 100, frequency: { amount: null, per: null, charge: 'Unlimited' }, range: null, trait: false, extraordinary: true, magical: false, ambulant: true, restricted: false, chosen: false, },
+]
+
+export const JUGGERNAUT_SPELLS = [
+  { id: 69, frequency: { amount: 1, per: 'Life', charge: null }, range: 'Self', trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+  { id: 108, frequency: { amount: 3, per: 'Refresh', charge: null }, swift: true, range: 'Self', trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+  { id: 84, frequency: { amount: null, per: null, charge: null }, range: null, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
 ]
 
 export const PATCH_NOTES = [
@@ -3170,6 +3288,7 @@ export const PATCH_NOTES = [
       "Fix healer Resurrect charge to charge x5.",
       "Fix Bear Strength effect description",
       "Fix weird spacing for effect description for Songs",
+      "Change 'Done Editing' button to go back in history by one page to better interact with header back button.",
       "Progress on Martial class archetypes flows",
     ]
   },
