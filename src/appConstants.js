@@ -2329,7 +2329,7 @@ export const BARD_SPELLS = [
   {
     level: 4,
     spells: [
-      { id: 5, cost: 1, max: 4, frequency: { amount: 1, per: 'Life', charge: null }, restricted: false },
+      { id: 5, cost: 1, max: 4, frequency: { amount: 1, per: 'Refresh', charge: null }, restricted: false },
       { id: 175, cost: 3, max: 1, frequency: null, restricted: false },
       { id: 126, cost: 1, max: null, frequency: { amount: 1, per: 'Refresh', charge: null }, restricted: false },
       { id: 136, cost: 1, max: null, frequency: { amount: 1, per: 'Refresh', charge: null }, restricted: false },
@@ -3290,6 +3290,7 @@ export const PATCH_NOTES = [
       "Fix weird spacing for effect description for Songs",
       "Change 'Done Editing' button to go back in history by one page to better interact with header back button.",
       "Fix Bard Greater Release cost to 1",
+      "Fix Bard Amplification to per Refresh",
       "Progress on Martial class archetypes flows",
     ]
   },
