@@ -75,6 +75,10 @@ function SpellListDetails() {
   const spellList = allSpellLists.find((list: SpellList) => list.id === parseInt(id || '0'))
   const allPointsSpent = spellList.spells.every(level => level.points === 0)
 
+  const isSpellTaken = (spellList: SpellList, spellId: number): boolean =>
+    spellList.spells.some(level =>
+      level.spells.some(spell => spell.id === spellId)
+  )
 
   const isArchetypeChosen = (spellList: SpellList, archetypeId: number): boolean => {
     return spellList.spells.some(level =>
@@ -86,6 +90,16 @@ function SpellListDetails() {
       )
     )
   }
+
+  // Caster subclass checks
+  const isWarder = isSpellTaken(spellList, 171)
+  const isNecromancer = isSpellTaken(spellList, 104)
+  const isWarlock = isSpellTaken(spellList, 172)
+  const isSummoner = isSpellTaken(spellList, 155)
+  const isDervish = isSpellTaken(spellList, 40)
+  const isLegend = isSpellTaken(spellList, 91)
+  const hasExtention = isSpellTaken(spellList, 58)
+  const isPriest = isSpellTaken(spellList, 114)
   // martial subclass Checks
   const isInfernal = isArchetypeChosen(spellList, 85)
   const isCorruptor = isArchetypeChosen(spellList, 36)
@@ -169,6 +183,10 @@ function SpellListDetails() {
       return spell?.purchased
     } else if (key === 'materials') {
       return spell?.materials
+    } else if (key === 'range') {
+      return spell?.range
+    } else if (key === 'extraordinary') {
+      return spell?.extraordinary
     }
   }
 
@@ -186,7 +204,34 @@ function SpellListDetails() {
       return spell?.trait
     } else if (key === 'swift') {
       return spell?.swift
+    } else if (key === 'range') {
+      return spell?.range
     }
+  }
+
+  const fetchMartialSpellDetails = (key: string, spellId: number) => {
+    for (const level of spellsByClass) {
+      if (Array.isArray(level.spells)) {
+        for (const spellsByLevel of level.spells) {
+          const allArrays = [
+            ...(spellsByLevel.base ?? []),
+            ...(spellsByLevel.optionalPickOne ?? []),
+            ...(spellsByLevel.pickOneOfTwo ?? []),
+            ...(spellsByLevel.pickTwoOfThree ?? []),
+          ]
+          const spell = allArrays.find(s => s.id === spellId)
+          if (spell) {
+            if (key === 'magical') return spell.magical
+            if (key === 'ambulant') return spell.ambulant
+            if (key === 'extraordinary') return spell.extraordinary
+            if (key === 'trait') return spell.trait
+            if (key === 'swift') return spell.swift
+            if (key === 'range') return spell.range
+          }
+        }
+      }
+    }
+    return undefined
   }
 
   const fetchEquipmentChanges = (spellList: SpellList) => {
@@ -325,11 +370,6 @@ function SpellListDetails() {
     }
   }
 
-  const isSpellTaken = (spellList: SpellList, spellId: number): boolean =>
-    spellList.spells.some(level =>
-      level.spells.some(spell => spell.id === spellId)
-  )
-
   const fetchSpellFrequency = (spellId: number, subclassSpells?: any[]) => {
     let spellDetails
 
@@ -374,19 +414,6 @@ function SpellListDetails() {
 
     const allSpell = ALL_SPELLS.find(s => Number(s.id) === Number(spellId))
     let range = allSpell?.range || ''
-
-    // Archetype checks
-
-    // Change frequency for martial classes too!
-
-    const isWarder = isSpellTaken(spellList, 171)
-    const isNecromancer = isSpellTaken(spellList, 104)
-    const isWarlock = isSpellTaken(spellList, 172)
-    const isSummoner = isSpellTaken(spellList, 155)
-    const isDervish = isSpellTaken(spellList, 40)
-    const isLegend = isSpellTaken(spellList, 91)
-    const hasExtention = isSpellTaken(spellList, 58)
-    const isPriest = isSpellTaken(spellList, 114)
     const isMetaMagic = ALL_SPELLS.some(spell =>
       spell.id === spellId && spell.type === 'Meta-Magic'
     )
@@ -417,6 +444,15 @@ function SpellListDetails() {
       allSpell.name === 'Terror'
     ) {
       charge = 'Charge x10'
+    }
+    if (
+      isCorruptor &&
+      allSpell &&
+      freq && (freq.charge === null || freq.charge === undefined) &&
+      allSpell.name &&
+      allSpell.name === 'Void Touched'
+    ) {
+      range = 'Self'
     }
     if (
       isWarder &&
@@ -521,6 +557,17 @@ function SpellListDetails() {
       frequency += (frequency ? ' ' : '') + 'Charge x3'
     }
 
+    // Assasin Spy changes
+    if (
+      isSpy &&
+      allSpell &&
+      allSpell.name &&
+      (allSpell.name === 'Shadow Step' ||
+      allSpell.name === 'Blink')
+    ) {
+      frequency += (frequency ? ' ' : '') + 'Charge x3'
+    }
+
     // Battlemage changes
     const isBattleMage = spellList.spells.some(level =>
       level.spells.some(spell => spell.id === 18)
@@ -586,6 +633,8 @@ function SpellListDetails() {
         const spellIncantation = fetchSpellDetails('incantation', chosenSpell.id)
         const spellMaterials = fetchSpellDetails('materials', chosenSpell.id)
         const spellFrequency = fetchSpellFrequency(chosenSpell.id)
+        const spellRange = fetchSpellDetails('range', chosenSpell.id)
+        const spellExtraordinary = fetchSubclassSpellDetails('extraordinary', chosenSpell.id, chosenName)
 
         // Get subclass spells if this archetype is in the map
         const subclassSpells = subclassSpellsMap[chosenName]
@@ -605,7 +654,8 @@ function SpellListDetails() {
                 </span>{' '}
                 <span>
                   {spellFrequency.frequency}
-                  {showRange && spellFrequency.range ? ` (${spellFrequency.range})` : ''}
+                  {spellExtraordinary ? '(ex)' : ''}
+                  {showRange && spellRange ? ` (${spellRange})` : ''}
                 </span>{' '}
                 {showTypeAndSchool && <span>( {spellType} )</span>}
                 {spellSchool && showTypeAndSchool && (
@@ -654,12 +704,14 @@ function SpellListDetails() {
                   const spellExtraordinary = fetchSubclassSpellDetails('extraordinary', sub.id, chosenName)
                   const spellTrait = fetchSubclassSpellDetails('trait', sub.id, chosenName)
                   const spellSwift = fetchSubclassSpellDetails('swift', sub.id, chosenName)
+                  const spellRange = fetchSubclassSpellDetails('range', sub.id, chosenName)
 
                   return (
                     <Row key={i} className="ms-1">
                       <span style={{ color: 'green' }}>
                         <span style={{ textDecoration: 'underline' }}>{fetchSpellDetails('name', sub.id) || ''}</span>
                         {' '}{spellFrequency.frequency}
+                        {' '}{spellRange ? `(${spellRange})` : ''}
                         {' '}{spellTrait ? '( T )' : ''}
                         {' '}{spellMagical ? '(m)' : ''}
                         {' '}{spellAmbulant ? '(Ambulant)' : ''}
@@ -748,6 +800,10 @@ function SpellListDetails() {
           const spellIncantation = fetchSpellDetails('incantation', spell.id)
           const spellMaterials = fetchSpellDetails('materials', spell.id)
           const spellFrequency = fetchSpellFrequency(spell.id)
+          const spellExtraordinary = fetchMartialSpellDetails('extraordinary', spell.id)
+          const spellMagical = fetchMartialSpellDetails('magical', spell.id)
+          const spellTrait = fetchMartialSpellDetails('trait', spell.id)
+          const spellAmbulant = fetchMartialSpellDetails('ambulant', spell.id)
 
           if (spell.restricted) {
             return (
@@ -769,7 +825,11 @@ function SpellListDetails() {
                 </span>{' '}
                 <span>
                   {spellFrequency.frequency}
-                  {showRange && spellFrequency.range ? ` (${spellFrequency.range})` : ''}
+                  {' '}{spellExtraordinary ? '(ex)' : ''}
+                  {' '}{spellMagical ? '(m)' : ''}
+                  {' '}{spellTrait ? '( T )' : ''}
+                  {' '}{spellAmbulant ? '(Ambulant)' : ''}
+                  {' '}{showRange && spellFrequency.range ? ` (${spellFrequency.range})` : ''}
                 </span>{' '}
                 {showTypeAndSchool && <span>( {spellType} )</span>}
                 {spellSchool && showTypeAndSchool && (

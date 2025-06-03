@@ -2810,9 +2810,9 @@ export const ASSASSIN_LIST = [
     spells: [
       { 
         base: [
-          { id: 164, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
-          { id: 11, frequency: { amount: null, per: null, charge: 'Unlimited' }, trait: false, extraordinary: false, magical: false, ambulant: true, restricted: false, chosen: null, },
-          { id: 131, frequency: { amount: 2, per: 'Life', charge: null }, trait: false, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 164, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 11, frequency: { amount: null, per: null, charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: true, restricted: false, chosen: null, },
+          { id: 131, frequency: { amount: 2, per: 'Life', charge: null }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
         ]
       }
     ],
@@ -2821,7 +2821,7 @@ export const ASSASSIN_LIST = [
     level: 2,
     spells: [
       { 
-        base: [
+        pickOne: [ // NEEDS A FIX
           { id: 111, frequency: { amount: 1, per: 'Life', charge: 'Charge x3' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
           { id: 112, frequency: { amount: 2, per: 'Arrows', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
         ]
