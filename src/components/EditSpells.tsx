@@ -1032,6 +1032,7 @@ const removeSpellFromList = (spellId: number) => {
   }
 
   const buildFrequencyString = (masterSpell: any) => {
+    console.log('master spell', masterSpell)
     let spell: (SpellsByClass | Spell) | null = null;
     if (Array.isArray(spellsByClass)) {
       for (const level of spellsByClass as LevelsByClass[]) {
@@ -1047,6 +1048,8 @@ const removeSpellFromList = (spellId: number) => {
     const amount = freq?.amount
     const per = freq?.per
     const charge = freq?.charge
+
+    console.log('spell frequency', freq, amount, per, charge)
 
     if (amount != null && per != null) {
       return `${amount}/${per}${charge ? ` ${charge}` : ''}`
@@ -1121,6 +1124,7 @@ const removeSpellFromList = (spellId: number) => {
           <Modal.Body className="modal-sm pb-1 p-0">
             <span>
               <strong>Base Frequency for {modifiedSpellList.class}: </strong>
+              {console.log('spell frequency', spellFrequency)}
               {spellFrequency ? spellFrequency : 'N/A'}
             </span>
           </Modal.Body>

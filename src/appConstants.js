@@ -2300,7 +2300,7 @@ export const BARD_SPELLS = [
       { id: 88, cost: 1, max: null, frequency: { amount: 1, per: 'Life', charge: null }, restricted: false },
       { id: 124, cost: 1, max: null, frequency: { amount: 1, per: 'Life', charge: null }, restricted: false },
       { id: 134, cost: 1, max: null, frequency: { amount: 1, per: 'Life', charge: null }, restricted: false },
-      { id: 142, cost: 1, max: 1, frequency: { amount: 1, per: 'Unlimited', charge: null }, restricted: false },
+      { id: 142, cost: 1, max: 1, frequency: { amount: null, per: null, charge: 'Unlimited' }, restricted: false },
     ]
   },
   {
@@ -2311,8 +2311,8 @@ export const BARD_SPELLS = [
       { id: 76, cost: 1, max: null, frequency: { amount: 1, per: 'Refresh', charge: null }, restricted: false },
       { id: 86, cost: 1, max: 4, frequency: { amount: 1, per: 'Refresh', charge: null }, restricted: false },
       { id: 98, cost: 1, max: null, frequency: { amount: 1, per: 'Life', charge: null }, restricted: false },
-      { id: 140, cost: 1, max: 1, frequency: { amount: 1, per: 'Unlimited', charge: null }, restricted: false },
-      { id: 147, cost: 1, max: 1, frequency: { amount: 1, per: 'Unlimited', charge: null }, restricted: false },
+      { id: 140, cost: 1, max: 1, frequency: { amount: null, per: null, charge: 'Unlimited' }, restricted: false },
+      { id: 147, cost: 1, max: 1, frequency: { amount: null, per: null, charge: 'Unlimited' }, restricted: false },
     ]
   },
   {
@@ -2323,7 +2323,7 @@ export const BARD_SPELLS = [
       { id: 31, cost: 1, max: 4, frequency: { amount: 1, per: 'Life', charge: null }, restricted: false },
       { id: 58, cost: 1, max: 2, frequency: { amount: 1, per: 'Life', charge: null }, restricted: false },
       { id: 51, cost: 2, max: 1, frequency: null, restricted: false },
-      { id: 143, cost: 1, max: 1, frequency: { amount: 1, per: 'Unlimited', charge: null }, restricted: false },
+      { id: 143, cost: 1, max: 1, frequency: { amount: null, per: null, charge: 'Unlimited' }, restricted: false },
     ]
   },
   {
@@ -2333,8 +2333,8 @@ export const BARD_SPELLS = [
       { id: 175, cost: 3, max: 1, frequency: null, restricted: false },
       { id: 126, cost: 1, max: null, frequency: { amount: 1, per: 'Refresh', charge: null }, restricted: false },
       { id: 136, cost: 1, max: null, frequency: { amount: 1, per: 'Refresh', charge: null }, restricted: false },
-      { id: 141, cost: 1, max: 1, frequency: { amount: 1, per: 'Unlimited', charge: null }, restricted: false },
-      { id: 145, cost: 1, max: 1, frequency: { amount: 1, per: 'Unlimited', charge: null }, restricted: false },
+      { id: 141, cost: 1, max: 1, frequency: { amount: null, per: null, charge: 'Unlimited' }, restricted: false },
+      { id: 145, cost: 1, max: 1, frequency: { amount: null, per: null, charge: 'Unlimited' }, restricted: false },
       { id: 156, cost: 1, max: null, frequency: { amount: 1, per: 'Refresh', charge: null }, restricted: false },
       { id: 159, cost: 1, max: 2, frequency: { amount: 1, per: 'Life', charge: null }, restricted: false },
       { id: 161, cost: 1, max: null, frequency: { amount: 1, per: 'Refresh', charge: null }, restricted: false },
@@ -2349,7 +2349,7 @@ export const BARD_SPELLS = [
       { id: 50, cost: 3, max: 1, frequency: null, restricted: false },
       { id: 77, cost: 1, max: null, frequency: { amount: 1, per: 'Refresh', charge: null }, restricted: false },
       { id: 93, cost: 1, max: null, frequency: { amount: 1, per: 'Life', charge: null }, restricted: false },
-      { id: 146, cost: 1, max: 1, frequency: { amount: 1, per: 'Unlimited', charge: null }, restricted: false },
+      { id: 146, cost: 1, max: 1, frequency: { amount: null, per: null, charge: 'Unlimited' }, restricted: false },
     ]
   },
   {
@@ -3292,6 +3292,7 @@ export const PATCH_NOTES = [
       "Fix Bard Greater Release cost to 1",
       "Fix Bard Amplification to per Refresh",
       "Fix Healer Ambulant to per Life when priest is present. Old healer spell lists may need to be rebuilt to see this change.",
+      "Fix applicable Bard Songs to only display Unlimited",
       "Progress on Martial class archetypes flows",
     ]
   },
