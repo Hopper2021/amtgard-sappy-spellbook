@@ -3291,6 +3291,7 @@ export const PATCH_NOTES = [
       "Change 'Done Editing' button to go back in history by one page to better interact with header back button.",
       "Fix Bard Greater Release cost to 1",
       "Fix Bard Amplification to per Refresh",
+      "Fix Healer Ambulant to per Life when priest is present. Old healer spell lists may need to be rebuilt to see this change.",
       "Progress on Martial class archetypes flows",
     ]
   },

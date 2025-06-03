@@ -353,7 +353,6 @@ function SpellListDetails() {
             ]
             const found = allArrays.find(s => s.id === spellId)
             if (found) {
-              console.log('Found spell in martial class structure:', found)
               spellDetails = found
               break
             }
@@ -387,10 +386,15 @@ function SpellListDetails() {
     const isDervish = isSpellTaken(spellList, 40)
     const isLegend = isSpellTaken(spellList, 91)
     const hasExtention = isSpellTaken(spellList, 58)
+    const isPriest = isSpellTaken(spellList, 114)
+    const isMetaMagic = ALL_SPELLS.some(spell =>
+      spell.id === spellId && spell.type === 'Meta-Magic'
+    )
 
     let frequency = ''
     const freq = spellDetails?.frequency
     let baseAmount = freq?.amount ?? 1
+    let per = freq?.per || ''
     let charge = freq?.charge ?? freq?.extra
 
     // Archetype multipliers
@@ -476,20 +480,24 @@ function SpellListDetails() {
       }
     }
 
+    if (isPriest && isMetaMagic) {
+      per = 'Life'
+    }
+
     if (freq && typeof freq === 'object') {
       if (experienced) {
-        if (freq.per === 'Life') {
+        if (per === 'Life') {
           charge = 'Charge x5'
         }
-        if (freq.per === 'Refresh') {
+        if (per === 'Refresh') {
           charge = 'Charge x10'
         }
       }
 
-      if (amount != null && freq.per) {
-        frequency = `${amount}/${freq.per}`
-      } else if (freq.per) {
-        frequency = freq.per
+      if (amount != null && per) {
+        frequency = `${amount}/${per}`
+      } else if (per) {
+        frequency = per
       }
       if (charge) {
         frequency += ` ${charge}`
@@ -499,12 +507,6 @@ function SpellListDetails() {
     }
 
     // Priest + Meta-Magic
-    const isPriest = spellList.spells.some(level =>
-      level.spells.some(spell => spell.id === 114)
-    )
-    const isMetaMagic = ALL_SPELLS.some(spell =>
-      spell.id === spellId && spell.type === 'Meta-Magic'
-    )
     if (isPriest && isMetaMagic) {
       frequency += (frequency ? ' ' : '') + 'Charge x3'
     }
@@ -563,7 +565,7 @@ function SpellListDetails() {
       range = 'Self'
     }
 
-    return { frequency, range }
+    return { frequency, range, per }
   }
 
   const renderSpellArray = (spellArr: any[] | undefined, indicator?: string) => {
@@ -875,7 +877,6 @@ function SpellListDetails() {
       </Row>
       <Row>
         <Form.Text>Class: {spellList.class}</Form.Text>
-        {console.log('all points spent:', allPointsSpent)}
         {!isMartialClass && (
           <>
             {allPointsSpent ? (
