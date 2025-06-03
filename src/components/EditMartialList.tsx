@@ -12,6 +12,20 @@ import {
 	WARRIOR_LIST,
   INFERNAL_SPELLS,
   CORRUPTOR_SPELLS,
+  SNIPER_SPELLS,
+  ARTIFICER_SPELLS,
+  MYSTIC_SPELLS,
+  MEDIUM_SPELLS,
+  BERSERKER_SPELLS,
+  RAIDER_SPELLS,
+  SPY_SPELLS,
+  RUFFIAN_SPELLS,
+  GUARDIAN_SPELLS,
+  INQUISITOR_SPELLS,
+  HUNTER_SPELLS,
+  APEX_SPELLS,
+  MARAUDER_SPELLS,
+  JUGGERNAUT_SPELLS,
 } from '../appConstants'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Toast, ToastContainer } from 'react-bootstrap'
@@ -37,19 +51,17 @@ type SelectedSpellType = {
   note: string | null
 } | null
 
-// This is a single spell instance (from appConstants lists)
 interface MartialSpell {
   id: number
   frequency: SpellFrequency
   trait: boolean
-  extrordinary: boolean
+  extraordinary: boolean
   magical: boolean
   ambulant: boolean
   restricted: boolean
   chosen: boolean | null
 }
 
-// This is a spell as it appears in a user's spell list (with purchase info)
 interface Spell {
   id: number
   purchased: number
@@ -58,21 +70,20 @@ interface Spell {
   restricted?: boolean
 }
 
-// This is a group of spells for a level (from appConstants lists)
 interface SpellsByLevel {
   base?: MartialSpell[]
   optionalPickOne?: MartialSpell[]
   pickOneOfTwo?: MartialSpell[]
   pickTwoOfThree?: MartialSpell[]
+  pickOne?: MartialSpell[]
 }
 
-// This is a level in the user's spell list
 interface SpellLevel {
   level: number
-  spells: SpellsByLevel[] // <-- spells is an array of SpellsByLevel objects
+  spells: SpellsByLevel[]
 }
 
-// The user's spell list
+// user's spell list
 interface SpellList {
   id: number
   name: string
@@ -104,10 +115,34 @@ function EditMartialList() {
   let enableTips = localStorage.getItem('enableTips')
   const tipsEnabled = enableTips === 'true'
 
+  // Archetypes that have edit limitations
+  const infernalArchetype = ALL_SPELLS.find(spell => spell.name === 'Infernal')
+  const corruptorArchetype = ALL_SPELLS.find(spell => spell.name === 'Corruptor')
+  const raiderArchetype = ALL_SPELLS.find(spell => spell.name === 'Raider')
+  const berserkerArchetype = ALL_SPELLS.find(spell => spell.name === 'Berserker')
+  const guardianArchetype = ALL_SPELLS.find(spell => spell.name === 'Guardian')
+  const inquisitorArchetype = ALL_SPELLS.find(spell => spell.name === 'Inquisitor')
+  const hunterArchetype = ALL_SPELLS.find(spell => spell.name === 'Hunter')
+  const apexArchetype = ALL_SPELLS.find(spell => spell.name === 'Apex')
+  const juggernautArchetype = ALL_SPELLS.find(spell => spell.name === 'Juggernaut')
+
   const subclassSpellsMap = {
-  "Infernal": INFERNAL_SPELLS,
-  "Corruptor": CORRUPTOR_SPELLS,
-  // Add other subclasses here
+    "Infernal": INFERNAL_SPELLS,
+    "Corruptor": CORRUPTOR_SPELLS,
+    "Sniper": SNIPER_SPELLS,
+    "Artificer": ARTIFICER_SPELLS,
+    "Ruffian": RUFFIAN_SPELLS,
+    "Spy": SPY_SPELLS,
+    "Raider": RAIDER_SPELLS,
+    "Berserker": BERSERKER_SPELLS,
+    "Medium": MEDIUM_SPELLS,
+    "Mystic": MYSTIC_SPELLS,
+    "Guardian": GUARDIAN_SPELLS,
+    "Inquisitor": INQUISITOR_SPELLS,
+    "Hunter": HUNTER_SPELLS,
+    "Apex": APEX_SPELLS,
+    "Marauder": MARAUDER_SPELLS,
+    "Juggernaut": JUGGERNAUT_SPELLS,
   }
   
   const [modifiedSpellList, setModifiedSpellList] = React.useState<SpellList>({
@@ -136,61 +171,94 @@ function EditMartialList() {
     return false
   }
 
-const updateRestrictedSpells = (spellList: SpellList): SpellList => {
-  // Archetypes
-  const infernalArchetype = ALL_SPELLS.find(spell => spell.name === 'Infernal')
-  const corruptorArchetype = ALL_SPELLS.find(spell => spell.name === 'Corruptor')
-  const infernalChosen = infernalArchetype ? isSpellChosen(spellList, infernalArchetype.id) : false
-  const corruptorChosen = corruptorArchetype ? isSpellChosen(spellList, corruptorArchetype.id) : false
+  const updateRestrictedSpells = (spellList: SpellList): SpellList => {
+    // Archetypes
+    const infernalChosen = infernalArchetype ? isSpellChosen(spellList, infernalArchetype.id) : false
+    const corruptorChosen = corruptorArchetype ? isSpellChosen(spellList, corruptorArchetype.id) : false
+    const raiderChosen = raiderArchetype ? isSpellChosen(spellList, raiderArchetype.id) : false
+    const berserkerChosen = berserkerArchetype ? isSpellChosen(spellList, berserkerArchetype.id) : false
+    const guardianChosen = guardianArchetype ? isSpellChosen(spellList, guardianArchetype.id) : false
+    const inquisitorChosen = inquisitorArchetype ? isSpellChosen(spellList, inquisitorArchetype.id) : false
+    const hunterChosen = hunterArchetype ? isSpellChosen(spellList, hunterArchetype.id) : false
+    const apexChosen = apexArchetype ? isSpellChosen(spellList, apexArchetype.id) : false
+    const juggernautChosen = juggernautArchetype ? isSpellChosen(spellList, juggernautArchetype.id) : false
 
-  // Possible restricted spells
-  const stealLifeEssenceId = ALL_SPELLS.find(spell => spell.name === 'Steal Life Essence')?.id || 0
-  const flameBladeId = ALL_SPELLS.find(spell => spell.name === 'Flame Blade')?.id || 0
+    // Possible restricted spells
+    const stealLifeEssenceId = ALL_SPELLS.find(spell => spell.name === 'Steal Life Essence')?.id || 0
+    const flameBladeId = ALL_SPELLS.find(spell => spell.name === 'Flame Blade')?.id || 0
+    const rageId = ALL_SPELLS.find(spell => spell.name === 'Rage')?.id || 0
+    const bloodAndThunderId = ALL_SPELLS.find(spell => spell.name === 'Blood and Thunder')?.id || 0
+    const protectionFromMagicId = ALL_SPELLS.find(spell => spell.name === 'Protection from Magic')?.id || 0
+    const extendImmunitiesId = ALL_SPELLS.find(spell => spell.name === 'Extend Immunities')?.id || 0
+    const greaterResurrectId = ALL_SPELLS.find(spell => spell.name === 'Greater Resurrect')?.id || 0
+    const aweId = ALL_SPELLS.find(spell => spell.name === 'Awe')?.id || 0
+    const releaseId = ALL_SPELLS.find(spell => spell.name === 'Release')?.id || 0
+    const evolutionId = ALL_SPELLS.find(spell => spell.name === 'Evolution')?.id || 0
+    const holdPersonId = ALL_SPELLS.find(spell => spell.name === 'Hold Person')?.id || 0
+    const pinningArrowId = ALL_SPELLS.find(spell => spell.name === 'Pinning Arrow')?.id || 0
+    const adaptiveProtectionId = ALL_SPELLS.find(spell => spell.name === 'Adaptive Protection')?.id || 0
+    const ancestralArmorId = ALL_SPELLS.find(spell => spell.name === 'Ancestral Armor')?.id || 0
+    const trueGritId = ALL_SPELLS.find(spell => spell.name === 'True Grit')?.id || 0
+    const hardenId = ALL_SPELLS.find(spell => spell.name === 'Harden')?.id || 0
 
-  // Only one restriction at a time, based on which archetype is chosen
-  let restrictedSpellIds: number[] = []
-  if (infernalChosen) {
-    restrictedSpellIds = [stealLifeEssenceId]
-  } else if (corruptorChosen) {
-    restrictedSpellIds = [flameBladeId]
-  }
+    // Only one restriction at a time, based on which archetype is chosen
+    let restrictedSpellIds: number[] = []
+    if (infernalChosen) {
+      restrictedSpellIds = [stealLifeEssenceId]
+    } else if (corruptorChosen) {
+      restrictedSpellIds = [flameBladeId]
+    } else if (raiderChosen) {
+      restrictedSpellIds = [rageId]
+    }else if (berserkerChosen) {
+      restrictedSpellIds = [bloodAndThunderId]
+    } else if (guardianChosen) {
+      restrictedSpellIds = [protectionFromMagicId, extendImmunitiesId]
+    } else if (inquisitorChosen) {
+      restrictedSpellIds = [greaterResurrectId, aweId]
+    } else if (hunterChosen) {
+      restrictedSpellIds = [releaseId, evolutionId]
+    } else if (apexChosen) {
+      restrictedSpellIds = [evolutionId, holdPersonId, pinningArrowId, adaptiveProtectionId]
+    } else if (juggernautChosen) {
+      restrictedSpellIds = [hardenId, ancestralArmorId, trueGritId]
+    }
 
-  // Deep copy and update restricted property for all spell arrays
-  const newList = JSON.parse(JSON.stringify(spellList))
-  for (const level of newList.spells) {
-    for (const spellsByLevel of level.spells) {
-      if (Array.isArray(spellsByLevel.base)) {
-        spellsByLevel.base = spellsByLevel.base.map(spell =>
-          restrictedSpellIds.includes(spell.id)
-            ? { ...spell, restricted: true }
-            : { ...spell, restricted: false }
-        )
-      }
-      if (Array.isArray(spellsByLevel.optionalPickOne)) {
-        spellsByLevel.optionalPickOne = spellsByLevel.optionalPickOne.map(spell =>
-          restrictedSpellIds.includes(spell.id)
-            ? { ...spell, restricted: true }
-            : { ...spell, restricted: false }
-        )
-      }
-      if (Array.isArray(spellsByLevel.pickOneOfTwo)) {
-        spellsByLevel.pickOneOfTwo = spellsByLevel.pickOneOfTwo.map(spell =>
-          restrictedSpellIds.includes(spell.id)
-            ? { ...spell, restricted: true }
-            : { ...spell, restricted: false }
-        )
-      }
-      if (Array.isArray(spellsByLevel.pickTwoOfThree)) {
-        spellsByLevel.pickTwoOfThree = spellsByLevel.pickTwoOfThree.map(spell =>
-          restrictedSpellIds.includes(spell.id)
-            ? { ...spell, restricted: true }
-            : { ...spell, restricted: false }
-        )
+    // Deep copy and update restricted property for all spell arrays
+    const newList = JSON.parse(JSON.stringify(spellList))
+    for (const level of newList.spells) {
+      for (const spellsByLevel of level.spells) {
+        if (Array.isArray(spellsByLevel.base)) {
+          spellsByLevel.base = spellsByLevel.base.map(spell =>
+            restrictedSpellIds.includes(spell.id)
+              ? { ...spell, restricted: true }
+              : { ...spell, restricted: false }
+          )
+        }
+        if (Array.isArray(spellsByLevel.optionalPickOne)) {
+          spellsByLevel.optionalPickOne = spellsByLevel.optionalPickOne.map(spell =>
+            restrictedSpellIds.includes(spell.id)
+              ? { ...spell, restricted: true }
+              : { ...spell, restricted: false }
+          )
+        }
+        if (Array.isArray(spellsByLevel.pickOneOfTwo)) {
+          spellsByLevel.pickOneOfTwo = spellsByLevel.pickOneOfTwo.map(spell =>
+            restrictedSpellIds.includes(spell.id)
+              ? { ...spell, restricted: true }
+              : { ...spell, restricted: false }
+          )
+        }
+        if (Array.isArray(spellsByLevel.pickTwoOfThree)) {
+          spellsByLevel.pickTwoOfThree = spellsByLevel.pickTwoOfThree.map(spell =>
+            restrictedSpellIds.includes(spell.id)
+              ? { ...spell, restricted: true }
+              : { ...spell, restricted: false }
+          )
+        }
       }
     }
+    return newList
   }
-  return newList
-}
 
 	const spellsByClass = 
   (spellListToEdit?.class === 'Anti-Paladin' && ANTIPALADIN_LIST) ||
@@ -245,14 +313,8 @@ const updateRestrictedSpells = (spellList: SpellList): SpellList => {
   }
 
   useEffect(() => {
-    const infernalArchetype = ALL_SPELLS.find(spell => spell.name === 'Infernal')
-    const corruptorArchetype = ALL_SPELLS.find(spell => spell.name === 'Corruptor')
-    const infernalPresent = infernalArchetype
-      ? isSpellChosen(modifiedSpellList, infernalArchetype.id)
-      : false
-    const corruptorPresent = corruptorArchetype
-      ? isSpellChosen(modifiedSpellList, corruptorArchetype.id)
-      : false
+    const infernalPresent = isSpellChosen(modifiedSpellList, 85)
+    const corruptorPresent = isSpellChosen(modifiedSpellList, 36)
 
     let cleanedSpellList = modifiedSpellList
     let shouldUpdate = false
@@ -461,7 +523,22 @@ const updateRestrictedSpells = (spellList: SpellList): SpellList => {
     return null
   }
 
-  // const spellFrequency = buildFrequencyString(selectedSpell)
+  const fetchSubclassSpellDetails = (key: string, spellId: number, chosenArchetype: string) => {
+    const subclassSpells = subclassSpellsMap[chosenArchetype || ''] || []
+    const spell = subclassSpells.find(s => s.id === spellId)
+
+    if (key === 'magical') {
+      return spell?.magical
+    } else if (key === 'ambulant') {
+      return spell?.ambulant
+    } else if (key === 'extraordinary') {
+      return spell?.extraordinary
+    } else if (key === 'trait') {
+      return spell?.trait
+    } else if (key === 'swift') {
+      return spell?.swift
+    }
+  }
 
   const setOptionalPickOneChosen = (
     spellList: SpellList,
@@ -503,7 +580,16 @@ const updateRestrictedSpells = (spellList: SpellList): SpellList => {
                 className="text-start d-block w-100"
                 onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
                   setChosenArchetype(subclassName)
-                  handleLongPressStart(spell.id, e)}}>
+                  handleLongPressStart(spell.id, e)}}
+                  onMouseMove={handleLongPressMove}
+                  onMouseUp={handleLongPressEnd}
+                  onMouseLeave={handleLongPressEnd}
+                  onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => {
+                    setChosenArchetype(subclassName)
+                    handleLongPressStart(spell.id, e)}}
+                  onTouchMove={handleLongPressMove}
+                  onTouchEnd={handleLongPressEnd}
+              >
                 {spellName}
               </Button>
             )
@@ -572,6 +658,21 @@ const updateRestrictedSpells = (spellList: SpellList): SpellList => {
             <span>
               <strong>{chosenArchetype ? chosenArchetype : "Base"} Frequency for {modifiedSpellList.class}: </strong>
               {buildFrequencyString(selectedSpell, chosenArchetype ?? undefined) ?? 'N/A'}
+              {selectedSpell?.id !== undefined && (
+                <>
+                  {[
+                    { key: 'magical', label: ' (m)' },
+                    { key: 'swift', label: ' (Swift)' },
+                    { key: 'extraordinary', label: ' (ex)' },
+                    { key: 'ambulant', label: ' (Ambulant)' },
+                    { key: 'trait', label: ' ( T )' },
+                  ].map(({ key, label }) =>
+                    fetchSubclassSpellDetails(key, selectedSpell.id, chosenArchetype ?? '') ? (
+                      <span key={key}>{label}</span>
+                    ) : null
+                  )}
+                </>
+              )}
             </span>
           </Modal.Body>
           <Modal.Body className="modal-sm p-0 pt-2">
@@ -631,32 +732,64 @@ const updateRestrictedSpells = (spellList: SpellList): SpellList => {
                     console.log('spell:', spell)
                     const archetypes: string[] = []
 
-                    // const priestArchetype = ALL_SPELLS.find(s => s.name === 'Priest')
-                    // const warderArchetype = ALL_SPELLS.find(s => s.name === 'Warder')
-                    // const necromancerArchetype = ALL_SPELLS.find(s => s.name === 'Necromancer')
-                    // const legendArchetype = ALL_SPELLS.find(s => s.name === 'Legend')
-
-                    const infernalArchetype = ALL_SPELLS.find(s => s.name === 'Infernal')
-                    const corruptorArchetype = ALL_SPELLS.find(s => s.name === 'Corruptor')
                     const hasInfernal = infernalArchetype
-                      ? isSpellChosen(modifiedSpellList, infernalArchetype.id)
-                      : false
+                      ? isSpellChosen(modifiedSpellList, infernalArchetype.id) : false
                     const hasCorruptor = corruptorArchetype
-                      ? isSpellChosen(modifiedSpellList, corruptorArchetype.id)
-                      : false
+                      ? isSpellChosen(modifiedSpellList, corruptorArchetype.id) : false
+                    const hasRaider = raiderArchetype
+                      ? isSpellChosen(modifiedSpellList, raiderArchetype.id) : false
+                    const hasBerserker = berserkerArchetype
+                      ? isSpellChosen(modifiedSpellList, berserkerArchetype.id) : false
+                    const hasGuardian = guardianArchetype
+                      ? isSpellChosen(modifiedSpellList, guardianArchetype.id) : false
+                    const hasInquisitor = inquisitorArchetype
+                      ? isSpellChosen(modifiedSpellList, inquisitorArchetype.id) : false
+                    const hasHunter = hunterArchetype
+                      ? isSpellChosen(modifiedSpellList, hunterArchetype.id) : false
+                    const hasApex = apexArchetype
+                      ? isSpellChosen(modifiedSpellList, apexArchetype.id) : false
+                    const hasJuggernaut = juggernautArchetype
+                      ? isSpellChosen(modifiedSpellList, juggernautArchetype.id) : false
 
-                    console.log('hasInfernal:', hasInfernal)
-                    
                     // Anti-Paladin
                     if (
                       infernalArchetype && hasInfernal &&
                       spell?.name === 'Steal Life Essence'
                     ) archetypes.push('Infernal')
-
                     if (
                       corruptorArchetype && hasCorruptor &&
                       spell?.name === 'Flame Blade'
                     ) archetypes.push('Corruptor')
+                    // Barbarian
+                    if (raiderArchetype && hasRaider &&
+                      (spell?.name === 'Rage')
+                    ) archetypes.push('Raider')
+                    if (berserkerArchetype && hasBerserker &&
+                      spell?.name === 'Blood and Thunder'
+                    ) archetypes.push('Berserker')
+                    // Paladin
+                    if (guardianArchetype && hasGuardian &&
+                      (spell?.name === 'Protection from Magic' || spell?.name === 'Extend Immunities')
+                    ) archetypes.push('Guardian')
+                    if (inquisitorArchetype && hasInquisitor &&
+                      (spell?.name === 'Greater Resurrect' || spell?.name === 'Awe')
+                    ) archetypes.push('Inquisitor')
+                    // Scout
+                    if (hunterArchetype && hasHunter &&
+                      (spell?.name === 'Release' || spell?.name === 'Evolution')
+                    ) archetypes.push('Hunter')
+                    if (apexArchetype && hasApex &&
+                      (spell?.name === 'Evolution' ||
+                        spell?.name === 'Hold Person' ||
+                        spell?.name === 'Pinning Arrow' ||
+                        spell?.name === 'Adaptive Protection')
+                    ) archetypes.push('Apex')
+                    // Warrior
+                    if (juggernautArchetype && hasJuggernaut &&
+                      (spell?.name === 'Ancestral Armor' ||
+                        spell?.name === 'True Grit' ||
+                        spell?.name === 'Harden')
+                    ) archetypes.push('Juggernaut')
 
                     if (archetypes.length > 0) {
                       return `${archetypes.join(',')}`
@@ -679,7 +812,7 @@ const updateRestrictedSpells = (spellList: SpellList): SpellList => {
             onClose={() => setShowAlert(false)}
           >
             <IoMdInformationCircle size={25} className="me-1" color="blue" />
-            <span>Long press on any spell below to view its effects and limitations.</span>
+            <span>Long press on any ability below to view its effects and limitations.</span>
             <div
               className="end-0 bottom-0 text-muted small mt-1"
               style={{ pointerEvents: 'none' }}
@@ -803,7 +936,6 @@ const updateRestrictedSpells = (spellList: SpellList): SpellList => {
                                   onTouchEnd={handleLongPressEnd}
                                   onClick={() => {
                                     setModifiedSpellList(prevList => {
-                                      // Set the chosen archetype if this spell is an archetype
                                       const spellName = getSpellName(spell.id)
                                       if (spellName && subclassSpellsMap[spellName]) {
                                         setChosenArchetype(null)
@@ -821,8 +953,8 @@ const updateRestrictedSpells = (spellList: SpellList): SpellList => {
                               </Row>
                               {spell.chosen &&
                                 renderSubclassSpells(
-                                  spellName ?? 'Unknown Spell',
-                                  subclassSpellsMap[spellName ?? 'Unknown Spell'] || [],
+                                  spellName ?? '',
+                                  subclassSpellsMap[spellName ?? ''] || [],
                                   getSpellName
                                 )
                               }
@@ -840,6 +972,41 @@ const updateRestrictedSpells = (spellList: SpellList): SpellList => {
                       )
                       rows.push(
                         ...spellsByLevel.pickOneOfTwo.map((spell: MartialSpell) => {
+                          const spellName = getSpellName(spell.id)
+                          return (
+                            <Row key={`pickOneOfTwo-${spell.id}`} className="d-flex justify-content-between ms-1">
+                              <Button
+                                style={{ padding: 7 }}
+                                variant="secondary"
+                                className="text-start border-bottom"
+                                onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => 
+                                  handleLongPressStart(spell.id, e)}
+                                onMouseMove={handleLongPressMove}
+                                onMouseUp={handleLongPressEnd}
+                                onMouseLeave={handleLongPressEnd}
+                                onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => 
+                                  handleLongPressStart(spell.id, e)}
+                                onTouchMove={handleLongPressMove}
+                                onTouchEnd={handleLongPressEnd}
+                              >
+                                <span style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                                  <span>{spellName}</span>
+                                </span>
+                              </Button>
+                            </Row>
+                          )
+                        })
+                      )
+                    }
+
+                    if (Array.isArray(spellsByLevel.pickOne)) {
+                      rows.push(
+                        <Row key={`optionalPickOne-label-${index}-${idx}`} className="fw-bold text-secondary mb-1">
+                          Pick one of two:
+                        </Row>
+                      )
+                      rows.push(
+                        ...spellsByLevel.pickOne.map((spell: MartialSpell) => {
                           const spellName = getSpellName(spell.id)
                           return (
                             <Row key={`pickOneOfTwo-${spell.id}`} className="d-flex justify-content-between ms-1">
@@ -908,9 +1075,7 @@ const updateRestrictedSpells = (spellList: SpellList): SpellList => {
           )
         })}
         <div className="d-flex justify-content-center mt-3 mb-5">
-          <Button variant="primary" onClick={() => {
-            navigate(`/listDetails/${modifiedSpellList.id}`)
-          }}>
+          <Button variant="primary" onClick={() => {navigate(-1)}}>
             Done Editing
           </Button>
         </div>
