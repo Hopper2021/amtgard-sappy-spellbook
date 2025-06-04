@@ -2626,6 +2626,14 @@ export const ANTIPALADIN_EQUIPMENT = {
   weapons: 'All Melee, Javelins'
 }
 
+export const ANTIPALADIN_LOOKTHEPART = [
+  { 
+    base: [
+      { id: 161, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: false, magical: true, ambulant: false, restricted: false, chosen: null, },
+    ]
+  }
+]
+
 export const ANTIPALADIN_LIST = [
   {
     level: 1,
@@ -2712,6 +2720,16 @@ export const ARCHER_EQUIPMENT = {
   shields: 'None',
   weapons: 'Daggers, Short, Bow'
 }
+
+export const ARCHER_LOOKTHEPART = [
+  {
+    pickOne: [
+      { id: 37, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+      { id: 109, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+      { id: 112, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+    ]
+  }
+]
 
 export const ARCHER_LIST = [
   {
@@ -2804,6 +2822,15 @@ export const ASSASSIN_EQUIPMENT = {
   weapons: 'Dagger, Short, Long, Light Thrown, Heavy Thrown, Bow',
 }
 
+export const ASSASSIN_LOOKTHEPART = [
+  { 
+    pickOne: [
+      { id: 111, frequency: { amount: 1, per: 'Life', charge: 'Charge x3' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+      { id: 112, frequency: { amount: 1, per: 'Arrows', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+    ]
+  }
+]
+
 export const ASSASSIN_LIST = [
   {
     level: 1,
@@ -2885,6 +2912,14 @@ export const BARBARIAN_EQUIPMENT = {
   weapons: 'All Melee, Javelins, Rocks',
 }
 
+export const BARBARIAN_LOOKTHEPART = [
+  { 
+    base: [
+      { id: 116, frequency: { amount: 1, per: 'Refresh', charge: 'Charge x10' }, trait: false, extraordinary: true, magical: false, ambulant: true, restricted: false, chosen: null, },
+    ]
+  }
+]
+
 export const BARBARIAN_LIST = [
   {
     level: 1,
@@ -2954,7 +2989,9 @@ export const BARBARIAN_LIST = [
   },
 ]
 
-export const RAIDER_SPELLS = [{}]
+export const RAIDER_SPELLS = [
+  { id: 74, frequency: { amount: 1, per: 'Life', charge: null }, range: 'Self', trait: false, extraordinary: true, magical: false, ambulant: true, restricted: false, chosen: false, }
+]
 
 export const BERSERKER_SPELLS = [
   { id: 100, frequency: { amount: null, per: null, charge: 'Unlimited' }, range: null, trait: false, extraordinary: true, magical: false, ambulant: true, restricted: false, chosen: false, },
@@ -2966,6 +3003,14 @@ export const MONK_EQUIPMENT = {
   shields: 'None',
   weapons: 'All Melee, Heavy Thrown',
 }
+
+export const MONK_LOOKTHEPART = [
+  { 
+    base: [
+      { id: 75, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null }
+    ]
+  }
+]
 
 export const MONK_LIST = [
   {
@@ -3053,6 +3098,14 @@ export const PALADIN_EQUIPMENT = {
   weapons: 'All Melee, Javelins',
 }
 
+export const PALADIN_LOOKTHEPART = [
+  { 
+    base: [
+      { id: 20, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: false, magical: true, ambulant: false, restricted: false, chosen: null }
+    ]
+  }
+]
+
 export const PALADIN_LIST = [
   {
     level: 1,
@@ -3114,6 +3167,13 @@ export const INQUISITOR_SPELLS = [
   { id: 187, frequency: { amount: 1, per: 'Life', charge: null }, range: 'Self', trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
 ]
 
+export const SCOUT_LOOKTHEPART = [
+  { 
+    base: [
+      { id: 75, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+    ]
+  }
+]
 
 export const SCOUT_EQUIPMENT = {
   lookThePart: 'Heal 1/Life (ex)',
@@ -3180,15 +3240,39 @@ export const SCOUT_LIST = [
           { id: 3, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: true, magical: true, ambulant: false, restricted: false, chosen: null, }
         ],
         optionalPickOne: [
-          { id: 80, frequency: { amount: null, per: null, charge: null }, trait: false, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+          {
+            id: 80,
+            frequency: {
+              amount: null,
+              per: null,
+              charge: null
+            },
+            trait: false,
+            extraordinary: false,
+            magical: false,
+            ambulant: false,
+            restricted: false,
+            chosen: false,
+            pickOne: [
+              { id: 79, frequency: { amount: 1, per: 'Life', charge: 'Charge x3' }, trait: false, extraordinary: false, magical: true, ambulant: false, restricted: false, chosen: false, },
+              { id: 109, frequency: { amount: 2, per: 'Arrows', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+            ]
+          },
           { id: 9, frequency: { amount: null, per: null, charge: null }, trait: false, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
-        ],
-      },
+        ]
+      }
     ],
   },
 ]
 
-export const HUNTER_SPELLS = [{}]
+export const HUNTER_SPELLS = [
+  // {
+    // pickOne: [
+      { id: 79, frequency: { amount: 1, per: 'Life', charge: 'Charge x3' }, trait: false, extraordinary: false, magical: true, ambulant: false, restricted: false, chosen: false, },
+      { id: 109, frequency: { amount: 2, per: 'Arrows', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+    // ],
+  // }
+]
 
 export const APEX_SPELLS = [
   { id: 101, frequency: { amount: null, per: null, charge: null }, range: null, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
@@ -3201,6 +3285,14 @@ export const WARRIOR_EQUIPMENT = {
   shields: 'Large',
   weapons: 'All Melee, Javelins',
 }
+
+export const WARRIOR_LOOKTHEPART = [
+  { 
+    base: [
+      { id: 88, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: false, magical: true, ambulant: true, restricted: false, chosen: false, }
+    ]
+  }
+]
 
 export const WARRIOR_LIST = [
   {
