@@ -236,6 +236,7 @@ function SpellListDetails() {
             ...(spellsByLevel.base ?? []),
             ...(spellsByLevel.optionalPickOne ?? []),
             ...(spellsByLevel.pickOneOfTwo ?? []),
+            ...(spellsByLevel.pickOne ?? []),
             ...(spellsByLevel.pickTwoOfThree ?? []),
           ]
           const spell = allArrays.find(s => s.id === spellId)
@@ -401,7 +402,7 @@ function SpellListDetails() {
       for (const level of spellsByClass) {
         // Martial class structure: level.spells is an array of objects with base/optionalPickOne/etc
         if (Array.isArray(level.spells) && level.spells.length > 0 && typeof level.spells[0] === 'object' && (
-          level.spells[0].base || level.spells[0].optionalPickOne || level.spells[0].pickOneOfTwo || level.spells[0].pickTwoOfThree
+          level.spells[0].base || level.spells[0].optionalPickOne || level.spells[0].pickOneOfTwo || level.spells[0].pickTwoOfThree || level.spells[0].pickOne
         )) {
           for (const spellsByLevel of level.spells) {
             const allArrays = [
@@ -409,6 +410,7 @@ function SpellListDetails() {
               ...(spellsByLevel.optionalPickOne ?? []),
               ...(spellsByLevel.pickOneOfTwo ?? []),
               ...(spellsByLevel.pickTwoOfThree ?? []),
+              ...(spellsByLevel.pickOne ?? []),
             ]
             const found = allArrays.find(s => s.id === spellId)
             if (found) {
@@ -648,7 +650,7 @@ function SpellListDetails() {
 
     const isOptional = indicator === 'optionalPickOne'
     const isBase = indicator === 'base'
-    const isPickOne = indicator === 'pickOne'
+    const isPickOne = indicator === 'pickOne' || indicator === 'pickOneOfTwo'
     const isPickTwoOfThree = indicator === 'pickTwoOfThree'
 
     // Handle optionalPickOne: only show chosen spell, label with chosen name in green
@@ -832,6 +834,8 @@ function SpellListDetails() {
           const spellMagical = fetchMartialSpellDetails('magical', spell.id)
           const spellTrait = fetchMartialSpellDetails('trait', spell.id)
           const spellAmbulant = fetchMartialSpellDetails('ambulant', spell.id)
+
+          console.log('Spell:', spell)
 
           if (spell.restricted) {
             return (
