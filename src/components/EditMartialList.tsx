@@ -68,6 +68,7 @@ interface MartialSpell {
   ambulant: boolean
   restricted: boolean
   chosen: boolean | null
+  pickOne?: MartialSpell[]
 }
 
 interface Spell {
@@ -548,19 +549,20 @@ function EditMartialList() {
     }
   }
 
-  const setOptionalPickOneChosen = (
+  const setPickOneChosen = (
     spellList: SpellList,
     levelIdx: number,
     spellsByLevelIdx: number,
     spellIdx?: number,
+    arrayName: 'optionalPickOne' | 'pickOne' | 'pickOneOfTwo' | 'pickTwoOfThree' = 'optionalPickOne',
     clear: boolean = false
   ): SpellList => {
     const newList = JSON.parse(JSON.stringify(spellList))
     const levelObj = newList.spells[levelIdx]
     if (levelObj) {
       const sbl = levelObj.spells[spellsByLevelIdx]
-      if (sbl && Array.isArray(sbl.optionalPickOne)) {
-        sbl.optionalPickOne = sbl.optionalPickOne.map((s, i) =>
+      if (sbl && Array.isArray(sbl[arrayName])) {
+        sbl[arrayName] = sbl[arrayName].map((s, i) =>
           clear ? { ...s, chosen: false } : (i === spellIdx ? { ...s, chosen: true } : { ...s, chosen: false })
         )
       }
@@ -587,6 +589,33 @@ function EditMartialList() {
       return newList;
     });
 };
+
+  const setNestedPickOneChosen = (
+    spellList: SpellList,
+    levelIdx: number,
+    spellsByLevelIdx: number,
+    parentIdx: number,
+    subSpellIdx: number,
+    clear: boolean = false
+  ): SpellList => {
+    const newList = JSON.parse(JSON.stringify(spellList));
+    const levelObj = newList.spells[levelIdx];
+    if (levelObj) {
+      const sbl = levelObj.spells[spellsByLevelIdx];
+      if (
+        sbl &&
+        Array.isArray(sbl.optionalPickOne) &&
+        sbl.optionalPickOne[parentIdx]?.pickOne
+      ) {
+        sbl.optionalPickOne[parentIdx].pickOne = sbl.optionalPickOne[parentIdx].pickOne.map((s, i) =>
+          clear ? { ...s, chosen: false } : (i === subSpellIdx ? { ...s, chosen: true } : { ...s, chosen: false })
+        );
+      }
+    }
+    let updated = updateRestrictedSpells(newList);
+    updateLocalStorage(updated);
+    return updated;
+  };
 
   const renderSubclassSpells = (
     subclassName: string,
@@ -940,7 +969,7 @@ function EditMartialList() {
                               className="py-0"
                               onClick={() => {
                                 setModifiedSpellList(prevList =>
-                                  setOptionalPickOneChosen(prevList, index, idx, undefined, true)
+                                  setPickOneChosen(prevList, index, idx, undefined, 'optionalPickOne', true)
                                 )
                               }}
                             >
@@ -981,7 +1010,7 @@ function EditMartialList() {
                                       } else {
                                         setChosenArchetype(null)
                                       }
-                                      return setOptionalPickOneChosen(prevList, index, idx, spellIdx)
+                                      return setPickOneChosen(prevList, index, idx, spellIdx, 'optionalPickOne', false)
                                     })
                                   }}
                                 >
@@ -990,15 +1019,64 @@ function EditMartialList() {
                                   </span>
                                 </Button>
                               </Row>
-                              {spell.chosen && modifiedSpellList.class === 'Scout' && hunterArchetype && isSpellChosen(modifiedSpellList, hunterArchetype.id) && (
-                                <Row
-                                  key={`pickOneOfTwo-label-${index}-${idx}`}
-                                  className="fw-bold text-secondary mb-1 ms-4"
-                                >
-                                  Pick one of two:
-                                </Row>
+                              {spell.pickOne && spell.chosen && modifiedSpellList.class === 'Scout' && hunterArchetype && isSpellChosen(modifiedSpellList, hunterArchetype.id) && (
+                                <>
+                                  <Row
+                                    key={`pickOneOfTwo-label-${index}-${idx}`}
+                                    className="fw-bold text-secondary mb-1 ms-4"
+                                  >
+                                    Pick one of two:
+                                  
+                                  <Col className="text-end">
+                                    <Button
+                                      className="py-0"
+                                      onClick={() => {
+                                        setModifiedSpellList(prevList =>
+                                          setNestedPickOneChosen(prevList, index, idx, spellIdx, undefined, true)
+                                        )
+                                      }}
+                                    >
+                                      Clear
+                                    </Button>
+                                  </Col>
+                                  </Row>
+                                  {spell.pickOne.map((subSpell: MartialSpell, subSpellIdx) => {
+                                    const subSpellName = getSpellName(subSpell.id)
+                                    return (
+                                      <Row key={`pickOneOfTwo-${subSpell.id}`} className="d-flex justify-content-between ms-4">
+                                        <Button
+                                          style={
+                                            subSpell.chosen
+                                              ? { backgroundColor: '#b8e0b8', color: '#222', border: '2px solid #198754', padding: 7 }
+                                              : { padding: 7 }
+                                          }
+                                          variant={subSpell.chosen ? "primary" : "outline-secondary"}
+                                          className="text-start border-bottom"
+                                          onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => 
+                                            handleLongPressStart(subSpell.id, e)}
+                                          onMouseMove={handleLongPressMove}
+                                          onMouseUp={handleLongPressEnd}
+                                          onMouseLeave={handleLongPressEnd}
+                                          onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => 
+                                            handleLongPressStart(subSpell.id, e)}
+                                          onTouchMove={handleLongPressMove}
+                                          onTouchEnd={handleLongPressEnd}
+                                          onClick={() => {
+                                            setModifiedSpellList(prevList => {
+                                              return setNestedPickOneChosen(prevList, index, idx, spellIdx, subSpellIdx, false)
+                                            })
+                                          }}
+                                        >
+                                          <span style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                                            <span>{subSpellName}</span>
+                                          </span>
+                                        </Button>
+                                      </Row>
+                                    )
+                                  })}
+                                </>
                               )}
-                              {spell.chosen && (
+                              {!spell.pickOne && spell.chosen && (
                                 renderSubclassSpells(
                                   spellName ?? '',
                                   subclassSpellsMap[spellName ?? ''] || [],
@@ -1048,18 +1126,38 @@ function EditMartialList() {
 
                     if (Array.isArray(spellsByLevel.pickOne)) {
                       rows.push(
-                        <Row key={`optionalPickOne-label-${index}-${idx}`} className="fw-bold text-secondary mb-1">
-                          Pick one of two:
+                        <Row
+                          key={`optionalPickOne-label-${index}-${idx}`}
+                          className="d-flex justify-content-between align-items-center fw-bold text-secondary my-1">
+                          <Col className="text-start">
+                            <span>Pick one of two:</span>
+                          </Col>
+                          <Col className="text-end">
+                            <Button
+                              className="py-0"
+                              onClick={() => {
+                                setModifiedSpellList(prevList =>
+                                  setPickOneChosen(prevList, index, idx, undefined, 'pickOne', true)
+                                )
+                              }}
+                            >
+                              Clear
+                            </Button>
+                          </Col>
                         </Row>
                       )
                       rows.push(
-                        ...spellsByLevel.pickOne.map((spell: MartialSpell) => {
+                        ...spellsByLevel.pickOne.map((spell: MartialSpell, spellIdx: number) => {
                           const spellName = getSpellName(spell.id)
                           return (
                             <Row key={`pickOneOfTwo-${spell.id}`} className="d-flex justify-content-between ms-1">
                               <Button
-                                style={{ padding: 7 }}
-                                variant="secondary"
+                                style={
+                                  spell.chosen
+                                    ? { backgroundColor: '#b8e0b8', color: '#222', border: '2px solid #198754', padding: 7 }
+                                    : { padding: 7 }
+                                }
+                                variant={spell.chosen ? "primary" : "outline-secondary"}
                                 className="text-start border-bottom"
                                 onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => 
                                   handleLongPressStart(spell.id, e)}
@@ -1070,6 +1168,11 @@ function EditMartialList() {
                                   handleLongPressStart(spell.id, e)}
                                 onTouchMove={handleLongPressMove}
                                 onTouchEnd={handleLongPressEnd}
+                                onClick={() => {
+                                  setModifiedSpellList(prevList => 
+                                    setPickOneChosen(prevList, index, idx, spellIdx, 'pickOne', false)
+                                  )
+                                }}
                               >
                                 <span style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
                                   <span>{spellName}</span>
