@@ -26,6 +26,14 @@ import {
   APEX_SPELLS,
   MARAUDER_SPELLS,
   JUGGERNAUT_SPELLS,
+  ANTIPALADIN_LOOKTHEPART,
+  ASSASSIN_LOOKTHEPART,
+  ARCHER_LOOKTHEPART,
+  BARBARIAN_LOOKTHEPART,
+  MONK_LOOKTHEPART,
+  PALADIN_LOOKTHEPART,
+  SCOUT_LOOKTHEPART,
+  WARRIOR_LOOKTHEPART
 } from '../appConstants'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Toast, ToastContainer } from 'react-bootstrap'
@@ -562,42 +570,73 @@ function EditMartialList() {
     return updated
   }
 
+  const setHunterSubclassSpellChosen = (
+    subclassName: string,
+    spellId: number
+  ) => {
+    setModifiedSpellList(prevList => {
+      const newList = JSON.parse(JSON.stringify(prevList));
+      // Find the subclass array in the map
+      if (subclassSpellsMap[subclassName]) {
+        subclassSpellsMap[subclassName] = subclassSpellsMap[subclassName].map(spell =>
+          spell.id === spellId
+            ? { ...spell, chosen: true }
+            : { ...spell, chosen: false }
+        );
+      }
+      return newList;
+    });
+};
+
   const renderSubclassSpells = (
     subclassName: string,
-    subclassSpells: { id: number }[],
+    subclassSpells: { id: number, chosen?: boolean }[],
     getSpellName: (id: number) => string | null
   ) => {
-    if (!subclassSpells || subclassSpells.length === 0) return null
+    if (!subclassSpells || subclassSpells.length === 0) return null;
+    const isHunter = subclassName === 'Hunter' && modifiedSpellList.class === 'Scout';
     return (
       <Row className="ms-4 my-1">
         <span>
           {subclassSpells.map((spell) => {
-            const spellName = getSpellName(spell.id)
+            const spellName = getSpellName(spell.id);
             return (
               <Button
                 key={spell.id}
-                variant="unknown"
+                variant={isHunter && spell.chosen ? "success" : "unknown"}
+                style={
+                  isHunter && spell.chosen
+                    ? { backgroundColor: '#b8e0b8', color: '#222', border: '2px solid #198754', marginBottom: 2 }
+                    : { marginBottom: 2 }
+                }
                 className="text-start d-block w-100"
                 onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
-                  setChosenArchetype(subclassName)
-                  handleLongPressStart(spell.id, e)}}
-                  onMouseMove={handleLongPressMove}
-                  onMouseUp={handleLongPressEnd}
-                  onMouseLeave={handleLongPressEnd}
-                  onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => {
-                    setChosenArchetype(subclassName)
-                    handleLongPressStart(spell.id, e)}}
-                  onTouchMove={handleLongPressMove}
-                  onTouchEnd={handleLongPressEnd}
+                  setChosenArchetype(subclassName);
+                  handleLongPressStart(spell.id, e);
+                }}
+                onMouseMove={handleLongPressMove}
+                onMouseUp={handleLongPressEnd}
+                onMouseLeave={handleLongPressEnd}
+                onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => {
+                  setChosenArchetype(subclassName);
+                  handleLongPressStart(spell.id, e);
+                }}
+                onTouchMove={handleLongPressMove}
+                onTouchEnd={handleLongPressEnd}
+                onClick={() => {
+                  if (isHunter) {
+                    setHunterSubclassSpellChosen(subclassName, spell.id);
+                  }
+                }}
               >
                 {spellName}
               </Button>
-            )
+            );
           })}
         </span>
       </Row>
-    )
-  }
+    );
+  };
 
   const handleLongPressStart = (spellId, e) => {
     const x = e.touches ? e.touches[0].clientX : e.clientX
@@ -951,13 +990,21 @@ function EditMartialList() {
                                   </span>
                                 </Button>
                               </Row>
-                              {spell.chosen &&
+                              {spell.chosen && modifiedSpellList.class === 'Scout' && hunterArchetype && isSpellChosen(modifiedSpellList, hunterArchetype.id) && (
+                                <Row
+                                  key={`pickOneOfTwo-label-${index}-${idx}`}
+                                  className="fw-bold text-secondary mb-1 ms-4"
+                                >
+                                  Pick one of two:
+                                </Row>
+                              )}
+                              {spell.chosen && (
                                 renderSubclassSpells(
                                   spellName ?? '',
                                   subclassSpellsMap[spellName ?? ''] || [],
                                   getSpellName
                                 )
-                              }
+                              )}
                             </React.Fragment>
                           )
                         })
