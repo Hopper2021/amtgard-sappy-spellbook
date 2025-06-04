@@ -39,6 +39,14 @@ import {
   APEX_SPELLS,
   MARAUDER_SPELLS,
   JUGGERNAUT_SPELLS,
+  ANTIPALADIN_LOOKTHEPART,
+  ASSASSIN_LOOKTHEPART,
+  ARCHER_LOOKTHEPART,
+  BARBARIAN_LOOKTHEPART,
+  MONK_LOOKTHEPART,
+  PALADIN_LOOKTHEPART,
+  SCOUT_LOOKTHEPART,
+  WARRIOR_LOOKTHEPART
 } from '../appConstants'
 
 interface SpellLevel {
@@ -127,6 +135,17 @@ function SpellListDetails() {
     (spellList?.class === 'Scout' && SCOUT_LIST) ||
     (spellList?.class === 'Warrior' && WARRIOR_LIST) ||
     []
+
+  const lookThePartByClass = {
+    'Anti-Paladin': ANTIPALADIN_LOOKTHEPART,
+    'Archer': ARCHER_LOOKTHEPART,
+    'Assassin': ASSASSIN_LOOKTHEPART,
+    'Barbarian': BARBARIAN_LOOKTHEPART,
+    'Monk': MONK_LOOKTHEPART,
+    'Paladin': PALADIN_LOOKTHEPART,
+    'Scout': SCOUT_LOOKTHEPART,
+    'Warrior': WARRIOR_LOOKTHEPART
+  }
 
   const subclassSpellsMap = {
     "Infernal": INFERNAL_SPELLS,
@@ -520,6 +539,15 @@ function SpellListDetails() {
       per = 'Life'
     }
 
+    if (
+      isMedium &&
+      allSpell &&
+      allSpell.school &&
+      allSpell.school === 'Spirit'
+    ) {
+      charge = 'Charge x3'
+    }
+
     if (freq && typeof freq === 'object') {
       if (experienced) {
         if (per === 'Life') {
@@ -637,7 +665,7 @@ function SpellListDetails() {
         const spellExtraordinary = fetchSubclassSpellDetails('extraordinary', chosenSpell.id, chosenName)
 
         // Get subclass spells if this archetype is in the map
-        const subclassSpells = subclassSpellsMap[chosenName]
+        const subclassSpells = subclassSpellsMap[chosenName] || []
 
         return (
           <>
@@ -711,7 +739,7 @@ function SpellListDetails() {
                       <span style={{ color: 'green' }}>
                         <span style={{ textDecoration: 'underline' }}>{fetchSpellDetails('name', sub.id) || ''}</span>
                         {' '}{spellFrequency.frequency}
-                        {' '}{spellRange ? `(${spellRange})` : ''}
+                        {' '}{showRange && spellRange ? `(${spellRange})` : ''}
                         {' '}{spellTrait ? '( T )' : ''}
                         {' '}{spellMagical ? '(m)' : ''}
                         {' '}{spellAmbulant ? '(Ambulant)' : ''}
@@ -783,8 +811,8 @@ function SpellListDetails() {
     // Default rendering for all other cases
     let label = ''
     if (isBase) label = ''
-    else if (isPickOne) label = 'Pick one:'
-    else if (isPickTwoOfThree) label = 'Pick two of three:'
+    else if (isPickOne) label = 'Pick one in edit mode:'
+    else if (isPickTwoOfThree) label = 'Pick two of three in edit mode:'
 
     return (
       <>
@@ -865,6 +893,161 @@ function SpellListDetails() {
               </div>
             </Row>
           )
+        })}
+      </>
+    )
+  }
+
+  const renderLookThePart = (lookThePartArr: any[]) => {
+    if (!Array.isArray(lookThePartArr) || lookThePartArr.length === 0) return null
+
+    if (!spellList.lookThePart) return (
+      <>
+        <Form.Text className="fw-bold mb-0">Look the part:</Form.Text>
+        <Row className="m-0">
+          <span>{' - '}</span>
+        </Row>
+      </>
+    )
+
+    return (
+      <>
+        <Form.Text className="fw-bold mb-0">Look the part:</Form.Text>
+        {lookThePartArr.map((entry, idx) => {
+          if (entry.base) {
+            return entry.base.map((spell, i) => {
+              const spellName = fetchSpellDetails('name', spell.id) || 'Unknown Spell'
+              const spellType = fetchSpellDetails('type', spell.id)
+              const spellSchool = fetchSpellDetails('school', spell.id)
+              const spellIncantation = fetchSpellDetails('incantation', spell.id)
+              const spellMaterials = fetchSpellDetails('materials', spell.id)
+              const spellFrequency = fetchSpellFrequency(spell.id)
+              const spellExtraordinary = fetchMartialSpellDetails('extraordinary', spell.id)
+              const spellMagical = fetchMartialSpellDetails('magical', spell.id)
+              const spellTrait = fetchMartialSpellDetails('trait', spell.id)
+              const spellAmbulant = fetchMartialSpellDetails('ambulant', spell.id)
+
+              return (
+                <Row key={i} className="m-0">
+                  <div>
+                    <span style={{ textDecoration: 'underline' }} >
+                      {spellName}
+                    </span>{' '}
+                    <span>
+                      {spellFrequency.frequency}
+                      {' '}{spellExtraordinary ? '(ex)' : ''}
+                      {' '}{spellMagical ? '(m)' : ''}
+                      {' '}{spellTrait ? '( T )' : ''}
+                      {' '}{spellAmbulant ? '(Ambulant)' : ''}
+                      {' '}{showRange && spellFrequency.range ? ` (${spellFrequency.range})` : ''}
+                    </span>{' '}
+                    {showTypeAndSchool && <span>( {spellType} )</span>}
+                    {spellSchool && showTypeAndSchool && (
+                      <span>( {spellSchool} )</span>
+                    )}
+                    <div style={{ marginLeft: '15px' }}>
+                      {showIncantation &&
+                        spellIncantation &&
+                        spellIncantation.split('\n').map((line, idx) => {
+                          const isIndented = line.startsWith('>>')
+                          const cleanLine = isIndented ? line.replace(/^>>/, '') : line
+                          return (
+                            <span
+                              key={idx}
+                              style={{
+                                display: 'block',
+                                lineHeight: '1.2',
+                                marginLeft: isIndented ? 15 : 0,
+                                marginBottom: 1,
+                                fontStyle: 'italic',
+                              }}
+                            >
+                              {cleanLine}
+                            </span>
+                          )
+                        })}
+                    </div>
+                    <div className="m-0">
+                      {showStrips && spellMaterials ? (
+                        <span>( {spellMaterials} )</span>
+                      ) : null}
+                    </div>
+                  </div>
+                </Row>
+              )
+            })
+          }
+          if (entry.pickOne) {
+            return (
+              <React.Fragment key={`pickOne-${idx}`}>
+                <Row className="ms-2 fw-bold text-secondary">
+                  <span>Optional, pick one:</span>
+                </Row>
+                {entry.pickOne.map((spell, j) => {
+                  const spellName = fetchSpellDetails('name', spell.id) || 'Unknown Spell'
+                  const spellType = fetchSpellDetails('type', spell.id)
+                  const spellSchool = fetchSpellDetails('school', spell.id)
+                  const spellIncantation = fetchSpellDetails('incantation', spell.id)
+                  const spellMaterials = fetchSpellDetails('materials', spell.id)
+                  const spellFrequency = fetchSpellFrequency(spell.id)
+                  const spellExtraordinary = fetchMartialSpellDetails('extraordinary', spell.id)
+                  const spellMagical = fetchMartialSpellDetails('magical', spell.id)
+                  const spellTrait = fetchMartialSpellDetails('trait', spell.id)
+                  const spellAmbulant = fetchMartialSpellDetails('ambulant', spell.id)
+
+                  return (
+                    <Row key={j} className="m-0">
+                      <div>
+                        <span className="ms-3" style={{ textDecoration: 'underline' }} >
+                          {spellName}
+                        </span>{' '}
+                        <span>
+                          {spellFrequency.frequency}
+                          {' '}{spellExtraordinary ? '(ex)' : ''}
+                          {' '}{spellMagical ? '(m)' : ''}
+                          {' '}{spellTrait ? '( T )' : ''}
+                          {' '}{spellAmbulant ? '(Ambulant)' : ''}
+                          {' '}{showRange && spellFrequency.range ? ` (${spellFrequency.range})` : ''}
+                        </span>{' '}
+                        {showTypeAndSchool && <span>( {spellType} )</span>}
+                        {spellSchool && showTypeAndSchool && (
+                          <span>( {spellSchool} )</span>
+                        )}
+                        <div style={{ marginLeft: '15px' }}>
+                          {showIncantation &&
+                            spellIncantation &&
+                            spellIncantation.split('\n').map((line, idx) => {
+                              const isIndented = line.startsWith('>>')
+                              const cleanLine = isIndented ? line.replace(/^>>/, '') : line
+                              return (
+                                <span
+                                  key={idx}
+                                  style={{
+                                    display: 'block',
+                                    lineHeight: '1.2',
+                                    marginLeft: isIndented ? 15 : 0,
+                                    marginBottom: 1,
+                                    fontStyle: 'italic',
+                                  }}
+                                >
+                                  {cleanLine}
+                                </span>
+                              )
+                            })}
+                        </div>
+                        <div className="m-0">
+                          {showStrips && spellMaterials ? (
+                            <span>( {spellMaterials} )</span>
+                          ) : null}
+                        </div>
+                      </div>
+                    </Row>
+                  )
+                })}
+              </React.Fragment>
+            )
+          }
+          return null
         })}
       </>
     )
@@ -966,12 +1149,6 @@ function SpellListDetails() {
             return (
               <>
                 <Form.Text className='my-0'>
-                  Look the part: 
-                  <span style={equipment.lookThePartColor ? { color: equipment.lookThePartColor } : {}}>
-                    {' '}{spellList.lookThePart ? equipment.lookThePart : ' - '}
-                  </span>
-                </Form.Text>
-                <Form.Text className='my-0'>
                   Armor: 
                   <span style={equipment.armorColor ? { color: equipment.armorColor } : {}}>
                     {' '}{equipment.armor}
@@ -996,6 +1173,7 @@ function SpellListDetails() {
         ) : (
           <Form.Text>**** Spells ****</Form.Text>
         )}
+        {isMartialClass && renderLookThePart(lookThePartByClass[spellList.class] || [])}
         {spellList.spells.map((level, levelIdx) => (
           <React.Fragment key={levelIdx}>
             <Form.Text className="fw-bold mb-0">{`Level ${level.level}`}</Form.Text>
