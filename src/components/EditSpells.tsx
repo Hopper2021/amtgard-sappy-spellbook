@@ -1031,7 +1031,6 @@ const removeSpellFromList = (spellId: number) => {
   }
 
   const buildFrequencyString = (masterSpell: any) => {
-    console.log('master spell', masterSpell)
     let spell: (SpellsByClass | Spell) | null = null;
     if (Array.isArray(spellsByClass)) {
       for (const level of spellsByClass as LevelsByClass[]) {
