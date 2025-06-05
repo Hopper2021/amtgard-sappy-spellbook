@@ -39,14 +39,6 @@ import {
   APEX_SPELLS,
   MARAUDER_SPELLS,
   JUGGERNAUT_SPELLS,
-  ANTIPALADIN_LOOKTHEPART,
-  ASSASSIN_LOOKTHEPART,
-  ARCHER_LOOKTHEPART,
-  BARBARIAN_LOOKTHEPART,
-  MONK_LOOKTHEPART,
-  PALADIN_LOOKTHEPART,
-  SCOUT_LOOKTHEPART,
-  WARRIOR_LOOKTHEPART
 } from '../appConstants'
 import { IoIosWarning } from 'react-icons/io'
 
@@ -62,7 +54,8 @@ interface SpellList {
   class: string
   maxLevel: number
   lookThePart: boolean
-  spells: SpellLevel[]
+  lookThePartSpells?: any[]
+  levels: SpellLevel[]
 }
 
 interface EquipmentByClass {
@@ -82,15 +75,15 @@ function SpellListDetails() {
 
   const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
   const spellList = allSpellLists.find((list: SpellList) => list.id === parseInt(id || '0'))
-  const allPointsSpent = spellList.spells.every(level => level.points === 0)
+  const allPointsSpent = spellList.levels.every(level => level.points === 0)
 
   const isSpellTaken = (spellList: SpellList, spellId: number): boolean =>
-    spellList.spells.some(level =>
+    spellList.levels.some(level =>
       level.spells.some(spell => spell.id === spellId)
   )
 
   const isArchetypeChosen = (spellList: SpellList, archetypeId: number): boolean => {
-    return spellList.spells.some(level =>
+    return spellList.levels.some(level =>
       level.spells.some(baseObj =>
         baseObj.optionalPickOne &&
         baseObj.optionalPickOne.some(
@@ -138,16 +131,16 @@ function SpellListDetails() {
     (spellList?.class === 'Warrior' && WARRIOR_LIST) ||
     []
 
-  const lookThePartByClass = {
-    'Anti-Paladin': ANTIPALADIN_LOOKTHEPART,
-    'Archer': ARCHER_LOOKTHEPART,
-    'Assassin': ASSASSIN_LOOKTHEPART,
-    'Barbarian': BARBARIAN_LOOKTHEPART,
-    'Monk': MONK_LOOKTHEPART,
-    'Paladin': PALADIN_LOOKTHEPART,
-    'Scout': SCOUT_LOOKTHEPART,
-    'Warrior': WARRIOR_LOOKTHEPART
-  }
+  // const lookThePartByClass = {
+  //   'Anti-Paladin': ANTIPALADIN_LOOKTHEPART,
+  //   'Archer': ARCHER_LOOKTHEPART,
+  //   'Assassin': ASSASSIN_LOOKTHEPART,
+  //   'Barbarian': BARBARIAN_LOOKTHEPART,
+  //   'Monk': MONK_LOOKTHEPART,
+  //   'Paladin': PALADIN_LOOKTHEPART,
+  //   'Scout': SCOUT_LOOKTHEPART,
+  //   'Warrior': WARRIOR_LOOKTHEPART
+  // }
 
   const subclassSpellsMap = {
     "Infernal": INFERNAL_SPELLS,
@@ -231,7 +224,8 @@ function SpellListDetails() {
   }
 
   const fetchMartialSpellDetails = (key: string, spellId: number) => {
-    for (const level of spellsByClass) {
+    if (!spellsByClass || !('levels' in spellsByClass) || !Array.isArray((spellsByClass as any).levels)) return undefined;
+    for (const level of (spellsByClass as any).levels) {
       if (Array.isArray(level.spells)) {
         for (const spellsByLevel of level.spells) {
           const allArrays = [
@@ -240,20 +234,20 @@ function SpellListDetails() {
             ...(spellsByLevel.pickOneOfTwo ?? []),
             ...(spellsByLevel.pickOne ?? []),
             ...(spellsByLevel.pickTwoOfThree ?? []),
-          ]
-          const spell = allArrays.find(s => s.id === spellId)
+          ];
+          const spell = allArrays.find(s => s.id === spellId);
           if (spell) {
-            if (key === 'magical') return spell.magical
-            if (key === 'ambulant') return spell.ambulant
-            if (key === 'extraordinary') return spell.extraordinary
-            if (key === 'trait') return spell.trait
-            if (key === 'swift') return spell.swift
-            if (key === 'range') return spell.range
+            if (key === 'magical') return spell.magical;
+            if (key === 'ambulant') return spell.ambulant;
+            if (key === 'extraordinary') return spell.extraordinary;
+            if (key === 'trait') return spell.trait;
+            if (key === 'swift') return spell.swift;
+            if (key === 'range') return spell.range;
           }
         }
       }
     }
-    return undefined
+    return undefined;
   }
 
   const fetchEquipmentChanges = (spellList: SpellList) => {
@@ -400,12 +394,21 @@ function SpellListDetails() {
       spellDetails = subclassSpells.find(s => s.id === spellId)
     }
 
-    if (Array.isArray(spellsByClass)) {
-      for (const level of spellsByClass) {
-        // Martial class structure: level.spells is an array of objects with base/optionalPickOne/etc
-        if (Array.isArray(level.spells) && level.spells.length > 0 && typeof level.spells[0] === 'object' && (
-          level.spells[0].base || level.spells[0].optionalPickOne || level.spells[0].pickOneOfTwo || level.spells[0].pickTwoOfThree || level.spells[0].pickOne
-        )) {
+    if (spellsByClass && !Array.isArray(spellsByClass) && Array.isArray((spellsByClass as any).levels)) {
+      for (const level of spellsByClass.levels) {
+        // Martial class: level.spells is an array of objects with base/pickOne/etc
+        if (
+          Array.isArray(level.spells) &&
+          level.spells.length > 0 &&
+          typeof level.spells[0] === 'object' &&
+          (
+            level.spells[0].base ||
+            level.spells[0].optionalPickOne ||
+            level.spells[0].pickOneOfTwo ||
+            level.spells[0].pickTwoOfThree ||
+            level.spells[0].pickOne
+          )
+        ) {
           for (const spellsByLevel of level.spells) {
             const allArrays = [
               ...(spellsByLevel.base ?? []),
@@ -413,25 +416,22 @@ function SpellListDetails() {
               ...(spellsByLevel.pickOneOfTwo ?? []),
               ...(spellsByLevel.pickTwoOfThree ?? []),
               ...(spellsByLevel.pickOne ?? []),
-            ]
-            const found = allArrays.find(s => s.id === spellId)
+            ];
+            const found = allArrays.find(s => s.id === spellId);
             if (found) {
-              spellDetails = found
-              break
+              spellDetails = found;
+              break;
             }
           }
         } else if (Array.isArray(level.spells)) {
-          // Caster class structure: level.spells is an array of spells
-          const found = level.spells.find((spell: any) => spell.id === spellId)
+          // Caster class: level.spells is an array of spells
+          const found = level.spells.find((spell: any) => spell.id === spellId);
           if (found) {
-            spellDetails = found
-            break
+            spellDetails = found;
+            break;
           }
-        } else if (level.id === spellId) {
-          spellDetails = level
-          break
         }
-        if (spellDetails) break
+        if (spellDetails) break;
       }
     }
 
@@ -518,7 +518,7 @@ function SpellListDetails() {
 
     // Get how many times this spell is purchased
     let purchased = 1
-    for (const level of spellList.spells) {
+    for (const level of spellList.levels) {
       const found = level.spells.find(s => s.id === spellId)
       if (found && typeof found.purchased === 'number') {
         purchased = found.purchased
@@ -531,7 +531,7 @@ function SpellListDetails() {
 
     // Experienced logic
     let experienced = false
-    for (const level of spellList.spells) {
+    for (const level of spellList.levels) {
       const found = level.spells.find(s => s.id === spellId)
       if (found && found.experienced) {
         experienced = true
@@ -627,16 +627,15 @@ function SpellListDetails() {
     }
 
     // Battlemage changes
-    const isBattleMage = spellList.spells.some(level =>
+    const isBattleMage = spellList.levels.some(level =>
       level.spells.some(spell => spell.id === 18)
     )
     const ambulantId = ALL_SPELLS.find(spell => spell.name === 'Ambulant')?.id
     if (isBattleMage && spellId === ambulantId) {
       frequency = 'Unlimited'
     }
-
     // Evoker Changes
-    const isEvoker = spellList.spells.some(level =>
+    const isEvoker = spellList.levels.some(level =>
       level.spells.some(spell => spell.id === 54)
     )
     const elementalBarageId = ALL_SPELLS.find(spell => spell.name === 'Elemental Barrage')?.id
@@ -645,11 +644,11 @@ function SpellListDetails() {
     }
 
     // Avatar of Nature changes
-    const isAvatarOfNature = spellList.spells.some(level =>
+    const isAvatarOfNature = spellList.levels.some(level =>
       level.spells.some(spell => spell.id === 19)
     )
     let isLevelFourOrBelow = false
-    for (const levelObj of DRUID_SPELLS) {
+    for (const levelObj of DRUID_SPELLS.levels) {
       if (levelObj.level <= 4) {
         if (levelObj.spells.some(spell => spell.id === spellId)) {
           isLevelFourOrBelow = true
@@ -674,74 +673,93 @@ function SpellListDetails() {
   }
 
   const renderSubclassSpells = (sub: any, chosenName: string) => {
-    const spellType = fetchSpellDetails('type', sub.id)
-    const spellSchool = fetchSpellDetails('school', sub.id)
-    const spellIncantation = fetchSpellDetails('incantation', sub.id)
-    const spellMaterials = fetchSpellDetails('materials', sub.id)
-    const spellFrequency = fetchSpellFrequency(sub.id)
-    const spellMagical = fetchSubclassSpellDetails('magical', sub.id, chosenName)
-    const spellAmbulant = fetchSubclassSpellDetails('ambulant', sub.id, chosenName)
-    const spellExtraordinary = fetchSubclassSpellDetails('extraordinary', sub.id, chosenName)
-    const spellTrait = fetchSubclassSpellDetails('trait', sub.id, chosenName)
-    const spellSwift = fetchSubclassSpellDetails('swift', sub.id, chosenName)
-    const spellRange = fetchSubclassSpellDetails('range', sub.id, chosenName)
+    // If sub is a spell object, render as before
+    if (sub && typeof sub === 'object' && 'id' in sub) {
+      const spellType = fetchSpellDetails('type', sub.id)
+      const spellSchool = fetchSpellDetails('school', sub.id)
+      const spellIncantation = fetchSpellDetails('incantation', sub.id)
+      const spellMaterials = fetchSpellDetails('materials', sub.id)
+      const spellFrequency = fetchSpellFrequency(sub.id)
+      const spellMagical = fetchSubclassSpellDetails('magical', sub.id, chosenName)
+      const spellAmbulant = fetchSubclassSpellDetails('ambulant', sub.id, chosenName)
+      const spellExtraordinary = fetchSubclassSpellDetails('extraordinary', sub.id, chosenName)
+      const spellTrait = fetchSubclassSpellDetails('trait', sub.id, chosenName)
+      const spellSwift = fetchSubclassSpellDetails('swift', sub.id, chosenName)
+      const spellRange = fetchSubclassSpellDetails('range', sub.id, chosenName)
 
-    return (
-      <Row key={sub.id} className="ms-1">
-        <span style={{ color: 'green' }}>
-          <span style={{ textDecoration: 'underline' }}>{fetchSpellDetails('name', sub.id) || ''}</span>
-          {' '}{spellFrequency.frequency}
-          {' '}{showRange && spellRange ? `(${spellRange})` : ''}
-          {' '}{spellTrait ? '( T )' : ''}
-          {' '}{spellMagical ? '(m)' : ''}
-          {' '}{spellAmbulant ? '(Ambulant)' : ''}
-          {' '}{spellExtraordinary ? '(ex)' : ''}
-          {' '}{spellSwift ? '(Swift)' : ''}
-          {showTypeAndSchool && (
-            <>
-              {' '}
-              <span>( {spellType} )</span>
-              {spellSchool && <span>( {spellSchool} )</span>}
-            </>
-          )}
-        </span>
-        <div style={{ marginLeft: '15px' }}>
-          {showIncantation &&
-            spellIncantation &&
-            spellIncantation.split('\n').map((line, idx) => {
-              const isIndented = line.startsWith('>>')
-              const cleanLine = isIndented ? line.replace(/^>>/, '') : line
-              return (
-                <span
-                  key={idx}
-                  style={{
-                    display: 'block',
-                    lineHeight: '1.2',
-                    marginLeft: isIndented ? 15 : 0,
-                    marginBottom: 1,
-                    fontStyle: 'italic',
-                    color: 'green',
-                  }}
-                >
-                  {cleanLine}
-                </span>
-              )
-            })}
-        </div>
-        <div className="m-0">
-          {showStrips && spellMaterials ? (
-            <span style={{ color: 'green' }}>( {spellMaterials} )</span>
-          ) : null}
-        </div>
-      </Row>
-    )
+      return (
+        <Row key={sub.id} className="ms-1">
+          <span style={{ color: 'green' }}>
+            <span style={{ textDecoration: 'underline' }}>{fetchSpellDetails('name', sub.id) || ''}</span>
+            {' '}{spellFrequency.frequency}
+            {' '}{showRange && spellRange ? `(${spellRange})` : ''}
+            {' '}{spellTrait ? '( T )' : ''}
+            {' '}{spellMagical ? '(m)' : ''}
+            {' '}{spellAmbulant ? '(Ambulant)' : ''}
+            {' '}{spellExtraordinary ? '(ex)' : ''}
+            {' '}{spellSwift ? '(Swift)' : ''}
+            {showTypeAndSchool && (
+              <>
+                {' '}
+                <span>( {spellType} )</span>
+                {spellSchool && <span>( {spellSchool} )</span>}
+              </>
+            )}
+          </span>
+          <div style={{ marginLeft: '15px' }}>
+            {showIncantation &&
+              spellIncantation &&
+              spellIncantation.split('\n').map((line, idx) => {
+                const isIndented = line.startsWith('>>')
+                const cleanLine = isIndented ? line.replace(/^>>/, '') : line
+                return (
+                  <span
+                    key={idx}
+                    style={{
+                      display: 'block',
+                      lineHeight: '1.2',
+                      marginLeft: isIndented ? 15 : 0,
+                      marginBottom: 1,
+                      fontStyle: 'italic',
+                      color: 'green',
+                    }}
+                  >
+                    {cleanLine}
+                  </span>
+                )
+              })}
+          </div>
+          <div className="m-0">
+            {showStrips && spellMaterials ? (
+              <span style={{ color: 'green' }}>( {spellMaterials} )</span>
+            ) : null}
+          </div>
+        </Row>
+      )
+    }
+
+    // If sub is a subclass spell list object with levels, flatten and render all spells
+    if (sub && typeof sub === 'object' && Array.isArray(sub.levels)) {
+      // Flatten all spells from all levels (for caster subclasses)
+      const allSpells = sub.levels.flatMap(level =>
+        Array.isArray(level.spells) ? level.spells : []
+      )
+      return allSpells.map((spell: any) => renderSubclassSpells(spell, chosenName))
+    }
+
+    // If sub is an array, map over it
+    if (Array.isArray(sub)) {
+      return sub.map((spell: any) => renderSubclassSpells(spell, chosenName))
+    }
+
+    return null
   }
 
   const renderSpellArray = (spellArr: any[] | undefined, indicator?: string) => {
     if (!Array.isArray(spellArr) || spellArr.length === 0) return null
 
     const isOptional = indicator === 'optionalPickOne'
-    const isBase = indicator === 'base'
+    // const isBase = indicator === 'base'
     const isPickOne = indicator === 'pickOne' || indicator === 'pickOneOfTwo'
     const isPickTwoOfThree = indicator === 'pickTwoOfThree'
 
@@ -884,11 +902,11 @@ function SpellListDetails() {
       }
     }
 
-    // Default rendering for all other cases
-    let label = ''
-    if (isBase) label = ''
-    else if (isPickOne) label = 'Pick one in edit mode:'
-    else if (isPickTwoOfThree) label = 'Pick two of three in edit mode:'
+    // // Default rendering for all other cases
+    // let label = ''
+    // if (isBase) label = ''
+    // else if (isPickOne) label = 'Pick one in edit mode:'
+    // else if (isPickTwoOfThree) label = 'Pick two of three in edit mode:'
 
     return (
       <>
@@ -912,7 +930,7 @@ function SpellListDetails() {
 
           return (
             <>
-              {showPickTwoLabel || showOneMoreLabel && (
+              {(showPickTwoLabel || showOneMoreLabel) && (
                 <Row className="ms-2 fw-bold text-secondary">
                   <span className="d-flex align-items-center">
                     <IoIosWarning color="gold" className="me-1"/>
@@ -1011,160 +1029,115 @@ function SpellListDetails() {
     )
   }
 
-  const renderLookThePart = (lookThePartArr: any[]) => {
-    if (!Array.isArray(lookThePartArr) || lookThePartArr.length === 0) return null
+  const renderLookThePart = () => {
+    const lookThePartArr = spellList.lookThePartSpells || [];
+    if (!Array.isArray(lookThePartArr) || lookThePartArr.length === 0) return null;
 
-    if (!spellList.lookThePart) return (
-      <>
-        <Form.Text className="fw-bold mb-0">Look the part:</Form.Text>
-        <Row className="m-0">
-          <span>{' - '}</span>
-        </Row>
-      </>
-    )
+    if (!spellList.lookThePart) {
+      return (
+        <>
+          <Form.Text className="fw-bold mb-0">Look the part:</Form.Text>
+          <Row className="m-0">
+            <span>{' - '}</span>
+          </Row>
+        </>
+      );
+    }
+
+    const chosenSpell = lookThePartArr.find(spell => spell.chosen);
+    const onlyOneLookThePartOption = lookThePartArr.length === 1
+
+    console.log('look the part arr', lookThePartArr.length, 'chosenSpell', chosenSpell)
 
     return (
       <>
         <Form.Text className="fw-bold mb-0">Look the part:</Form.Text>
-        {lookThePartArr.map((entry, idx) => {
-          if (entry.base) {
-            return entry.base.map((spell, i) => {
-              const spellName = fetchSpellDetails('name', spell.id) || 'Unknown Spell'
-              const spellType = fetchSpellDetails('type', spell.id)
-              const spellSchool = fetchSpellDetails('school', spell.id)
-              const spellIncantation = fetchSpellDetails('incantation', spell.id)
-              const spellMaterials = fetchSpellDetails('materials', spell.id)
-              const spellFrequency = fetchSpellFrequency(spell.id)
-              const spellExtraordinary = fetchMartialSpellDetails('extraordinary', spell.id)
-              const spellMagical = fetchMartialSpellDetails('magical', spell.id)
-              const spellTrait = fetchMartialSpellDetails('trait', spell.id)
-              const spellAmbulant = fetchMartialSpellDetails('ambulant', spell.id)
-
+        {chosenSpell ? (
+          <Row className="m-0">
+            <div>
+              <span style={{ textDecoration: 'underline', color: 'green', fontWeight: 600 }}>
+                {fetchSpellDetails('name', chosenSpell.id) || 'Unknown Spell'}
+              </span>{' '}
+              <span>
+                {fetchSpellFrequency(chosenSpell.id).frequency}
+                {' '}{fetchMartialSpellDetails('extraordinary', chosenSpell.id) ? '(ex)' : ''}
+                {' '}{fetchMartialSpellDetails('magical', chosenSpell.id) ? '(m)' : ''}
+                {' '}{fetchMartialSpellDetails('trait', chosenSpell.id) ? '( T )' : ''}
+                {' '}{fetchMartialSpellDetails('ambulant', chosenSpell.id) ? '(Ambulant)' : ''}
+                {' '}{showRange && fetchSpellFrequency(chosenSpell.id).range ? ` (${fetchSpellFrequency(chosenSpell.id).range})` : ''}
+              </span>{' '}
+              {showTypeAndSchool && <span>( {fetchSpellDetails('type', chosenSpell.id)} )</span>}
+              {fetchSpellDetails('school', chosenSpell.id) && showTypeAndSchool && (
+                <span>( {fetchSpellDetails('school', chosenSpell.id)} )</span>
+              )}
+              <div style={{ marginLeft: '15px' }}>
+                {showIncantation &&
+                  fetchSpellDetails('incantation', chosenSpell.id) &&
+                  fetchSpellDetails('incantation', chosenSpell.id).split('\n').map((line: string, idx: number) => {
+                    const isIndented = line.startsWith('>>');
+                    const cleanLine = isIndented ? line.replace(/^>>/, '') : line;
+                    return (
+                      <span
+                        key={idx}
+                        style={{
+                          display: 'block',
+                          lineHeight: '1.2',
+                          marginLeft: isIndented ? 15 : 0,
+                          marginBottom: 1,
+                          fontStyle: 'italic',
+                        }}
+                      >
+                        {cleanLine}
+                      </span>
+                    );
+                  })}
+              </div>
+              <div className="m-0">
+                {showStrips && fetchSpellDetails('materials', chosenSpell.id) ? (
+                  <span>( {fetchSpellDetails('materials', chosenSpell.id)} )</span>
+                ) : null}
+              </div>
+            </div>
+          </Row>
+        ) : (
+          <>
+            {!onlyOneLookThePartOption && 
+              <Row className="ms-2 fw-bold text-secondary">
+                <span className="d-flex align-items-center">
+                  <IoIosWarning color="gold" className="me-1"/>
+                  Pick one in edit mode:
+                </span>
+              </Row>
+            }
+            {lookThePartArr.map((spell, idx) => {
               return (
-                <Row key={i} className="m-0">
-                  <div>
-                    <span style={{ textDecoration: 'underline' }} >
-                      {spellName}
-                    </span>{' '}
-                    <span>
-                      {spellFrequency.frequency}
-                      {' '}{spellExtraordinary ? '(ex)' : ''}
-                      {' '}{spellMagical ? '(m)' : ''}
-                      {' '}{spellTrait ? '( T )' : ''}
-                      {' '}{spellAmbulant ? '(Ambulant)' : ''}
-                      {' '}{showRange && spellFrequency.range ? ` (${spellFrequency.range})` : ''}
-                    </span>{' '}
-                    {showTypeAndSchool && <span>( {spellType} )</span>}
-                    {spellSchool && showTypeAndSchool && (
-                      <span>( {spellSchool} )</span>
-                    )}
-                    <div style={{ marginLeft: '15px' }}>
-                      {showIncantation &&
-                        spellIncantation &&
-                        spellIncantation.split('\n').map((line, idx) => {
-                          const isIndented = line.startsWith('>>')
-                          const cleanLine = isIndented ? line.replace(/^>>/, '') : line
-                          return (
-                            <span
-                              key={idx}
-                              style={{
-                                display: 'block',
-                                lineHeight: '1.2',
-                                marginLeft: isIndented ? 15 : 0,
-                                marginBottom: 1,
-                                fontStyle: 'italic',
-                              }}
-                            >
-                              {cleanLine}
-                            </span>
-                          )
-                        })}
-                    </div>
-                    <div className="m-0">
-                      {showStrips && spellMaterials ? (
-                        <span>( {spellMaterials} )</span>
-                      ) : null}
-                    </div>
-                  </div>
+                <Row key={idx} className="m-0">
+                  <span style={{
+                    textDecoration: onlyOneLookThePartOption ? 'underline' : 'none',
+                    color: onlyOneLookThePartOption ? 'green' : 'inherit',
+                    marginLeft: onlyOneLookThePartOption ? '0' : '15px'}}>
+                    {fetchSpellDetails('name', spell.id) || 'Unknown Spell'}
+                    {' '}{fetchSpellFrequency(spell.id).frequency}
+                    {' '}{fetchMartialSpellDetails('extraordinary', spell.id) ? '(ex)' : ''}
+                    {' '}{fetchMartialSpellDetails('magical', spell.id) ? '(m)' : ''}
+                    {' '}{fetchMartialSpellDetails('trait', spell.id) ? '( T )' : ''}
+                    {' '}{fetchMartialSpellDetails('ambulant', spell.id) ? '(Ambulant)' : ''}
+                    {' '}{showRange && fetchSpellFrequency(spell.id).range
+                    ? ` (${fetchSpellFrequency(spell.id).range})`
+                    : ''}
+                  </span>{' '}
+                  {showTypeAndSchool && <span>( {fetchSpellDetails('type', spell.id)} )</span>}
+                  {fetchSpellDetails('school', spell.id) && showTypeAndSchool && (
+                    <span>( {fetchSpellDetails('school', spell.id)} )</span>
+                  )}
                 </Row>
-              )
-            })
-          }
-          if (entry.pickOne) {
-            return (
-              <React.Fragment key={`pickOne-${idx}`}>
-                <Row className="ms-2 fw-bold text-secondary">
-                  <span>Pick one in edit mode:</span>
-                </Row>
-                {entry.pickOne.map((spell, j) => {
-                  const spellName = fetchSpellDetails('name', spell.id) || 'Unknown Spell'
-                  const spellType = fetchSpellDetails('type', spell.id)
-                  const spellSchool = fetchSpellDetails('school', spell.id)
-                  const spellIncantation = fetchSpellDetails('incantation', spell.id)
-                  const spellMaterials = fetchSpellDetails('materials', spell.id)
-                  const spellFrequency = fetchSpellFrequency(spell.id)
-                  const spellExtraordinary = fetchMartialSpellDetails('extraordinary', spell.id)
-                  const spellMagical = fetchMartialSpellDetails('magical', spell.id)
-                  const spellTrait = fetchMartialSpellDetails('trait', spell.id)
-                  const spellAmbulant = fetchMartialSpellDetails('ambulant', spell.id)
-
-                  return (
-                    <Row key={j} className="m-0">
-                      <div>
-                        <span className="ms-3" style={{ textDecoration: 'underline' }} >
-                          {spellName}
-                        </span>{' '}
-                        <span>
-                          {spellFrequency.frequency}
-                          {' '}{spellExtraordinary ? '(ex)' : ''}
-                          {' '}{spellMagical ? '(m)' : ''}
-                          {' '}{spellTrait ? '( T )' : ''}
-                          {' '}{spellAmbulant ? '(Ambulant)' : ''}
-                          {' '}{showRange && spellFrequency.range ? ` (${spellFrequency.range})` : ''}
-                        </span>{' '}
-                        {showTypeAndSchool && <span>( {spellType} )</span>}
-                        {spellSchool && showTypeAndSchool && (
-                          <span>( {spellSchool} )</span>
-                        )}
-                        <div style={{ marginLeft: '15px' }}>
-                          {showIncantation &&
-                            spellIncantation &&
-                            spellIncantation.split('\n').map((line, idx) => {
-                              const isIndented = line.startsWith('>>')
-                              const cleanLine = isIndented ? line.replace(/^>>/, '') : line
-                              return (
-                                <span
-                                  key={idx}
-                                  style={{
-                                    display: 'block',
-                                    lineHeight: '1.2',
-                                    marginLeft: isIndented ? 15 : 0,
-                                    marginBottom: 1,
-                                    fontStyle: 'italic',
-                                  }}
-                                >
-                                  {cleanLine}
-                                </span>
-                              )
-                            })}
-                        </div>
-                        <div className="m-0">
-                          {showStrips && spellMaterials ? (
-                            <span>( {spellMaterials} )</span>
-                          ) : null}
-                        </div>
-                      </div>
-                    </Row>
-                  )
-                })}
-              </React.Fragment>
-            )
-          }
-          return null
-        })}
+              );
+            })}
+          </>
+        )}
       </>
-    )
-  }
+    );
+  };
 
   if (!spellList) {
     return <Container><p>Spell list not found.</p></Container>
@@ -1175,6 +1148,7 @@ function SpellListDetails() {
       <Row className="d-flex">
         <Col xs="auto" className="pe-0">
           <h4>Overview</h4>
+          <span>{spellList.version}</span>
         </Col>
         <Col className="flex-grow-1">
           {[
@@ -1241,11 +1215,9 @@ function SpellListDetails() {
               <>
                 <Form.Text>Points Remaining...</Form.Text>
                 <div>
-                  {spellList.spells.map((level: SpellLevel, index) =>
+                  {spellList.levels.map((level: SpellLevel, index) =>
                     level.points === 0 ? null : (
-                      <Form.Text
-                        key={index}
-                        className="me-3">
+                      <Form.Text key={index} className="me-3">
                         L{level.level}: {level.points},
                       </Form.Text>
                     )
@@ -1286,8 +1258,8 @@ function SpellListDetails() {
         ) : (
           <Form.Text>**** Spells ****</Form.Text>
         )}
-        {isMartialClass && renderLookThePart(lookThePartByClass[spellList.class] || [])}
-        {spellList.spells.map((level, levelIdx) => (
+        {isMartialClass && renderLookThePart()}
+        {spellList.levels.map((level, levelIdx) => (
           <React.Fragment key={levelIdx}>
             <Form.Text className="fw-bold mb-0">{`Level ${level.level}`}</Form.Text>
             {!isMartialClass && renderSpellArray(level.spells)}

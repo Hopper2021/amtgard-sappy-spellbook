@@ -6,6 +6,7 @@ import { IoIosWarning } from "react-icons/io"
 import { LuCirclePlus } from "react-icons/lu"
 import { IoMdInformationCircle } from "react-icons/io"
 import { IoEllipsisVertical } from 'react-icons/io5'
+import { CURRENT_VERSION } from '../appConstants.js'
 
 function App() {
   const navigate = useNavigate()
@@ -13,6 +14,7 @@ function App() {
   const [toggleDeleteModal, setDeleteToggleModal] = useState(false)
   const emptySpellList = {
     id: null,
+    version: '',
     name: '',
     class: '',
     maxLevel: null,
@@ -31,6 +33,8 @@ function App() {
   const tipsEnabled = enableTips === 'true'
 
   const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
+
+  console.log('allSpellLists', allSpellLists)
 
   const handleClose = () => {
     setOpenModal(false)
@@ -147,7 +151,11 @@ function App() {
                   onMouseLeave={handleLongPressEnd}
                   onTouchStart={() => handleLongPressStart(spellList)}
                   onTouchEnd={handleLongPressEnd}
-                  onClick={() => navigate(`/listDetails/${spellList.id}`)}
+                  onClick={() => {
+                    spellList.version && spellList.version === CURRENT_VERSION
+                    ? navigate(`/listDetails/${spellList.id}`)
+                    : navigate(`/legacyListDetails/${spellList.id}`)
+                  }}
                 >
                   {spellList.name} ({spellList.class}, level {spellList.maxLevel})
                 </Button>

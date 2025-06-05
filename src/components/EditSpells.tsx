@@ -51,7 +51,7 @@ interface SpellList {
   class: string
   maxLevel: number
   lookThePart: boolean
-  spells: SpellLevel[]
+  levels: SpellLevel[]
 }
 
 interface FrequencyByClass {
@@ -99,22 +99,22 @@ function EditSpells() {
     class: spellListToEdit?.class || 'Bard',
     maxLevel: spellListToEdit?.maxLevel || 1,
     lookThePart: spellListToEdit?.lookThePart || false,
-    spells: spellListToEdit?.spells || [],
+    levels: spellListToEdit?.levels || [],
   })
   const experiencedMax = ALL_SPELLS.find(s => s.name === "Experienced")?.max ?? 2
-  const experiencedSpell = modifiedSpellList.spells
+  const experiencedSpell = modifiedSpellList.levels
     .flatMap(level => level.spells)
     .find(spell => {
       const expSpell = ALL_SPELLS.find(s => s.name === "Experienced")
       return expSpell && spell.id === expSpell.id
     })
 
-  const getAllVerbals = (modifiedSpellList) => {
-    const verbals: VerbalSpell[] = []
-    modifiedSpellList.spells
-      .filter((level: SpellLevel) => level.level <= 4)
-      .forEach((level: SpellLevel) => {
-        level.spells.forEach((spellObj: Spell) => {
+    const getAllVerbals = (modifiedSpellList) => {
+      const verbals: VerbalSpell[] = []
+      modifiedSpellList.levels
+        .filter((level: SpellLevel) => level.level <= 4)
+        .forEach((level: SpellLevel) => {
+          level.spells.forEach((spellObj: Spell) => {
           // Only include if experienced is 0 or undefined
           if (spellObj.experienced && spellObj.experienced !== 0) return
           const spellDetails = ALL_SPELLS.find(s => s.id === spellObj.id) as VerbalSpell | undefined
@@ -134,13 +134,13 @@ function EditSpells() {
     const warderArchetype = ALL_SPELLS.find(spell => spell.name === 'Warder')
     const necromancerArchetype = ALL_SPELLS.find(spell => spell.name === 'Necromancer')
     const healSpell = ALL_SPELLS.find(spell => spell.name === 'Heal')
-    const priestPresent = spellList?.spells.some(level =>
+    const priestPresent = spellList?.levels.some(level =>
       level.spells.some(spell => spell.id === priestArchetype?.id)
     )
-    const warderPresent = spellList?.spells.some(level =>
+    const warderPresent = spellList?.levels.some(level =>
       level.spells.some(spell => spell.id === warderArchetype?.id)
     )
-    const necromancerPresent = spellList?.spells.some(level =>
+    const necromancerPresent = spellList?.levels.some(level =>
       level.spells.some(spell => spell.id === necromancerArchetype?.id)
     )
 
@@ -173,15 +173,15 @@ function EditSpells() {
   // Wizard Archetype list adjustments
   const getAdjustedWizardSpells = (baseWizardSpells, spellList) => {
     const evokerArchetype = ALL_SPELLS.find(spell => spell.name === 'Evoker')
-    const evokerPresent = spellList?.spells.some(level =>
+    const evokerPresent = spellList?.levels.some(level =>
       level.spells.some(spell => spell.id === evokerArchetype?.id)
     )
     const warlockArchetype = ALL_SPELLS.find(spell => spell.name === 'Warlock')
-    const warlockPresent = spellList?.spells.some(level =>
+    const warlockPresent = spellList?.levels.some(level =>
       level.spells.some(spell => spell.id === warlockArchetype?.id)
     )
     const battleMadeArchetype = ALL_SPELLS.find(spell => spell.name === 'Battlemage')
-    const battleMagePresent = spellList?.spells.some(level =>
+    const battleMagePresent = spellList?.levels.some(level =>
       level.spells.some(spell => spell.id === battleMadeArchetype?.id)
     )
 
@@ -240,11 +240,11 @@ function EditSpells() {
   // Druid Archetype list adjustments
   const getAdjustedDruidSpells = (baseDruidSpells, spellList) => {
     const summonerArchetype = ALL_SPELLS.find(spell => spell.name === 'Summoner')
-    const summonerPresent = spellList?.spells.some(level =>
+    const summonerPresent = spellList?.levels.some(level =>
       level.spells.some(spell => spell.id === summonerArchetype?.id)
     )
     const rangerArchetype = ALL_SPELLS.find(spell => spell.name === 'Ranger')
-    const rangerPresent = spellList?.spells.some(level =>
+    const rangerPresent = spellList?.levels.some(level =>
       level.spells.some(spell => spell.id === rangerArchetype?.id)
     )
 
@@ -310,11 +310,11 @@ function EditSpells() {
   // Bard Archetype list adjustments
   const getAdjustedBardSpells = (baseBardSpells, spellList) => {
     const dervishArcheType = ALL_SPELLS.find(spell => spell.name === 'Dervish')
-    const dervishPresent = spellList?.spells.some(level =>
+    const dervishPresent = spellList?.levels.some(level =>
       level.spells.some(spell => spell.id === dervishArcheType?.id)
     )
     const legendArcheType = ALL_SPELLS.find(spell => spell.name === 'Legend')
-    const legendPresent = spellList?.spells.some(level =>
+    const legendPresent = spellList?.levels.some(level =>
       level.spells.some(spell => spell.id === legendArcheType?.id)
     )
 
@@ -350,10 +350,10 @@ function EditSpells() {
   }
 
   const spellsByClass =
-    (spellListToEdit?.class === 'Bard' && getAdjustedBardSpells(BARD_SPELLS, spellListToEdit)) ||
-    (spellListToEdit?.class === 'Healer' && getAdjustedHealerSpells(HEALER_SPELLS, spellListToEdit)) ||
-    (spellListToEdit?.class === 'Wizard' && getAdjustedWizardSpells(WIZARD_SPELLS, spellListToEdit)) ||
-    (spellListToEdit?.class === 'Druid' && getAdjustedDruidSpells(DRUID_SPELLS, spellListToEdit))
+    (spellListToEdit?.class === 'Bard' && getAdjustedBardSpells(BARD_SPELLS.levels, spellListToEdit)) ||
+    (spellListToEdit?.class === 'Healer' && getAdjustedHealerSpells(HEALER_SPELLS.levels, spellListToEdit)) ||
+    (spellListToEdit?.class === 'Wizard' && getAdjustedWizardSpells(WIZARD_SPELLS.levels, spellListToEdit)) ||
+    (spellListToEdit?.class === 'Druid' && getAdjustedDruidSpells(DRUID_SPELLS.levels, spellListToEdit))
 
   const autoRemoveAndRefundSpell = (spellId: number, spellList: SpellList) => {
     const spellLevel = findSpellLevel(spellId)
@@ -362,7 +362,7 @@ function EditSpells() {
     const spellData = getSpellData(spellLevel, spellId)
     let spellCost = spellData?.cost ?? 0
 
-    const currentLevelObj = spellList.spells.find(level => level.level === spellLevel.level)
+    const currentLevelObj = spellList.levels.find(level => level.level === spellLevel.level)
     if (!currentLevelObj) return spellList
 
     const spellExists = currentLevelObj.spells.find((spell: Spell) => spell.id === spellId)
@@ -380,7 +380,7 @@ function EditSpells() {
       lookThePart,
       maxLevel
     )
-    const newLevels = spellList.spells.map(level => {
+    const newLevels = spellList.levels.map(level => {
       const refunded = refundedLevels.find(l => l.level === level.level)
       return refunded ? refunded : level
     })
@@ -393,17 +393,17 @@ function EditSpells() {
     )
     return {
       ...spellList,
-      spells: newSpellLevels,
+      levels: newSpellLevels,
     }
   }
 
   useEffect(() => {
     const warderArchetype = ALL_SPELLS.find(spell => spell.name === 'Warder')
     const necromancerArchetype = ALL_SPELLS.find(spell => spell.name === 'Necromancer')
-    const warderPresent = modifiedSpellList.spells.some(level =>
+    const warderPresent = modifiedSpellList.levels.some(level =>
       level.spells.some(spell => spell.id === warderArchetype?.id)
     )
-    const necromancerPresent = modifiedSpellList.spells.some(level =>
+    const necromancerPresent = modifiedSpellList.levels.some(level =>
       level.spells.some(spell => spell.id === necromancerArchetype?.id)
     )
 
@@ -434,15 +434,15 @@ function EditSpells() {
 
     // Wizard Archetype spell limitations
     const evokerArchetype = ALL_SPELLS.find(spell => spell.name === 'Evoker')
-    const evokerPresent = modifiedSpellList.spells.some(level =>
+    const evokerPresent = modifiedSpellList.levels.some(level =>
       level.spells.some(spell => spell.id === evokerArchetype?.id)
     )
     const warlockArchetype = ALL_SPELLS.find(spell => spell.name === 'Warlock')
-    const warlockPresent = modifiedSpellList.spells.some(level =>
+    const warlockPresent = modifiedSpellList.levels.some(level =>
       level.spells.some(spell => spell.id === warlockArchetype?.id)
     )
     const battleMageArchetype = ALL_SPELLS.find(spell => spell.name === 'Battlemage')
-    const battleMagePresent = modifiedSpellList.spells.some(level =>
+    const battleMagePresent = modifiedSpellList.levels.some(level =>
       level.spells.some(spell => spell.id === battleMageArchetype?.id)
     )
 
@@ -499,7 +499,7 @@ function EditSpells() {
   }
 
   const calculateLevelPointsAvailable = (level: number) => {
-    const listLevel = modifiedSpellList.spells.find(listLevel => listLevel.level === level)
+    const listLevel = modifiedSpellList.levels.find(listLevel => listLevel.level === level)
     if (listLevel) {
       return listLevel.points
     }
@@ -507,14 +507,13 @@ function EditSpells() {
   }
 
   const calculateTrickleDownPointsAvailable = (level: number) => {
-    const levelsToSum = modifiedSpellList.spells.filter((listLevel) => listLevel.level >= level)
+    const levelsToSum = modifiedSpellList.levels.filter((listLevel) => listLevel.level >= level)
     const totalPoints = levelsToSum.reduce((sum, listLevel) => sum + listLevel.points, 0)
-
     return totalPoints
   }
 
   const getAmountPurchased = (spellId: number): string => {
-    for (const level of modifiedSpellList.spells) {
+    for (const level of modifiedSpellList.levels) {
       const spell = level.spells.find((spell: { id: number; purchased: number }) => spell.id === spellId)
       if (spell) {
         return `x${spell.purchased}`
@@ -541,7 +540,7 @@ function EditSpells() {
   const deductPointsForSpell = (spellCost: number, spellLevel, modifiedSpellList) => {
     let remainingCost = spellCost
     let rolledDown: { [level: number]: number } = {}
-    const updatedLevels = modifiedSpellList.spells.map(modifiedListLevel => {
+    const updatedLevels = modifiedSpellList.levels.map(modifiedListLevel => {
       if (remainingCost > 0 && modifiedListLevel.level === spellLevel.level && modifiedListLevel.points > 0) {
         const deduct = Math.min(modifiedListLevel.points, remainingCost)
         remainingCost -= deduct
@@ -608,7 +607,7 @@ function EditSpells() {
       // Count how many spells have experienced set to 1
       let experiencedCount = 0
       let updatedSpellList = { ...modifiedSpellList }
-      updatedSpellList.spells = updatedSpellList.spells.map(level => ({
+      updatedSpellList.levels = updatedSpellList.levels.map(level => ({
         ...level,
         spells: level.spells.map(spell => {
           if (spell.experienced === 1) experiencedCount++
@@ -617,7 +616,7 @@ function EditSpells() {
       }))
 
       // Set experienced value on the target spell
-      updatedSpellList.spells = updatedSpellList.spells.map(level => ({
+      updatedSpellList.levels = updatedSpellList.levels.map(level => ({
         ...level,
         spells: level.spells.map(spell => {
           if (spell.id === targetSpellId) {
@@ -629,7 +628,7 @@ function EditSpells() {
 
       // Deduct points for Experienced from level 1 (or trickle down)
       const experiencedCost = ALL_SPELLS.find(s => s.name === "Experienced")?.cost ?? 2
-      const level1Obj = updatedSpellList.spells.find(lvl => lvl.level === 1)
+      const level1Obj = updatedSpellList.levels.find(lvl => lvl.level === 1)
       if (!level1Obj) return
 
       // Use deductPointsForSpell to get updated levels and rolledDown for Experienced
@@ -683,9 +682,9 @@ function EditSpells() {
         }
       }
 
-      setModifiedSpellList({ ...updatedSpellList, spells: updatedLevels })
+      setModifiedSpellList({ ...updatedSpellList, levels: updatedLevels })
       setOpenExperiencedModal(false)
-      updateLocalStorage({ ...updatedSpellList, spells: updatedLevels })
+      updateLocalStorage({ ...updatedSpellList, levels: updatedLevels })
       return
     }
 
@@ -711,7 +710,7 @@ function EditSpells() {
       }
     }
 
-    const currentLevelObj = modifiedSpellList.spells.find(level => level.level === spellLevel.level)
+    const currentLevelObj = modifiedSpellList.levels.find(level => level.level === spellLevel.level)
     if (!currentLevelObj) {
       setCannotAffordSpell(true)
       setShowToast(true)
@@ -728,7 +727,7 @@ function EditSpells() {
     }
 
     const isHeal = spellData?.name === 'Heal'
-    const priestIsPresent = priestSpellId !== undefined && modifiedSpellList.spells.some(level =>
+    const priestIsPresent = priestSpellId !== undefined && modifiedSpellList.levels.some(level =>
       level.spells.some(spell => spell.id === priestSpellId)
     )
     if (isHeal && priestIsPresent) {
@@ -748,7 +747,7 @@ function EditSpells() {
 
     let newSpellList: SpellList = {
       ...modifiedSpellList,
-      spells: newLevels,
+      levels: newLevels,
     }
 
     const rangerArchetype = ALL_SPELLS.find(spell => spell.name === 'Ranger')
@@ -772,7 +771,7 @@ function EditSpells() {
   }
 
   const findCurrentLevelObj = (spellLevel, modifiedSpellList) => {
-    return modifiedSpellList.spells.find(level => level.level === spellLevel.level)
+    return modifiedSpellList.levels.find(level => level.level === spellLevel.level)
   }
 
   const getRolledDownMap = (spellExists) => {
@@ -784,7 +783,7 @@ function EditSpells() {
   }
 
   const getEligibleLevels = (modifiedSpellList, spellByClassLevel) => {
-    return [...modifiedSpellList.spells]
+    return [...modifiedSpellList.levels]
       .filter(level => level.level >= spellByClassLevel.level)
       .sort((a, b) => b.level - a.level)
   }
@@ -868,7 +867,7 @@ const removeSpellFromList = (spellId: number) => {
     let highestExpLevelIdx = -1
     let highestExpSpellIdx = -1
 
-    modifiedList.spells.forEach((level, lvlIdx) => {
+    modifiedList.levels.forEach((level, lvlIdx) => {
       level.spells.forEach((spell, spellIdx) => {
         if (typeof spell.experienced === 'number' && spell.experienced > highestExp) {
           highestExp = spell.experienced
@@ -880,7 +879,7 @@ const removeSpellFromList = (spellId: number) => {
 
     // Set that spell's experienced to 0
     if (highestExpLevelIdx !== -1 && highestExpSpellIdx !== -1) {
-      modifiedList.spells = modifiedList.spells.map((level, lvlIdx) => ({
+      modifiedList.levels = modifiedList.levels.map((level, lvlIdx) => ({
         ...level,
         spells: level.spells.map((spell, spellIdx) =>
           lvlIdx === highestExpLevelIdx && spellIdx === highestExpSpellIdx
@@ -894,7 +893,7 @@ const removeSpellFromList = (spellId: number) => {
   // --- Handle Experienced removal if the spell being removed has experienced >= 1 ---
   if (spellExists.experienced && spellExists.experienced >= 1) {
     // Find Experienced in level 1
-    const level1 = modifiedList.spells.find(level => level.level === 1)
+    const level1 = modifiedList.levels.find(level => level.level === 1)
     const experiencedIdx = level1?.spells.findIndex(s => s.id === 56)
     if (level1 && experiencedIdx !== undefined && experiencedIdx !== -1) {
       const expSpell = level1.spells[experiencedIdx]
@@ -913,13 +912,13 @@ const removeSpellFromList = (spellId: number) => {
       )
 
       // Update points for refunded levels
-      modifiedList.spells = modifiedList.spells.map(lvl => {
+      modifiedList.levels = modifiedList.levels.map(lvl => {
         const refunded = expRefundedLevels.find(l => l.level === lvl.level)
         return refunded ? refunded : lvl
       })
 
       // Now remove/decrement Experienced in level 1
-      modifiedList.spells = modifiedList.spells.map(level => {
+      modifiedList.levels = modifiedList.levels.map(level => {
         if (level.level === 1) {
           if ((expSpell.purchased || 1) > 1) {
             return {
@@ -941,7 +940,7 @@ const removeSpellFromList = (spellId: number) => {
       })
 
       // Set experienced to 0 on the spell being removed
-      modifiedList.spells = modifiedList.spells.map(level => ({
+      modifiedList.levels = modifiedList.levels.map(level => ({
         ...level,
         spells: level.spells.map(spell =>
           spell.id === spellId
@@ -968,7 +967,7 @@ const removeSpellFromList = (spellId: number) => {
     maxLevel
   )
 
-  const newLevels = modifiedList.spells.map(level => {
+  const newLevels = modifiedList.levels.map(level => {
     const refunded = refundedLevels.find(l => l.level === level.level)
     return refunded ? refunded : level
   })
@@ -983,7 +982,7 @@ const removeSpellFromList = (spellId: number) => {
 
   let newSpellList: SpellList = {
     ...modifiedList,
-    spells: newSpellLevels,
+    levels: newSpellLevels,
   }
 
   // Remove archetype-related spells if needed (existing logic)
@@ -1048,8 +1047,6 @@ const removeSpellFromList = (spellId: number) => {
     const amount = freq?.amount
     const per = freq?.per
     const charge = freq?.charge
-
-    console.log('spell frequency', freq, amount, per, charge)
 
     if (amount != null && per != null) {
       return `${amount}/${per}${charge ? ` ${charge}` : ''}`
@@ -1124,7 +1121,6 @@ const removeSpellFromList = (spellId: number) => {
           <Modal.Body className="modal-sm pb-1 p-0">
             <span>
               <strong>Base Frequency for {modifiedSpellList.class}: </strong>
-              {console.log('spell frequency', spellFrequency)}
               {spellFrequency ? spellFrequency : 'N/A'}
             </span>
           </Modal.Body>
@@ -1219,33 +1215,33 @@ const removeSpellFromList = (spellId: number) => {
 
                     // Healer
                     if (
-                      priestArchetype && modifiedSpellList.spells.some(level =>
+                      priestArchetype && modifiedSpellList.levels.some(level =>
                         level.spells.some(s => s.id === priestArchetype.id)
                       ) &&
                       spell?.school === 'Death'
                     ) archetypes.push('Priest')
                     if (
-                      warderArchetype && modifiedSpellList.spells.some(level =>
+                      warderArchetype && modifiedSpellList.levels.some(level =>
                         level.spells.some(s => s.id === warderArchetype.id)
                       ) &&
                       ['Death', 'Command', 'Subdual'].includes(spell?.school || '')
                     ) archetypes.push('Warder')
                     if (
-                      necromancerArchetype && modifiedSpellList.spells.some(level =>
+                      necromancerArchetype && modifiedSpellList.levels.some(level =>
                         level.spells.some(s => s.id === necromancerArchetype.id)
                       ) &&
                       spell?.school === 'Protection'
                     ) archetypes.push('Necromancer')
                     // Wizard
                     if (
-                      evokerArchetype && modifiedSpellList.spells.some(level =>
+                      evokerArchetype && modifiedSpellList.levels.some(level =>
                         level.spells.some(s => s.id === evokerArchetype.id)
                       ) &&
                       spell?.type === 'Verbal' &&
                       (spell?.range === "20'" || spell?.range === "50'")
                     ) archetypes.push('Evoker')
                     if (
-                      warlockArchetype && modifiedSpellList.spells.some(level =>
+                      warlockArchetype && modifiedSpellList.levels.some(level =>
                         level.spells.some(s => s.id === warlockArchetype.id)
                       ) &&
                       spell?.type === 'Verbal' &&
@@ -1253,21 +1249,21 @@ const removeSpellFromList = (spellId: number) => {
                     ) archetypes.push('Warlock')
                     if (
                       battleMageArchetype &&
-                      modifiedSpellList.spells.some(level =>
+                      modifiedSpellList.levels.some(level =>
                         level.spells.some(s => s.id === battleMageArchetype.id)
                       ) &&
                       (spell?.type === 'Enchantment' || spell?.type === 'Magic Ball')
                     ) archetypes.push('Battlemage')
                     // Druid
                     if (
-                      summonerArchetype && modifiedSpellList.spells.some(level =>
+                      summonerArchetype && modifiedSpellList.levels.some(level =>
                         level.spells.some(s => s.id === summonerArchetype.id)
                       ) &&
                       spell?.type === 'Verbal' &&
                       (spell?.range === "20'" || spell?.range === "50'" || spell?.range === 'Other')
                     ) archetypes.push('Summoner')
                     if (
-                      summonerArchetype && modifiedSpellList.spells.some(level =>
+                      summonerArchetype && modifiedSpellList.levels.some(level =>
                         level.spells.some(s => s.id === summonerArchetype.id)
                       ) &&
                       spell?.name?.includes('Equipment:') &&
@@ -1279,7 +1275,7 @@ const removeSpellFromList = (spellId: number) => {
                       })()
                     ) archetypes.push('Summoner')
                     if (
-                      legendArchetype && modifiedSpellList.spells.some(level =>
+                      legendArchetype && modifiedSpellList.levels.some(level =>
                         level.spells.some(s => s.id === legendArchetype.id)
                       ) &&
                       spell?.name?.includes('Swift')
@@ -1376,10 +1372,10 @@ const removeSpellFromList = (spellId: number) => {
             </Button>
           </div>
         </CardHeader>
-        {Array.isArray(spellsByClass) && spellsByClass.slice(0, modifiedSpellList.spells.length).map((level, index) => {
+        {Array.isArray(spellsByClass) && spellsByClass.slice(0, modifiedSpellList.levels.length).map((level, index) => {
           const levelPointsAvailable = calculateLevelPointsAvailable(level.level)
           const trickleDownPointsAvailable = calculateTrickleDownPointsAvailable(level.level)
-          const currentLevelSpells = modifiedSpellList.spells.find(lvl => lvl.level === level.level)?.spells || []
+          const currentLevelSpells = modifiedSpellList.levels.find(lvl => lvl.level === level.level)?.spells || []
 
           return (
             <Accordion key={index} defaultActiveKey="1" flush>

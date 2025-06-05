@@ -26,14 +26,6 @@ import {
   APEX_SPELLS,
   MARAUDER_SPELLS,
   JUGGERNAUT_SPELLS,
-  ANTIPALADIN_LOOKTHEPART,
-  ASSASSIN_LOOKTHEPART,
-  ARCHER_LOOKTHEPART,
-  BARBARIAN_LOOKTHEPART,
-  MONK_LOOKTHEPART,
-  PALADIN_LOOKTHEPART,
-  SCOUT_LOOKTHEPART,
-  WARRIOR_LOOKTHEPART
 } from '../appConstants'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Toast, ToastContainer } from 'react-bootstrap'
@@ -69,6 +61,7 @@ interface MartialSpell {
   restricted: boolean
   chosen: boolean | null
   pickOne?: MartialSpell[]
+  rolledDown?: { [level: number]: number }
 }
 
 interface Spell {
@@ -99,7 +92,8 @@ interface SpellList {
   class: string
   maxLevel: number
   lookThePart: boolean
-  spells: SpellLevel[]
+  levels: SpellLevel[]
+  lookThePartSpells?: MartialSpell[]
 }
 
 interface FrequencyByClass {
@@ -160,11 +154,12 @@ function EditMartialList() {
     class: spellListToEdit?.class || 'Bard',
     maxLevel: spellListToEdit?.maxLevel || 1,
     lookThePart: spellListToEdit?.lookThePart || false,
-    spells: spellListToEdit?.spells || [],
+    levels: spellListToEdit?.levels || [],
+    lookThePartSpells: spellListToEdit?.lookThePartSpells || [],
   })
 
   const isSpellChosen = (modifiedSpellList: SpellList, spellId: number): boolean => {
-    for (const level of modifiedSpellList.spells) {
+    for (const level of modifiedSpellList.levels) {
       for (const spellsByLevel of level.spells) {
         const allArrays = [
           ...(spellsByLevel.base ?? []),
@@ -234,7 +229,7 @@ function EditMartialList() {
 
     // Deep copy and update restricted property for all spell arrays
     const newList = JSON.parse(JSON.stringify(spellList))
-    for (const level of newList.spells) {
+    for (const level of newList.levels) {
       for (const spellsByLevel of level.spells) {
         if (Array.isArray(spellsByLevel.base)) {
           spellsByLevel.base = spellsByLevel.base.map(spell =>
@@ -286,10 +281,19 @@ function EditMartialList() {
     const spellData = getSpellData(spellLevel, spellId)
     let spellCost = spellData?.cost ?? 0
 
-    const currentLevelObj = spellList.spells.find(level => level.level === spellLevel.level)
+    const currentLevelObj = spellList.levels.find(level => level.level === spellLevel.level)
     if (!currentLevelObj) return spellList
 
-    const spellExists = currentLevelObj.spells.find((spell: Spell) => spell.id === spellId)
+    const spellExists = Array.isArray(currentLevelObj.spells)
+      ? currentLevelObj.spells.flatMap((sbl: SpellsByLevel) =>
+          [
+            ...(sbl.base ?? []),
+            ...(sbl.optionalPickOne ?? []),
+            ...(sbl.pickOneOfTwo ?? []),
+            ...(sbl.pickTwoOfThree ?? []),
+          ]
+        ).find(spell => spell.id === spellId)
+      : undefined
     if (!spellExists) return spellList
 
     let rolledDownMap = getRolledDownMap(spellExists)
@@ -304,7 +308,7 @@ function EditMartialList() {
       lookThePart,
       maxLevel
     )
-    const newLevels = spellList.spells.map(level => {
+    const newLevels = spellList.levels.map(level => {
       const refunded = refundedLevels.find(l => l.level === level.level)
       return refunded ? refunded : level
     })
@@ -374,8 +378,8 @@ function EditMartialList() {
   }
 
   const findSpellLevel = (spellId: number) => {
-    if (!Array.isArray(spellsByClass)) return undefined
-    return spellsByClass.find(level =>
+    if (!spellsByClass || !Array.isArray(spellsByClass.levels)) return undefined
+    return spellsByClass.levels.find(level =>
       Array.isArray(level.spells) &&
       level.spells.some(spellsByLevel => {
         const allArrays = [
@@ -402,7 +406,7 @@ function EditMartialList() {
   }
 
   const getEligibleLevels = (modifiedSpellList, spellByClassLevel) => {
-    return [...modifiedSpellList.spells]
+    return [...modifiedSpellList.levels]
       .filter(level => level.level >= spellByClassLevel.level)
       .sort((a, b) => b.level - a.level)
   }
@@ -554,31 +558,40 @@ function EditMartialList() {
     levelIdx: number,
     spellsByLevelIdx: number,
     spellIdx?: number,
-    arrayName: 'optionalPickOne' | 'pickOne' | 'pickOneOfTwo' | 'pickTwoOfThree' = 'optionalPickOne',
+    arrayName: 'optionalPickOne' | 'pickOne' | 'pickOneOfTwo' | 'pickTwoOfThree' | 'lookThePartSpells' = 'optionalPickOne',
     clear: boolean = false
   ): SpellList => {
     const newList = JSON.parse(JSON.stringify(spellList))
-    const levelObj = newList.spells[levelIdx]
-    if (levelObj) {
-      const sbl = levelObj.spells[spellsByLevelIdx]
-      if (sbl && Array.isArray(sbl[arrayName])) {
-        sbl[arrayName] = sbl[arrayName].map((s, i) => {
-          // If clearing, also clear nested pickOne arrays
-          if (clear) {
-            return {
-              ...s,
-              chosen: false,
-              pickOne: Array.isArray(s.pickOne)
-                ? s.pickOne.map(sub => ({ ...sub, chosen: false }))
-                : s.pickOne
+    if (arrayName === 'lookThePartSpells') {
+      newList.lookThePartSpells = newList.lookThePartSpells.map((s, i) => {
+        if (clear) {
+          return { ...s, chosen: false }
+        }
+        return i === spellIdx
+          ? { ...s, chosen: true }
+          : { ...s, chosen: false }
+      })
+    } else {
+      const levelObj = newList.levels[levelIdx]
+      if (levelObj) {
+        const sbl = levelObj.spells[spellsByLevelIdx]
+        if (sbl && Array.isArray(sbl[arrayName])) {
+          sbl[arrayName] = sbl[arrayName].map((s, i) => {
+            if (clear) {
+              return {
+                ...s,
+                chosen: false,
+                pickOne: Array.isArray(s.pickOne)
+                  ? s.pickOne.map(sub => ({ ...sub, chosen: false }))
+                  : s.pickOne
+              }
             }
-          }
-          // Otherwise, normal pick one logic
-          return i === spellIdx
-            ? { ...s, chosen: true }
-            : { ...s, chosen: false, pickOne: Array.isArray(s.pickOne) ? s.pickOne.map(sub => (
-              { ...sub, chosen: false })) : s.pickOne }
-        })
+            return i === spellIdx
+              ? { ...s, chosen: true }
+              : { ...s, chosen: false, pickOne: Array.isArray(s.pickOne) ? s.pickOne.map(sub => (
+                { ...sub, chosen: false })) : s.pickOne }
+          })
+        }
       }
     }
     let updated = updateRestrictedSpells(newList)
@@ -681,24 +694,24 @@ function EditMartialList() {
     )
   }
 
-  const setPickTwoOfThreeChosen = (
-    spellList: SpellList,
-    levelIdx: number,
-    spellsByLevelIdx: number,
-    spellIdx?: number,
-    clear: boolean = false
-  ): SpellList => {
-    const newList = JSON.parse(JSON.stringify(spellList))
-    const levelObj = newList.spells[levelIdx]
-    if (levelObj) {
-      const sbl = levelObj.spells[spellsByLevelIdx]
-      if (sbl && Array.isArray(sbl.pickTwoOfThree)) {
-        if (clear) {
-          sbl.pickTwoOfThree = sbl.pickTwoOfThree.map(spell => ({
-            ...spell,
-            chosen: false
-          }))
-        } else {
+    const setPickTwoOfThreeChosen = (
+      spellList: SpellList,
+      levelIdx: number,
+      spellsByLevelIdx: number,
+      spellIdx?: number,
+      clear: boolean = false
+    ): SpellList => {
+      const newList = JSON.parse(JSON.stringify(spellList))
+      const levelObj = newList.levels[levelIdx] // <-- FIXED
+      if (levelObj) {
+        const sbl = levelObj.spells[spellsByLevelIdx]
+        if (sbl && Array.isArray(sbl.pickTwoOfThree)) {
+          if (clear) {
+            sbl.pickTwoOfThree = sbl.pickTwoOfThree.map(spell => ({
+              ...spell,
+              chosen: false
+            }))
+          } else {
           // Get index of current chosen spells
           const chosenIndices = sbl.pickTwoOfThree
             .map((spell, index) => (spell.chosen ? index : -1))
@@ -946,7 +959,63 @@ function EditMartialList() {
           </Alert>
         )}
 
-        {modifiedSpellList.spells.map((level, index) => {
+        {Array.isArray(modifiedSpellList.lookThePartSpells) &&
+        modifiedSpellList.lookThePartSpells.length > 1 &&
+        modifiedSpellList.lookThePart && (
+          <>
+            <Row className="fw-bold text-secondary my-1 ms-1">
+              <Col className="text-start">
+                <span>Look the Part: Pick one</span>
+              </Col>
+              <Col className="text-end">
+                <Button
+                  className="py-0"
+                  onClick={() => {
+                    setModifiedSpellList(prevList =>
+                      setPickOneChosen(prevList, -1, 0, undefined, 'lookThePartSpells', true)
+                    )
+                  }}
+                >
+                  Clear
+                </Button>
+              </Col>
+            </Row>
+            {modifiedSpellList.lookThePartSpells.map((spell, idx) => {
+              const spellName = getSpellName(spell.id)
+              return (
+                <Row key={`lookthepart-${spell.id}`} className="d-flex justify-content-between ms-1">
+                  <Button
+                    style={
+                      spell.chosen
+                        ? { backgroundColor: '#b8e0b8', color: '#222', border: '2px solid #198754', padding: 7 }
+                        : { padding: 7 }
+                    }
+                    variant={spell.chosen ? "primary" : "outline-secondary"}
+                    className="text-start border-bottom"
+                    onClick={() => {
+                      setModifiedSpellList(prevList =>
+                        setPickOneChosen(prevList, -1, 0, idx, 'lookThePartSpells', false)
+                      )
+                    }}
+                    onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => handleLongPressStart(spell.id, e)}
+                    onMouseMove={handleLongPressMove}
+                    onMouseUp={handleLongPressEnd}
+                    onMouseLeave={handleLongPressEnd}
+                    onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => handleLongPressStart(spell.id, e)}
+                    onTouchMove={handleLongPressMove}
+                    onTouchEnd={handleLongPressEnd}
+                  >
+                    <span style={{ display: 'flex', width: '100%' }}>
+                      <span>{spellName}</span>
+                    </span>
+                  </Button>
+                </Row>
+              )
+            })}
+          </>
+        )}
+
+        {modifiedSpellList.levels.map((level, index) => {
           return (
             <Accordion key={index} defaultActiveKey="0" flush>
               <Accordion.Item eventKey="0" className="border-bottom">
