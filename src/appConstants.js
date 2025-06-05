@@ -2649,14 +2649,6 @@ export const ANTIPALADIN_EQUIPMENT = {
   weapons: 'All Melee, Javelins'
 }
 
-// export const ANTIPALADIN_LOOKTHEPART = [
-//   { 
-//     base: [
-//       { id: 161, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: false, magical: true, ambulant: false, restricted: false, chosen: null, },
-//     ]
-//   }
-// ]
-
 export const ANTIPALADIN_LIST = {
   lookThePartSpells: [
     { id: 161, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: false, magical: true, ambulant: false, restricted: false, chosen: null, }
@@ -2748,16 +2740,6 @@ export const ARCHER_EQUIPMENT = {
   shields: 'None',
   weapons: 'Daggers, Short, Bow'
 }
-
-// export const ARCHER_LOOKTHEPART = [
-//   {
-//     pickOne: [
-//       { id: 37, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
-//       { id: 109, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
-//       { id: 112, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
-//     ]
-//   }
-// ]
 
 export const ARCHER_LIST = {
   lookThePartSpells: [
@@ -2932,76 +2914,6 @@ export const ASSASSIN_LIST = {
     }
   ]
 }
-
-// export const ASSASSIN_LIST = [
-//   {
-//     level: 1,
-//     spells: [
-//       { 
-//         base: [
-//           { id: 164, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
-//           { id: 11, frequency: { amount: null, per: null, charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: true, restricted: false, chosen: null, },
-//           { id: 131, frequency: { amount: 2, per: 'Life', charge: null }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
-//         ]
-//       }
-//     ],
-//   },
-//   {
-//     level: 2,
-//     spells: [
-//       { 
-//         pickOne: [ // NEEDS A FIX
-//           { id: 111, frequency: { amount: 1, per: 'Life', charge: 'Charge x3' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
-//           { id: 112, frequency: { amount: 2, per: 'Arrows', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
-//         ]
-//       }
-//     ],
-//   },
-//   {
-//     level: 3,
-//     spells: [
-//       { 
-//         base: [
-//           { id: 27, frequency: { amount: 2, per: 'Life', charge: null }, trait: false, extraordinary: true, magical: false, ambulant: true, restricted: false, chosen: null, },
-//         ]
-//       }
-//     ],
-//   },
-//   {
-//     level: 4,
-//     spells: [
-//       { 
-//         base: [
-//           { id: 79, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: false, magical: true, ambulant: false, restricted: false, chosen: null, },
-//         ]
-//       }
-//     ],
-//   },
-//   {
-//     level: 5,
-//     spells: [
-//       { 
-//         base: [
-//           { id: 160, frequency: { amount: 2, per: 'Life', charge: null }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
-//         ]
-//       }
-//     ],
-//   },
-//   {
-//     level: 6,
-//     spells: [
-//       { 
-//         base: [
-//           { id: 39, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: false, magical: true, ambulant: false, restricted: false, chosen: null, },
-//         ],
-//         optionalPickOne: [
-//           { id: 181, frequency: { amount: null, per: null, charge: null }, trait: false, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
-//           { id: 150, frequency: { amount: null, per: null, charge: null }, trait: false, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
-//         ]
-//       }
-//     ],
-//   },
-// ]
 
 export const RUFFIAN_SPELLS = [{}]
 
@@ -3468,6 +3380,8 @@ export const PATCH_NOTES = [
       "Fix Bard Amplification to per Refresh",
       "Fix Healer Ambulant to per Life when priest is present. Old healer spell lists may need to be rebuilt to see this change.",
       "Fix applicable Bard Songs to only display Unlimited",
+      "Display spell list version on spell lists made from 8.6.4 and beyond.",
+      "Create path for legacy data. Spell lists on older versions will not be able to be edited.",
       "Progress on Martial class archetypes flows",
     ]
   },
