@@ -3,6 +3,7 @@ import { Button, Col, Container, Dropdown, Row } from 'react-bootstrap'
 import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
 import { useNavigate, useParams } from 'react-router-dom'
+import { CURRENT_VERSION, CURRENT_VERSION_NAME } from '../appConstants'
 
 interface SpellLevel {
 	level: number
@@ -12,11 +13,13 @@ interface SpellLevel {
 
 interface SpellList {
   id: number
+  version: string
   name: string
   class: string
   maxLevel: number
   lookThePart: boolean
-  spells: SpellLevel[]
+  levels: SpellLevel[]
+  lookThePartSpells?: any[]
 }
 
 function ModifySpellList() {
@@ -26,14 +29,16 @@ function ModifySpellList() {
   const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
   const spellListToEdit = allSpellLists.find((list: SpellList) => list.id === parseInt(id || '0'))
 
-  const [modifiedSpellList, setModifiedSpellList] = React.useState<SpellList>({
+	const [modifiedSpellList, setModifiedSpellList] = React.useState<SpellList>({
 		id: parseInt(id || '0'),
+		version: CURRENT_VERSION,
 		name: spellListToEdit?.name || 'My SpellBook',
 		class: spellListToEdit?.class || 'Bard',
 		maxLevel: spellListToEdit?.maxLevel || 1,
 		lookThePart: spellListToEdit?.lookThePart || false,
-		spells: spellListToEdit?.spells || [],
-  })
+		levels: spellListToEdit?.levels || [],
+		lookThePartSpells: spellListToEdit?.lookThePartSpells || [],
+	})
 
   return (
     <Container fluid className="p-4" style={{ maxWidth: 600 }}>
@@ -77,11 +82,13 @@ function ModifySpellList() {
 						<InputGroup.Text>Level:</InputGroup.Text>
 						<Dropdown className="w-100">
 							<Dropdown.Toggle
+								disabled
 								variant="outline-secondary"
 								style={{
 									borderColor: 'lightgrey',
 									borderWidth: 1,
 									color: 'black',
+									backgroundColor: 'lightgrey',
 								}}
 							>
 								{modifiedSpellList.maxLevel}
@@ -94,12 +101,12 @@ function ModifySpellList() {
 										<Dropdown.Item
 											key={level}
 											onClick={() => {
-												const updatedSpells = Array.from({ length: level }, (_, index) => ({
-													level: index + 1,
-													points: modifiedSpellList.lookThePart && index + 1 === level ? 6 : 5,
-													spells: [],
-												}))
-												setModifiedSpellList({ ...modifiedSpellList, maxLevel: level, spells: updatedSpells })
+											const updatedLevels = Array.from({ length: level }, (_, index) => ({
+												level: index + 1,
+												points: modifiedSpellList.lookThePart && index + 1 === level ? 6 : 5,
+												spells: [],
+											}))
+											setModifiedSpellList({ ...modifiedSpellList, maxLevel: level, levels: updatedLevels })
 											}}
 										>
 											{level}
@@ -121,11 +128,14 @@ function ModifySpellList() {
 							Version:
 						</InputGroup.Text>
 						<Dropdown>
-							<Dropdown.Toggle variant="outline-secondary" style={{ borderColor: 'lightgrey', borderWidth: 1, color: 'black' }}>
-								V8.6.3 "Sappy Three"
+							<Dropdown.Toggle disabled variant="outline-secondary" style={{ borderColor: 'lightgrey',
+									borderWidth: 1,
+									color: 'black',
+									backgroundColor: 'lightgrey', }}>
+								{CURRENT_VERSION_NAME}
 							</Dropdown.Toggle>
 							<Dropdown.Menu>
-								<Dropdown.Item>- V8.6.3 "Sappy Three"</Dropdown.Item>
+								<Dropdown.Item>{CURRENT_VERSION_NAME}</Dropdown.Item>
 							</Dropdown.Menu>
 						</Dropdown>
 					</InputGroup>

@@ -3368,7 +3368,7 @@ export const JUGGERNAUT_SPELLS = [
 
 export const PATCH_NOTES = [
   {
-    version: "0.1.3",
+    version: "0.2.0 Major Update",
     title: "",
     details: [
       "Add APK v...",
@@ -3382,6 +3382,7 @@ export const PATCH_NOTES = [
       "Fix applicable Bard Songs to only display Unlimited",
       "Display spell list version on spell lists made from 8.6.4 and beyond.",
       "Create path for legacy data. Spell lists on older versions will not be able to be edited.",
+      "Disable Class, level and version for modify page",
       "Progress on Martial class archetypes flows",
     ]
   },
