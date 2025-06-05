@@ -2288,6 +2288,18 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     limitation: null,
     note: null
   },
+  {
+    id: 188,
+    name: 'Ancestral Armor', // Warrior ancestral armor
+    type: 'Enchantment',
+    school: 'Protection',
+    range: 'Other',
+    materials: 'White strip',
+    incantation: `"May this armor protect thee from all forms of harm"`,
+    effect: 'The effects of a Magic Ball, projectile weapon, or melee weapon which just struck armor worn by the player are ignored, even if the object would not otherwise affect the armor. The armor loses one point of value in the location struck. This effect will not trigger if the armor has no points left in the location struck. Ancestral Armor is not expended after use and will continue to provide protection until removed with Dispel Magic or similar abilities.',
+    limitation: 'Phase Arrow and Phase Bolt interact with armor worn by the bearer as though Ancestral Armor was not present.',
+    note: 'Engulfing Effects that do not strike the bearers armor and abilities that ignore armor entirely do not trigger Ancestral Armor.'
+  },
 ]
 
 export const BARD_SPELLS = [
@@ -3350,7 +3362,7 @@ export const WARRIOR_LIST = [
     spells: [
       {
         base: [
-          { id: 7, frequency: { amount: 3, per: 'Refresh', charge: 'Charge x10' }, swift: true, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 188, frequency: { amount: 3, per: 'Refresh', charge: 'Charge x10' }, swift: true, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
         ],
         optionalPickOne: [
           { id: 178, frequency: { amount: null, per: null, charge: null }, trait: false, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
