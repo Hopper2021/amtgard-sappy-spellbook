@@ -14,7 +14,7 @@ function App() {
   const [toggleDeleteModal, setDeleteToggleModal] = useState(false)
   const emptySpellList = {
     id: null,
-    version: '',
+    version: CURRENT_VERSION,
     name: '',
     class: '',
     maxLevel: null,
