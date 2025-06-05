@@ -1492,9 +1492,7 @@ const removeSpellFromList = (spellId: number) => {
           )
         })}
         <div className="d-flex justify-content-center mt-3 mb-5">
-          <Button variant="primary" onClick={() => {
-            navigate(`/listDetails/${modifiedSpellList.id}`)
-          }}>
+          <Button variant="primary" onClick={() => {navigate(-1)}}>
             Done Editing
           </Button>
         </div>
