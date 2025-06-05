@@ -9,6 +9,7 @@ import EditSpells from './components/EditSpells.tsx'
 import ModifySpellList from './components/ModifySpellList.tsx'
 import PatchNotes from './components/PatchNotes.tsx'
 import EditMartialList from './components/EditMartialList.tsx'
+import LegacySpellListDetails from './components/LegacySpellListDetails.tsx'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Routes>
           <Route path="/*" element={<Home />}/>
           <Route path="/listDetails/:id" element={<SpellListDetails />}/>
+          <Route path="/legacyListDetails/:id" element={<LegacySpellListDetails />}/>
           <Route path="/createList" element={<CreateSpellList />}/>
           <Route path="/editList/:id" element={<EditSpells />}/>
           <Route path="/modifyList/:id" element={<ModifySpellList />}/>
