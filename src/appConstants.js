@@ -1,4 +1,4 @@
-export const IS_APK = false
+export const IS_APK = true
 
 export const CURRENT_VERSION = 'V8.6.4'
 export const CURRENT_VERSION_NAME = 'V8.6.4 "Sappy Four"'
@@ -3367,11 +3367,10 @@ export const JUGGERNAUT_SPELLS = [
 export const PATCH_NOTES = [
   {
     version: "0.2.2",
-    title: "Add APK v6.2, Legend bug fix, ",
+    title: "Add APK v6.2, Legend bug fix",
     details: [
       "Add APK v6.2 file to downloads page.",
       "Legend bug fix, adding Legend now only multiplies extension by 2.",
-      "",
     ]
   },
   {
