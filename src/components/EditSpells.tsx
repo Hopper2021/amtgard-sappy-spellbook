@@ -47,6 +47,7 @@ interface SpellLevel {
 
 interface SpellList {
   id: number
+  version: string
   name: string
   class: string
   maxLevel: number
@@ -95,6 +96,7 @@ function EditSpells() {
   const tipsEnabled = enableTips === 'true'
   const [modifiedSpellList, setModifiedSpellList] = React.useState<SpellList>({
     id: parseInt(id || '0'),
+    version: spellListToEdit?.version || '',
     name: spellListToEdit?.name || 'My SpellBook',
     class: spellListToEdit?.class || 'Bard',
     maxLevel: spellListToEdit?.maxLevel || 1,
