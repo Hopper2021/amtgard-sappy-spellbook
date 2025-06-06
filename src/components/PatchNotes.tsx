@@ -28,7 +28,7 @@ function App() {
                 >
                 <IoMdInformationCircle size={25} className="me-1" color="blue"/>
                 <div className="d-flex flex-column">
-                  <span>Open Beta APK <strong>v5</strong> is now available!</span>
+                  <span>Open Beta APK <strong>v6</strong> is now available!</span>
                   <span>Ignore the warnings, it's fine to download.</span>
                   <div
                     className="end-0 bottom-0 text-muted small mt-1"
@@ -41,12 +41,12 @@ function App() {
             )}
             <Container className="d-flex justify-content-center mb-2">
               <a
-                href="/downloads/swiftgard-main-9eefd3-release.apk" 
+                href="/downloads/swiftgard-main-b99fd9-release.apk" 
                 className="btn btn-primary mb-1"
                 download
                 style={{ minWidth: 200, textAlign: 'center' }}
               >
-                Download Android APK v5
+                Download Android APK v6
               </a>
             </Container>
           </>
@@ -55,11 +55,11 @@ function App() {
         <Container>
           <Row className="pb-2 fw-semibold">Patch Notes</Row>
           {PATCH_NOTES.map(note => (
-            <Container className="ps-1" key={note.version}>
+            <Container className="ps-1 pe-0" key={note.version}>
               <span className="fw-semibold">Version: {note.version}</span>
-              <Container className="ps-2 pt-1">
-                <Row className="ps-4">{note.title}</Row>
-                <Accordion className="ps-3">
+              <Container className="ps-2 pt-1 pe-0">
+                <Row className="ps-2 pb-1">{note.title}</Row>
+                <Accordion className="ps-2 pb-1">
                   <Accordion.Header className="border">Details</Accordion.Header>
                   <Accordion.Body>
                     <ul>
