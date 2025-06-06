@@ -161,12 +161,9 @@ function EditMartialList() {
     lookThePartSpells: spellListToEdit?.lookThePartSpells || [],
   })
 
-  const [selectedSpellContext, setSelectedSpellContext] = useState<{
-    arrayName: string,
-    levelIdx: number,
-    spellsByLevelIdx: number,
-    spellIdx: number
-} | null>(null);
+const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
+  SpellFrequency | { amount: number | null; per: string | null; charge: string | null; } | null
+>(null);
 
   const isSpellChosen = (modifiedSpellList: SpellList, spellId: number): boolean => {
     for (const level of modifiedSpellList.levels) {
@@ -498,49 +495,11 @@ function EditMartialList() {
     setLongPressTimeout(timeout)
   }
 
-  const buildFrequencyString = (
-    masterSpell: any,
-    context?: { arrayName: string, levelIdx: number, spellsByLevelIdx: number, spellIdx: number },
-    subclassName?: string
-  ) => {
-    let spell: MartialSpell | null = null;
-
-    // 1. Check subclass
-    if (subclassName && subclassSpellsMap[subclassName]) {
-      spell = subclassSpellsMap[subclassName].find(s => s.id === masterSpell?.id) || null;
-    }
-    // 2. Check lookThePartSpells
-    else if (
-      Array.isArray(modifiedSpellList.lookThePartSpells) &&
-      modifiedSpellList.lookThePartSpells.length > 0
-    ) {
-      spell = modifiedSpellList.lookThePartSpells.find(s => s.id === masterSpell?.id) || null;
-    }
-    // 3. Use context to directly access the spell
-    else if (context && modifiedSpellList.levels[context.levelIdx]) {
-      const levelObj = modifiedSpellList.levels[context.levelIdx];
-      const sbl = levelObj.spells[context.spellsByLevelIdx];
-      const arr = sbl[context.arrayName];
-                  console.log('buildFrequencyString context:', {
-      context,
-      spell,
-      freq: spell?.frequency,
-      arr,
-      sbl,
-      levelObj
-    });
-      if (arr) {
-        spell = arr[context.spellIdx] || null;
-      }
-    }
-    // fallback: search all arrays as before (optional)
-    // ...
-
+  const buildFrequencyString = () => {
     // Build frequency string from found spell
-    const freq: FrequencyByClass | null = (spell && 'frequency' in spell) ? spell.frequency : null;
-    const amount = freq?.amount;
-    const per = freq?.per;
-    const charge = freq?.charge;
+    const amount = selectedSpellFrequency?.amount;
+    const per = selectedSpellFrequency?.per;
+    const charge = selectedSpellFrequency?.charge;
 
     if (amount != null && per != null) {
       return `${amount}/${per}${charge ? ` ${charge}` : ''}`;
@@ -813,7 +772,7 @@ function EditMartialList() {
           <Modal.Body className="modal-sm pb-1 p-0">
             <span>
               <strong>{chosenArchetype ? chosenArchetype : "Base"} Frequency for {modifiedSpellList.class}: </strong>
-              {buildFrequencyString(selectedSpell, selectedSpellContext ?? undefined, chosenArchetype ?? undefined) ?? 'N/A'}
+              {buildFrequencyString() || 'N/A'}
               {selectedSpell?.id !== undefined && (
                 <>
                   {[
@@ -999,6 +958,7 @@ function EditMartialList() {
               </Col>
             </Row>
             {modifiedSpellList.lookThePartSpells.map((spell, lookThePartIdx: number) => {
+              console.log('spell:', spell)
               const spellName = getSpellName(spell.id)
               return (
                 <Row key={`lookthepart-${spell.id}`} className="d-flex justify-content-between ms-1">
@@ -1016,11 +976,10 @@ function EditMartialList() {
                       )
                     }}
                     onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
-                      setSelectedSpellContext({
-                        arrayName: 'lookThePartSpells',
-                        levelIdx: -1,
-                        spellsByLevelIdx: 0,
-                        spellIdx: lookThePartIdx
+                      setSelectedSpellFrequency({
+                        amount: spell.frequency?.amount,
+                        per: spell.frequency?.per,
+                        charge: spell.frequency?.charge,
                       });
                       handleLongPressStart(spell.id, e)
                     }}
@@ -1028,11 +987,10 @@ function EditMartialList() {
                     onMouseUp={handleLongPressEnd}
                     onMouseLeave={handleLongPressEnd}
                     onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => {
-                      setSelectedSpellContext({
-                        arrayName: 'lookThePartSpells',
-                        levelIdx: -1,
-                        spellsByLevelIdx: 0,
-                        spellIdx: lookThePartIdx
+                      setSelectedSpellFrequency({
+                        amount: spell.frequency?.amount,
+                        per: spell.frequency?.per,
+                        charge: spell.frequency?.charge,
                       });
                       handleLongPressStart(spell.id, e);
                     }}
@@ -1066,6 +1024,7 @@ function EditMartialList() {
                     if (Array.isArray(spellsByLevel.base)) {
                       rows.push(
                         ...spellsByLevel.base.map((spell: MartialSpell, baseIdx: number) => {
+                          console.log('base spell:', spell)
                           const spellName = getSpellName(spell.id)
                           return (
                             <Row
@@ -1081,11 +1040,10 @@ function EditMartialList() {
                                 className="text-start border-bottom"
                                 onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
                                   setChosenArchetype(null);
-                                  setSelectedSpellContext({
-                                    arrayName: 'base',
-                                    levelIdx: index,
-                                    spellsByLevelIdx: spellsByLevelIdx,
-                                    spellIdx: baseIdx
+                                  setSelectedSpellFrequency({
+                                    amount: spell.frequency?.amount,
+                                    per: spell.frequency?.per,
+                                    charge: spell.frequency?.charge,
                                   });
                                   handleLongPressStart(spell.id, e);
                                 }}
@@ -1094,11 +1052,10 @@ function EditMartialList() {
                                 onMouseLeave={handleLongPressEnd}
                                 onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => {
                                   setChosenArchetype(null);
-                                  setSelectedSpellContext({
-                                    arrayName: 'base',
-                                    levelIdx: index,
-                                    spellsByLevelIdx: spellsByLevelIdx,
-                                    spellIdx: baseIdx
+                                  setSelectedSpellFrequency({
+                                    amount: spell.frequency?.amount,
+                                    per: spell.frequency?.per,
+                                    charge: spell.frequency?.charge,
                                   });
                                   handleLongPressStart(spell.id, e);
                                 }}
@@ -1167,23 +1124,21 @@ function EditMartialList() {
                                   variant={spell.chosen ? "primary" : "outline-secondary"}
                                   className="text-start border-bottom"
                                   onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
-                                    setSelectedSpellContext({
-                                      arrayName: 'optionalPickOne',
-                                      levelIdx: index,
-                                      spellsByLevelIdx: spellsByLevelIdx,
-                                      spellIdx: optionalIdx
-                                    });
+                                    setSelectedSpellFrequency({
+                                      amount: spell.frequency?.amount,
+                                      per: spell.frequency?.per,
+                                      charge: spell.frequency?.charge,
+                                  });
                                     handleLongPressStart(spell.id, e);
                                   }}
                                   onMouseMove={handleLongPressMove}
                                   onMouseUp={handleLongPressEnd}
                                   onMouseLeave={handleLongPressEnd}
                                   onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => {
-                                    setSelectedSpellContext({
-                                      arrayName: 'optionalPickOne',
-                                      levelIdx: index,
-                                      spellsByLevelIdx: spellsByLevelIdx,
-                                      spellIdx: optionalIdx
+                                    setSelectedSpellFrequency({
+                                      amount: spell.frequency?.amount,
+                                      per: spell.frequency?.per,
+                                      charge: spell.frequency?.charge,
                                     });
                                     handleLongPressStart(spell.id, e);
                                   }}
@@ -1239,11 +1194,10 @@ function EditMartialList() {
                                           variant={subSpell.chosen ? "primary" : "outline-secondary"}
                                           className="text-start border-bottom"
                                           onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
-                                            setSelectedSpellContext({
-                                              arrayName: 'pickOne',
-                                              levelIdx: index,
-                                              spellsByLevelIdx: spellsByLevelIdx,
-                                              spellIdx: pickOneIdx
+                                            setSelectedSpellFrequency({
+                                              amount: spell.frequency?.amount,
+                                              per: spell.frequency?.per,
+                                              charge: spell.frequency?.charge,
                                             });
                                             handleLongPressStart(spell.id, e);
                                           }}
@@ -1251,12 +1205,11 @@ function EditMartialList() {
                                           onMouseUp={handleLongPressEnd}
                                           onMouseLeave={handleLongPressEnd}
                                           onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => {
-                                          setSelectedSpellContext({
-                                            arrayName: 'pickOne',
-                                            levelIdx: index,
-                                            spellsByLevelIdx: spellsByLevelIdx,
-                                            spellIdx: pickOneIdx
-                                          });
+                                            setSelectedSpellFrequency({
+                                              amount: spell.frequency?.amount,
+                                              per: spell.frequency?.per,
+                                              charge: spell.frequency?.charge,
+                                            });
                                             handleLongPressStart(spell.id, e);
                                           }}
                                           onTouchMove={handleLongPressMove}
@@ -1305,11 +1258,10 @@ function EditMartialList() {
                                 variant="secondary"
                                 className="text-start border-bottom"
                                 onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
-                                  setSelectedSpellContext({
-                                    arrayName: 'pickOneOfTwo',
-                                    levelIdx: index,
-                                    spellsByLevelIdx: spellsByLevelIdx,
-                                    spellIdx: pickOneOfTwoIdx
+                                  setSelectedSpellFrequency({
+                                    amount: spell.frequency?.amount,
+                                    per: spell.frequency?.per,
+                                    charge: spell.frequency?.charge,
                                   });
                                   handleLongPressStart(spell.id, e);
                                 }}
@@ -1317,11 +1269,10 @@ function EditMartialList() {
                                 onMouseUp={handleLongPressEnd}
                                 onMouseLeave={handleLongPressEnd}
                                 onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => {
-                                  setSelectedSpellContext({
-                                    arrayName: 'pickOneOfTwo',
-                                    levelIdx: index,
-                                    spellsByLevelIdx: spellsByLevelIdx,
-                                    spellIdx: pickOneOfTwoIdx
+                                  setSelectedSpellFrequency({
+                                    amount: spell.frequency?.amount,
+                                    per: spell.frequency?.per,
+                                    charge: spell.frequency?.charge,
                                   });
                                   handleLongPressStart(spell.id, e);
                                 }}
@@ -1374,11 +1325,10 @@ function EditMartialList() {
                                 variant={spell.chosen ? "primary" : "outline-secondary"}
                                 className="text-start border-bottom"
                                 onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
-                                  setSelectedSpellContext({
-                                    arrayName: 'pickOne',
-                                    levelIdx: index,
-                                    spellsByLevelIdx: spellsByLevelIdx,
-                                    spellIdx: pickOneIdx
+                                  setSelectedSpellFrequency({
+                                    amount: spell.frequency?.amount,
+                                    per: spell.frequency?.per,
+                                    charge: spell.frequency?.charge,
                                   });
                                   handleLongPressStart(spell.id, e);
                                 }}
@@ -1386,11 +1336,10 @@ function EditMartialList() {
                                 onMouseUp={handleLongPressEnd}
                                 onMouseLeave={handleLongPressEnd}
                                 onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => {
-                                  setSelectedSpellContext({
-                                    arrayName: 'pickOne',
-                                    levelIdx: index,
-                                    spellsByLevelIdx: spellsByLevelIdx,
-                                    spellIdx: pickOneIdx
+                                  setSelectedSpellFrequency({
+                                    amount: spell.frequency?.amount,
+                                    per: spell.frequency?.per,
+                                    charge: spell.frequency?.charge,
                                   });
                                   handleLongPressStart(spell.id, e);
                                 }}
@@ -1446,11 +1395,10 @@ function EditMartialList() {
                                 variant={spell.chosen ? "primary" : "outline-secondary"}
                                 className="text-start border-bottom"
                                 onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
-                                  setSelectedSpellContext({
-                                    arrayName: 'pickTwoOfThree',
-                                    levelIdx: index,
-                                    spellsByLevelIdx: spellsByLevelIdx,
-                                    spellIdx: pickTwoOfThreeIdx
+                                  setSelectedSpellFrequency({
+                                    amount: spell.frequency?.amount,
+                                    per: spell.frequency?.per,
+                                    charge: spell.frequency?.charge,
                                   });
                                   handleLongPressStart(spell.id, e);
                                 }}
@@ -1458,11 +1406,10 @@ function EditMartialList() {
                                 onMouseUp={handleLongPressEnd}
                                 onMouseLeave={handleLongPressEnd}
                                 onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => {
-                                  setSelectedSpellContext({
-                                    arrayName: 'pickTwoOfThree',
-                                    levelIdx: index,
-                                    spellsByLevelIdx: spellsByLevelIdx,
-                                    spellIdx: pickTwoOfThreeIdx
+                                  setSelectedSpellFrequency({
+                                    amount: spell.frequency?.amount,
+                                    per: spell.frequency?.per,
+                                    charge: spell.frequency?.charge,
                                   });
                                   handleLongPressStart(spell.id, e);
                                 }}
