@@ -1,4 +1,4 @@
-export const IS_APK = false
+export const IS_APK = true
 
 export const CURRENT_VERSION = 'V8.6.4'
 export const CURRENT_VERSION_NAME = 'V8.6.4 "Sappy Four"'
@@ -3366,10 +3366,12 @@ export const JUGGERNAUT_SPELLS = [
 
 export const PATCH_NOTES = [
   {
-    version: "0.2.0 Major Update",
-    title: "",
+    version: "0.2.0 JUMP! Major Update!",
+    title: "Update to V8.6.4 rules, Add Martial Classes, Fix Reported Bugs and minor styling updates.",
     details: [
-      "Add APK v...",
+      "Add APK v6",
+      "Update app to V8.6.4 rules.",
+      "Martial class additions! Try creating a martial class list!",
       "Fix healer Resurrect charge to charge x5.",
       "Fix Bear Strength effect description",
       "Fix weird spacing for effect description for Songs",
@@ -3381,7 +3383,7 @@ export const PATCH_NOTES = [
       "Display spell list version on spell lists made from 8.6.4 and beyond.",
       "Create path for legacy data. Spell lists on older versions will not be able to be edited.",
       "Disable Class, level and version for modify page",
-      "Progress on Martial class archetypes flows",
+      "Major overhaul to master spell list structure",
     ]
   },
   {
