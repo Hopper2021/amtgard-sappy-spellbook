@@ -1701,7 +1701,7 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     range: null,
     materials: null,
     incantation: null,
-    effect: `May physically carry any number of Specialty Arrows of each type. The frequency of each type of Specialty Arrow ability becomes 1 Arrow/Life Charge x3. Gain Momentum Unlimited (ex) (Ambulant).`,
+    effect: `May physically carry any number of Specialty Arrows of each type. The frequency of each type of Specialty Arrow ability becomes 1 Arrow/Life Charge x3. Gain Momentum Unlimited (ex) (Ambulant). Look the part becomes Mend 1/Life.`,
     limitation: 'May not fire normal arrows.',
     note: null
   },
