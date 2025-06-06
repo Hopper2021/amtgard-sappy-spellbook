@@ -1,4 +1,4 @@
-export const IS_APK = false
+export const IS_APK = true
 
 export const CURRENT_VERSION = 'V8.6.4'
 export const CURRENT_VERSION_NAME = 'V8.6.4 "Sappy Four"'
@@ -3365,6 +3365,15 @@ export const JUGGERNAUT_SPELLS = [
 ]
 
 export const PATCH_NOTES = [
+  {
+    version: "0.2.1",
+    title: "Add APK v6.1, White screen bug fix, update sniper.",
+    details: [
+      "Add APK v6.1 file to downloads page.",
+      "White screen bug fix: When clicking on a caster class spell list from the home page, white screen will appear. Bug fixed, but if its persists, deleteing the spell list will remove the issue.",
+      "Fix Sniper description for V8.6.4."
+    ]
+  },
   {
     version: "0.2.0 JUMP! Major Update!",
     title: "Update to V8.6.4 rules, Add Martial Classes, Fix Reported Bugs and minor styling updates.",
