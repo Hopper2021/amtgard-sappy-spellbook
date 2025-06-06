@@ -19,7 +19,7 @@ import {
   BERSERKER_SPELLS,
   RAIDER_SPELLS,
   SPY_SPELLS,
-  RUFFIAN_SPELLS,
+  ROGUE_SPELLS,
   GUARDIAN_SPELLS,
   INQUISITOR_SPELLS,
   HUNTER_SPELLS,
@@ -98,12 +98,6 @@ interface SpellList {
   lookThePartSpells?: MartialSpell[]
 }
 
-interface FrequencyByClass {
-  amount: number | null
-  per: string | null
-  charge: string | null
-}
-
 function EditMartialList() {
   const navigate = useNavigate()
   const [pressStartPos, setPressStartPos] = useState<{ x: number, y: number } | null>(null)
@@ -129,14 +123,16 @@ function EditMartialList() {
   const inquisitorArchetype = ALL_SPELLS.find(spell => spell.name === 'Inquisitor')
   const hunterArchetype = ALL_SPELLS.find(spell => spell.name === 'Hunter')
   const apexArchetype = ALL_SPELLS.find(spell => spell.name === 'Apex')
+  const sniperArchetype = ALL_SPELLS.find(spell => spell.name === 'Sniper')
   const juggernautArchetype = ALL_SPELLS.find(spell => spell.name === 'Juggernaut')
+  const mysticArchetype = ALL_SPELLS.find(spell => spell.name === 'Mystic')
 
   const subclassSpellsMap = {
     "Infernal": INFERNAL_SPELLS,
     "Corruptor": CORRUPTOR_SPELLS,
     "Sniper": SNIPER_SPELLS,
     "Artificer": ARTIFICER_SPELLS,
-    "Ruffian": RUFFIAN_SPELLS,
+    "Rogue": ROGUE_SPELLS,
     "Spy": SPY_SPELLS,
     "Raider": RAIDER_SPELLS,
     "Berserker": BERSERKER_SPELLS,
@@ -163,7 +159,7 @@ function EditMartialList() {
 
 const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
   SpellFrequency | { amount: number | null; per: string | null; charge: string | null; } | null
->(null);
+>(null)
 
   const isSpellChosen = (modifiedSpellList: SpellList, spellId: number): boolean => {
     for (const level of modifiedSpellList.levels) {
@@ -182,6 +178,8 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
     return false
   }
 
+  const sniperChosen = isSpellChosen(modifiedSpellList, sniperArchetype?.id || 0)
+
   const updateRestrictedSpells = (spellList: SpellList): SpellList => {
     // Archetypes
     const infernalChosen = infernalArchetype ? isSpellChosen(spellList, infernalArchetype.id) : false
@@ -193,6 +191,7 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
     const hunterChosen = hunterArchetype ? isSpellChosen(spellList, hunterArchetype.id) : false
     const apexChosen = apexArchetype ? isSpellChosen(spellList, apexArchetype.id) : false
     const juggernautChosen = juggernautArchetype ? isSpellChosen(spellList, juggernautArchetype.id) : false
+    const mysticChosen = mysticArchetype ? isSpellChosen(spellList, mysticArchetype.id) : false
 
     // Possible restricted spells
     const stealLifeEssenceId = ALL_SPELLS.find(spell => spell.name === 'Steal Life Essence')?.id || 0
@@ -202,7 +201,6 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
     const protectionFromMagicId = ALL_SPELLS.find(spell => spell.name === 'Protection from Magic')?.id || 0
     const extendImmunitiesId = ALL_SPELLS.find(spell => spell.name === 'Extend Immunities')?.id || 0
     const greaterResurrectId = ALL_SPELLS.find(spell => spell.name === 'Greater Resurrect')?.id || 0
-    const aweId = ALL_SPELLS.find(spell => spell.name === 'Awe')?.id || 0
     const releaseId = ALL_SPELLS.find(spell => spell.name === 'Release')?.id || 0
     const evolutionId = ALL_SPELLS.find(spell => spell.name === 'Evolution')?.id || 0
     const holdPersonId = ALL_SPELLS.find(spell => spell.name === 'Hold Person')?.id || 0
@@ -211,6 +209,7 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
     const ancestralArmorId = ALL_SPELLS.find(spell => spell.name === 'Ancestral Armor')?.id || 0
     const trueGritId = ALL_SPELLS.find(spell => spell.name === 'True Grit')?.id || 0
     const hardenId = ALL_SPELLS.find(spell => spell.name === 'Harden')?.id || 0
+    const resurrectId = ALL_SPELLS.find(spell => spell.name === 'Resurrect')?.id || 0
 
     // Only one restriction at a time, based on which archetype is chosen
     let restrictedSpellIds: number[] = []
@@ -225,13 +224,15 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
     } else if (guardianChosen) {
       restrictedSpellIds = [protectionFromMagicId, extendImmunitiesId]
     } else if (inquisitorChosen) {
-      restrictedSpellIds = [greaterResurrectId, aweId]
+      restrictedSpellIds = [greaterResurrectId]
     } else if (hunterChosen) {
       restrictedSpellIds = [releaseId, evolutionId]
     } else if (apexChosen) {
       restrictedSpellIds = [evolutionId, holdPersonId, pinningArrowId, adaptiveProtectionId]
     } else if (juggernautChosen) {
       restrictedSpellIds = [hardenId, ancestralArmorId, trueGritId]
+    } else if (mysticChosen) {
+      restrictedSpellIds = [resurrectId]
     }
 
     // Deep copy and update restricted property for all spell arrays
@@ -497,21 +498,21 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
 
   const buildFrequencyString = () => {
     // Build frequency string from found spell
-    const amount = selectedSpellFrequency?.amount;
-    const per = selectedSpellFrequency?.per;
-    const charge = selectedSpellFrequency?.charge;
+    const amount = selectedSpellFrequency?.amount
+    const per = selectedSpellFrequency?.per
+    const charge = selectedSpellFrequency?.charge
 
     if (amount != null && per != null) {
-      return `${amount}/${per}${charge ? ` ${charge}` : ''}`;
+      return `${amount}/${per}${charge ? ` ${charge}` : ''}`
     }
     if ((amount == null && !per) && charge === 'Unlimited') {
-      return charge;
+      return charge
     }
     if ((amount == null && !per) && charge) {
-      return charge;
+      return charge
     }
-    return null;
-  };
+    return null
+  }
 
   const fetchSubclassSpellDetails = (key: string, spellId: number, chosenArchetype: string) => {
     const subclassSpells = subclassSpellsMap[chosenArchetype || ''] || []
@@ -603,7 +604,7 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
     clear: boolean = false
   ): SpellList => {
     const newList = JSON.parse(JSON.stringify(spellList))
-    const levelObj = newList.spells[levelIdx]
+    const levelObj = newList.levels[levelIdx] // <-- FIXED
     if (levelObj) {
       const sbl = levelObj.spells[spellsByLevelIdx]
       if (
@@ -623,7 +624,7 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
 
   const renderSubclassSpells = (
     subclassName: string,
-    subclassSpells: { id: number, chosen?: boolean }[],
+    subclassSpells: { id: number, chosen?: boolean, frequency?: SpellFrequency }[],
     getSpellName: (id: number) => string | null
   ) => {
     if (!subclassSpells || subclassSpells.length === 0) return null
@@ -635,7 +636,7 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
             const spellName = getSpellName(spell.id)
             return (
               <Button
-                key={spell.id}
+                key={index}
                 variant={isHunter && spell.chosen ? "success" : "unknown"}
                 style={
                   isHunter && spell.chosen
@@ -645,7 +646,11 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
                 className="text-start d-block w-100"
                 onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
                   setChosenArchetype(subclassName)
-                  // setSelectedSpellContext({ arrayName: 'lookThePart', levelIdx: index, spellsByLevelIdx: idx, spellIdx: baseIdx })
+                  setSelectedSpellFrequency({
+                    amount: spell.frequency?.amount ?? null,
+                    per: spell.frequency?.per ?? null,
+                    charge: spell.frequency?.charge ?? null,
+                  })
                   handleLongPressStart(spell.id, e)
                 }}
                 onMouseMove={handleLongPressMove}
@@ -653,6 +658,11 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
                 onMouseLeave={handleLongPressEnd}
                 onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => {
                   setChosenArchetype(subclassName)
+                  setSelectedSpellFrequency({
+                    amount: spell.frequency?.amount ?? null,
+                    per: spell.frequency?.per ?? null,
+                    charge: spell.frequency?.charge ?? null,
+                  })
                   handleLongPressStart(spell.id, e)
                 }}
                 onTouchMove={handleLongPressMove}
@@ -864,6 +874,8 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
                       ? isSpellChosen(modifiedSpellList, apexArchetype.id) : false
                     const hasJuggernaut = juggernautArchetype
                       ? isSpellChosen(modifiedSpellList, juggernautArchetype.id) : false
+                    const hasMystic = mysticArchetype
+                      ? isSpellChosen(modifiedSpellList, mysticArchetype.id) : false
 
                     // Anti-Paladin
                     if (
@@ -886,7 +898,7 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
                       (spell?.name === 'Protection from Magic' || spell?.name === 'Extend Immunities')
                     ) archetypes.push('Guardian')
                     if (inquisitorArchetype && hasInquisitor &&
-                      (spell?.name === 'Greater Resurrect' || spell?.name === 'Awe')
+                      (spell?.name === 'Greater Resurrect')
                     ) archetypes.push('Inquisitor')
                     // Scout
                     if (hunterArchetype && hasHunter &&
@@ -904,6 +916,10 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
                         spell?.name === 'True Grit' ||
                         spell?.name === 'Harden')
                     ) archetypes.push('Juggernaut')
+                    // Monk
+                    if (mysticArchetype && hasMystic &&
+                      (spell?.name === 'Resurrect')
+                    ) archetypes.push('Mystic')
 
                     if (archetypes.length > 0) {
                       return `${archetypes.join(',')}`
@@ -936,7 +952,7 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
           </Alert>
         )}
 
-        {Array.isArray(modifiedSpellList.lookThePartSpells) &&
+      {!sniperChosen && Array.isArray(modifiedSpellList.lookThePartSpells) &&
         modifiedSpellList.lookThePartSpells.length > 1 &&
         modifiedSpellList.lookThePart && (
           <>
@@ -980,7 +996,7 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
                         amount: spell.frequency?.amount,
                         per: spell.frequency?.per,
                         charge: spell.frequency?.charge,
-                      });
+                      })
                       handleLongPressStart(spell.id, e)
                     }}
                     onMouseMove={handleLongPressMove}
@@ -991,8 +1007,8 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
                         amount: spell.frequency?.amount,
                         per: spell.frequency?.per,
                         charge: spell.frequency?.charge,
-                      });
-                      handleLongPressStart(spell.id, e);
+                      })
+                      handleLongPressStart(spell.id, e)
                     }}
                     onTouchMove={handleLongPressMove}
                     onTouchEnd={handleLongPressEnd}
@@ -1039,25 +1055,25 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
                                 variant={spell.restricted ? "danger" : "unknown"}
                                 className="text-start border-bottom"
                                 onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
-                                  setChosenArchetype(null);
+                                  setChosenArchetype(null)
                                   setSelectedSpellFrequency({
                                     amount: spell.frequency?.amount,
                                     per: spell.frequency?.per,
                                     charge: spell.frequency?.charge,
-                                  });
-                                  handleLongPressStart(spell.id, e);
+                                  })
+                                  handleLongPressStart(spell.id, e)
                                 }}
                                 onMouseMove={handleLongPressMove}
                                 onMouseUp={handleLongPressEnd}
                                 onMouseLeave={handleLongPressEnd}
                                 onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => {
-                                  setChosenArchetype(null);
+                                  setChosenArchetype(null)
                                   setSelectedSpellFrequency({
                                     amount: spell.frequency?.amount,
                                     per: spell.frequency?.per,
                                     charge: spell.frequency?.charge,
-                                  });
-                                  handleLongPressStart(spell.id, e);
+                                  })
+                                  handleLongPressStart(spell.id, e)
                                 }}
                                 onTouchMove={handleLongPressMove}
                                 onTouchEnd={handleLongPressEnd}
@@ -1128,8 +1144,8 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
                                       amount: spell.frequency?.amount,
                                       per: spell.frequency?.per,
                                       charge: spell.frequency?.charge,
-                                  });
-                                    handleLongPressStart(spell.id, e);
+                                  })
+                                    handleLongPressStart(spell.id, e)
                                   }}
                                   onMouseMove={handleLongPressMove}
                                   onMouseUp={handleLongPressEnd}
@@ -1139,8 +1155,8 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
                                       amount: spell.frequency?.amount,
                                       per: spell.frequency?.per,
                                       charge: spell.frequency?.charge,
-                                    });
-                                    handleLongPressStart(spell.id, e);
+                                    })
+                                    handleLongPressStart(spell.id, e)
                                   }}
                                   onTouchMove={handleLongPressMove}
                                   onTouchEnd={handleLongPressEnd}
@@ -1195,22 +1211,22 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
                                           className="text-start border-bottom"
                                           onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
                                             setSelectedSpellFrequency({
-                                              amount: spell.frequency?.amount,
-                                              per: spell.frequency?.per,
-                                              charge: spell.frequency?.charge,
-                                            });
-                                            handleLongPressStart(spell.id, e);
+                                              amount: subSpell.frequency?.amount,
+                                              per: subSpell.frequency?.per,
+                                              charge: subSpell.frequency?.charge,
+                                            })
+                                            handleLongPressStart(subSpell.id, e)
                                           }}
                                           onMouseMove={handleLongPressMove}
                                           onMouseUp={handleLongPressEnd}
                                           onMouseLeave={handleLongPressEnd}
                                           onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => {
                                             setSelectedSpellFrequency({
-                                              amount: spell.frequency?.amount,
-                                              per: spell.frequency?.per,
-                                              charge: spell.frequency?.charge,
-                                            });
-                                            handleLongPressStart(spell.id, e);
+                                              amount: subSpell.frequency?.amount,
+                                              per: subSpell.frequency?.per,
+                                              charge: subSpell.frequency?.charge,
+                                            })
+                                            handleLongPressStart(subSpell.id, e)
                                           }}
                                           onTouchMove={handleLongPressMove}
                                           onTouchEnd={handleLongPressEnd}
@@ -1262,8 +1278,8 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
                                     amount: spell.frequency?.amount,
                                     per: spell.frequency?.per,
                                     charge: spell.frequency?.charge,
-                                  });
-                                  handleLongPressStart(spell.id, e);
+                                  })
+                                  handleLongPressStart(spell.id, e)
                                 }}
                                 onMouseMove={handleLongPressMove}
                                 onMouseUp={handleLongPressEnd}
@@ -1273,8 +1289,8 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
                                     amount: spell.frequency?.amount,
                                     per: spell.frequency?.per,
                                     charge: spell.frequency?.charge,
-                                  });
-                                  handleLongPressStart(spell.id, e);
+                                  })
+                                  handleLongPressStart(spell.id, e)
                                 }}
                                 onTouchMove={handleLongPressMove}
                                 onTouchEnd={handleLongPressEnd}
@@ -1329,8 +1345,8 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
                                     amount: spell.frequency?.amount,
                                     per: spell.frequency?.per,
                                     charge: spell.frequency?.charge,
-                                  });
-                                  handleLongPressStart(spell.id, e);
+                                  })
+                                  handleLongPressStart(spell.id, e)
                                 }}
                                 onMouseMove={handleLongPressMove}
                                 onMouseUp={handleLongPressEnd}
@@ -1340,8 +1356,8 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
                                     amount: spell.frequency?.amount,
                                     per: spell.frequency?.per,
                                     charge: spell.frequency?.charge,
-                                  });
-                                  handleLongPressStart(spell.id, e);
+                                  })
+                                  handleLongPressStart(spell.id, e)
                                 }}
                                 onTouchMove={handleLongPressMove}
                                 onTouchEnd={handleLongPressEnd}
@@ -1399,8 +1415,8 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
                                     amount: spell.frequency?.amount,
                                     per: spell.frequency?.per,
                                     charge: spell.frequency?.charge,
-                                  });
-                                  handleLongPressStart(spell.id, e);
+                                  })
+                                  handleLongPressStart(spell.id, e)
                                 }}
                                 onMouseMove={handleLongPressMove}
                                 onMouseUp={handleLongPressEnd}
@@ -1410,8 +1426,8 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
                                     amount: spell.frequency?.amount,
                                     per: spell.frequency?.per,
                                     charge: spell.frequency?.charge,
-                                  });
-                                  handleLongPressStart(spell.id, e);
+                                  })
+                                  handleLongPressStart(spell.id, e)
                                 }}
                                 onTouchMove={handleLongPressMove}
                                 onTouchEnd={handleLongPressEnd}

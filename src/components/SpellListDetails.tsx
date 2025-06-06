@@ -27,7 +27,6 @@ import {
   WARRIOR_EQUIPMENT,
   SNIPER_SPELLS,
   ARTIFICER_SPELLS,
-  RUFFIAN_SPELLS,
   SPY_SPELLS,
   RAIDER_SPELLS,
   BERSERKER_SPELLS,
@@ -39,6 +38,9 @@ import {
   APEX_SPELLS,
   MARAUDER_SPELLS,
   JUGGERNAUT_SPELLS,
+  SNIPER_LOOKTHEPART_SPELL,
+  ROGUE_SPELLS,
+  RAIDER_LOOKTHEPART_SPELL,
 } from '../appConstants'
 import { IoIosWarning } from 'react-icons/io'
 
@@ -59,7 +61,6 @@ interface SpellList {
 }
 
 interface EquipmentByClass {
-  lookThePart: string
   armor: string
   shields: string
   weapons: string
@@ -76,6 +77,22 @@ function SpellListDetails() {
   const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
   const spellList = allSpellLists.find((list: SpellList) => list.id === parseInt(id || '0'))
   const allPointsSpent = spellList.levels.every(level => level.points === 0)
+
+  const isHoldPersonChosenAtLevel4 = spellList.levels[3]?.spells[0]?.pickOne?.some(
+    spell => spell.id === 79 && spell.chosen === true
+  )
+  const isPinningArrowChosenAtLevel4 = spellList.levels[3]?.spells[0]?.pickOne?.some(
+    spell => spell.id === 109 && spell.chosen === true
+  )
+
+  const isNestedHoldPersonChosenAtLevel6 = spellList.levels[5]?.spells[0]?.optionalPickOne?.some(
+    opt => Array.isArray(opt.pickOne) &&
+      opt.pickOne.some(subSpell => subSpell.id === 79 && subSpell.chosen === true)
+  )
+  const isNestedPinningArrowChosenAtLevel6 = spellList.levels[5]?.spells[0]?.optionalPickOne?.some(
+    opt => Array.isArray(opt.pickOne) &&
+      opt.pickOne.some(subSpell => subSpell.id === 109 && subSpell.chosen === true)
+  )
 
   const isSpellTaken = (spellList: SpellList, spellId: number): boolean =>
     spellList.levels.some(level =>
@@ -106,7 +123,7 @@ function SpellListDetails() {
   const isInfernal = isArchetypeChosen(spellList, 85)
   const isCorruptor = isArchetypeChosen(spellList, 36)
   const isArtificer = isArchetypeChosen(spellList, 10)
-  const isRuffian = isArchetypeChosen(spellList, 181)
+  const isRogue = isArchetypeChosen(spellList, 181)
   const isSpy = isArchetypeChosen(spellList, 150)
   const isRaider = isArchetypeChosen(spellList, 117)
   const isBerserker = isArchetypeChosen(spellList, 22)
@@ -131,23 +148,12 @@ function SpellListDetails() {
     (spellList?.class === 'Warrior' && WARRIOR_LIST) ||
     []
 
-  // const lookThePartByClass = {
-  //   'Anti-Paladin': ANTIPALADIN_LOOKTHEPART,
-  //   'Archer': ARCHER_LOOKTHEPART,
-  //   'Assassin': ASSASSIN_LOOKTHEPART,
-  //   'Barbarian': BARBARIAN_LOOKTHEPART,
-  //   'Monk': MONK_LOOKTHEPART,
-  //   'Paladin': PALADIN_LOOKTHEPART,
-  //   'Scout': SCOUT_LOOKTHEPART,
-  //   'Warrior': WARRIOR_LOOKTHEPART
-  // }
-
   const subclassSpellsMap = {
     "Infernal": INFERNAL_SPELLS,
     "Corruptor": CORRUPTOR_SPELLS,
     "Sniper": SNIPER_SPELLS,
     "Artificer": ARTIFICER_SPELLS,
-    "Ruffian": RUFFIAN_SPELLS,
+    "Rogue": ROGUE_SPELLS,
     "Spy": SPY_SPELLS,
     "Raider": RAIDER_SPELLS,
     "Berserker": BERSERKER_SPELLS,
@@ -224,7 +230,7 @@ function SpellListDetails() {
   }
 
   const fetchMartialSpellDetails = (key: string, spellId: number) => {
-    if (!spellsByClass || !('levels' in spellsByClass) || !Array.isArray((spellsByClass as any).levels)) return undefined;
+    if (!spellsByClass || !('levels' in spellsByClass) || !Array.isArray((spellsByClass as any).levels)) return undefined
     for (const level of (spellsByClass as any).levels) {
       if (Array.isArray(level.spells)) {
         for (const spellsByLevel of level.spells) {
@@ -234,20 +240,20 @@ function SpellListDetails() {
             ...(spellsByLevel.pickOneOfTwo ?? []),
             ...(spellsByLevel.pickOne ?? []),
             ...(spellsByLevel.pickTwoOfThree ?? []),
-          ];
-          const spell = allArrays.find(s => s.id === spellId);
+          ]
+          const spell = allArrays.find(s => s.id === spellId)
           if (spell) {
-            if (key === 'magical') return spell.magical;
-            if (key === 'ambulant') return spell.ambulant;
-            if (key === 'extraordinary') return spell.extraordinary;
-            if (key === 'trait') return spell.trait;
-            if (key === 'swift') return spell.swift;
-            if (key === 'range') return spell.range;
+            if (key === 'magical') return spell.magical
+            if (key === 'ambulant') return spell.ambulant
+            if (key === 'extraordinary') return spell.extraordinary
+            if (key === 'trait') return spell.trait
+            if (key === 'swift') return spell.swift
+            if (key === 'range') return spell.range
           }
         }
       }
     }
-    return undefined;
+    return undefined
   }
 
   const fetchEquipmentChanges = (spellList: SpellList) => {
@@ -260,7 +266,7 @@ function SpellListDetails() {
       (spellList?.class === 'Paladin' && PALADIN_EQUIPMENT) || 
       (spellList?.class === 'Scout' && SCOUT_EQUIPMENT) || 
       (spellList?.class === 'Warrior' && WARRIOR_EQUIPMENT) || {
-        lookThePart: '',
+        // lookThePart: '',
         armor: '',
         shields: '',
         weapons: '',
@@ -269,7 +275,6 @@ function SpellListDetails() {
     let weaponsColor = ''
     let shieldsColor = ''
     let armorColor = ''
-    let lookThePartColor = ''
 
     // Anti-Paladin
     if (spellList.class === 'Anti-Paladin') {
@@ -282,11 +287,9 @@ function SpellListDetails() {
       } else if (isCorruptor) {
         equipmentByClass = {
           ...equipmentByClass,
-          lookThePart: 'Terror 1/Life Charge x10 (m)',
           weapons: 'No Javelins or Great Weapons due to Corruptor',
         }
         weaponsColor = 'red'
-        lookThePartColor = 'green'
       }
     }
     // Archer
@@ -301,10 +304,10 @@ function SpellListDetails() {
     }
     // Assassin
     if (spellList.class === 'Assassin') {
-      if (isRuffian) {
+      if (isRogue) {
         equipmentByClass = {
           ...equipmentByClass,
-          weapons: 'No long weapons or bows due to Ruffian',
+          weapons: 'No long weapons or bows due to Rogue',
         }
         weaponsColor = 'red'
       }
@@ -318,13 +321,6 @@ function SpellListDetails() {
     }
     // Barbarian
     if (spellList.class === 'Barbarian') {
-      if (isRaider) {
-        equipmentByClass = {
-          ...equipmentByClass,
-          shields: 'None due to Raider',
-        }
-        shieldsColor = 'red'
-      }
       if (isBerserker) {
         equipmentByClass = {
           ...equipmentByClass,
@@ -347,7 +343,7 @@ function SpellListDetails() {
       if (isMystic) {
         equipmentByClass = {
           ...equipmentByClass,
-          weapons: 'No Great Weapons nor Heavy Thrown due to Mystic',
+          weapons: 'No Heavy Thrown due to Mystic',
         }
         weaponsColor = 'red'
       }
@@ -379,7 +375,6 @@ function SpellListDetails() {
 
     return {
       ...equipmentByClass,
-      lookThePartColor,
       armorColor,
       shieldsColor,
       weaponsColor,
@@ -416,22 +411,22 @@ function SpellListDetails() {
               ...(spellsByLevel.pickOneOfTwo ?? []),
               ...(spellsByLevel.pickTwoOfThree ?? []),
               ...(spellsByLevel.pickOne ?? []),
-            ];
-            const found = allArrays.find(s => s.id === spellId);
+            ]
+            const found = allArrays.find(s => s.id === spellId)
             if (found) {
-              spellDetails = found;
-              break;
+              spellDetails = found
+              break
             }
           }
         } else if (Array.isArray(level.spells)) {
           // Caster class: level.spells is an array of spells
-          const found = level.spells.find((spell: any) => spell.id === spellId);
+          const found = level.spells.find((spell: any) => spell.id === spellId)
           if (found) {
-            spellDetails = found;
-            break;
+            spellDetails = found
+            break
           }
         }
-        if (spellDetails) break;
+        if (spellDetails) break
       }
     }
 
@@ -679,7 +674,7 @@ function SpellListDetails() {
       const spellSchool = fetchSpellDetails('school', sub.id)
       const spellIncantation = fetchSpellDetails('incantation', sub.id)
       const spellMaterials = fetchSpellDetails('materials', sub.id)
-      const spellFrequency = fetchSpellFrequency(sub.id)
+      const spellFrequency = fetchSpellFrequency(sub.id, subclassSpellsMap[chosenName])
       const spellMagical = fetchSubclassSpellDetails('magical', sub.id, chosenName)
       const spellAmbulant = fetchSubclassSpellDetails('ambulant', sub.id, chosenName)
       const spellExtraordinary = fetchSubclassSpellDetails('extraordinary', sub.id, chosenName)
@@ -779,6 +774,22 @@ function SpellListDetails() {
         // Get subclass spells if this archetype is in the map
         const subclassSpells = subclassSpellsMap[chosenName] || []
 
+        if (isPickOne && chosenName === 'Hold Person' && isHoldPersonChosenAtLevel4 && isNestedHoldPersonChosenAtLevel6) {
+          return (
+            <Row className="ms-3">
+              {' - '}
+            </Row>
+          )
+        }
+
+        if (isPickOne && chosenName === 'Pinning Arrow' && isPinningArrowChosenAtLevel4 && isNestedPinningArrowChosenAtLevel6) {
+          return (
+            <Row className="ms-3">
+              {' - '}
+            </Row>
+          )
+        }
+
         return (
           <>
             <Row className="m-0">
@@ -840,7 +851,28 @@ function SpellListDetails() {
 
                     if (chosenSpell && Array.isArray(chosenSpell.pickOne)) {
                       const nestedChosen = chosenSpell.pickOne.find(s => s.chosen)
-                      if (nestedChosen) {
+
+                      if (
+                        isHunter &&
+                        nestedChosen &&
+                        nestedChosen.id === 79 &&
+                        isNestedHoldPersonChosenAtLevel6 &&
+                        !isHoldPersonChosenAtLevel4
+                      ) {
+                        return (
+                          <Row className="ms-2 mb-2"> - </Row>
+                        )
+                      } else if (
+                        isHunter &&
+                        nestedChosen &&
+                        nestedChosen.id === 109 &&
+                        isNestedPinningArrowChosenAtLevel6 &&
+                        !isPinningArrowChosenAtLevel4
+                      ) {
+                        return (
+                          <Row className="ms-2 mb-2"> - </Row>
+                        )
+                      } else if (nestedChosen) {
                         // If a nested pickOne spell is chosen, render it in green
                         return (
                           <>
@@ -959,6 +991,8 @@ function SpellListDetails() {
                   )
                 }
 
+                console.log('spell', spell, 'spellName', spellName, 'spellFrequency', spellFrequency)
+
                 return (
                   <Row key={index} className="m-0">
                     <div >
@@ -1030,8 +1064,8 @@ function SpellListDetails() {
   }
 
   const renderLookThePart = () => {
-    const lookThePartArr = spellList.lookThePartSpells || [];
-    if (!Array.isArray(lookThePartArr) || lookThePartArr.length === 0) return null;
+    let lookThePartArr = spellList.lookThePartSpells || []
+    if (!Array.isArray(lookThePartArr) || lookThePartArr.length === 0) return null
 
     if (!spellList.lookThePart) {
       return (
@@ -1041,10 +1075,18 @@ function SpellListDetails() {
             <span>{' - '}</span>
           </Row>
         </>
-      );
+      )
     }
 
-    const chosenSpell = lookThePartArr.find(spell => spell.chosen);
+    if (isSniper && spellList.lookThePart) {
+      lookThePartArr = SNIPER_LOOKTHEPART_SPELL
+    }
+
+    if (isRaider && spellList.lookThePart) {
+      lookThePartArr = RAIDER_LOOKTHEPART_SPELL
+    }
+
+    const chosenSpell = lookThePartArr.find(spell => spell.chosen)
     const onlyOneLookThePartOption = lookThePartArr.length === 1
 
     console.log('look the part arr', lookThePartArr.length, 'chosenSpell', chosenSpell)
@@ -1074,8 +1116,8 @@ function SpellListDetails() {
                 {showIncantation &&
                   fetchSpellDetails('incantation', chosenSpell.id) &&
                   fetchSpellDetails('incantation', chosenSpell.id).split('\n').map((line: string, idx: number) => {
-                    const isIndented = line.startsWith('>>');
-                    const cleanLine = isIndented ? line.replace(/^>>/, '') : line;
+                    const isIndented = line.startsWith('>>')
+                    const cleanLine = isIndented ? line.replace(/^>>/, '') : line
                     return (
                       <span
                         key={idx}
@@ -1089,7 +1131,7 @@ function SpellListDetails() {
                       >
                         {cleanLine}
                       </span>
-                    );
+                    )
                   })}
               </div>
               <div className="m-0">
@@ -1131,13 +1173,13 @@ function SpellListDetails() {
                     <span>( {fetchSpellDetails('school', spell.id)} )</span>
                   )}
                 </Row>
-              );
+              )
             })}
           </>
         )}
       </>
-    );
-  };
+    )
+  }
 
   if (!spellList) {
     return <Container><p>Spell list not found.</p></Container>

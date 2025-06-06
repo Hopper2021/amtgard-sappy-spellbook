@@ -1057,7 +1057,7 @@ export const ALL_SPELLS = [
     materials: null,
     incantation: null,
     effect: 'Gain Sacred Blades (Self) 1/Life (ex)',
-    limitation: 'Player loses all instances of Greater Resurrect and Awe.',
+    limitation: 'Player loses all instances of Greater Resurrect.',
     note: null
   },
   {
@@ -1240,7 +1240,7 @@ export const ALL_SPELLS = [
     materials: null,
     incantation: null,
     effect: 'Gain Force Bolt 4 Balls / Unlimited (m). Gain Suppression Bolt 2 Balls / Unlimited (m).',
-    limitation: 'May not wield Great weapons nor Heavy Thrown.',
+    limitation: 'May not wield Heavy Thrown. Lose all instances of Resurrect.',
     note: null
   },
   {
@@ -1430,8 +1430,8 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     range: null,
     materials: null,
     incantation: null,
-    effect: 'Player may choose to use Adrenaline for its usual effect or to instantly charge Brutal Strike. Brutal Strike becomes 3/Life Charge x3 (ex). Gain Harden (Self) 1/Life (ex).',
-    limitation: 'May not wield shields, and loses all instances of Rage.',
+    effect: 'Gain Bear Strength (Self) 1/Life (ex). Look the part becomes an additional use of Brutal Strike.',
+    limitation: 'Loses all instances of Rage.',
     note: null
   },
   {
@@ -2040,14 +2040,8 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     range: 'Other',
     materials: 'Yellow strip',
     incantation: `
-      "Flesh rots, bones break, skulls sigh, spirits take, 
-      let the power of my will descend on thee
-      let the power of my will restore thy spirit
-      let the power of my will knit thy corpse
-      let the power of my will give thee direction
-      let the power of my will cheat thy death
-      by the power of my will, arise my minion!"`,
-    effect: `Bearer is Cursed. When the bearer dies, they must return to the caster. While the bearer is enchanted, the caster gains Raise Dead (Unlimited) (m) which can only be cast with the bearer as the target, and ignores the requirement for the bearer to have not moved from where they died. For the duration of the Enchantment, the bearer may treat the caster as a base for the purposes of the effects which require the bearer to go to their base. This enchantment is Persistent, and remains active while the bearer is dead.`,
+      "By the power of my will, arise my minion!" x5`,
+    effect: `Bearer is Cursed and cannot respawn. While the bearer is enchanted, the caster gains Raise Dead (Unlimited) (m) white can only be cast with the bearer as the target and ignores the requirement for the bearer to have not movedd from where they died. For the duration of the Enchantment, the bearer may treat the caster as a base for the purposes of the effects which require the bearer to go to their base. This Enchantment is Persistent, and remains active while the bearer is dead.`,
     limitation: 'The caster may not have more than three Undead Minion Enchantments.',
     note: null
   },
@@ -2209,13 +2203,13 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
   },
   {
     id: 181,
-    name: 'Ruffian',
+    name: 'Rogue',
     type: 'Archetype',
     school: 'Neutral',
     range: null,
     materials: null,
     incantation: null,
-    effect: "Regain a use of Coup de Grace if you successfully cast Assassinate on a player after killing them with a thrown weapon. You do not gain the effect if the dead player is unaffected by Assassinate.",
+    effect: "Regain a use of Coup de Grace upon killing a player with a thrown weapon.",
     limitation: 'May not wield Long weapons or Bows.',
     note: null,
   },
@@ -2828,6 +2822,8 @@ export const SNIPER_SPELLS = [
   { id: 100, frequency: { amount: null, per: null, charge: 'Unlimited' }, range: null, trait: false, extraordinary: true, magical: false, ambulant: true, restricted: false, chosen: false, },
 ]
 
+export const SNIPER_LOOKTHEPART_SPELL = [{ id: 98, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },]
+
 export const ARTIFICER_SPELLS = [
   { id: 71, frequency: { amount: 2, per: 'Refresh', charge: 'Charge x10' }, range: null, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
 ]
@@ -2915,7 +2911,7 @@ export const ASSASSIN_LIST = {
   ]
 }
 
-export const RUFFIAN_SPELLS = [{}]
+export const ROGUE_SPELLS = [{}]
 
 export const SPY_SPELLS = [{}]
 
@@ -3001,8 +2997,10 @@ export const BARBARIAN_LIST = {
 }
 
 export const RAIDER_SPELLS = [
-  { id: 74, frequency: { amount: 1, per: 'Life', charge: null }, range: 'Self', trait: false, extraordinary: true, magical: false, ambulant: true, restricted: false, chosen: false, }
+  { id: 179, frequency: { amount: 1, per: 'Life', charge: null }, range: 'Self', trait: false, extraordinary: true, magical: false, ambulant: true, restricted: false, chosen: false, }
 ]
+
+export const RAIDER_LOOKTHEPART_SPELL = [{ id: 32, frequency: { amount: 1, per: 'Life', charge: 'Charge x3' }, trait: false, extraordinary: true, magical: false, ambulant: true, restricted: false, chosen: null, }]
 
 export const BERSERKER_SPELLS = [
   { id: 100, frequency: { amount: null, per: null, charge: 'Unlimited' }, range: null, trait: false, extraordinary: true, magical: false, ambulant: true, restricted: false, chosen: false, },
@@ -3273,8 +3271,8 @@ export const HUNTER_SPELLS = [
 ]
 
 export const APEX_SPELLS = [
-  { id: 101, frequency: { amount: null, per: null, charge: null }, range: null, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
-  { id: 2, frequency: { amount: 1, per: 'Life', charge: 'Charge x5' }, swift: true, range: null, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+  { id: 98, frequency: { amount: 1, per: 'Life', charge: null }, range: null, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+  { id: 136, frequency: { amount: 1, per: 'Life', charge: null }, range: 'Self', trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
 ]
 
 export const WARRIOR_EQUIPMENT = {
