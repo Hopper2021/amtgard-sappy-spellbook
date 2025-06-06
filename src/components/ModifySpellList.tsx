@@ -167,7 +167,8 @@ function ModifySpellList() {
 
 			<Button
 				className="w-100"
-				variant="primary"
+				disabled={spellListToEdit.version === undefined}
+				variant={spellListToEdit.version === undefined ? 'secondary' : 'primary'}
 				onClick={() => {
 					const updatedAllSpellLists = allSpellLists.map((list: SpellList) =>
 						list.id === modifiedSpellList.id ? modifiedSpellList : list
@@ -176,7 +177,7 @@ function ModifySpellList() {
 					navigate('/')
 				}}
 			>
-				UPDATE
+				{spellListToEdit.version === undefined ? 'VERSION OUT OF DATE' : 'Update'}
 			</Button>
     </Container>
   )
