@@ -26,6 +26,7 @@ import {
   APEX_SPELLS,
   MARAUDER_SPELLS,
   JUGGERNAUT_SPELLS,
+  CURRENT_VERSION,
 } from '../appConstants'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Toast, ToastContainer } from 'react-bootstrap'
@@ -88,6 +89,7 @@ interface SpellLevel {
 // user's spell list
 interface SpellList {
   id: number
+  version: string
   name: string
   class: string
   maxLevel: number
@@ -150,6 +152,7 @@ function EditMartialList() {
   
   const [modifiedSpellList, setModifiedSpellList] = React.useState<SpellList>({
     id: parseInt(id || '0'),
+    version: CURRENT_VERSION,
     name: spellListToEdit?.name || 'My SpellBook',
     class: spellListToEdit?.class || 'Bard',
     maxLevel: spellListToEdit?.maxLevel || 1,
@@ -157,6 +160,13 @@ function EditMartialList() {
     levels: spellListToEdit?.levels || [],
     lookThePartSpells: spellListToEdit?.lookThePartSpells || [],
   })
+
+  const [selectedSpellContext, setSelectedSpellContext] = useState<{
+    arrayName: string,
+    levelIdx: number,
+    spellsByLevelIdx: number,
+    spellIdx: number
+} | null>(null);
 
   const isSpellChosen = (modifiedSpellList: SpellList, spellId: number): boolean => {
     for (const level of modifiedSpellList.levels) {
@@ -490,51 +500,59 @@ function EditMartialList() {
 
   const buildFrequencyString = (
     masterSpell: any,
+    context?: { arrayName: string, levelIdx: number, spellsByLevelIdx: number, spellIdx: number },
     subclassName?: string
   ) => {
-    let spell: (MartialSpell | Spell) | null = null
+    let spell: MartialSpell | null = null;
 
-    // If a subclass is chosen and exists in the map, search there
+    // 1. Check subclass
     if (subclassName && subclassSpellsMap[subclassName]) {
-      spell = subclassSpellsMap[subclassName].find(s => s.id === masterSpell?.id) || null
-    } else if (Array.isArray(spellsByClass)) {
-      // Otherwise, search the base class list
-      for (const level of spellsByClass) {
-        if (Array.isArray(level.spells)) {
-          for (const spellsByLevel of level.spells) {
-            const allArrays = [
-              ...(spellsByLevel.base ?? []),
-              ...(spellsByLevel.optionalPickOne ?? []),
-              ...(spellsByLevel.pickOneOfTwo ?? []),
-              ...(spellsByLevel.pickTwoOfThree ?? []),
-            ]
-            const match = allArrays.find(s => s.id === masterSpell?.id)
-            if (match) {
-              spell = match
-              break
-            }
-          }
-        }
-        if (spell) break
+      spell = subclassSpellsMap[subclassName].find(s => s.id === masterSpell?.id) || null;
+    }
+    // 2. Check lookThePartSpells
+    else if (
+      Array.isArray(modifiedSpellList.lookThePartSpells) &&
+      modifiedSpellList.lookThePartSpells.length > 0
+    ) {
+      spell = modifiedSpellList.lookThePartSpells.find(s => s.id === masterSpell?.id) || null;
+    }
+    // 3. Use context to directly access the spell
+    else if (context && modifiedSpellList.levels[context.levelIdx]) {
+      const levelObj = modifiedSpellList.levels[context.levelIdx];
+      const sbl = levelObj.spells[context.spellsByLevelIdx];
+      const arr = sbl[context.arrayName];
+                  console.log('buildFrequencyString context:', {
+      context,
+      spell,
+      freq: spell?.frequency,
+      arr,
+      sbl,
+      levelObj
+    });
+      if (arr) {
+        spell = arr[context.spellIdx] || null;
       }
     }
+    // fallback: search all arrays as before (optional)
+    // ...
 
-    const freq: FrequencyByClass | null = (spell && 'frequency' in (spell as any)) ? (spell as any).frequency : null
-    const amount = freq?.amount
-    const per = freq?.per
-    const charge = freq?.charge
+    // Build frequency string from found spell
+    const freq: FrequencyByClass | null = (spell && 'frequency' in spell) ? spell.frequency : null;
+    const amount = freq?.amount;
+    const per = freq?.per;
+    const charge = freq?.charge;
 
     if (amount != null && per != null) {
-      return `${amount}/${per}${charge ? ` ${charge}` : ''}`
+      return `${amount}/${per}${charge ? ` ${charge}` : ''}`;
     }
     if ((amount == null && !per) && charge === 'Unlimited') {
-      return charge
+      return charge;
     }
     if ((amount == null && !per) && charge) {
-      return charge
+      return charge;
     }
-    return null
-  }
+    return null;
+  };
 
   const fetchSubclassSpellDetails = (key: string, spellId: number, chosenArchetype: string) => {
     const subclassSpells = subclassSpellsMap[chosenArchetype || ''] || []
@@ -654,7 +672,7 @@ function EditMartialList() {
     return (
       <Row className="ms-4 my-1">
         <span>
-          {subclassSpells.map((spell) => {
+          {subclassSpells.map((spell, index) => {
             const spellName = getSpellName(spell.id)
             return (
               <Button
@@ -668,6 +686,7 @@ function EditMartialList() {
                 className="text-start d-block w-100"
                 onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
                   setChosenArchetype(subclassName)
+                  // setSelectedSpellContext({ arrayName: 'lookThePart', levelIdx: index, spellsByLevelIdx: idx, spellIdx: baseIdx })
                   handleLongPressStart(spell.id, e)
                 }}
                 onMouseMove={handleLongPressMove}
@@ -794,7 +813,7 @@ function EditMartialList() {
           <Modal.Body className="modal-sm pb-1 p-0">
             <span>
               <strong>{chosenArchetype ? chosenArchetype : "Base"} Frequency for {modifiedSpellList.class}: </strong>
-              {buildFrequencyString(selectedSpell, chosenArchetype ?? undefined) ?? 'N/A'}
+              {buildFrequencyString(selectedSpell, selectedSpellContext ?? undefined, chosenArchetype ?? undefined) ?? 'N/A'}
               {selectedSpell?.id !== undefined && (
                 <>
                   {[
@@ -866,7 +885,6 @@ function EditMartialList() {
                 <strong className="ms-1">
                   {(() => {
                     const spell = ALL_SPELLS.find(s => s.id === selectedSpell.id)
-                    console.log('spell:', spell)
                     const archetypes: string[] = []
 
                     const hasInfernal = infernalArchetype
@@ -980,7 +998,7 @@ function EditMartialList() {
                 </Button>
               </Col>
             </Row>
-            {modifiedSpellList.lookThePartSpells.map((spell, idx) => {
+            {modifiedSpellList.lookThePartSpells.map((spell, lookThePartIdx: number) => {
               const spellName = getSpellName(spell.id)
               return (
                 <Row key={`lookthepart-${spell.id}`} className="d-flex justify-content-between ms-1">
@@ -994,14 +1012,30 @@ function EditMartialList() {
                     className="text-start border-bottom"
                     onClick={() => {
                       setModifiedSpellList(prevList =>
-                        setPickOneChosen(prevList, -1, 0, idx, 'lookThePartSpells', false)
+                        setPickOneChosen(prevList, -1, 0, lookThePartIdx, 'lookThePartSpells', false)
                       )
                     }}
-                    onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => handleLongPressStart(spell.id, e)}
+                    onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
+                      setSelectedSpellContext({
+                        arrayName: 'lookThePartSpells',
+                        levelIdx: -1,
+                        spellsByLevelIdx: 0,
+                        spellIdx: lookThePartIdx
+                      });
+                      handleLongPressStart(spell.id, e)
+                    }}
                     onMouseMove={handleLongPressMove}
                     onMouseUp={handleLongPressEnd}
                     onMouseLeave={handleLongPressEnd}
-                    onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => handleLongPressStart(spell.id, e)}
+                    onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => {
+                      setSelectedSpellContext({
+                        arrayName: 'lookThePartSpells',
+                        levelIdx: -1,
+                        spellsByLevelIdx: 0,
+                        spellIdx: lookThePartIdx
+                      });
+                      handleLongPressStart(spell.id, e);
+                    }}
                     onTouchMove={handleLongPressMove}
                     onTouchEnd={handleLongPressEnd}
                   >
@@ -1026,12 +1060,12 @@ function EditMartialList() {
                 </Accordion.Header>
 
                 <Accordion.Body className="py-0">
-                  {level.spells.map((spellsByLevel, idx) => {
+                  {level.spells.map((spellsByLevel, spellsByLevelIdx: number) => {
                     const rows: React.ReactNode[] = []
 
                     if (Array.isArray(spellsByLevel.base)) {
                       rows.push(
-                        ...spellsByLevel.base.map((spell: MartialSpell) => {
+                        ...spellsByLevel.base.map((spell: MartialSpell, baseIdx: number) => {
                           const spellName = getSpellName(spell.id)
                           return (
                             <Row
@@ -1046,14 +1080,28 @@ function EditMartialList() {
                                 variant={spell.restricted ? "danger" : "unknown"}
                                 className="text-start border-bottom"
                                 onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
-                                  setChosenArchetype(null)
-                                  handleLongPressStart(spell.id, e)}}
+                                  setChosenArchetype(null);
+                                  setSelectedSpellContext({
+                                    arrayName: 'base',
+                                    levelIdx: index,
+                                    spellsByLevelIdx: spellsByLevelIdx,
+                                    spellIdx: baseIdx
+                                  });
+                                  handleLongPressStart(spell.id, e);
+                                }}
                                 onMouseMove={handleLongPressMove}
                                 onMouseUp={handleLongPressEnd}
                                 onMouseLeave={handleLongPressEnd}
                                 onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => {
-                                  setChosenArchetype(null)
-                                  handleLongPressStart(spell.id, e)}}
+                                  setChosenArchetype(null);
+                                  setSelectedSpellContext({
+                                    arrayName: 'base',
+                                    levelIdx: index,
+                                    spellsByLevelIdx: spellsByLevelIdx,
+                                    spellIdx: baseIdx
+                                  });
+                                  handleLongPressStart(spell.id, e);
+                                }}
                                 onTouchMove={handleLongPressMove}
                                 onTouchEnd={handleLongPressEnd}
                                 onClick={() => {
@@ -1084,7 +1132,7 @@ function EditMartialList() {
                     if (Array.isArray(spellsByLevel.optionalPickOne)) {
                       rows.push(
                         <Row
-                          key={`optionalPickOne-label-${index}-${idx}`}
+                          key={`optionalPickOne-label-${index}`}
                           className="d-flex justify-content-between align-items-center fw-bold text-secondary my-1">
                           <Col className="text-start">
                             <span>Optional, Pick one:</span>
@@ -1094,7 +1142,7 @@ function EditMartialList() {
                               className="py-0"
                               onClick={() => {
                                 setModifiedSpellList(prevList =>
-                                  setPickOneChosen(prevList, index, idx, undefined, 'optionalPickOne', true)
+                                  setPickOneChosen(prevList, index, spellsByLevelIdx, undefined, 'optionalPickOne', true)
                                 )
                               }}
                             >
@@ -1104,7 +1152,7 @@ function EditMartialList() {
                         </Row>
                       )
                       rows.push(
-                        ...spellsByLevel.optionalPickOne.map((spell: MartialSpell, spellIdx) => {
+                        ...spellsByLevel.optionalPickOne.map((spell: MartialSpell, optionalIdx) => {
                           const spellName = getSpellName(spell.id)
                           
                           return (
@@ -1118,13 +1166,27 @@ function EditMartialList() {
                                   }
                                   variant={spell.chosen ? "primary" : "outline-secondary"}
                                   className="text-start border-bottom"
-                                  onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => 
-                                    handleLongPressStart(spell.id, e)}
+                                  onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
+                                    setSelectedSpellContext({
+                                      arrayName: 'optionalPickOne',
+                                      levelIdx: index,
+                                      spellsByLevelIdx: spellsByLevelIdx,
+                                      spellIdx: optionalIdx
+                                    });
+                                    handleLongPressStart(spell.id, e);
+                                  }}
                                   onMouseMove={handleLongPressMove}
                                   onMouseUp={handleLongPressEnd}
                                   onMouseLeave={handleLongPressEnd}
-                                  onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => 
-                                    handleLongPressStart(spell.id, e)}
+                                  onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => {
+                                    setSelectedSpellContext({
+                                      arrayName: 'optionalPickOne',
+                                      levelIdx: index,
+                                      spellsByLevelIdx: spellsByLevelIdx,
+                                      spellIdx: optionalIdx
+                                    });
+                                    handleLongPressStart(spell.id, e);
+                                  }}
                                   onTouchMove={handleLongPressMove}
                                   onTouchEnd={handleLongPressEnd}
                                   onClick={() => {
@@ -1135,7 +1197,7 @@ function EditMartialList() {
                                       } else {
                                         setChosenArchetype(null)
                                       }
-                                      return setPickOneChosen(prevList, index, idx, spellIdx, 'optionalPickOne', false)
+                                      return setPickOneChosen(prevList, index, spellsByLevelIdx, optionalIdx, 'optionalPickOne', false)
                                     })
                                   }}
                                 >
@@ -1147,25 +1209,24 @@ function EditMartialList() {
                               {spell.pickOne && spell.chosen && modifiedSpellList.class === 'Scout' && hunterArchetype && isSpellChosen(modifiedSpellList, hunterArchetype.id) && (
                                 <>
                                   <Row
-                                    key={`pickOneOfTwo-label-${index}-${idx}`}
+                                    key={`pickOneOfTwo-label-${index}`}
                                     className="fw-bold text-secondary mb-1 ms-4"
                                   >
-                                    Pick one of two:
-                                  
-                                  <Col className="text-end">
-                                    <Button
-                                      className="py-0"
-                                      onClick={() => {
-                                        setModifiedSpellList(prevList =>
-                                          setNestedPickOneChosen(prevList, index, idx, spellIdx, -1, true)
-                                        )
-                                      }}
-                                    >
-                                      Clear
-                                    </Button>
-                                  </Col>
+                                    Pick one of two:  
+                                    <Col className="text-end">
+                                      <Button
+                                        className="py-0"
+                                        onClick={() => {
+                                          setModifiedSpellList(prevList =>
+                                            setNestedPickOneChosen(prevList, index, spellsByLevelIdx, optionalIdx, -1, true)
+                                          )
+                                        }}
+                                      >
+                                        Clear
+                                      </Button>
+                                    </Col>
                                   </Row>
-                                  {spell.pickOne.map((subSpell: MartialSpell, subSpellIdx) => {
+                                  {spell.pickOne.map((subSpell: MartialSpell, pickOneIdx) => {
                                     const subSpellName = getSpellName(subSpell.id)
                                     return (
                                       <Row key={`pickOneOfTwo-${subSpell.id}`} className="d-flex justify-content-between ms-4">
@@ -1177,18 +1238,32 @@ function EditMartialList() {
                                           }
                                           variant={subSpell.chosen ? "primary" : "outline-secondary"}
                                           className="text-start border-bottom"
-                                          onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => 
-                                            handleLongPressStart(subSpell.id, e)}
+                                          onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
+                                            setSelectedSpellContext({
+                                              arrayName: 'pickOne',
+                                              levelIdx: index,
+                                              spellsByLevelIdx: spellsByLevelIdx,
+                                              spellIdx: pickOneIdx
+                                            });
+                                            handleLongPressStart(spell.id, e);
+                                          }}
                                           onMouseMove={handleLongPressMove}
                                           onMouseUp={handleLongPressEnd}
                                           onMouseLeave={handleLongPressEnd}
-                                          onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => 
-                                            handleLongPressStart(subSpell.id, e)}
+                                          onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => {
+                                          setSelectedSpellContext({
+                                            arrayName: 'pickOne',
+                                            levelIdx: index,
+                                            spellsByLevelIdx: spellsByLevelIdx,
+                                            spellIdx: pickOneIdx
+                                          });
+                                            handleLongPressStart(spell.id, e);
+                                          }}
                                           onTouchMove={handleLongPressMove}
                                           onTouchEnd={handleLongPressEnd}
                                           onClick={() => {
                                             setModifiedSpellList(prevList => {
-                                              return setNestedPickOneChosen(prevList, index, idx, spellIdx, subSpellIdx, false)
+                                              return setNestedPickOneChosen(prevList, index, spellsByLevelIdx, optionalIdx, pickOneIdx, false)
                                             })
                                           }}
                                         >
@@ -1216,12 +1291,12 @@ function EditMartialList() {
 
                     if (Array.isArray(spellsByLevel.pickOneOfTwo)) {
                       rows.push(
-                        <Row key={`optionalPickOne-label-${index}-${idx}`} className="fw-bold text-secondary mb-1">
+                        <Row key={`optionalPickOne-label-${index}`} className="fw-bold text-secondary mb-1">
                           Pick one of two:
                         </Row>
                       )
                       rows.push(
-                        ...spellsByLevel.pickOneOfTwo.map((spell: MartialSpell) => {
+                        ...spellsByLevel.pickOneOfTwo.map((spell: MartialSpell, pickOneOfTwoIdx: number) => {
                           const spellName = getSpellName(spell.id)
                           return (
                             <Row key={`pickOneOfTwo-${spell.id}`} className="d-flex justify-content-between ms-1">
@@ -1229,13 +1304,27 @@ function EditMartialList() {
                                 style={{ padding: 7 }}
                                 variant="secondary"
                                 className="text-start border-bottom"
-                                onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => 
-                                  handleLongPressStart(spell.id, e)}
+                                onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
+                                  setSelectedSpellContext({
+                                    arrayName: 'pickOneOfTwo',
+                                    levelIdx: index,
+                                    spellsByLevelIdx: spellsByLevelIdx,
+                                    spellIdx: pickOneOfTwoIdx
+                                  });
+                                  handleLongPressStart(spell.id, e);
+                                }}
                                 onMouseMove={handleLongPressMove}
                                 onMouseUp={handleLongPressEnd}
                                 onMouseLeave={handleLongPressEnd}
-                                onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => 
-                                  handleLongPressStart(spell.id, e)}
+                                onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => {
+                                  setSelectedSpellContext({
+                                    arrayName: 'pickOneOfTwo',
+                                    levelIdx: index,
+                                    spellsByLevelIdx: spellsByLevelIdx,
+                                    spellIdx: pickOneOfTwoIdx
+                                  });
+                                  handleLongPressStart(spell.id, e);
+                                }}
                                 onTouchMove={handleLongPressMove}
                                 onTouchEnd={handleLongPressEnd}
                               >
@@ -1252,7 +1341,7 @@ function EditMartialList() {
                     if (Array.isArray(spellsByLevel.pickOne)) {
                       rows.push(
                         <Row
-                          key={`optionalPickOne-label-${index}-${idx}`}
+                          key={`optionalPickOne-label-${index}`}
                           className="d-flex justify-content-between align-items-center fw-bold text-secondary my-1">
                           <Col className="text-start">
                             <span>Pick one of two:</span>
@@ -1262,7 +1351,7 @@ function EditMartialList() {
                               className="py-0"
                               onClick={() => {
                                 setModifiedSpellList(prevList =>
-                                  setPickOneChosen(prevList, index, idx, undefined, 'pickOne', true)
+                                  setPickOneChosen(prevList, index, spellsByLevelIdx, undefined, 'pickOne', true)
                                 )
                               }}
                             >
@@ -1272,7 +1361,7 @@ function EditMartialList() {
                         </Row>
                       )
                       rows.push(
-                        ...spellsByLevel.pickOne.map((spell: MartialSpell, spellIdx: number) => {
+                        ...spellsByLevel.pickOne.map((spell: MartialSpell, pickOneIdx: number) => {
                           const spellName = getSpellName(spell.id)
                           return (
                             <Row key={`pickOneOfTwo-${spell.id}`} className="d-flex justify-content-between ms-1">
@@ -1284,18 +1373,32 @@ function EditMartialList() {
                                 }
                                 variant={spell.chosen ? "primary" : "outline-secondary"}
                                 className="text-start border-bottom"
-                                onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => 
-                                  handleLongPressStart(spell.id, e)}
+                                onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
+                                  setSelectedSpellContext({
+                                    arrayName: 'pickOne',
+                                    levelIdx: index,
+                                    spellsByLevelIdx: spellsByLevelIdx,
+                                    spellIdx: pickOneIdx
+                                  });
+                                  handleLongPressStart(spell.id, e);
+                                }}
                                 onMouseMove={handleLongPressMove}
                                 onMouseUp={handleLongPressEnd}
                                 onMouseLeave={handleLongPressEnd}
-                                onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => 
-                                  handleLongPressStart(spell.id, e)}
+                                onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => {
+                                  setSelectedSpellContext({
+                                    arrayName: 'pickOne',
+                                    levelIdx: index,
+                                    spellsByLevelIdx: spellsByLevelIdx,
+                                    spellIdx: pickOneIdx
+                                  });
+                                  handleLongPressStart(spell.id, e);
+                                }}
                                 onTouchMove={handleLongPressMove}
                                 onTouchEnd={handleLongPressEnd}
                                 onClick={() => {
                                   setModifiedSpellList(prevList => 
-                                    setPickOneChosen(prevList, index, idx, spellIdx, 'pickOne', false)
+                                    setPickOneChosen(prevList, index, spellsByLevelIdx, pickOneIdx, 'pickOne', false)
                                   )
                                 }}
                               >
@@ -1311,7 +1414,7 @@ function EditMartialList() {
 
                     if (Array.isArray(spellsByLevel.pickTwoOfThree)) {
                       rows.push(
-                        <Row key={`pickTwoOfThree-label-${index}-${idx}`} className="d-flex justify-content-between align-items-center fw-bold text-secondary my-1">
+                        <Row key={`pickTwoOfThree-label-${index}`} className="d-flex justify-content-between align-items-center fw-bold text-secondary my-1">
                           <Col className="text-start">
                             <span>Pick two of three:</span>
                           </Col>
@@ -1320,7 +1423,7 @@ function EditMartialList() {
                               className="py-0"
                               onClick={() => {
                                 setModifiedSpellList(prevList =>
-                                  setPickTwoOfThreeChosen(prevList, index, idx, undefined, true)
+                                  setPickTwoOfThreeChosen(prevList, index, spellsByLevelIdx, undefined, true)
                                 )
                               }}
                             >
@@ -1330,7 +1433,7 @@ function EditMartialList() {
                         </Row>
                       )
                       rows.push(
-                        ...spellsByLevel.pickTwoOfThree.map((spell: MartialSpell, spellIdx: number) => {
+                        ...spellsByLevel.pickTwoOfThree.map((spell: MartialSpell, pickTwoOfThreeIdx: number) => {
                           const spellName = getSpellName(spell.id)
                           return (
                             <Row key={`pickTwoOfThree-${spell.id}`} className="d-flex justify-content-between ms-1">
@@ -1342,16 +1445,32 @@ function EditMartialList() {
                                 }
                                 variant={spell.chosen ? "primary" : "outline-secondary"}
                                 className="text-start border-bottom"
-                                onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => handleLongPressStart(spell.id, e)}
+                                onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
+                                  setSelectedSpellContext({
+                                    arrayName: 'pickTwoOfThree',
+                                    levelIdx: index,
+                                    spellsByLevelIdx: spellsByLevelIdx,
+                                    spellIdx: pickTwoOfThreeIdx
+                                  });
+                                  handleLongPressStart(spell.id, e);
+                                }}
                                 onMouseMove={handleLongPressMove}
                                 onMouseUp={handleLongPressEnd}
                                 onMouseLeave={handleLongPressEnd}
-                                onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => handleLongPressStart(spell.id, e)}
+                                onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => {
+                                  setSelectedSpellContext({
+                                    arrayName: 'pickTwoOfThree',
+                                    levelIdx: index,
+                                    spellsByLevelIdx: spellsByLevelIdx,
+                                    spellIdx: pickTwoOfThreeIdx
+                                  });
+                                  handleLongPressStart(spell.id, e);
+                                }}
                                 onTouchMove={handleLongPressMove}
                                 onTouchEnd={handleLongPressEnd}
                                 onClick={() => {
                                   setModifiedSpellList(prevList =>
-                                    setPickTwoOfThreeChosen(prevList, index, idx, spellIdx)
+                                    setPickTwoOfThreeChosen(prevList, index, spellsByLevelIdx, pickTwoOfThreeIdx)
                                   )
                                 }}
                               >
@@ -1365,7 +1484,7 @@ function EditMartialList() {
                       )
                     }
 
-                    return <React.Fragment key={idx}>{rows}</React.Fragment>
+                    return <React.Fragment key={index}>{rows}</React.Fragment>
                   })}
                 </Accordion.Body>
               </Accordion.Item>
