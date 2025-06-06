@@ -991,8 +991,6 @@ function SpellListDetails() {
                   )
                 }
 
-                console.log('spell', spell, 'spellName', spellName, 'spellFrequency', spellFrequency)
-
                 return (
                   <Row key={index} className="m-0">
                     <div >
@@ -1064,7 +1062,16 @@ function SpellListDetails() {
   }
 
   const renderLookThePart = () => {
-    let lookThePartArr = spellList.lookThePartSpells || []
+    let lookThePartArr: any[] = []
+
+    if (isSniper && spellList.lookThePart) {
+      lookThePartArr = SNIPER_LOOKTHEPART_SPELL
+    } else if (isRaider && spellList.lookThePart) {
+      lookThePartArr = RAIDER_LOOKTHEPART_SPELL
+    } else {
+      lookThePartArr = spellList.lookThePartSpells || []
+    }
+
     if (!Array.isArray(lookThePartArr) || lookThePartArr.length === 0) return null
 
     if (!spellList.lookThePart) {
@@ -1078,18 +1085,8 @@ function SpellListDetails() {
       )
     }
 
-    if (isSniper && spellList.lookThePart) {
-      lookThePartArr = SNIPER_LOOKTHEPART_SPELL
-    }
-
-    if (isRaider && spellList.lookThePart) {
-      lookThePartArr = RAIDER_LOOKTHEPART_SPELL
-    }
-
     const chosenSpell = lookThePartArr.find(spell => spell.chosen)
     const onlyOneLookThePartOption = lookThePartArr.length === 1
-
-    console.log('look the part arr', lookThePartArr.length, 'chosenSpell', chosenSpell)
 
     return (
       <>

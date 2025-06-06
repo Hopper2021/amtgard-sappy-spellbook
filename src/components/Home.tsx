@@ -34,8 +34,6 @@ function App() {
 
   const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
 
-  console.log('allSpellLists', allSpellLists)
-
   const handleClose = () => {
     setOpenModal(false)
     setDeleteToggleModal(false)

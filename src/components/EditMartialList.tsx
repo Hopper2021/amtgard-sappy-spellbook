@@ -974,7 +974,6 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
               </Col>
             </Row>
             {modifiedSpellList.lookThePartSpells.map((spell, lookThePartIdx: number) => {
-              console.log('spell:', spell)
               const spellName = getSpellName(spell.id)
               return (
                 <Row key={`lookthepart-${spell.id}`} className="d-flex justify-content-between ms-1">
@@ -1040,7 +1039,6 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
                     if (Array.isArray(spellsByLevel.base)) {
                       rows.push(
                         ...spellsByLevel.base.map((spell: MartialSpell, baseIdx: number) => {
-                          console.log('base spell:', spell)
                           const spellName = getSpellName(spell.id)
                           return (
                             <Row
