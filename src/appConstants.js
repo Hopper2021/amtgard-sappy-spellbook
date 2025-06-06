@@ -1,4 +1,4 @@
-export const IS_APK = true
+export const IS_APK = false
 
 export const CURRENT_VERSION = 'V8.6.4'
 export const CURRENT_VERSION_NAME = 'V8.6.4 "Sappy Four"'
@@ -3370,8 +3370,9 @@ export const PATCH_NOTES = [
     title: "Add APK v6.1, White screen bug fix, update sniper.",
     details: [
       "Add APK v6.1 file to downloads page.",
+      "Fix Sniper description for V8.6.4.",
+      "Disable Update when spell list version is out of date.",
       "White screen bug fix: When clicking on a caster class spell list from the home page, white screen will appear. Bug fixed, but if its persists, deleteing the spell list will remove the issue.",
-      "Fix Sniper description for V8.6.4."
     ]
   },
   {
