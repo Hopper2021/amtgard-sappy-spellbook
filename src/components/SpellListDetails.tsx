@@ -117,7 +117,7 @@ function SpellListDetails() {
   const isSummoner = isSpellTaken(spellList, 155)
   const isDervish = isSpellTaken(spellList, 40)
   const isLegend = isSpellTaken(spellList, 91)
-  const hasExtention = isSpellTaken(spellList, 58)
+  const hasExtension = isSpellTaken(spellList, 58)
   const isPriest = isSpellTaken(spellList, 114)
   // martial subclass Checks
   const isInfernal = isArchetypeChosen(spellList, 85)
@@ -504,9 +504,10 @@ function SpellListDetails() {
       archetypeMultiplier *= 2
     }
     if (
-      allSpell &&
       isLegend &&
-      hasExtention
+      hasExtension &&
+      allSpell &&
+      allSpell.name === 'Extension'
     ) {
       archetypeMultiplier *= 2
     }

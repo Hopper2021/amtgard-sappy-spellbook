@@ -3366,6 +3366,15 @@ export const JUGGERNAUT_SPELLS = [
 
 export const PATCH_NOTES = [
   {
+    version: "0.2.2",
+    title: "Add APK v6.2, Legend bug fix, ",
+    details: [
+      "Add APK v6.2 file to downloads page.",
+      "Legend bug fix, adding Legend now only multiplies extension by 2.",
+      "",
+    ]
+  },
+  {
     version: "0.2.1",
     title: "Add APK v6.1, White screen bug fix, update sniper.",
     details: [
