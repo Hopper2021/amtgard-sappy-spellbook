@@ -2971,7 +2971,7 @@ export const BARBARIAN_LIST = {
       { 
         base: [
           { id: 21, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
-          { id: 182, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: false, magical: false, ambulant: true, restricted: false, chosen: null, },
+          { id: 182, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
           { id: 184, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
         ]
       }
