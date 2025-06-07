@@ -124,6 +124,7 @@ function EditMartialList() {
   const hunterArchetype = ALL_SPELLS.find(spell => spell.name === 'Hunter')
   const apexArchetype = ALL_SPELLS.find(spell => spell.name === 'Apex')
   const sniperArchetype = ALL_SPELLS.find(spell => spell.name === 'Sniper')
+  const artificerArchetype = ALL_SPELLS.find(spell => spell.name === 'Artificer')
   const juggernautArchetype = ALL_SPELLS.find(spell => spell.name === 'Juggernaut')
   const mysticArchetype = ALL_SPELLS.find(spell => spell.name === 'Mystic')
 
@@ -179,6 +180,7 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
   }
 
   const sniperChosen = isSpellChosen(modifiedSpellList, sniperArchetype?.id || 0)
+  const artificerChosen = isSpellChosen(modifiedSpellList, artificerArchetype?.id || 0) // Artificer spell ID
 
   const updateRestrictedSpells = (spellList: SpellList): SpellList => {
     // Archetypes
@@ -952,7 +954,7 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
           </Alert>
         )}
 
-      {!sniperChosen && Array.isArray(modifiedSpellList.lookThePartSpells) &&
+      {!sniperChosen && !artificerChosen && Array.isArray(modifiedSpellList.lookThePartSpells) &&
         modifiedSpellList.lookThePartSpells.length > 1 &&
         modifiedSpellList.lookThePart && (
           <>
