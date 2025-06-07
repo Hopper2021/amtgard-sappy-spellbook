@@ -1163,7 +1163,7 @@ function SpellListDetails() {
           <Row className="m-0">
             <div>
               <span style={{ textDecoration: 'underline', color: 'green', fontWeight: 600 }}>
-                {fetchSpellDetails('name', chosenSpell.id) || 'Unknown Spell'}
+                Spell chosen: {fetchSpellDetails('name', chosenSpell.id) || 'Unknown Spell'}
               </span>{' '}
               <span>
                 {fetchSpellFrequency(chosenSpell.id).frequency}
@@ -1232,11 +1232,12 @@ function SpellListDetails() {
                     {' '}{showRange && fetchSpellFrequency(spell.id).range
                     ? ` (${fetchSpellFrequency(spell.id).range})`
                     : ''}
-                  </span>{' '}
+                  {' '}
                   {showTypeAndSchool && <span>( {fetchSpellDetails('type', spell.id)} )</span>}
                   {fetchSpellDetails('school', spell.id) && showTypeAndSchool && (
                     <span>( {fetchSpellDetails('school', spell.id)} )</span>
                   )}
+                  </span>
                 </Row>
               )
             })}
