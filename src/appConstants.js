@@ -3047,7 +3047,7 @@ export const BARBARIAN_LIST = {
 }
 
 export const RAIDER_SPELLS = [
-  { id: 179, frequency: { amount: 1, per: 'Life', charge: null }, range: 'Self', trait: false, extraordinary: true, magical: false, ambulant: true, restricted: false, chosen: false, }
+  { id: 179, frequency: { amount: 1, per: 'Life', charge: null }, range: 'Self', trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, }
 ]
 
 export const RAIDER_LOOKTHEPART_SPELL = [{ id: 32, frequency: { amount: 1, per: 'Life', charge: 'Charge x3' }, trait: false, extraordinary: true, magical: false, ambulant: true, restricted: false, chosen: null, }]
