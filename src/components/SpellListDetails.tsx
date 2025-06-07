@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Container, Row, Button, Col, Form } from 'react-bootstrap'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
@@ -69,10 +69,11 @@ interface EquipmentByClass {
 function SpellListDetails() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
-  const [showTypeAndSchool, setShowTypeAndSchool] = React.useState(false)
-  const [showIncantation, setShowIncantation] = React.useState(false)
-  const [showStrips, setShowStrips] = React.useState(false)
-  const [showRange, setShowRange] = React.useState(false)
+  const [showTypeAndSchool, setShowTypeAndSchool] = useState(false)
+  const [showIncantation, setShowIncantation] = useState(false)
+  const [showStrips, setShowStrips] = useState(false)
+  const [showRange, setShowRange] = useState(false)
+  const [refreshKey, setRefreshKey] = useState(0)
 
   const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
   const spellList = allSpellLists.find((list: SpellList) => list.id === parseInt(id || '0'))
@@ -93,6 +94,31 @@ function SpellListDetails() {
     opt => Array.isArray(opt.pickOne) &&
       opt.pickOne.some(subSpell => subSpell.id === 109 && subSpell.chosen === true)
   )
+
+  console.log(spellList.levels[5]?.spells[0]?.base[0]?.id === 65 ? 'Flame Blade is old ID 65' : 'Flame Blade is new ID 189')
+
+  useEffect(() => {
+    const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
+    const spellListIndex = allSpellLists.findIndex((list: SpellList) => list.id === parseInt(id || '0'))
+    if (spellListIndex === -1) return
+
+    const spellList = allSpellLists[spellListIndex]
+    const oldFlameBladeIdx = spellList.levels[5]?.spells[0]?.base?.findIndex(spell => spell.id === 65)
+
+    // update spellList if class is Anti-Paladin and oldFlameBlade is found
+    const shouldUpdateAntiPaladin =
+      spellList.class === 'Anti-Paladin' &&
+      oldFlameBladeIdx !== undefined &&
+      oldFlameBladeIdx !== -1
+
+    if (shouldUpdateAntiPaladin) {
+      console.log('Should update Flame Blade to new ID 189')
+      spellList.levels[5].spells[0].base[oldFlameBladeIdx].id = 189
+      allSpellLists[spellListIndex] = spellList
+      localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
+      setRefreshKey(prev => prev + 1) // Optionally force rerender
+    }
+  }, [id])
 
   const isSpellTaken = (spellList: SpellList, spellId: number): boolean =>
     spellList.levels.some(level =>
@@ -452,7 +478,6 @@ function SpellListDetails() {
       allSpell.name === 'Flame Blade'
     ) {
       charge = 'Charge x5'
-      range = 'Self'
     }
     if (
       isCorruptor &&
@@ -755,7 +780,6 @@ function SpellListDetails() {
     if (!Array.isArray(spellArr) || spellArr.length === 0) return null
 
     const isOptional = indicator === 'optionalPickOne'
-    // const isBase = indicator === 'base'
     const isPickOne = indicator === 'pickOne' || indicator === 'pickOneOfTwo'
     const isPickTwoOfThree = indicator === 'pickTwoOfThree'
 
@@ -853,6 +877,7 @@ function SpellListDetails() {
                     if (chosenSpell && Array.isArray(chosenSpell.pickOne)) {
                       const nestedChosen = chosenSpell.pickOne.find(s => s.chosen)
 
+                      // nested hunter changes for archetype adjustments
                       if (
                         isHunter &&
                         nestedChosen &&
@@ -1184,7 +1209,7 @@ function SpellListDetails() {
   }
 
   return (
-    <Container className="pt-3 mb-4 m-1">
+    <Container key={refreshKey} className="pt-3 mb-4 m-1">
       <Row className="d-flex">
         <Col xs="auto" className="pe-0">
           <h4>Overview</h4>

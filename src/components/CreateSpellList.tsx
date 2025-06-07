@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Button, Col, Container, Dropdown, Row } from 'react-bootstrap'
 import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
@@ -101,10 +101,6 @@ function CreateSpellList() {
 		lookThePartSpells: [],
 		levels: [{ level: 1, points: 5, spells: [] }],
 	})
-
-	useEffect(() => {
-		console.log('New Spell List:', newSpellList)
-	}, [newSpellList])
 
 	return (
 		<Container fluid className="p-4" style={{ maxWidth: 600 }}>
