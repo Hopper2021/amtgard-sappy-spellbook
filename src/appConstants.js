@@ -2323,7 +2323,7 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
   },
   {
     id: 191,
-    name: 'Trickery', // assassin trickery
+    name: 'Trickery', // assassin trickery trait
     type: 'Trait',
     school: null,
     range: null,
@@ -2335,13 +2335,37 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
   },
   {
     id: 192,
-    name: 'Berserk',
+    name: 'Berserk', // Barbarian berserk
     type: 'Trait',
     school: null,
     range: null,
     materials: null,
     incantation: null,
     effect: "Bearer's wielded melee weapons are Armor Breaking.",
+    limitation: null,
+    note: null
+  },
+  {
+    id: 193,
+    name: 'Enlightened Soul', // Monk Enlightened Soul Trait
+    type: 'Trait',
+    school: null,
+    range: null,
+    materials: null,
+    incantation: null,
+    effect: 'Player is unaffected by Verbal Magical abilities used at a Range greater than Touch.',
+    limitation: 'Affects beneficial as well as harmful Magical abilities.',
+    note: 'Does not affect (ex) abilities, abilities with a Range of Touch, nor abilities whose Range is greater than Touch but are used at a Range of Touch anyway.'
+  },
+  {
+    id: 194,
+    name: 'Missile Block', // Monk missle block trait
+    type: 'Trait',
+    school: null,
+    range: null,
+    materials: null,
+    incantation: null,
+    effect: 'Player may block arrows, projectile weapons, and Magic Balls with their hands and wielded melee or thrown weapons. Any arrow, projectile weapon or magic ball blocked is nullified.',
     limitation: null,
     note: null
   },
@@ -3073,8 +3097,8 @@ export const MONK_LIST = {
     spells: [
       { 
         base: [
-          { id: 47, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
-          { id: 99, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 193, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 194, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
         ]
       }
     ],
@@ -3124,7 +3148,7 @@ export const MONK_LIST = {
     spells: [
       { 
         base: [
-          { id: 86, frequency: { amount: 1, per: 'Life', charge: 'Charge x5' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, }
+          { id: 86, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, }
         ],
         optionalPickOne: [
           { id: 97, frequency: { amount: null, per: null, charge: null }, trait: false, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },

@@ -109,8 +109,10 @@ function SpellListDetails() {
     const oldTeleportIdx = spellList.levels[4]?.spells[0]?.base?.findIndex(spell => spell.id === 160)
     const oldTrickeryIdx = spellList.levels[0]?.spells[0]?.base?.findIndex(spell => spell.id === 164)
     const oldBerserkIdx = spellList.levels[0]?.spells[0]?.base?.findIndex(spell => spell.id === 21)
-
-    // Update antiPaladin Flame Blade from old ID 65 to new ID 189 ( has new range )
+    const oldEnlightenedSoulIdx = spellList.levels[0]?.spells[0]?.base?.findIndex(spell => spell.id === 47)
+    const oldMissileBlockIdx = spellList.levels[0]?.spells[0]?.base?.findIndex(spell => spell.id === 99)
+    
+    // antiPaladin Flame Blade ( has new range )
     const shouldUpdateAntiPaladin =
       spellList.class === 'Anti-Paladin' &&
       oldFlameBladeIdx !== undefined &&
@@ -158,6 +160,34 @@ function SpellListDetails() {
     if (shouldUpdateBarbarianBerserk) {
       console.log('Should update Berserk to new ID 192')
       spellList.levels[0].spells[0].base[oldBerserkIdx].id = 192
+      allSpellLists[spellListIndex] = spellList
+      localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
+      setRefreshKey(prev => prev + 1)
+    }
+
+    // Monk
+    // update enlightened soul ( range and strips )
+    const shouldUpdateMonkEnlightenedSoul =
+      spellList.class === 'Monk' &&
+      oldEnlightenedSoulIdx !== undefined &&
+      oldEnlightenedSoulIdx !== -1
+
+    if (shouldUpdateMonkEnlightenedSoul) {
+      console.log('Should update Enlightened Soul to new ID 193')
+      spellList.levels[0].spells[0].base[oldEnlightenedSoulIdx].id = 193
+      allSpellLists[spellListIndex] = spellList
+      localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
+      setRefreshKey(prev => prev + 1)
+    }
+        // update enlightened soul ( range and strips )
+    const shouldUpdateMonkMissileBlock =
+      spellList.class === 'Monk' &&
+      oldMissileBlockIdx !== undefined &&
+      oldMissileBlockIdx !== -1
+
+    if (shouldUpdateMonkMissileBlock) {
+      console.log('Should update Missile Block to new ID 194')
+      spellList.levels[0].spells[0].base[oldMissileBlockIdx].id = 194
       allSpellLists[spellListIndex] = spellList
       localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
       setRefreshKey(prev => prev + 1)
