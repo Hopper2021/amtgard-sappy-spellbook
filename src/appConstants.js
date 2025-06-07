@@ -2333,6 +2333,18 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     limitation: null,
     note: null
   },
+  {
+    id: 192,
+    name: 'Berserk',
+    type: 'Trait',
+    school: null,
+    range: null,
+    materials: null,
+    incantation: null,
+    effect: "Bearer's wielded melee weapons are Armor Breaking.",
+    limitation: null,
+    note: null
+  },
 ]
 
 export const BARD_SPELLS = {
@@ -2970,7 +2982,7 @@ export const BARBARIAN_LIST = {
     spells: [
       { 
         base: [
-          { id: 21, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 192, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
           { id: 182, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
           { id: 184, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
         ]
