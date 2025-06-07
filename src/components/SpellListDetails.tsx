@@ -96,8 +96,9 @@ function SpellListDetails() {
       opt.pickOne.some(subSpell => subSpell.id === 109 && subSpell.chosen === true)
   )
 
-  console.log(spellList.levels[0]?.spells[0]?.base[0]?.id === 164 ? 'Trickery is old ID 164' : 'Trickery is new ID 191')
+  console.log(spellList.levels[0]?.spells[0]?.base[0]?.id === 21 ? 'Berserk is old ID 21' : 'Berserk is new ID 192')
 
+  // update spellList if old data is found
   useEffect(() => {
     const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
     const spellListIndex = allSpellLists.findIndex((list: SpellList) => list.id === parseInt(id || '0'))
@@ -107,8 +108,8 @@ function SpellListDetails() {
     const oldFlameBladeIdx = spellList.levels[5]?.spells[0]?.base?.findIndex(spell => spell.id === 65)
     const oldTeleportIdx = spellList.levels[4]?.spells[0]?.base?.findIndex(spell => spell.id === 160)
     const oldTrickeryIdx = spellList.levels[0]?.spells[0]?.base?.findIndex(spell => spell.id === 164)
-    
-    // update spellList if old data is found
+    const oldBerserkIdx = spellList.levels[0]?.spells[0]?.base?.findIndex(spell => spell.id === 21)
+
     // Update antiPaladin Flame Blade from old ID 65 to new ID 189 ( has new range )
     const shouldUpdateAntiPaladin =
       spellList.class === 'Anti-Paladin' &&
@@ -122,7 +123,7 @@ function SpellListDetails() {
       localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
       setRefreshKey(prev => prev + 1) // force rerender
     }
-    // update assassin old teleport from 160 to new 190 ( new Self range )
+    // assassin new teleport id ( new Self range )
     const shouldUpdateAssassinTeleport =
       spellList.class === 'Assassin' &&
       oldTeleportIdx !== undefined &&
@@ -135,7 +136,7 @@ function SpellListDetails() {
       localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
       setRefreshKey(prev => prev + 1)
     }
-
+  // new trickery id ( no range )
     const shouldUpdateAssassinTrickery =
       spellList.class === 'Assassin' &&
       oldTrickeryIdx !== undefined &&
@@ -144,6 +145,19 @@ function SpellListDetails() {
     if (shouldUpdateAssassinTrickery) {
       console.log('Should update Trickery to new ID 191')
       spellList.levels[0].spells[0].base[oldTrickeryIdx].id = 191
+      allSpellLists[spellListIndex] = spellList
+      localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
+      setRefreshKey(prev => prev + 1)
+    }
+    // Barbarian
+    const shouldUpdateBarbarianBerserk =
+      spellList.class === 'Barbarian' &&
+      oldBerserkIdx !== undefined &&
+      oldBerserkIdx !== -1
+
+    if (shouldUpdateBarbarianBerserk) {
+      console.log('Should update Berserk to new ID 192')
+      spellList.levels[0].spells[0].base[oldBerserkIdx].id = 192
       allSpellLists[spellListIndex] = spellList
       localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
       setRefreshKey(prev => prev + 1)
@@ -748,6 +762,8 @@ function SpellListDetails() {
       const spellSwift = fetchSubclassSpellDetails('swift', sub.id, chosenName)
       const spellRange = fetchSubclassSpellDetails('range', sub.id, chosenName)
 
+      console.log('spell range', spellRange)
+
       return (
         <Row key={sub.id} className="ms-1">
           <span style={{ color: 'green' }}>
@@ -1001,11 +1017,6 @@ function SpellListDetails() {
     }
 
     // // Default rendering for all other cases
-    // let label = ''
-    // if (isBase) label = ''
-    // else if (isPickOne) label = 'Pick one in edit mode:'
-    // else if (isPickTwoOfThree) label = 'Pick two of three in edit mode:'
-
     return (
       <>
         {(() => {
@@ -1070,9 +1081,7 @@ function SpellListDetails() {
                         >
                           {spellName}
                         </span>{' '}
-                        <span style={{
-                          color: isPickTwoOfThree && spell.chosen ? 'green' : undefined
-                        }}>
+                        <span style={{ color: isPickTwoOfThree && spell.chosen ? 'green' : undefined }}>
                         {spellFrequency.frequency}
                         {' '}{spellExtraordinary ? '(ex)' : ''}
                         {' '}{spellSwift ? '(Swift)' : ''}
@@ -1219,25 +1228,28 @@ function SpellListDetails() {
             {lookThePartArr.map((spell, idx) => {
               return (
                 <Row key={idx} className="m-0">
-                  <span style={{
-                    textDecoration: onlyOneLookThePartOption ? 'underline' : 'none',
-                    color: onlyOneLookThePartOption ? 'green' : 'inherit',
-                    marginLeft: onlyOneLookThePartOption ? '0' : '15px'}}>
-                    {fetchSpellDetails('name', spell.id) || 'Unknown Spell'}
-                    {' '}{fetchSpellFrequency(spell.id).frequency}
-                    {' '}{fetchMartialSpellDetails('extraordinary', spell.id) ? '(ex)' : ''}
-                    {' '}{fetchMartialSpellDetails('magical', spell.id) ? '(m)' : ''}
-                    {' '}{fetchMartialSpellDetails('trait', spell.id) ? '( T )' : ''}
-                    {' '}{fetchMartialSpellDetails('ambulant', spell.id) ? '(Ambulant)' : ''}
-                    {' '}{showRange && fetchSpellFrequency(spell.id).range
-                    ? ` (${fetchSpellFrequency(spell.id).range})`
-                    : ''}
-                  {' '}
-                  {showTypeAndSchool && <span>( {fetchSpellDetails('type', spell.id)} )</span>}
-                  {fetchSpellDetails('school', spell.id) && showTypeAndSchool && (
-                    <span>( {fetchSpellDetails('school', spell.id)} )</span>
-                  )}
-                  </span>
+                  <div>
+                    <span style={{
+                      textDecoration: onlyOneLookThePartOption ? 'underline' : 'none',
+                      color: 'inherit',
+                      marginLeft: onlyOneLookThePartOption ? '0' : '15px'}}>
+                      {fetchSpellDetails('name', spell.id) || 'Unknown Spell'}</span>
+                    <span>
+                      {' '}{fetchSpellFrequency(spell.id).frequency}
+                      {' '}{fetchMartialSpellDetails('extraordinary', spell.id) ? '(ex)' : ''}
+                      {' '}{fetchMartialSpellDetails('magical', spell.id) ? '(m)' : ''}
+                      {' '}{fetchMartialSpellDetails('trait', spell.id) ? '( T )' : ''}
+                      {' '}{fetchMartialSpellDetails('ambulant', spell.id) ? '(Ambulant)' : ''}
+                      {' '}{showRange && fetchSpellFrequency(spell.id).range
+                      ? ` (${fetchSpellFrequency(spell.id).range})`
+                      : ''}
+                    {' '}
+                    {showTypeAndSchool && <span>( {fetchSpellDetails('type', spell.id)} )</span>}
+                    {fetchSpellDetails('school', spell.id) && showTypeAndSchool && (
+                      <span>( {fetchSpellDetails('school', spell.id)} )</span>
+                    )}
+                    </span>
+                  </div>
                 </Row>
               )
             })}
