@@ -2297,6 +2297,18 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     limitation: 'Phase Arrow and Phase Bolt interact with armor worn by the bearer as though Ancestral Armor was not present.',
     note: 'Engulfing Effects that do not strike the bearers armor and abilities that ignore armor entirely do not trigger Ancestral Armor.'
   },
+  {
+    id: 189,
+    name: 'Flame Blade',
+    type: 'Enchantment',
+    school: 'Flame',
+    range: 'Self',  // Anti-paladin range
+    materials: 'Red strip and white strip',
+    incantation: '"The element of fire shall infuse your weapons" x3',
+    effect: "Bearer's wielded melee weapons are Armor Breaking and Shield Crushing. Bearer and their wielded weapons are Immune to Flame.",
+    limitation: null,
+    note: null
+  },
 ]
 
 export const BARD_SPELLS = {
@@ -2704,7 +2716,7 @@ export const ANTIPALADIN_LIST = {
     spells: [
       { 
         base: [
-          { id: 65, frequency: { amount: 2, per: 'Refresh', charge: null }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+          { id: 189, frequency: { amount: 2, per: 'Refresh', charge: null }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
         ],
         optionalPickOne: [
           { id: 85, frequency: { amount: null, per: null, charge: null }, trait: false, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
