@@ -96,7 +96,7 @@ function SpellListDetails() {
       opt.pickOne.some(subSpell => subSpell.id === 109 && subSpell.chosen === true)
   )
 
-  console.log(spellList.levels[5]?.spells[0]?.base[0]?.id === 160 ? 'Teleport is old ID 160' : 'Teleport is new ID 190')
+  console.log(spellList.levels[0]?.spells[0]?.base[0]?.id === 164 ? 'Trickery is old ID 164' : 'Trickery is new ID 191')
 
   useEffect(() => {
     const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
@@ -106,7 +106,8 @@ function SpellListDetails() {
     const spellList = allSpellLists[spellListIndex]
     const oldFlameBladeIdx = spellList.levels[5]?.spells[0]?.base?.findIndex(spell => spell.id === 65)
     const oldTeleportIdx = spellList.levels[4]?.spells[0]?.base?.findIndex(spell => spell.id === 160)
-
+    const oldTrickeryIdx = spellList.levels[0]?.spells[0]?.base?.findIndex(spell => spell.id === 164)
+    
     // update spellList if old data is found
     // Update antiPaladin Flame Blade from old ID 65 to new ID 189 ( has new range )
     const shouldUpdateAntiPaladin =
@@ -122,14 +123,27 @@ function SpellListDetails() {
       setRefreshKey(prev => prev + 1) // force rerender
     }
     // update assassin old teleport from 160 to new 190 ( new Self range )
-    const shouldUpdateAssassin =
+    const shouldUpdateAssassinTeleport =
       spellList.class === 'Assassin' &&
       oldTeleportIdx !== undefined &&
       oldTeleportIdx !== -1
 
-    if (shouldUpdateAssassin) {
+    if (shouldUpdateAssassinTeleport) {
       console.log('Should update Teleport to new ID 190')
       spellList.levels[4].spells[0].base[oldTeleportIdx].id = 190
+      allSpellLists[spellListIndex] = spellList
+      localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
+      setRefreshKey(prev => prev + 1)
+    }
+
+    const shouldUpdateAssassinTrickery =
+      spellList.class === 'Assassin' &&
+      oldTrickeryIdx !== undefined &&
+      oldTrickeryIdx !== -1
+
+    if (shouldUpdateAssassinTrickery) {
+      console.log('Should update Trickery to new ID 191')
+      spellList.levels[0].spells[0].base[oldTrickeryIdx].id = 191
       allSpellLists[spellListIndex] = spellList
       localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
       setRefreshKey(prev => prev + 1)

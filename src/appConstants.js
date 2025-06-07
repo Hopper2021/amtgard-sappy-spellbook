@@ -2309,6 +2309,30 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     limitation: null,
     note: null
   },
+  {
+    id: 190,
+    name: 'Teleport', // Assassin Teleport
+    type: 'Verbal',
+    school: 'Sorcery',
+    range: 'Self',
+    materials: null,
+    incantation: '"I travel through the aether" x5',
+    effect: 'Target willing player becomes Insubstantial and moves directly to a chosen location chosen by the caster at the time of casting. This must be a fixed location (not relative to a player or to a moveable object). Upon arrival, they must immediately end the effect as per Insubstantial.',
+    limitation: null,
+    note: 'If the player\'s Insubstantial State is removed before they have reached their destination, the effects of Teleport end. If Teleport is cast on self, the caster may end this Insubstantial State at any time by using the exit incantation for Insubstantial.'
+  },
+  {
+    id: 191,
+    name: 'Trickery', // assassin trickery
+    type: 'Trait',
+    school: null,
+    range: null,
+    materials: null,
+    incantation: null,
+    effect: 'Bearer may cast Blink, Shadow Step, and Teleport on themselves while they are already Insubstantial, provided that they were the cause of the initial Insubstantial State and entered it voluntarily. Doing so removes the original Insubstantial effect.',
+    limitation: null,
+    note: null
+  },
 ]
 
 export const BARD_SPELLS = {
@@ -2834,11 +2858,13 @@ export const SNIPER_SPELLS = [
   { id: 100, frequency: { amount: null, per: null, charge: 'Unlimited' }, range: null, trait: false, extraordinary: true, magical: false, ambulant: true, restricted: false, chosen: false, },
 ]
 
-export const SNIPER_LOOKTHEPART_SPELL = [{ id: 98, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },]
+export const SNIPER_LOOKTHEPART_SPELL = [{ id: 98, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, }]
 
 export const ARTIFICER_SPELLS = [
   { id: 71, frequency: { amount: 2, per: 'Refresh', charge: 'Charge x10' }, range: null, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
 ]
+
+export const ARTIFICER_LOOKTHEPART_SPELL = [{ id: 109, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, }]
 
 export const ASSASSIN_EQUIPMENT = {
   lookThePart: 'Pick One: Poison (Self) 1/Life Charge x3, Poison Arrow - 1 Arrow / Unlimited (ex)',
@@ -2858,7 +2884,7 @@ export const ASSASSIN_LIST = {
       spells: [
         { 
           base: [
-            { id: 164, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
+            { id: 191, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },
             { id: 11, frequency: { amount: null, per: null, charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: true, restricted: false, chosen: null, },
             { id: 131, frequency: { amount: 2, per: 'Life', charge: null }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
           ]
@@ -2901,7 +2927,7 @@ export const ASSASSIN_LIST = {
       spells: [
         { 
           base: [
-            { id: 160, frequency: { amount: 2, per: 'Life', charge: null }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
+            { id: 190, frequency: { amount: 2, per: 'Life', charge: null }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, },
           ]
         }
       ],
