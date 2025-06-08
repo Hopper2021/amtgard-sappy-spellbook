@@ -2393,6 +2393,18 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     limitation: null,
     note: 'This ability does work in conjunction with Attuned, Essence Graft, or Phoenix Tears so long as the other limitations of those Enchantments are followed.'
   },
+  {
+    id: 197,
+    name: 'Adaptive Protection',
+    type: 'Enchantment',
+    school: 'Protection',
+    range: 'Self',
+    materials: 'White strip',
+    incantation: '"I enchant thee with this protection" x3',
+    effect: 'Bearer becomes Immune to one of the following Schools: Death, Flame, Subdual, Command, Sorcery. School is chosen at the time of casting.',
+    limitation: null,
+    note: null
+  },
 ]
 
 export const BARD_SPELLS = {
@@ -3334,7 +3346,7 @@ export const SCOUT_LIST = {
     spells: [
       { 
         base: [
-          { id: 3, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, }
+          { id: 197, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, }
         ],
         optionalPickOne: [
           {
@@ -3482,6 +3494,7 @@ export const PATCH_NOTES = [
       "Fix Paladin Protection from Magic to range touch",
       "Remove m from Scout Adaptive Protection",
       "Remove range self from Scout Evolution",
+      "Fix Adaptive Protection range to self",
     ]
   },
   {
