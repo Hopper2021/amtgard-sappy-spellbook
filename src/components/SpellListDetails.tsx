@@ -96,7 +96,7 @@ function SpellListDetails() {
       opt.pickOne.some(subSpell => subSpell.id === 109 && subSpell.chosen === true)
   )
 
-  console.log(spellList.levels[5]?.spells[0]?.base[0]?.id === 118 ? 'Pro Magic is old ID 118' : 'Pro Magic is new ID 195')
+  console.log(spellList.levels[4]?.spells[0]?.base[0]?.id === 118 ? 'Evolution is old ID 55' : 'Evolution is new ID 196')
 
   // update spellList if old data is found
   useEffect(() => {
@@ -112,6 +112,7 @@ function SpellListDetails() {
     const oldEnlightenedSoulIdx = spellList.levels[0]?.spells[0]?.base?.findIndex(spell => spell.id === 47)
     const oldMissileBlockIdx = spellList.levels[0]?.spells[0]?.base?.findIndex(spell => spell.id === 99)
     const oldProMagicIdx = spellList.levels[5]?.spells[0]?.base?.findIndex(spell => spell.id === 118)
+    const oldEvolutionIdx = spellList.levels[4]?.spells[0]?.base?.findIndex(spell => spell.id === 55)
 
     // antiPaladin Flame Blade ( has new range )
     const shouldUpdateAntiPaladin =
@@ -120,7 +121,6 @@ function SpellListDetails() {
       oldFlameBladeIdx !== -1
 
     if (shouldUpdateAntiPaladin) {
-      console.log('Should update Flame Blade to new ID 189')
       spellList.levels[5].spells[0].base[oldFlameBladeIdx].id = 189
       allSpellLists[spellListIndex] = spellList
       localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
@@ -133,7 +133,6 @@ function SpellListDetails() {
       oldTeleportIdx !== -1
 
     if (shouldUpdateAssassinTeleport) {
-      console.log('Should update Teleport to new ID 190')
       spellList.levels[4].spells[0].base[oldTeleportIdx].id = 190
       allSpellLists[spellListIndex] = spellList
       localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
@@ -146,7 +145,6 @@ function SpellListDetails() {
       oldTrickeryIdx !== -1
 
     if (shouldUpdateAssassinTrickery) {
-      console.log('Should update Trickery to new ID 191')
       spellList.levels[0].spells[0].base[oldTrickeryIdx].id = 191
       allSpellLists[spellListIndex] = spellList
       localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
@@ -159,7 +157,6 @@ function SpellListDetails() {
       oldBerserkIdx !== -1
 
     if (shouldUpdateBarbarianBerserk) {
-      console.log('Should update Berserk to new ID 192')
       spellList.levels[0].spells[0].base[oldBerserkIdx].id = 192
       allSpellLists[spellListIndex] = spellList
       localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
@@ -174,7 +171,6 @@ function SpellListDetails() {
       oldEnlightenedSoulIdx !== -1
 
     if (shouldUpdateMonkEnlightenedSoul) {
-      console.log('Should update Enlightened Soul to new ID 193')
       spellList.levels[0].spells[0].base[oldEnlightenedSoulIdx].id = 193
       allSpellLists[spellListIndex] = spellList
       localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
@@ -187,7 +183,6 @@ function SpellListDetails() {
       oldMissileBlockIdx !== -1
 
     if (shouldUpdateMonkMissileBlock) {
-      console.log('Should update Missile Block to new ID 194')
       spellList.levels[0].spells[0].base[oldMissileBlockIdx].id = 194
       allSpellLists[spellListIndex] = spellList
       localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
@@ -200,8 +195,20 @@ function SpellListDetails() {
       oldProMagicIdx !== -1
 
     if (shouldUpdatePaladinProMag) {
-      console.log('Should update Protection from Magic to new ID 195')
       spellList.levels[5].spells[0].base[oldProMagicIdx].id = 195
+      allSpellLists[spellListIndex] = spellList
+      localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
+      setRefreshKey(prev => prev + 1)
+    }
+
+    const shouldUpdateScoutAdaptiveProtection =
+      spellList.class === 'Scout' &&
+      oldEvolutionIdx !== undefined &&
+      oldEvolutionIdx !== -1
+
+    if (shouldUpdateScoutAdaptiveProtection) {
+      console.log('Should update Evolution to new ID 196')
+      spellList.levels[4].spells[0].base[oldEvolutionIdx].id = 196
       allSpellLists[spellListIndex] = spellList
       localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
       setRefreshKey(prev => prev + 1)

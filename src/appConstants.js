@@ -2381,6 +2381,18 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     limitation: null,
     note: 'This effect does not interact with other Enchantments worn by the bearer.'
   },
+  {
+    id: 196,
+    name: 'Evolution', // Scout Evolution Trait
+    type: 'Trait',
+    school: null,
+    range: null,
+    materials: null,
+    incantation: null,
+    effect: "May wear an additional Enchantment. Evolution does not count towards the bearer's Enchantment limit.",
+    limitation: null,
+    note: 'This ability does work in conjunction with Attuned, Essence Graft, or Phoenix Tears so long as the other limitations of those Enchantments are followed.'
+  },
 ]
 
 export const BARD_SPELLS = {
@@ -3314,7 +3326,7 @@ export const SCOUT_LIST = {
   {
     level: 5,
     spells: [
-      { base: [{ id: 55, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },]}
+      { base: [{ id: 196, frequency: { amount: null, per: null, charge: null }, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: null, },]}
     ],
   },
   {
@@ -3468,6 +3480,8 @@ export const PATCH_NOTES = [
       "Remove ambulant for Raider bear strength",
       "Change Enlightened Soul and Missle Block to traits for Monk",
       "Fix Paladin Protection from Magic to range touch",
+      "Remove m from Scout Adaptive Protection",
+      "Remove range self from Scout Evolution",
     ]
   },
   {
