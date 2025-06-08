@@ -3322,7 +3322,7 @@ export const SCOUT_LIST = {
     spells: [
       { 
         base: [
-          { id: 3, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: true, magical: true, ambulant: false, restricted: false, chosen: null, }
+          { id: 3, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null, }
         ],
         optionalPickOne: [
           {
