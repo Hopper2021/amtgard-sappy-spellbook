@@ -485,7 +485,7 @@ function SpellListDetails() {
         equipmentByClass = {
           ...equipmentByClass,
           shields: 'None due to Hunter',
-          weapons: 'May wield Great Weapons and Javalins due to Hunter',
+          weapons: 'May wield Great Weapons and Javelins due to Hunter',
         }
         shieldsColor = 'red'
         weaponsColor = 'green'
