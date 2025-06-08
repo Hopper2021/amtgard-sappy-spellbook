@@ -1,8 +1,8 @@
-export const IS_APK = false
+export const IS_APK = true
 
 export const CURRENT_VERSION = 'V8.6.4'
 export const CURRENT_VERSION_NAME = 'V8.6.4 "Sappy Four"'
-export const APK_VERSION = 'v6.2'
+export const APK_VERSION = 'v6.3'
 
 export const ALL_SPELLS = [
   {
@@ -3477,10 +3477,18 @@ export const JUGGERNAUT_SPELLS = [
 
 export const PATCH_NOTES = [
   {
-    version: "0.2.2",
-    title: `Add APK ${APK_VERSION}, Bard fix and Martial class fixes`,
+    version: "0.2.3",
+    title: `Add APK v6.3, Caster class white screen bug fix.`,
     details: [
-      `Add APK ${APK_VERSION} file to downloads page.`,
+      `Add APK v6.3 file to downloads page.`,
+      "White screen bug fix. Navigating to a caster class details page will no longer result in a white screen.",
+    ]
+  },
+  {
+    version: "0.2.2",
+    title: `Add APK v6.2, Bard fix and Martial class fixes`,
+    details: [
+      `Add APK v6.2 file to downloads page.`,
       "Legend bug fix, adding Legend now only multiplies extension by 2.",
       "Update paladin Flame Blade to range self",
       "Artificer updates mend to 2/Life Charge x3 and now has look the part spell change",

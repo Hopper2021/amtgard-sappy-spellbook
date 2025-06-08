@@ -96,8 +96,6 @@ function SpellListDetails() {
       opt.pickOne.some(subSpell => subSpell.id === 109 && subSpell.chosen === true)
   )
 
-  console.log(spellList.levels[5]?.spells[0]?.base[0]?.id === 3 ? 'Adaptive Protection is old ID 3' : 'Adaptive Protection is new ID 197')
-
   // update spellList in local storage if old data is found
   useEffect(() => {
     const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
@@ -106,69 +104,76 @@ function SpellListDetails() {
 
     const spellList = allSpellLists[spellListIndex]
 
-    // Each class and spell to update
+    const getBaseIdx = (levelIdx: number, spellIdx: number, oldId: number) => {
+      const level = spellList.levels?.[levelIdx]
+      const spellsArr = Array.isArray(level?.spells) ? level.spells : []
+      const spellObj = spellsArr[spellIdx]
+      const baseArr = Array.isArray(spellObj?.base) ? spellObj.base : []
+      return baseArr.findIndex(spell => spell.id === oldId)
+    }
+
     const updateRules = [
       {
         className: 'Anti-Paladin',
         level: 5,
         spellIdx: 0,
-        baseIdx: spellList.levels[5]?.spells[0]?.base?.findIndex(spell => spell.id === 65),
+        baseIdx: getBaseIdx(5, 0, 65),
         newId: 189,
       },
       {
         className: 'Assassin',
         level: 4,
         spellIdx: 0,
-        baseIdx: spellList.levels[4]?.spells[0]?.base?.findIndex(spell => spell.id === 160),
+        baseIdx: getBaseIdx(4, 0, 160),
         newId: 190,
       },
       {
         className: 'Assassin',
         level: 0,
         spellIdx: 0,
-        baseIdx: spellList.levels[0]?.spells[0]?.base?.findIndex(spell => spell.id === 164),
+        baseIdx: getBaseIdx(0, 0, 164),
         newId: 191,
       },
       {
         className: 'Barbarian',
         level: 0,
         spellIdx: 0,
-        baseIdx: spellList.levels[0]?.spells[0]?.base?.findIndex(spell => spell.id === 21),
+        baseIdx: getBaseIdx(0, 0, 21),
         newId: 192,
       },
       {
         className: 'Monk',
         level: 0,
         spellIdx: 0,
-        baseIdx: spellList.levels[0]?.spells[0]?.base?.findIndex(spell => spell.id === 47),
+        baseIdx: getBaseIdx(0, 0, 47),
         newId: 193,
       },
       {
         className: 'Monk',
         level: 0,
         spellIdx: 0,
-        baseIdx: spellList.levels[0]?.spells[0]?.base?.findIndex(spell => spell.id === 99),
+        baseIdx: getBaseIdx(0, 0, 99),
         newId: 194,
       },
       {
         className: 'Paladin',
         level: 5,
         spellIdx: 0,
-        baseIdx: spellList.levels[5]?.spells[0]?.base?.findIndex(spell => spell.id === 118),
+        baseIdx: getBaseIdx(5, 0, 118),
         newId: 195,
       },
       {
         className: 'Scout',
         level: 4,
         spellIdx: 0,
-        baseIdx: spellList.levels[4]?.spells[0]?.base?.findIndex(spell => spell.id === 55),
+        baseIdx: getBaseIdx(4, 0, 55),
         newId: 196,
       },
       {
         className: 'Scout',
         level: 5,
         spellIdx: 0,
-        baseIdx: spellList.levels[5]?.spells[0]?.base?.findIndex(spell => spell.id === 3),
+        baseIdx: getBaseIdx(5, 0, 3),
         newId: 197,
       },
     ]
@@ -176,12 +181,17 @@ function SpellListDetails() {
     let updated = false
 
     updateRules.forEach(rule => {
+      const level = spellList.levels?.[rule.level]
+      const spellsArr = Array.isArray(level?.spells) ? level.spells : []
+      const spellObj = spellsArr[rule.spellIdx]
+      const baseArr = Array.isArray(spellObj?.base) ? spellObj.base : []
       if (
         spellList.class === rule.className &&
         rule.baseIdx !== undefined &&
-        rule.baseIdx !== -1
+        rule.baseIdx !== -1 &&
+        baseArr[rule.baseIdx]
       ) {
-        spellList.levels[rule.level].spells[rule.spellIdx].base[rule.baseIdx].id = rule.newId
+        baseArr[rule.baseIdx].id = rule.newId
         updated = true
       }
     })
@@ -790,8 +800,6 @@ function SpellListDetails() {
       const spellSwift = fetchSubclassSpellDetails('swift', sub.id, chosenName)
       const spellRange = fetchSubclassSpellDetails('range', sub.id, chosenName)
 
-      console.log('spell range', spellRange)
-
       return (
         <Row key={sub.id} className="ms-1">
           <span style={{ color: 'green' }}>
@@ -1292,7 +1300,7 @@ function SpellListDetails() {
   }
 
   return (
-    <Container key={refreshKey} className="pt-3 mb-4 m-1">
+    <Container key={refreshKey} className="p-3 pb-5">
       <Row className="d-flex">
         <Col xs="auto" className="pe-0">
           <h4>Overview</h4>
