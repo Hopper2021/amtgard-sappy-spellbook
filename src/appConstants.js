@@ -2369,6 +2369,18 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     limitation: null,
     note: null
   },
+  {
+    id: 195,
+    name: 'Protection from Magic', // Paladin Pro mag
+    type: 'Enchantment',
+    school: 'Protection',
+    range: 'Touch',
+    materials: 'White strip',
+    incantation: '"I enchant thee with protection from magic" x3',
+    effect: 'Bearer is unaffected by Magical abilities from any school. Upon death the player is Cursed.',
+    limitation: null,
+    note: 'This effect does not interact with other Enchantments worn by the bearer.'
+  },
 ]
 
 export const BARD_SPELLS = {
@@ -3223,7 +3235,7 @@ export const PALADIN_LIST = {
     spells: [
       { 
         base: [
-          { id: 118, frequency: { amount: 2, per: 'Refresh', charge: null }, trait: false, extraordinary: false, magical: true, ambulant: false, restricted: false, chosen: null, }
+          { id: 195, frequency: { amount: 2, per: 'Refresh', charge: null }, trait: false, extraordinary: false, magical: true, ambulant: false, restricted: false, chosen: null, }
         ],
         optionalPickOne: [
           { id: 73, frequency: { amount: null, per: null, charge: null }, trait: false, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
@@ -3445,6 +3457,17 @@ export const PATCH_NOTES = [
     details: [
       "Add APK v6.2 file to downloads page.",
       "Legend bug fix, adding Legend now only multiplies extension by 2.",
+      "Update paladin Flame Blade to range self",
+      "Artificer updates mend to 2/Life Charge x3 and now has look the part spell change",
+      "Hide look the part choice if Artificer is chosen",
+      "Remove Trickery range",
+      "Add 'Spell chosen: ' to look the part",
+      "Remove ambulant from immune to command for traits",
+      "Remove Berserk range for Barbarian",
+      "Update Berserk to trait for Barbarin",
+      "Remove ambulant for Raider bear strength",
+      "Change Enlightened Soul and Missle Block to traits for Monk",
+      "Fix Paladin Protection from Magic to range touch",
     ]
   },
   {

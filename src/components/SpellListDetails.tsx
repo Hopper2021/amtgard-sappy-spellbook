@@ -96,7 +96,7 @@ function SpellListDetails() {
       opt.pickOne.some(subSpell => subSpell.id === 109 && subSpell.chosen === true)
   )
 
-  console.log(spellList.levels[0]?.spells[0]?.base[0]?.id === 21 ? 'Berserk is old ID 21' : 'Berserk is new ID 192')
+  console.log(spellList.levels[5]?.spells[0]?.base[0]?.id === 118 ? 'Pro Magic is old ID 118' : 'Pro Magic is new ID 195')
 
   // update spellList if old data is found
   useEffect(() => {
@@ -111,7 +111,8 @@ function SpellListDetails() {
     const oldBerserkIdx = spellList.levels[0]?.spells[0]?.base?.findIndex(spell => spell.id === 21)
     const oldEnlightenedSoulIdx = spellList.levels[0]?.spells[0]?.base?.findIndex(spell => spell.id === 47)
     const oldMissileBlockIdx = spellList.levels[0]?.spells[0]?.base?.findIndex(spell => spell.id === 99)
-    
+    const oldProMagicIdx = spellList.levels[5]?.spells[0]?.base?.findIndex(spell => spell.id === 118)
+
     // antiPaladin Flame Blade ( has new range )
     const shouldUpdateAntiPaladin =
       spellList.class === 'Anti-Paladin' &&
@@ -188,6 +189,19 @@ function SpellListDetails() {
     if (shouldUpdateMonkMissileBlock) {
       console.log('Should update Missile Block to new ID 194')
       spellList.levels[0].spells[0].base[oldMissileBlockIdx].id = 194
+      allSpellLists[spellListIndex] = spellList
+      localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
+      setRefreshKey(prev => prev + 1)
+    }
+
+    const shouldUpdatePaladinProMag =
+      spellList.class === 'Paladin' &&
+      oldProMagicIdx !== undefined &&
+      oldProMagicIdx !== -1
+
+    if (shouldUpdatePaladinProMag) {
+      console.log('Should update Protection from Magic to new ID 195')
+      spellList.levels[5].spells[0].base[oldProMagicIdx].id = 195
       allSpellLists[spellListIndex] = spellList
       localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
       setRefreshKey(prev => prev + 1)
