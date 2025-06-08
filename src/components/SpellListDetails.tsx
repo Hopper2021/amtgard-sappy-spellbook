@@ -98,127 +98,95 @@ function SpellListDetails() {
 
   console.log(spellList.levels[5]?.spells[0]?.base[0]?.id === 3 ? 'Adaptive Protection is old ID 3' : 'Adaptive Protection is new ID 197')
 
-  // update spellList if old data is found
+  // update spellList in local storage if old data is found
   useEffect(() => {
     const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
     const spellListIndex = allSpellLists.findIndex((list: SpellList) => list.id === parseInt(id || '0'))
     if (spellListIndex === -1) return
 
     const spellList = allSpellLists[spellListIndex]
-    const oldFlameBladeIdx = spellList.levels[5]?.spells[0]?.base?.findIndex(spell => spell.id === 65)
-    const oldTeleportIdx = spellList.levels[4]?.spells[0]?.base?.findIndex(spell => spell.id === 160)
-    const oldTrickeryIdx = spellList.levels[0]?.spells[0]?.base?.findIndex(spell => spell.id === 164)
-    const oldBerserkIdx = spellList.levels[0]?.spells[0]?.base?.findIndex(spell => spell.id === 21)
-    const oldEnlightenedSoulIdx = spellList.levels[0]?.spells[0]?.base?.findIndex(spell => spell.id === 47)
-    const oldMissileBlockIdx = spellList.levels[0]?.spells[0]?.base?.findIndex(spell => spell.id === 99)
-    const oldProMagicIdx = spellList.levels[5]?.spells[0]?.base?.findIndex(spell => spell.id === 118)
-    const oldEvolutionIdx = spellList.levels[4]?.spells[0]?.base?.findIndex(spell => spell.id === 55)
-    const oldAdaptiveProtectionIdx = spellList.levels[5]?.spells[0]?.base?.findIndex(spell => spell.id === 3)
 
-    // antiPaladin
-    const shouldUpdateAntiPaladinFlameBlade =
-      spellList.class === 'Anti-Paladin' &&
-      oldFlameBladeIdx !== undefined &&
-      oldFlameBladeIdx !== -1
+    // Each class and spell to update
+    const updateRules = [
+      {
+        className: 'Anti-Paladin',
+        level: 5,
+        spellIdx: 0,
+        baseIdx: spellList.levels[5]?.spells[0]?.base?.findIndex(spell => spell.id === 65),
+        newId: 189,
+      },
+      {
+        className: 'Assassin',
+        level: 4,
+        spellIdx: 0,
+        baseIdx: spellList.levels[4]?.spells[0]?.base?.findIndex(spell => spell.id === 160),
+        newId: 190,
+      },
+      {
+        className: 'Assassin',
+        level: 0,
+        spellIdx: 0,
+        baseIdx: spellList.levels[0]?.spells[0]?.base?.findIndex(spell => spell.id === 164),
+        newId: 191,
+      },
+      {
+        className: 'Barbarian',
+        level: 0,
+        spellIdx: 0,
+        baseIdx: spellList.levels[0]?.spells[0]?.base?.findIndex(spell => spell.id === 21),
+        newId: 192,
+      },
+      {
+        className: 'Monk',
+        level: 0,
+        spellIdx: 0,
+        baseIdx: spellList.levels[0]?.spells[0]?.base?.findIndex(spell => spell.id === 47),
+        newId: 193,
+      },
+      {
+        className: 'Monk',
+        level: 0,
+        spellIdx: 0,
+        baseIdx: spellList.levels[0]?.spells[0]?.base?.findIndex(spell => spell.id === 99),
+        newId: 194,
+      },
+      {
+        className: 'Paladin',
+        level: 5,
+        spellIdx: 0,
+        baseIdx: spellList.levels[5]?.spells[0]?.base?.findIndex(spell => spell.id === 118),
+        newId: 195,
+      },
+      {
+        className: 'Scout',
+        level: 4,
+        spellIdx: 0,
+        baseIdx: spellList.levels[4]?.spells[0]?.base?.findIndex(spell => spell.id === 55),
+        newId: 196,
+      },
+      {
+        className: 'Scout',
+        level: 5,
+        spellIdx: 0,
+        baseIdx: spellList.levels[5]?.spells[0]?.base?.findIndex(spell => spell.id === 3),
+        newId: 197,
+      },
+    ]
 
-    if (shouldUpdateAntiPaladinFlameBlade) {
-      spellList.levels[5].spells[0].base[oldFlameBladeIdx].id = 189
-      allSpellLists[spellListIndex] = spellList
-      localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
-      setRefreshKey(prev => prev + 1) // force rerender
-    }
-    // assassin
-    const shouldUpdateAssassinTeleport =
-      spellList.class === 'Assassin' &&
-      oldTeleportIdx !== undefined &&
-      oldTeleportIdx !== -1
+    let updated = false
 
-    if (shouldUpdateAssassinTeleport) {
-      spellList.levels[4].spells[0].base[oldTeleportIdx].id = 190
-      allSpellLists[spellListIndex] = spellList
-      localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
-      setRefreshKey(prev => prev + 1)
-    }
-    const shouldUpdateAssassinTrickery =
-      spellList.class === 'Assassin' &&
-      oldTrickeryIdx !== undefined &&
-      oldTrickeryIdx !== -1
+    updateRules.forEach(rule => {
+      if (
+        spellList.class === rule.className &&
+        rule.baseIdx !== undefined &&
+        rule.baseIdx !== -1
+      ) {
+        spellList.levels[rule.level].spells[rule.spellIdx].base[rule.baseIdx].id = rule.newId
+        updated = true
+      }
+    })
 
-    if (shouldUpdateAssassinTrickery) {
-      spellList.levels[0].spells[0].base[oldTrickeryIdx].id = 191
-      allSpellLists[spellListIndex] = spellList
-      localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
-      setRefreshKey(prev => prev + 1)
-    }
-    // Barbarian
-    const shouldUpdateBarbarianBerserk =
-      spellList.class === 'Barbarian' &&
-      oldBerserkIdx !== undefined &&
-      oldBerserkIdx !== -1
-
-    if (shouldUpdateBarbarianBerserk) {
-      spellList.levels[0].spells[0].base[oldBerserkIdx].id = 192
-      allSpellLists[spellListIndex] = spellList
-      localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
-      setRefreshKey(prev => prev + 1)
-    }
-
-    // Monk
-    const shouldUpdateMonkEnlightenedSoul =
-      spellList.class === 'Monk' &&
-      oldEnlightenedSoulIdx !== undefined &&
-      oldEnlightenedSoulIdx !== -1
-
-    if (shouldUpdateMonkEnlightenedSoul) {
-      spellList.levels[0].spells[0].base[oldEnlightenedSoulIdx].id = 193
-      allSpellLists[spellListIndex] = spellList
-      localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
-      setRefreshKey(prev => prev + 1)
-    }
-    const shouldUpdateMonkMissileBlock =
-      spellList.class === 'Monk' &&
-      oldMissileBlockIdx !== undefined &&
-      oldMissileBlockIdx !== -1
-
-    if (shouldUpdateMonkMissileBlock) {
-      spellList.levels[0].spells[0].base[oldMissileBlockIdx].id = 194
-      allSpellLists[spellListIndex] = spellList
-      localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
-      setRefreshKey(prev => prev + 1)
-    }
-    // paladin
-    const shouldUpdatePaladinProMag =
-      spellList.class === 'Paladin' &&
-      oldProMagicIdx !== undefined &&
-      oldProMagicIdx !== -1
-
-    if (shouldUpdatePaladinProMag) {
-      spellList.levels[5].spells[0].base[oldProMagicIdx].id = 195
-      allSpellLists[spellListIndex] = spellList
-      localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
-      setRefreshKey(prev => prev + 1)
-    }
-    //scout
-    const shouldUpdateScoutEvolution =
-      spellList.class === 'Scout' &&
-      oldEvolutionIdx !== undefined &&
-      oldEvolutionIdx !== -1
-
-    if (shouldUpdateScoutEvolution) {
-      console.log('Should update Evolution to new ID 196')
-      spellList.levels[4].spells[0].base[oldEvolutionIdx].id = 196
-      allSpellLists[spellListIndex] = spellList
-      localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
-      setRefreshKey(prev => prev + 1)
-    }
-    const shouldUpdateScoutAdaptiveProtection =
-      spellList.class === 'Scout' &&
-      oldAdaptiveProtectionIdx !== undefined &&
-      oldAdaptiveProtectionIdx !== -1
-
-    if (shouldUpdateScoutAdaptiveProtection) {
-      console.log('Should update Adaptive Protection to new ID 197')
-      spellList.levels[5].spells[0].base[oldAdaptiveProtectionIdx].id = 197
+    if (updated) {
       allSpellLists[spellListIndex] = spellList
       localStorage.setItem('allSpellLists', JSON.stringify(allSpellLists))
       setRefreshKey(prev => prev + 1)
@@ -397,7 +365,6 @@ function SpellListDetails() {
       (spellList?.class === 'Paladin' && PALADIN_EQUIPMENT) || 
       (spellList?.class === 'Scout' && SCOUT_EQUIPMENT) || 
       (spellList?.class === 'Warrior' && WARRIOR_EQUIPMENT) || {
-        // lookThePart: '',
         armor: '',
         shields: '',
         weapons: '',

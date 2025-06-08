@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Container, Row, Alert, Accordion } from 'react-bootstrap'
 import { IoMdInformationCircle } from "react-icons/io"
 import { IoEllipsisVertical } from 'react-icons/io5'
-import { IS_APK, PATCH_NOTES } from '../appConstants.js'
+import { APK_VERSION, IS_APK, PATCH_NOTES } from '../appConstants.js'
 
 function App() {
   const [showAlert, setShowAlert] = useState(true)
@@ -28,7 +28,7 @@ function App() {
                 >
                 <IoMdInformationCircle size={25} className="me-1" color="blue"/>
                 <div className="d-flex flex-column">
-                  <span>Open Beta APK <strong>v6.2</strong> is now available!</span>
+                  <span>Open Beta APK <strong>{APK_VERSION}</strong> is now available!</span>
                   <span>Ignore the warnings, it's fine to download.</span>
                   <div
                     className="end-0 bottom-0 text-muted small mt-1"
@@ -46,7 +46,7 @@ function App() {
                 download
                 style={{ minWidth: 200, textAlign: 'center' }}
               >
-                Download Android APK v6.2
+                Download Android APK {APK_VERSION}
               </a>
             </Container>
           </>

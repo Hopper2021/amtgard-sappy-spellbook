@@ -1,7 +1,8 @@
-export const IS_APK = false
+export const IS_APK = true
 
 export const CURRENT_VERSION = 'V8.6.4'
 export const CURRENT_VERSION_NAME = 'V8.6.4 "Sappy Four"'
+export const APK_VERSION = 'v6.2'
 
 export const ALL_SPELLS = [
   {
@@ -3477,9 +3478,9 @@ export const JUGGERNAUT_SPELLS = [
 export const PATCH_NOTES = [
   {
     version: "0.2.2",
-    title: "Add APK v6.2, Legend bug fix",
+    title: `Add APK ${APK_VERSION}, Bard fix and Martial class fixes`,
     details: [
-      "Add APK v6.2 file to downloads page.",
+      `Add APK ${APK_VERSION} file to downloads page.`,
       "Legend bug fix, adding Legend now only multiplies extension by 2.",
       "Update paladin Flame Blade to range self",
       "Artificer updates mend to 2/Life Charge x3 and now has look the part spell change",
