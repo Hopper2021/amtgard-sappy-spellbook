@@ -886,7 +886,8 @@ function SpellListDetails() {
         const spellMaterials = fetchSpellDetails('materials', chosenSpell.id)
         const spellFrequency = fetchSpellFrequency(chosenSpell.id)
         const spellRange = fetchSpellDetails('range', chosenSpell.id)
-        const spellExtraordinary = fetchSubclassSpellDetails('extraordinary', chosenSpell.id, chosenName)
+        const subclassSpellExtraordinary = fetchSubclassSpellDetails('extraordinary', chosenSpell.id, chosenName)
+        const spellExtraordinary = fetchMartialSpellDetails('extraordinary', chosenSpell.id)
         const spellMagical = fetchMartialSpellDetails('magical', chosenSpell.id)
 
         // Get subclass spells if this archetype is in the map
@@ -924,7 +925,7 @@ function SpellListDetails() {
                 <span>
                   {spellFrequency.frequency}{' '}
                   {spellMagical ? `(m)` : ''}
-                  {spellExtraordinary ? '(ex)' : ''}
+                  {spellExtraordinary || subclassSpellExtraordinary ? '(ex)' : ''}
                   {showRange && spellRange ? ` (${spellRange})` : ''}
                 </span>{' '}
                 {showTypeAndSchool && <span>( {spellType} )</span>}
