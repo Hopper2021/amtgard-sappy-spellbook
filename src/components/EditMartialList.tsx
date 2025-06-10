@@ -1341,9 +1341,11 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
                             <Row key={`pickOneOfTwo-${spell.id}`} className="d-flex justify-content-between ms-1">
                               <Button
                                 style={
-                                  spell.chosen
-                                    ? { backgroundColor: '#b8e0b8', color: '#222', border: '2px solid #198754', padding: 7 }
-                                    : { padding: 7 }
+                                  spell.restricted
+                                    ? { backgroundColor: '#f1b0b7', color: '#fff', border: 'none', padding: 7 }
+                                    : spell.chosen
+                                      ? { backgroundColor: '#b8e0b8', color: '#222', border: '2px solid #198754', padding: 7 }
+                                      : { padding: 7 }
                                 }
                                 variant={spell.chosen ? "primary" : "outline-secondary"}
                                 className="text-start border-bottom"
@@ -1369,9 +1371,13 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
                                 onTouchMove={handleLongPressMove}
                                 onTouchEnd={handleLongPressEnd}
                                 onClick={() => {
+                                  if (spell.restricted) {
+                                    setSelectedSpell(ALL_SPELLS.find(s => s.id === spell.id) as SelectedSpellType)
+                                    setShowDisabledSpellToast(true)
+                                  } else {
                                   setModifiedSpellList(prevList => 
                                     setPickOneChosen(prevList, index, spellsByLevelIdx, pickOneIdx, 'pickOne', false)
-                                  )
+                                  )}
                                 }}
                               >
                                 <span style={{ display: 'flex', alignItems: 'center', width: '100%' }}>

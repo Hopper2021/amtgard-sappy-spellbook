@@ -909,6 +909,14 @@ function SpellListDetails() {
           )
         }
 
+        if (chosenSpell.restricted) {
+          return (
+            <Row className="ms-3">
+              {' - '}
+            </Row>
+          )
+        }
+
         return (
           <>
             <Row className="m-0">
