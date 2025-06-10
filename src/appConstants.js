@@ -3477,6 +3477,16 @@ export const JUGGERNAUT_SPELLS = [
 
 export const PATCH_NOTES = [
   {
+    version: "0.2.4",
+    title: `Add APK v6.4, more martial class v8.6.4 fixes`,
+    details: [
+      `Add APK v6.4 file to downloads page.`,
+      "Fix Hold Person for Scout, now lists (m)",
+      "Scout Pinning Arrow now lists (ex)",
+      "Update Apex effect and spell restrictions to v8.6.4",
+    ]
+  },
+  {
     version: "0.2.3",
     title: `Add APK v6.3, Caster class white screen bug fix.`,
     details: [
