@@ -114,7 +114,7 @@ export const ALL_SPELLS = [
     range: null,
     materials: null,
     incantation: null,
-    effect: 'Gain Mutation (T) and Adaptive Blessing (Self) 1/Life Charge x5 (ex) (Swift)',
+    effect: 'Gain Mend 1/Life (ex) and Sleight of Mind (Self) 1/Life (ex)',
     limitation: 'Loses all instances of Evolution, Hold Person, Pinning Arrow, and Adaptive Protection',
     note: null
   },
@@ -2396,7 +2396,7 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
   },
   {
     id: 197,
-    name: 'Adaptive Protection',
+    name: 'Adaptive Protection', // Scout Adaptive Protection
     type: 'Enchantment',
     school: 'Protection',
     range: 'Self',
@@ -3382,7 +3382,7 @@ export const HUNTER_SPELLS = [
 ]
 
 export const APEX_SPELLS = [
-  { id: 98, frequency: { amount: 1, per: 'Life', charge: null }, range: null, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+  { id: 98, frequency: { amount: 1, per: 'Life', charge: null }, range: 'Touch', trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
   { id: 136, frequency: { amount: 1, per: 'Life', charge: null }, range: 'Self', trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
 ]
 
