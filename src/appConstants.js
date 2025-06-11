@@ -2291,7 +2291,7 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     name: 'Ancestral Armor', // Warrior ancestral armor
     type: 'Enchantment',
     school: 'Protection',
-    range: 'Other',
+    range: 'Self',
     materials: 'White strip',
     incantation: `"May this armor protect thee from all forms of harm"`,
     effect: 'The effects of a Magic Ball, projectile weapon, or melee weapon which just struck armor worn by the player are ignored, even if the object would not otherwise affect the armor. The armor loses one point of value in the location struck. This effect will not trigger if the armor has no points left in the location struck. Ancestral Armor is not expended after use and will continue to provide protection until removed with Dispel Magic or similar abilities.',
@@ -2404,6 +2404,18 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     incantation: '"I enchant thee with this protection" x3',
     effect: 'Bearer becomes Immune to one of the following Schools: Death, Flame, Subdual, Command, Sorcery. School is chosen at the time of casting.',
     limitation: null,
+    note: null
+  },
+  {
+    id: 198,
+    name: 'Harden', // Warrior's harden
+    type: 'Enchantment',
+    school: 'Protection',
+    range: 'Self',
+    materials: 'White strip',
+    incantation: '"I enchant thee with Harden" x3',
+    effect: "Bearer's wielded weapons or shield may only be destroyed or damaged by Magic Balls/Verbals which destroy objects e.g. Fireball or Pyrotechnics.",
+    limitation: 'Will only affect either the weapons or the shield of the bearer, not both.',
     note: null
   },
 ]
@@ -3403,7 +3415,7 @@ export const WARRIOR_LIST = {
     spells: [
       { 
         base: [
-          { id: 74, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null },
+          { id: 198, frequency: { amount: 1, per: 'Life', charge: null }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: null },
         ]
       }
     ],
