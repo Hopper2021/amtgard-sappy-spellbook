@@ -2430,6 +2430,25 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     limitation: 'Does not apply to Magic Armor. A player may only benefit from one instance of Imbue Armor.',
     note: 'When this enchantment is removed, the bearer loses 1 current and maximum Armor Point in each location.'
   },
+  {
+    id: 200,
+    name: 'Phoenix Tears',
+    type: 'Enchantment',
+    school: 'Spirit',
+    range: 'Self',
+    materials: 'Two white strips',
+    incantation: '"May the tears of the phoenix wash over thee"',
+    effect: `Enchanted player does not die as normal. When the player would otherwise die they instead remove a strip and become Frozen for 30 seconds. 
+    \n>>When the Frozen State is ended, the bearer is affected as follows:
+    \n>> 1. All wounds are removed.
+    \n>> 2. All States that would be removed by death or Respawning are removed.
+    \n>> 3. All Ongoing Effects with a timer expire.
+    \n>> 4. All of their carried equipment is fully repaired.
+    \n>> 5. All non-persistent enchantments, other than Phoenix Tears, are removed.
+Additionally Phoenix Tears allows you to wear an extra Enchantment from the Protection School. This extra enchantment is considered Persistent as long as Phoenix Tears is present. The additional Enchantment is not removed once Phoenix Tears is removed.`,
+    limitation: 'Phoenix Tears is removed when the last strip is removed. If Phoenix Tears is removed, the bearer chooses which (m) Enchantments to lose to meet their new Enchantment limit, if necessary.',
+    note: null
+  },
 ]
 
 export const BARD_SPELLS = {
@@ -3495,8 +3514,8 @@ export const MARAUDER_SPELLS = [
 
 export const JUGGERNAUT_SPELLS = [
   { id: 69, frequency: { amount: 1, per: 'Life', charge: null }, range: 'Self', trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
-  { id: 108, frequency: { amount: 3, per: 'Refresh', charge: null }, swift: true, range: 'Self', trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
-  { id: 84, frequency: { amount: null, per: null, charge: null }, range: null, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+  { id: 200, frequency: { amount: 3, per: 'Refresh', charge: null }, swift: true, range: 'Self', trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+  { id: 199, frequency: { amount: null, per: null, charge: null }, range: null, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
 ]
 
 export const PATCH_NOTES = [
