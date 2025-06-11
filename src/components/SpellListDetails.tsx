@@ -176,6 +176,13 @@ function SpellListDetails() {
         baseIdx: getBaseIdx(5, 0, 3),
         newId: 197,
       },
+      {
+        className: 'Warrior',
+        level: 0,
+        spellIdx: 0,
+        baseIdx: getBaseIdx(0, 0, 74),
+        newId: 198,
+      },
     ]
 
     let updated = false
