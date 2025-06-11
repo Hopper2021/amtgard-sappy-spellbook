@@ -671,6 +671,15 @@ function SpellListDetails() {
       charge = 'Charge x5'
     }
 
+    if (
+      isMarauder &&
+      allSpell &&
+      allSpell.name &&
+      allSpell.name === 'Ancestral Armor'
+    ) {
+      charge = null
+    }
+
     if (freq && typeof freq === 'object') {
       if (experienced) {
         if (per === 'Life') {
