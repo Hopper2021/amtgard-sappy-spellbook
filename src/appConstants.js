@@ -3527,6 +3527,12 @@ export const PATCH_NOTES = [
       "Fix Hold Person for Scout, now lists (m)",
       "Scout Pinning Arrow now lists (ex)",
       "Update Apex effect and spell restrictions to v8.6.4",
+      "Update Warrior Harden to range self",
+      "Update Warrior Ancestral Armor to range self",
+      "Update Marauder Momentum to range self",
+      "Remove Ancestral armor for juggernaut",
+      "List Juggernaut imbue armor as a trait",
+      "Remove x3 from Juggernaut incant",
     ]
   },
   {
