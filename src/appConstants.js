@@ -2418,6 +2418,18 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     limitation: 'Will only affect either the weapons or the shield of the bearer, not both.',
     note: null
   },
+  {
+    id: 199,
+    name: 'Imbue Armor',
+    type: 'Trait', // Juggernaut Trait
+    school: null,
+    range: null,
+    materials: null,
+    incantation: null,
+    effect: 'Armor worn by the bearer gains 1 Armor Point to its current and maximum rating in each location, up to the bearer\'s class maximum.',
+    limitation: 'Does not apply to Magic Armor. A player may only benefit from one instance of Imbue Armor.',
+    note: 'When this enchantment is removed, the bearer loses 1 current and maximum Armor Point in each location.'
+  },
 ]
 
 export const BARD_SPELLS = {
