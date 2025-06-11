@@ -3478,7 +3478,7 @@ export const WARRIOR_LIST = {
 }
 
 export const MARAUDER_SPELLS = [
-  { id: 100, frequency: { amount: null, per: null, charge: 'Unlimited' }, range: null, trait: false, extraordinary: true, magical: false, ambulant: true, restricted: false, chosen: false, },
+  { id: 100, frequency: { amount: null, per: null, charge: 'Unlimited' }, range: 'Self', trait: false, extraordinary: true, magical: false, ambulant: true, restricted: false, chosen: false, },
 ]
 
 export const JUGGERNAUT_SPELLS = [
