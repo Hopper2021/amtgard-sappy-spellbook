@@ -10,6 +10,7 @@ import ModifySpellList from './components/ModifySpellList.tsx'
 import PatchNotes from './components/PatchNotes.tsx'
 import EditMartialList from './components/EditMartialList.tsx'
 import LegacySpellListDetails from './components/LegacySpellListDetails.tsx'
+import BugsAndFeatures from './components/BugsAndFeatures.tsx'
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/modifyList/:id" element={<ModifySpellList />}/>
           <Route path="/editMartialList/:id" element={<EditMartialList />}/>
           <Route path="/patchNotes" element={<PatchNotes />}/>
+          <Route path="/bugsAndFeatures" element={<BugsAndFeatures />}/>
         </Routes>
     </>
   )

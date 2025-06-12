@@ -3535,6 +3535,7 @@ export const PATCH_NOTES = [
       "Remove x3 from Juggernaut incant",
       "Fix text selection when spell details modal is opened",
       "Pick one/Pick two, etc. headers and clear button styling for smaller viewports.",
+      "Add bug reporting/feature request to settings menu",
     ]
   },
   {

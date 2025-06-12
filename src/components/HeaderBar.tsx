@@ -45,6 +45,7 @@ function HeaderBar() {
                 <Dropdown.Item onClick={() => changeTipsSettings()}>
                   {currentSetting === 'true' ? 'Disable' : 'Enable'} Tips
                 </Dropdown.Item>
+                <Dropdown.Item onClick={() => navigate('/bugsAndFeatures')}>Bug reporting</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
         </Container>
