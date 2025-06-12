@@ -3533,6 +3533,8 @@ export const PATCH_NOTES = [
       "Remove Ancestral armor for juggernaut",
       "List Juggernaut imbue armor as a trait",
       "Remove x3 from Juggernaut incant",
+      "Fix text selection when spell details modal is opened",
+      "Pick one/Pick two, etc. headers and clear button styling for smaller viewports.",
     ]
   },
   {

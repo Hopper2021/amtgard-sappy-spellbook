@@ -965,11 +965,11 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
         modifiedSpellList.lookThePartSpells.length > 1 &&
         modifiedSpellList.lookThePart && (
           <>
-            <Row className="fw-bold text-secondary my-1 ms-1">
-              <Col className="text-start">
-                <span>Look the Part: Pick one</span>
+            <Row className="fw-bold text-secondary mb-2">
+              <Col xs className="text-start pe-0">
+                <span>Look the part, pick one:</span>
               </Col>
-              <Col className="text-end">
+              <Col xs={4} className="text-end">
                 <Button
                   className="py-0"
                   onClick={() => {
@@ -985,7 +985,7 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
             {modifiedSpellList.lookThePartSpells.map((spell, lookThePartIdx: number) => {
               const spellName = getSpellName(spell.id)
               return (
-                <Row key={`lookthepart-${spell.id}`} className="d-flex justify-content-between ms-1">
+                <Row key={`lookthepart-${spell.id}`} className="d-flex justify-content-between ms-1 me-1">
                   <Button
                     style={
                       spell.chosen
@@ -1113,11 +1113,11 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
                       rows.push(
                         <Row
                           key={`optionalPickOne-label-${index}`}
-                          className="d-flex justify-content-between align-items-center fw-bold text-secondary my-1">
-                          <Col className="text-start">
+                          className="d-flex align-items-center fw-bold text-secondary my-2">
+                          <Col xs className="text-start pe-0">
                             <span>Optional, Pick one:</span>
                           </Col>
-                          <Col className="text-end">
+                          <Col xs={4} className="text-end">
                             <Button
                               className="py-0"
                               onClick={() => {
@@ -1188,10 +1188,10 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
                                 <>
                                   <Row
                                     key={`pickOneOfTwo-label-${index}`}
-                                    className="fw-bold text-secondary mb-1 ms-4"
+                                    className="fw-bold text-secondary my-1 ms-3"
                                   >
-                                    Pick one of two:  
-                                    <Col className="text-end">
+                                    <Col xs><span>Pick one of two:  </span></Col>
+                                    <Col xs={4} className="text-end">
                                       <Button
                                         className="py-0"
                                         onClick={() => {
@@ -1317,10 +1317,10 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
                         <Row
                           key={`optionalPickOne-label-${index}`}
                           className="d-flex justify-content-between align-items-center fw-bold text-secondary my-1">
-                          <Col className="text-start">
+                          <Col xs className="pe-0">
                             <span>Pick one of two:</span>
                           </Col>
-                          <Col className="text-end">
+                          <Col xs={4} className="text-end">
                             <Button
                               className="py-0"
                               onClick={() => {
@@ -1393,10 +1393,10 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
                     if (Array.isArray(spellsByLevel.pickTwoOfThree)) {
                       rows.push(
                         <Row key={`pickTwoOfThree-label-${index}`} className="d-flex justify-content-between align-items-center fw-bold text-secondary my-1">
-                          <Col className="text-start">
+                          <Col xs className="text-start pe-0">
                             <span>Pick two of three:</span>
                           </Col>
-                          <Col className="text-end">
+                          <Col xs={4} className="text-end">
                             <Button
                               className="py-0"
                               onClick={() => {
