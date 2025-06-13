@@ -1103,7 +1103,7 @@ const removeSpellFromList = (spellId: number) => {
 
   return (
     <Container fluid className="p-2">
-      <Modal className="p-2" show={openModal} onHide={handleClose} centered>
+      <Modal style={{ userSelect: 'none' }} className="p-2" show={openModal} onHide={handleClose} centered>
         <Modal.Header className="pb-2 pt-2" closeButton>
           <Modal.Title>
             <Row className="ps-3">{selectedSpell?.name}</Row>
