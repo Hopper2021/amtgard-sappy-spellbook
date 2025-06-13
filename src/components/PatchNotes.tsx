@@ -1,44 +1,23 @@
-import { useState } from 'react'
-import { Container, Row, Alert, Accordion } from 'react-bootstrap'
-import { IoMdInformationCircle } from "react-icons/io"
-import { IoEllipsisVertical } from 'react-icons/io5'
+import { Container, Row, Accordion } from 'react-bootstrap'
 import { APK_VERSION, IS_APK, PATCH_NOTES } from '../appConstants.js'
+import AlertTip from './AlertTip.tsx'
 
-function App() {
-  const [showAlert, setShowAlert] = useState(true)
-
-  let enableTips = localStorage.getItem('enableTips')
-  if (enableTips === null) {
-    localStorage.setItem('enableTips', 'true')
-    enableTips = 'true'
-  }
-  const tipsEnabled = enableTips === 'true'
-
+const PatchNotes = () => {
   return (
     <Container fluid className="p-3 mb-5">
       <Container className="px-1 pt-1">
-        {IS_APK ? null 
-          : ( <>
-            {tipsEnabled && (
-              <Alert
-                show={showAlert}
-                className="d-flex alert-primary"
-                dismissible
-                onClose={() => setShowAlert(false)}
-                >
-                <IoMdInformationCircle size={25} className="me-1" color="blue"/>
-                <div className="d-flex flex-column">
-                  <span>Open Beta APK <strong>{APK_VERSION}</strong> is now available!</span>
+        {IS_APK ? null
+          : (
+            <>
+              <AlertTip
+                message={
+                  <>
+                    <span>Open Beta APK <strong>{APK_VERSION}</strong> is now available!</span>
+                  <br />
                   <span>Ignore the warnings, it's fine to download.</span>
-                  <div
-                    className="end-0 bottom-0 text-muted small mt-1"
-                    style={{ pointerEvents: 'none' }}
-                  >
-                    <span>Disable tips in settings <IoEllipsisVertical /></span>
-                  </div>
-                </div>
-              </Alert>
-            )}
+                </>
+              }
+            />
             <Container className="d-flex justify-content-center mb-2">
               <a
                 href="/downloads/swiftgard-main-0c5516-release.apk" 
@@ -78,4 +57,4 @@ function App() {
   )
 }
 
-export default App
+export default PatchNotes

@@ -1,12 +1,11 @@
 import { useState } from 'react'
 import FloatingActionButton from './FloatingActionButton.tsx'
-import { Container, Row, Button, Modal, Alert } from 'react-bootstrap'
+import { Container, Row, Button, Modal } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { IoIosWarning } from "react-icons/io"
 import { LuCirclePlus } from "react-icons/lu"
-import { IoMdInformationCircle } from "react-icons/io"
-import { IoEllipsisVertical } from 'react-icons/io5'
 import { CURRENT_VERSION } from '../appConstants.js'
+import AlertTip from './AlertTip.tsx'
 
 function App() {
   const navigate = useNavigate()
@@ -23,14 +22,12 @@ function App() {
   }
   const [selectedSpellList, setSelectedSpellList] = useState(emptySpellList)
   const [longPressTimeout, setLongPressTimeout] = useState<NodeJS.Timeout | null>(null)
-  const [showAlert, setShowAlert] = useState(true)
 
   let enableTips = localStorage.getItem('enableTips')
   if (enableTips === null) {
     localStorage.setItem('enableTips', 'true')
     enableTips = 'true'
   }
-  const tipsEnabled = enableTips === 'true'
 
   const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
 
@@ -112,25 +109,7 @@ function App() {
       </Modal>
 
         <Container className="px-0 pt-1">
-          {tipsEnabled && (
-            <Alert
-              show={showAlert}
-              className="d-flex alert-primary"
-              dismissible
-              onClose={() => setShowAlert(false)}
-              >
-              <IoMdInformationCircle size={35} className="me-1" color="blue"/>
-              <div className="d-flex flex-column">
-                <span>Long press on a spell book to modify its base data or delete it.</span>
-                <div
-                  className="end-0 bottom-0 text-muted small mt-1"
-                  style={{ pointerEvents: 'none' }}
-                >
-                  <span>Disable tips in settings <IoEllipsisVertical /></span>
-                </div>
-              </div>
-            </Alert>
-          )}
+          <AlertTip message={'Long press on a spell book to modify its base data or delete it.'} />
           <Container>
           <Row className="pb-2 fw-semibold">Spell Books</Row>
             {allSpellLists.length === 0 ? (

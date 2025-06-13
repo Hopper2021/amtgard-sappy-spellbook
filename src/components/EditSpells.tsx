@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Row, Accordion, Button, CardHeader, Modal, Alert } from 'react-bootstrap'
+import { Container, Row, Accordion, Button, CardHeader, Modal } from 'react-bootstrap'
 import { ALL_SPELLS, BARD_SPELLS, HEALER_SPELLS, WIZARD_SPELLS, DRUID_SPELLS, CURRENT_VERSION } from '../appConstants'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Toast, ToastContainer } from 'react-bootstrap'
-import { IoMdInformationCircle } from 'react-icons/io'
-import { IoEllipsisVertical } from "react-icons/io5"
+import AlertTip from './AlertTip.tsx'
 
 type VerbalSpell = {
   id: number
@@ -91,9 +90,9 @@ function EditSpells() {
   const { id } = useParams<{ id: string }>()
   const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
   const spellListToEdit = allSpellLists.find((list: SpellList) => list.id === parseInt(id || '0'))
-  const [showAlert, setShowAlert] = useState(true)
-  let enableTips = localStorage.getItem('enableTips')
-  const tipsEnabled = enableTips === 'true'
+  // const [showAlert, setShowAlert] = useState(true)
+  // let enableTips = localStorage.getItem('enableTips')
+  // const tipsEnabled = enableTips === 'true'
   const [modifiedSpellList, setModifiedSpellList] = React.useState<SpellList>({
     id: parseInt(id || '0'),
     version: spellListToEdit?.version || CURRENT_VERSION,
@@ -1315,23 +1314,7 @@ const removeSpellFromList = (spellId: number) => {
       </ToastContainer>
 
       <Container>
-        {tipsEnabled && (
-          <Alert
-            show={showAlert}
-            className="alert-primary align-items-center mt-1"
-            dismissible
-            onClose={() => setShowAlert(false)}
-          >
-            <IoMdInformationCircle size={25} className="me-1" color="blue" />
-            <span>Long press on any spell below to view its effects and limitations.</span>
-            <div
-              className="end-0 bottom-0 text-muted small mt-1"
-              style={{ pointerEvents: 'none' }}
-            >
-              <span>Disable tips in settings <IoEllipsisVertical /></span>
-            </div>
-          </Alert>
-        )}
+        <AlertTip message={'Long press on any spell below to view its effects and limitations.'} />
         <CardHeader className="d-flex justify-content-between align-items-center mt-2">
           <h6>{addOrRemoveSpells} {modifiedSpellList.class} Spells</h6>
           <div>
