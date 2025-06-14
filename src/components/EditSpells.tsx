@@ -1268,7 +1268,7 @@ const removeSpellFromList = (spellId: number) => {
                       ) &&
                       spell?.name?.includes('Equipment:') &&
                       (() => {
-                        const spellInDruidList = DRUID_SPELLS.find(level =>
+                        const spellInDruidList = DRUID_SPELLS.levels.find(level =>
                           level.spells.some(s => s.id === spell.id)
                         )
                         return spellInDruidList && spellInDruidList.level > 2
