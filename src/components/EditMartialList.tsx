@@ -196,7 +196,7 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
     const flameBladeId = ALL_SPELLS.find(spell => spell.name === 'Flame Blade')?.id || 0
     const rageId = ALL_SPELLS.find(spell => spell.name === 'Rage')?.id || 0
     const bloodAndThunderId = ALL_SPELLS.find(spell => spell.name === 'Blood and Thunder')?.id || 0
-    const protectionFromMagicId = ALL_SPELLS.find(spell => spell.name === 'Protection from Magic')?.id || 0
+    const protectionFromMagicId = ALL_SPELLS.find(spell => spell.id === 195)?.id || ALL_SPELLS.find(spell => spell.id === 118)?.id || 0
     const extendImmunitiesId = ALL_SPELLS.find(spell => spell.name === 'Extend Immunities')?.id || 0
     const greaterResurrectId = ALL_SPELLS.find(spell => spell.name === 'Greater Resurrect')?.id || 0
     const releaseId = ALL_SPELLS.find(spell => spell.name === 'Release')?.id || 0
