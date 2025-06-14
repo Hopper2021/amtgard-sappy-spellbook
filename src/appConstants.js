@@ -2978,6 +2978,9 @@ export const SNIPER_LOOKTHEPART_SPELL = [{ id: 98, frequency: { amount: 1, per: 
 
 export const ARTIFICER_SPELLS = [
   { id: 71, frequency: { amount: 2, per: 'Refresh', charge: 'Charge x10' }, range: null, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+  { id: 109, frequency: { amount: 3, per: 'Arrow', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+  { id: 106, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+  { id: 157, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
 ]
 
 export const ARTIFICER_LOOKTHEPART_SPELL = [{ id: 109, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, }]

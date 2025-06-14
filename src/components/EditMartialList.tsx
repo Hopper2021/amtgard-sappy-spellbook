@@ -176,7 +176,7 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
   }
 
   const sniperChosen = isSpellChosen(modifiedSpellList, sniperArchetype?.id || 0)
-  const artificerChosen = isSpellChosen(modifiedSpellList, artificerArchetype?.id || 0) // Artificer spell ID
+  const artificerChosen = isSpellChosen(modifiedSpellList, artificerArchetype?.id || 0)
 
   const updateRestrictedSpells = (spellList: SpellList): SpellList => {
     // Archetypes
@@ -208,6 +208,8 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
     const trueGritId = ALL_SPELLS.find(spell => spell.name === 'True Grit')?.id || 0
     const hardenId = ALL_SPELLS.find(spell => spell.name === 'Harden')?.id || 0
     const resurrectId = ALL_SPELLS.find(spell => spell.name === 'Resurrect')?.id || 0
+    const destructionArrowId = ALL_SPELLS.find(spell => spell.name === 'Destruction Arrow')?.id || 0
+    const poisonArrowId = ALL_SPELLS.find(spell => spell.name === 'Poison Arrow')?.id || 0
 
     // Only one restriction at a time, based on which archetype is chosen
     let restrictedSpellIds: number[] = []
@@ -231,7 +233,11 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
       restrictedSpellIds = [hardenId, ancestralArmorId, trueGritId]
     } else if (mysticChosen) {
       restrictedSpellIds = [resurrectId]
+    } else if (artificerChosen) {
+      restrictedSpellIds = [pinningArrowId, destructionArrowId, poisonArrowId]
     }
+
+    console.log('artificerChosen', artificerChosen)
 
     // Deep copy and update restricted property for all spell arrays
     const newList = JSON.parse(JSON.stringify(spellList))

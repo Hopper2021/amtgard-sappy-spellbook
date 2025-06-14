@@ -618,6 +618,14 @@ function SpellListDetails() {
       archetypeMultiplier *= 2
     }
     if (
+      isArtificer &&
+      allSpell &&
+      allSpell.name === 'Pinning Arrow'
+    ) {
+      archetypeMultiplier *= 3
+    }
+
+    if (
       isLegend &&
       hasExtension &&
       allSpell &&
@@ -1102,12 +1110,17 @@ function SpellListDetails() {
 
           return (
             <>
-              {(showPickTwoLabel || showOneMoreLabel) && (
+              {(showPickTwoLabel || showOneMoreLabel) && !isArtificer && (
                 <Row className="ms-2 fw-bold text-secondary">
                   <span className="d-flex align-items-center">
                     <IoIosWarning color="gold" className="me-1"/>
                     {showOneMoreLabel ? 'Pick one more in edit mode:' : 'Pick two of three in edit mode:'}
                   </span>
+                </Row>
+              )}
+              {isArtificer && isPickTwoOfThree && (
+                <Row className="ms-2 fw-bold text-secondary">
+                  {' - '}
                 </Row>
               )}
               {spellsToRender.map((spell, index) => {
@@ -1128,6 +1141,12 @@ function SpellListDetails() {
                     <Row key={index} className="ms-3">
                       {' - '}
                     </Row>
+                  )
+                }
+
+                if (isPickTwoOfThree && isArtificer) {
+                  return (
+                    null
                   )
                 }
 
