@@ -3529,6 +3529,7 @@ export const PATCH_NOTES = [
       `Add APK v6.5 file to downloads page.`,
       "Fix text selection on caster edit page when opening spell details modal",
       "Code clean up; consolidate and remove dry code",
+      "Fix Artificer limitations and added arrows",
     ]
   },
   {

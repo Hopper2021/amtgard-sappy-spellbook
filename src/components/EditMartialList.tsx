@@ -237,8 +237,6 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
       restrictedSpellIds = [pinningArrowId, destructionArrowId, poisonArrowId]
     }
 
-    console.log('artificerChosen', artificerChosen)
-
     // Deep copy and update restricted property for all spell arrays
     const newList = JSON.parse(JSON.stringify(spellList))
     for (const level of newList.levels) {
