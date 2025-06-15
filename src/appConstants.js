@@ -1,8 +1,8 @@
-export const IS_APK = true
+export const IS_APK = false
 
 export const CURRENT_VERSION = 'V8.6.4'
 export const CURRENT_VERSION_NAME = 'V8.6.4 "Sappy Four"'
-export const APK_VERSION = 'v6.4'
+export const APK_VERSION = 'v6.5'
 
 export const ALL_SPELLS = [
   {
