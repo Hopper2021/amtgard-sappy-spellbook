@@ -3530,6 +3530,9 @@ export const PATCH_NOTES = [
       "Fix text selection on caster edit page when opening spell details modal",
       "Code clean up; consolidate and remove dry code",
       "Fix Artificer limitations and added arrows",
+      "Fix guardian limitation on Protection from Magic",
+      "Fix Druid white screen bug when clicking on restricted equipment when summoner is taken",
+      "Do not show unlimited spells in experienced spell select modal",
     ]
   },
   {
