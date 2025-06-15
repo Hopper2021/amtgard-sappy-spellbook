@@ -110,25 +110,6 @@ function EditSpells() {
       return expSpell && spell.id === expSpell.id
     })
 
-    const getAllVerbals = (modifiedSpellList) => {
-      const verbals: VerbalSpell[] = []
-      modifiedSpellList.levels
-        .filter((level: SpellLevel) => level.level <= 4)
-        .forEach((level: SpellLevel) => {
-          level.spells.forEach((spellObj: Spell) => {
-          // Only include if experienced is 0 or undefined
-          if (spellObj.experienced && spellObj.experienced !== 0) return
-          const spellDetails = ALL_SPELLS.find(s => s.id === spellObj.id) as VerbalSpell | undefined
-          if (spellDetails?.type === 'Verbal') {
-            verbals.push(spellDetails)
-          }
-        })
-      })
-    return verbals
-  }
-
-  const modifiedSpellListVerbals = getAllVerbals(modifiedSpellList)
-
   // Healer Archetype list adjustments
   const getAdjustedHealerSpells = (baseHealerSpells, spellList) => {
     const priestArchetype = ALL_SPELLS.find(spell => spell.name === 'Priest')
@@ -355,6 +336,58 @@ function EditSpells() {
     (spellListToEdit?.class === 'Healer' && getAdjustedHealerSpells(HEALER_SPELLS.levels, spellListToEdit)) ||
     (spellListToEdit?.class === 'Wizard' && getAdjustedWizardSpells(WIZARD_SPELLS.levels, spellListToEdit)) ||
     (spellListToEdit?.class === 'Druid' && getAdjustedDruidSpells(DRUID_SPELLS.levels, spellListToEdit))
+
+  const buildFrequencyString = (masterSpell: any) => {
+    let spell: (SpellsByClass | Spell) | null = null;
+    if (Array.isArray(spellsByClass)) {
+      for (const level of spellsByClass as LevelsByClass[]) {
+        const match = level.spells.find(s => s.id === masterSpell?.id);
+        if (match) {
+          spell = match;
+          break;
+        }
+      }
+    }
+
+    const freq: FrequencyByClass | null = (spell && 'frequency' in (spell as any)) ? (spell as any).frequency : null
+    const amount = freq?.amount
+    const per = freq?.per
+    const charge = freq?.charge
+
+    if (amount != null && per != null) {
+      return `${amount}/${per}${charge ? ` ${charge}` : ''}`
+    }
+    if ((amount == null && !per) && charge === 'Unlimited') {
+      return charge
+    }
+    if ((amount == null && !per) && charge) {
+      return charge
+    }
+    return null
+  }
+
+  const spellFrequency = buildFrequencyString(selectedSpell)
+
+    const getAllVerbals = (modifiedSpellList) => {
+      const verbals: VerbalSpell[] = []
+      modifiedSpellList.levels
+        .filter((level: SpellLevel) => level.level <= 4)
+        .forEach((level: SpellLevel) => {
+          level.spells.forEach((spellObj: Spell) => {
+          // Only include if experienced is 0 or undefined
+          if (spellObj.experienced && spellObj.experienced !== 0) return
+          const spellDetails = ALL_SPELLS.find(s => s.id === spellObj.id) as VerbalSpell | undefined
+          const spellFrequency = buildFrequencyString(spellObj)
+          console.log('spellFrequency', spellFrequency)
+          if (spellDetails?.type === 'Verbal' && spellFrequency !== 'Unlimited') {
+            verbals.push(spellDetails)
+          }
+        })
+      })
+    return verbals
+  }
+
+  const modifiedSpellListVerbals = getAllVerbals(modifiedSpellList)
 
   const autoRemoveAndRefundSpell = (spellId: number, spellList: SpellList) => {
     const spellLevel = findSpellLevel(spellId)
@@ -1031,37 +1064,6 @@ const removeSpellFromList = (spellId: number) => {
     setLongPressTimeout(timeout)
   }
 
-  const buildFrequencyString = (masterSpell: any) => {
-    let spell: (SpellsByClass | Spell) | null = null;
-    if (Array.isArray(spellsByClass)) {
-      for (const level of spellsByClass as LevelsByClass[]) {
-        const match = level.spells.find(s => s.id === masterSpell?.id);
-        if (match) {
-          spell = match;
-          break;
-        }
-      }
-    }
-
-    const freq: FrequencyByClass | null = (spell && 'frequency' in (spell as any)) ? (spell as any).frequency : null
-    const amount = freq?.amount
-    const per = freq?.per
-    const charge = freq?.charge
-
-    if (amount != null && per != null) {
-      return `${amount}/${per}${charge ? ` ${charge}` : ''}`
-    }
-    if ((amount == null && !per) && charge === 'Unlimited') {
-      return charge
-    }
-    if ((amount == null && !per) && charge) {
-      return charge
-    }
-    return null
-  }
-
-  const spellFrequency = buildFrequencyString(selectedSpell)
-
   const handleLongPressStart = (spellId, e) => {
     const x = e.touches ? e.touches[0].clientX : e.clientX
     const y = e.touches ? e.touches[0].clientY : e.clientY
@@ -1178,6 +1180,7 @@ const removeSpellFromList = (spellId: number) => {
                   onClick={() => addSpellToList(56, spell.id)}
                 >
                   {spell.name}
+                  {/* {' '}( {buildFrequencyString(spell)} ) */}
                 </Button>
               </div>
             ))}
