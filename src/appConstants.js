@@ -1,4 +1,4 @@
-export const IS_APK = false
+export const IS_APK = true
 
 export const CURRENT_VERSION = 'V8.6.4'
 export const CURRENT_VERSION_NAME = 'V8.6.4 "Sappy Four"'
@@ -3529,7 +3529,7 @@ export const PATCH_NOTES = [
       `Add APK v6.5 file to downloads page.`,
       "Fix text selection on caster edit page when opening spell details modal",
       "Code clean up; consolidate and remove dry code",
-      "Fix Artificer limitations and added arrows",
+      "Fix Artificer limitations, added arrows and limitation message",
       "Fix guardian limitation on Protection from Magic",
       "Fix Druid white screen bug when clicking on restricted equipment when summoner is taken",
       "Do not show unlimited spells in experienced spell select modal",
