@@ -721,7 +721,14 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
                     if (mysticArchetype && hasMystic &&
                       (spell?.name === 'Resurrect')
                     ) archetypes.push('Mystic')
-
+                    // Artificer
+                    if (artificerArchetype && artificerIsChosen &&
+                      (spell?.name === 'Pinning Arrow' ||
+                        spell?.name === 'Destruction Arrow' ||
+                        spell?.name === 'Poison Arrow' ||
+                        spell?.name === 'Suppression Arrow' ||
+                        spell?.name === 'Phase Arrow')
+                    ) archetypes.push('Artificer')
                     if (archetypes.length > 0) {
                       return `${archetypes.join(',')}`
                     }
@@ -735,7 +742,7 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
       </ToastContainer>
 
       <Container>
-        <AlertTip message={'Long press on any ability below to view its effects and limitations.'} />
+        <AlertTip message={'Long press on any spell or ability below to view its effects and limitations.'} />
 
       {!sniperChosen && !artificerIsChosen && Array.isArray(modifiedSpellList.lookThePartSpells) &&
         modifiedSpellList.lookThePartSpells.length > 1 &&
@@ -1193,13 +1200,13 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
                             return (
                               <Row key={`pickTwoOfThree-${spell.id}`} className="d-flex justify-content-between ms-1">
                                 <Button
-                                style={
-                                  spell.restricted
-                                    ? { backgroundColor: '#f1b0b7', color: '#fff', border: 'none', padding: 7 }
-                                    : spell.chosen
-                                      ? { backgroundColor: '#b8e0b8', color: '#222', border: '2px solid #198754', padding: 7 }
-                                      : { padding: 7 }
-                                  }
+                                  style={
+                                    spell.restricted
+                                      ? { backgroundColor: '#f1b0b7', color: '#fff', border: 'none', padding: 7 }
+                                      : spell.chosen
+                                        ? { backgroundColor: '#b8e0b8', color: '#222', border: '2px solid #198754', padding: 7 }
+                                        : { padding: 7 }
+                                    }
                                   variant={spell.chosen ? "primary" : "outline-secondary"}
                                   className="text-start border-bottom"
                                   onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
@@ -1224,9 +1231,14 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
                                   onTouchMove={handleLongPressMove}
                                   onTouchEnd={handleLongPressEnd}
                                   onClick={() => {
-                                    setModifiedSpellList(prevList =>
-                                      setPickTwoOfThreeChosen(prevList, index, spellsByLevelIdx, pickTwoOfThreeIdx)
-                                    )
+                                    if (spell.restricted) {
+                                      setSelectedSpell(ALL_SPELLS.find(s => s.id === spell.id) as SelectedSpellType)
+                                      setShowDisabledSpellToast(true)
+                                    } else {
+                                      setModifiedSpellList(prevList =>
+                                        setPickTwoOfThreeChosen(prevList, index, spellsByLevelIdx, pickTwoOfThreeIdx)
+                                      )
+                                    }
                                   }}
                                 >
                                   <span style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
