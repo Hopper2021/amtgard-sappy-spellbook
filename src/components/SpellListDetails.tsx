@@ -1163,7 +1163,12 @@ function SpellListDetails() {
                           }}
                           className={isPickOne || isOptional || isPickTwoOfThree ? 'ms-3' : ''}
                         >
-                          {spellName}
+                        {isPickTwoOfThree && spell.chosen && (
+                          <span style={{ color: 'green', fontWeight: 600 }}>
+                            Spell chosen:
+                          </span>
+                        )}
+                          {' '}{spellName}
                         </span>{' '}
                         <span style={{ color: isPickTwoOfThree && spell.chosen ? 'green' : undefined }}>
                         {spellFrequency.frequency}
