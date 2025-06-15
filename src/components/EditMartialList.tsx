@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Container, Row, Accordion, Button, Modal, Col } from 'react-bootstrap'
 import {
   ALL_SPELLS,
@@ -160,7 +160,7 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
   }
 
   const sniperChosen = isSpellChosen(modifiedSpellList, sniperArchetype?.id || 0)
-  const artificerChosen = isSpellChosen(modifiedSpellList, artificerArchetype?.id || 0)
+  const artificerIsChosen = isSpellChosen(modifiedSpellList, artificerArchetype?.id || 0)
 
   const updateRestrictedSpells = (spellList: SpellList): SpellList => {
     // Archetypes
@@ -174,6 +174,7 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
     const apexChosen = apexArchetype ? isSpellChosen(spellList, apexArchetype.id) : false
     const juggernautChosen = juggernautArchetype ? isSpellChosen(spellList, juggernautArchetype.id) : false
     const mysticChosen = mysticArchetype ? isSpellChosen(spellList, mysticArchetype.id) : false
+    const artificerChosen = artificerArchetype ? isSpellChosen(spellList, artificerArchetype.id) : false
 
     // Possible restricted spells
     const stealLifeEssenceId = ALL_SPELLS.find(spell => spell.name === 'Steal Life Essence')?.id || 0
@@ -194,6 +195,8 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
     const resurrectId = ALL_SPELLS.find(spell => spell.name === 'Resurrect')?.id || 0
     const destructionArrowId = ALL_SPELLS.find(spell => spell.name === 'Destruction Arrow')?.id || 0
     const poisonArrowId = ALL_SPELLS.find(spell => spell.name === 'Poison Arrow')?.id || 0
+    const supressionArrowId = ALL_SPELLS.find(spell => spell.name === 'Suppression Arrow')?.id || 0
+    const phaseArrowId = ALL_SPELLS.find(spell => spell.name === 'Phase Arrow')?.id || 0
 
     // Only one restriction at a time, based on which archetype is chosen
     let restrictedSpellIds: number[] = []
@@ -218,7 +221,7 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
     } else if (mysticChosen) {
       restrictedSpellIds = [resurrectId]
     } else if (artificerChosen) {
-      restrictedSpellIds = [pinningArrowId, destructionArrowId, poisonArrowId]
+      restrictedSpellIds = [pinningArrowId, destructionArrowId, poisonArrowId, supressionArrowId, phaseArrowId]
     }
 
     // Deep copy and update restricted property for all spell arrays
@@ -734,7 +737,7 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
       <Container>
         <AlertTip message={'Long press on any ability below to view its effects and limitations.'} />
 
-      {!sniperChosen && !artificerChosen && Array.isArray(modifiedSpellList.lookThePartSpells) &&
+      {!sniperChosen && !artificerIsChosen && Array.isArray(modifiedSpellList.lookThePartSpells) &&
         modifiedSpellList.lookThePartSpells.length > 1 &&
         modifiedSpellList.lookThePart && (
           <>
@@ -1183,54 +1186,58 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
                           </Col>
                         </Row>
                       )
-                      rows.push(
-                        ...spellsByLevel.pickTwoOfThree.map((spell: MartialSpell, pickTwoOfThreeIdx: number) => {
-                          const spellName = getSpellName(spell.id)
-                          return (
-                            <Row key={`pickTwoOfThree-${spell.id}`} className="d-flex justify-content-between ms-1">
-                              <Button
+                      if (Array.isArray(spellsByLevel.pickTwoOfThree)) {
+                        rows.push(
+                          ...spellsByLevel.pickTwoOfThree.map((spell: MartialSpell, pickTwoOfThreeIdx: number) => {
+                            const spellName = getSpellName(spell.id)
+                            return (
+                              <Row key={`pickTwoOfThree-${spell.id}`} className="d-flex justify-content-between ms-1">
+                                <Button
                                 style={
-                                  spell.chosen
-                                    ? { backgroundColor: '#b8e0b8', color: '#222', border: '2px solid #198754', padding: 7 }
-                                    : { padding: 7 }
-                                }
-                                variant={spell.chosen ? "primary" : "outline-secondary"}
-                                className="text-start border-bottom"
-                                onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
-                                  setSelectedSpellFrequency({
-                                    amount: spell.frequency?.amount,
-                                    per: spell.frequency?.per,
-                                    charge: spell.frequency?.charge,
-                                  })
-                                  handleLongPressStart(spell.id, e)
-                                }}
-                                onMouseMove={handleLongPressMove}
-                                onMouseUp={handleLongPressEnd}
-                                onMouseLeave={handleLongPressEnd}
-                                onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => {
-                                  setSelectedSpellFrequency({
-                                    amount: spell.frequency?.amount,
-                                    per: spell.frequency?.per,
-                                    charge: spell.frequency?.charge,
-                                  })
-                                  handleLongPressStart(spell.id, e)
-                                }}
-                                onTouchMove={handleLongPressMove}
-                                onTouchEnd={handleLongPressEnd}
-                                onClick={() => {
-                                  setModifiedSpellList(prevList =>
-                                    setPickTwoOfThreeChosen(prevList, index, spellsByLevelIdx, pickTwoOfThreeIdx)
-                                  )
-                                }}
-                              >
-                                <span style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                                  <span>{spellName}</span>
-                                </span>
-                              </Button>
-                            </Row>
-                          )
-                        })
-                      )
+                                  spell.restricted
+                                    ? { backgroundColor: '#f1b0b7', color: '#fff', border: 'none', padding: 7 }
+                                    : spell.chosen
+                                      ? { backgroundColor: '#b8e0b8', color: '#222', border: '2px solid #198754', padding: 7 }
+                                      : { padding: 7 }
+                                  }
+                                  variant={spell.chosen ? "primary" : "outline-secondary"}
+                                  className="text-start border-bottom"
+                                  onMouseDown={(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
+                                    setSelectedSpellFrequency({
+                                      amount: spell.frequency?.amount,
+                                      per: spell.frequency?.per,
+                                      charge: spell.frequency?.charge,
+                                    })
+                                    handleLongPressStart(spell.id, e)
+                                  }}
+                                  onMouseMove={handleLongPressMove}
+                                  onMouseUp={handleLongPressEnd}
+                                  onMouseLeave={handleLongPressEnd}
+                                  onTouchStart={(e: React.TouchEvent<HTMLButtonElement>) => {
+                                    setSelectedSpellFrequency({
+                                      amount: spell.frequency?.amount,
+                                      per: spell.frequency?.per,
+                                      charge: spell.frequency?.charge,
+                                    })
+                                    handleLongPressStart(spell.id, e)
+                                  }}
+                                  onTouchMove={handleLongPressMove}
+                                  onTouchEnd={handleLongPressEnd}
+                                  onClick={() => {
+                                    setModifiedSpellList(prevList =>
+                                      setPickTwoOfThreeChosen(prevList, index, spellsByLevelIdx, pickTwoOfThreeIdx)
+                                    )
+                                  }}
+                                >
+                                  <span style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                                    <span>{spellName}</span>
+                                  </span>
+                                </Button>
+                              </Row>
+                            )
+                          })
+                        )
+                      }
                     }
 
                     return <React.Fragment key={index}>{rows}</React.Fragment>
