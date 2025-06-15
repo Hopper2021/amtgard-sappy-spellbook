@@ -343,7 +343,7 @@ function SpellListDetails() {
     } else if (key === 'range') {
       return spell?.range
     } else if (key === 'frequency') {
-      return spell?.frequency?.amount
+      return `${spell.frequency?.amount || 1}/${spell.frequency?.per || ''}${spell.frequency?.charge ? ` ${spell.frequency.charge}` : ''  }`
     }
   }
 
@@ -830,7 +830,7 @@ function SpellListDetails() {
         <Row key={sub.id} className="ms-1">
           <span style={{ color: 'green' }}>
             <span style={{ textDecoration: 'underline' }}>{fetchSpellDetails('name', sub.id) || ''}</span>
-            {' '}{spellFrequency.frequency}
+            {' '}{spellFrequency}
             {' '}{showRange && spellRange ? `(${spellRange})` : ''}
             {' '}{spellTrait ? '( T )' : ''}
             {' '}{spellMagical ? '(m)' : ''}
