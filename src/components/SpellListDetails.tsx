@@ -328,7 +328,7 @@ function SpellListDetails() {
 
   const fetchSubclassSpellDetails = (key: string, spellId: number, chosenArchetype: string) => {
     const subclassSpells = subclassSpellsMap[chosenArchetype || ''] || []
-    const spell = subclassSpells.find(s => s.id === spellId)
+    const spell = subclassSpells?.find(s => s.id === spellId)
 
     if (key === 'magical') {
       return spell?.magical
@@ -342,6 +342,8 @@ function SpellListDetails() {
       return spell?.swift
     } else if (key === 'range') {
       return spell?.range
+    } else if (key === 'frequency') {
+      return spell?.frequency?.amount
     }
   }
 
@@ -622,7 +624,7 @@ function SpellListDetails() {
       allSpell &&
       allSpell.name === 'Pinning Arrow'
     ) {
-      archetypeMultiplier *= 3
+      archetypeMultiplier *= 1
     }
 
     if (
@@ -816,7 +818,7 @@ function SpellListDetails() {
       const spellSchool = fetchSpellDetails('school', sub.id)
       const spellIncantation = fetchSpellDetails('incantation', sub.id)
       const spellMaterials = fetchSpellDetails('materials', sub.id)
-      const spellFrequency = fetchSpellFrequency(sub.id, subclassSpellsMap[chosenName])
+      const spellFrequency = fetchSubclassSpellDetails('frequency', sub.id, chosenName)
       const spellMagical = fetchSubclassSpellDetails('magical', sub.id, chosenName)
       const spellAmbulant = fetchSubclassSpellDetails('ambulant', sub.id, chosenName)
       const spellExtraordinary = fetchSubclassSpellDetails('extraordinary', sub.id, chosenName)
@@ -1136,17 +1138,17 @@ function SpellListDetails() {
                 const spellAmbulant = fetchMartialSpellDetails('ambulant', spell.id)
                 const spellSwift = fetchMartialSpellDetails('swift', spell.id)
 
+                if (spell.restricted && isArtificer) {
+                  return (
+                    null
+                  )
+                }
+
                 if (spell.restricted) {
                   return (
                     <Row key={index} className="ms-3">
                       {' - '}
                     </Row>
-                  )
-                }
-
-                if (isPickTwoOfThree && isArtificer) {
-                  return (
-                    null
                   )
                 }
 
@@ -1255,9 +1257,9 @@ function SpellListDetails() {
             <div>
               <span style={{ textDecoration: 'underline', color: 'green', fontWeight: 600 }}>
                 Spell chosen: {fetchSpellDetails('name', chosenSpell.id) || 'Unknown Spell'}
-              </span>{' '}
+              </span>
               <span>
-                {fetchSpellFrequency(chosenSpell.id).frequency}
+                {' '}{fetchSpellFrequency(chosenSpell.id).frequency}
                 {' '}{fetchMartialSpellDetails('extraordinary', chosenSpell.id) ? '(ex)' : ''}
                 {' '}{fetchMartialSpellDetails('magical', chosenSpell.id) ? '(m)' : ''}
                 {' '}{fetchMartialSpellDetails('trait', chosenSpell.id) ? '( T )' : ''}
