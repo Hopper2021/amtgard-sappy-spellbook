@@ -20,7 +20,7 @@ const PatchNotes = () => {
             />
             <Container className="d-flex justify-content-center mb-2">
               <a
-                href="/downloads/swiftgard-main-5f2319-release.apk" 
+                href="/downloads/swiftgard-main-fdd535-release.apk" 
                 className="btn btn-primary mb-1"
                 download
                 style={{ minWidth: 200, textAlign: 'center' }}
