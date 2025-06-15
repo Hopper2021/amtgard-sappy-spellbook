@@ -1315,9 +1315,10 @@ function SpellListDetails() {
                       textDecoration: onlyOneLookThePartOption ? 'underline' : 'none',
                       color: 'inherit',
                       marginLeft: onlyOneLookThePartOption ? '0' : '15px'}}>
-                      {fetchSpellDetails('name', spell.id) || 'Unknown Spell'}</span>
+                      {fetchSpellDetails('name', spell.id) || 'Unknown Spell'}
+                    </span>
                     <span>
-                      {' '}{fetchSpellFrequency(spell.id).frequency}
+                      {' '}{fetchSpellFrequency(spell.id)?.frequency}
                       {' '}{fetchMartialSpellDetails('extraordinary', spell.id) ? '(ex)' : ''}
                       {' '}{fetchMartialSpellDetails('magical', spell.id) ? '(m)' : ''}
                       {' '}{fetchMartialSpellDetails('trait', spell.id) ? '( T )' : ''}
@@ -1330,6 +1331,25 @@ function SpellListDetails() {
                     {fetchSpellDetails('school', spell.id) && showTypeAndSchool && (
                       <span>( {fetchSpellDetails('school', spell.id)} )</span>
                     )}
+                    {showIncantation &&
+                      fetchSpellDetails('incantation', spell.id).split('\n').map((line, idx) => {
+                        const isIndented = line.startsWith('>>')
+                        const cleanLine = isIndented ? line.replace(/^>>/, '') : line
+                        return (
+                          <span
+                            key={idx}
+                            style={{
+                              display: 'block',
+                              lineHeight: '1.2',
+                              marginLeft: isIndented ? 15 : 0,
+                              marginBottom: 1,
+                              fontStyle: 'italic',
+                            }}
+                          >
+                            {cleanLine}
+                          </span>
+                        )
+                      })}
                     </span>
                   </div>
                 </Row>
