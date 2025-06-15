@@ -1,4 +1,4 @@
-export const IS_APK = false
+export const IS_APK = true
 
 export const CURRENT_VERSION = 'V8.6.4'
 export const CURRENT_VERSION_NAME = 'V8.6.4 "Sappy Four"'
