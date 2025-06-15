@@ -2,14 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { Container, Row, Accordion, Button, Modal, Col } from 'react-bootstrap'
 import {
   ALL_SPELLS,
-	ANTIPALADIN_LIST,
-	ARCHER_LIST,
-	ASSASSIN_LIST,
-	BARBARIAN_LIST,
-	MONK_LIST,
-	PALADIN_LIST,
-	SCOUT_LIST,
-	WARRIOR_LIST,
   INFERNAL_SPELLS,
   CORRUPTOR_SPELLS,
   SNIPER_SPELLS,
@@ -62,14 +54,6 @@ interface MartialSpell {
   chosen: boolean | null
   pickOne?: MartialSpell[]
   rolledDown?: { [level: number]: number }
-}
-
-interface Spell {
-  id: number
-  purchased: number
-  experienced?: number
-  rolledDown?: { [level: number]: number }
-  restricted?: boolean
 }
 
 interface SpellsByLevel {
@@ -193,7 +177,7 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
 
     // Possible restricted spells
     const stealLifeEssenceId = ALL_SPELLS.find(spell => spell.name === 'Steal Life Essence')?.id || 0
-    const flameBladeId = ALL_SPELLS.find(spell => spell.name === 'Flame Blade')?.id || 0
+    const flameBladeId = ALL_SPELLS.find(spell => spell.id === 189)?.id || ALL_SPELLS.find(spell => spell.id === 65)?.id || 0
     const rageId = ALL_SPELLS.find(spell => spell.name === 'Rage')?.id || 0
     const bloodAndThunderId = ALL_SPELLS.find(spell => spell.name === 'Blood and Thunder')?.id || 0
     const protectionFromMagicId = ALL_SPELLS.find(spell => spell.id === 195)?.id || ALL_SPELLS.find(spell => spell.id === 118)?.id || 0
@@ -281,207 +265,12 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
     return newList
   }
 
-	const spellsByClass = 
-  (spellListToEdit?.class === 'Anti-Paladin' && ANTIPALADIN_LIST) ||
-		(spellListToEdit?.class === 'Archer' && ARCHER_LIST) ||
-		(spellListToEdit?.class === 'Assassin' && ASSASSIN_LIST) ||
-		(spellListToEdit?.class === 'Barbarian' && BARBARIAN_LIST) ||
-		(spellListToEdit?.class === 'Monk' && MONK_LIST) ||
-		(spellListToEdit?.class === 'Paladin' && PALADIN_LIST) ||
-		(spellListToEdit?.class === 'Scout' && SCOUT_LIST) ||
-		(spellListToEdit?.class === 'Warrior' && WARRIOR_LIST)
-
-  const autoRemoveAndRefundSpell = (spellId: number, spellList: SpellList) => {
-    const spellLevel = findSpellLevel(spellId)
-    if (!spellLevel) return spellList
-
-    const spellData = getSpellData(spellLevel, spellId)
-    let spellCost = spellData?.cost ?? 0
-
-    const currentLevelObj = spellList.levels.find(level => level.level === spellLevel.level)
-    if (!currentLevelObj) return spellList
-
-    const spellExists = Array.isArray(currentLevelObj.spells)
-      ? currentLevelObj.spells.flatMap((sbl: SpellsByLevel) =>
-          [
-            ...(sbl.base ?? []),
-            ...(sbl.optionalPickOne ?? []),
-            ...(sbl.pickOneOfTwo ?? []),
-            ...(sbl.pickTwoOfThree ?? []),
-          ]
-        ).find(spell => spell.id === spellId)
-      : undefined
-    if (!spellExists) return spellList
-
-    let rolledDownMap = getRolledDownMap(spellExists)
-    const maxLevel = spellList.maxLevel
-    const lookThePart = spellList.lookThePart
-    const eligibleLevels = getEligibleLevels(spellList, spellLevel)
-    const refundedLevels = refundPointsToLevels(
-      eligibleLevels,
-      { ...rolledDownMap },
-      spellLevel,
-      spellCost,
-      lookThePart,
-      maxLevel
-    )
-    const newLevels = spellList.levels.map(level => {
-      const refunded = refundedLevels.find(l => l.level === level.level)
-      return refunded ? refunded : level
-    })
-    const newSpellLevels = updateSpellPurchasesAfterRemoval(
-      newLevels,
-      spellLevel,
-      spellExists,
-      spellId,
-      { ...(spellExists?.rolledDown || {}) }
-    )
-    return {
-      ...spellList,
-      spells: newSpellLevels,
-    }
-  }
-
-  useEffect(() => {
-    const infernalPresent = isSpellChosen(modifiedSpellList, 85)
-    const corruptorPresent = isSpellChosen(modifiedSpellList, 36)
-
-    let cleanedSpellList = modifiedSpellList
-    let shouldUpdate = false
-
-    if (infernalPresent) {
-      const restrictedIds = ALL_SPELLS
-        .filter(s => s.name !== null && ['Steal Life Essence'].includes(s.name))
-        .map(s => s.id)
-
-      restrictedIds.forEach(spellId => {
-        cleanedSpellList = autoRemoveAndRefundSpell(spellId, cleanedSpellList)
-      })
-      shouldUpdate = true
-    }
-
-    if (corruptorPresent) {
-      const restrictedIds = ALL_SPELLS
-        .filter(s => s.name !== null && ['Flame Blade'].includes(s.name))
-        .map(s => s.id)
-
-      restrictedIds.forEach(spellId => {
-        cleanedSpellList = autoRemoveAndRefundSpell(spellId, cleanedSpellList)
-      })
-      shouldUpdate = true
-    }
-   
-
-    if (
-      shouldUpdate &&
-      JSON.stringify(cleanedSpellList) !== JSON.stringify(modifiedSpellList)
-    ) {
-      setModifiedSpellList(cleanedSpellList)
-      const updatedSpellLists = allSpellLists.map((list: SpellList) =>
-        list.id === cleanedSpellList.id ? cleanedSpellList : list
-      )
-      localStorage.setItem('allSpellLists', JSON.stringify(updatedSpellLists))
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modifiedSpellList, allSpellLists])
-
   const getSpellName = (spellId: number) => {
     const spell = ALL_SPELLS.find(spell => spell.id === spellId)
     if (spell) {
       return spell.name
     }
     return null
-  }
-
-  const findSpellLevel = (spellId: number) => {
-    if (!spellsByClass || !Array.isArray(spellsByClass.levels)) return undefined
-    return spellsByClass.levels.find(level =>
-      Array.isArray(level.spells) &&
-      level.spells.some(spellsByLevel => {
-        const allArrays = [
-          ...(spellsByLevel.base ?? []),
-          ...(spellsByLevel.optionalPickOne ?? []),
-          ...(spellsByLevel.pickOneOfTwo ?? []),
-          ...(spellsByLevel.pickTwoOfThree ?? []),
-        ]
-        return allArrays.some(spell => spell.id === spellId)
-      })
-    )
-  }
-
-  const getSpellData = (spellLevel, spellId: number) => {
-    return spellLevel?.spells.find(spell => spell.id === spellId)
-  }
-
-  const getRolledDownMap = (spellExists) => {
-    let rolledDownMap: { [level: number]: number } = {}
-    if (spellExists && spellExists.rolledDown) {
-      rolledDownMap = { ...spellExists.rolledDown }
-    }
-    return rolledDownMap
-  }
-
-  const getEligibleLevels = (modifiedSpellList, spellByClassLevel) => {
-    return [...modifiedSpellList.levels]
-      .filter(level => level.level >= spellByClassLevel.level)
-      .sort((a, b) => b.level - a.level)
-  }
-
-  const refundPointsToLevels = (eligibleLevels, rolledDownMap, spellByClassLevel, spellCost, lookThePart, maxLevel) => {
-    let remainingRefund = spellCost
-    return eligibleLevels.map(level => {
-      let maxPoints = 5
-      if (lookThePart && level.level === maxLevel) {
-        maxPoints = 6
-      }
-      const pointsCanRefund = Math.max(0, maxPoints - level.points)
-
-      let refund = 0
-
-      if (rolledDownMap[level.level]) {
-        refund = Math.min(pointsCanRefund, remainingRefund, rolledDownMap[level.level])
-        rolledDownMap[level.level] -= refund
-      } else if (level.level === spellByClassLevel.level) {
-        refund = Math.min(pointsCanRefund, remainingRefund)
-      }
-
-      if (refund > 0) {
-        remainingRefund -= refund
-        return { ...level, points: level.points + refund }
-      }
-      return level
-    })
-  }
-
-  const updateSpellPurchasesAfterRemoval = (newLevels, spellByClassLevel, spellExists, spellId, rolledDownMap) => {
-    let safeRolledDownMap = { ...(rolledDownMap || {}) }
-    return newLevels.map(level => {
-      if (level.level === spellByClassLevel.level) {
-        if (spellExists) {
-          if (spellExists.purchased <= 1) {
-            return {
-              ...level,
-              spells: level.spells.filter((spell: Spell) => spell.id !== spellId),
-            }
-          } else {
-            let newRolledDown = { ...safeRolledDownMap }
-            Object.keys(newRolledDown).forEach(key => {
-              if (newRolledDown[key] <= 0) delete newRolledDown[key]
-            })
-            return {
-              ...level,
-              spells: level.spells.map((spell: Spell) =>
-                spell.id === spellId
-                  ? { ...spell, purchased: spell.purchased - 1, rolledDown: newRolledDown, experienced: typeof spell.experienced === 'number' ? spell.experienced : 0 }
-                  : { ...spell, experienced: typeof spell.experienced === 'number' ? spell.experienced : 0 }
-              ),
-            }
-          }
-        }
-      }
-      return level
-    })
   }
 
   const updateLocalStorage = (updatedList: SpellList) => {

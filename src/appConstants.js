@@ -2432,7 +2432,7 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
   },
   {
     id: 200,
-    name: 'Phoenix Tears',
+    name: 'Phoenix Tears', // warrior p.tears incant
     type: 'Enchantment',
     school: 'Spirit',
     range: 'Self',
