@@ -96,7 +96,7 @@ function CreateSpellList() {
 		version: CURRENT_VERSION,
 		name: 'My SpellBook',
 		class: 'Bard',
-		maxLevel: 1,
+		maxLevel: 6,
 		lookThePart: false,
 		lookThePartSpells: [],
 		levels: [{ level: 1, points: 5, spells: [] }],
