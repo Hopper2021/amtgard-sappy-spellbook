@@ -1340,7 +1340,7 @@ const removeSpellFromList = (spellId: number) => {
         </Toast>
       </ToastContainer>
 
-      <Container>
+      <Container className="pt-2">
         <AlertTip message={'Long press on any spell below to view its effects and limitations.'} />
         <CardHeader className="d-flex justify-content-between align-items-center mt-2">
           <h6>{addOrRemoveSpells} {modifiedSpellList.class} Spells</h6>

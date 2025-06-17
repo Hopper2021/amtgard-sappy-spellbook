@@ -741,7 +741,7 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
         </Toast>
       </ToastContainer>
 
-      <Container>
+      <Container  className="pt-2">
         <AlertTip message={'Long press on any spell or ability below to view its effects and limitations.'} />
 
       {!sniperChosen && !artificerIsChosen && Array.isArray(modifiedSpellList.lookThePartSpells) &&
