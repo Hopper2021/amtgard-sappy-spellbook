@@ -3523,6 +3523,15 @@ export const JUGGERNAUT_SPELLS = [
 
 export const PATCH_NOTES = [
   {
+    version: "0.2.6",
+    title: `Add APK v6.6, more martial class v8.6.4 fixes`,
+    details: [
+      `Add APK v6.6 file to downloads page.`,
+      "Add base spell frequency and current charge rate when selecting a spell to experience in the pop up modal",
+      "Normalize margin for edit spell pages",
+    ]
+  },
+  {
     version: "0.2.5",
     title: `Add APK v6.5, more martial class v8.6.4 fixes`,
     details: [
