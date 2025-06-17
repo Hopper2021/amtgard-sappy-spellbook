@@ -36,6 +36,7 @@ interface Spell {
   purchased: number
   experienced?: number
   rolledDown?: { [level: number]: number }
+  frequency?: FrequencyByClass
 }
 
 interface SpellLevel {
@@ -337,8 +338,17 @@ function EditSpells() {
     (spellListToEdit?.class === 'Wizard' && getAdjustedWizardSpells(WIZARD_SPELLS.levels, spellListToEdit)) ||
     (spellListToEdit?.class === 'Druid' && getAdjustedDruidSpells(DRUID_SPELLS.levels, spellListToEdit))
 
+  const isSpellTaken = (spellList: SpellList, spellId: number): boolean =>
+    spellList.levels.some(level =>
+      level.spells.some(spell => spell.id === spellId)
+  )
+
   const buildFrequencyString = (masterSpell: any) => {
+    const isNecromancer = isSpellTaken(modifiedSpellList, 104)
+
+    const allSpell = ALL_SPELLS.find(s => Number(s.id) === Number(masterSpell?.id))
     let spell: (SpellsByClass | Spell) | null = null;
+    
     if (Array.isArray(spellsByClass)) {
       for (const level of spellsByClass as LevelsByClass[]) {
         const match = level.spells.find(s => s.id === masterSpell?.id);
@@ -349,21 +359,35 @@ function EditSpells() {
       }
     }
 
-    const freq: FrequencyByClass | null = (spell && 'frequency' in (spell as any)) ? (spell as any).frequency : null
-    const amount = freq?.amount
-    const per = freq?.per
-    const charge = freq?.charge
+    let frequency = ''
+    const freq = spell?.frequency
+    let amount = freq?.amount || 1
+    let per = freq?.per
+    let charge = freq?.charge
 
-    if (amount != null && per != null) {
-      return `${amount}/${per}${charge ? ` ${charge}` : ''}`
+    if (freq && typeof freq === 'object') {
+      if (amount != null && per) {
+        frequency = `${amount}/${per}`
+      } else if (per) {
+        frequency = per
+      }
+      if (charge) {
+        frequency += ` ${charge}`
+      }
+    } else if (typeof freq === 'string') {
+      frequency = freq
     }
-    if ((amount == null && !per) && charge === 'Unlimited') {
-      return charge
+
+    if (
+      isNecromancer &&
+      allSpell &&
+      allSpell.school &&
+      allSpell.school.trim().toLowerCase() === 'death'
+    ) {
+      frequency += (frequency ? ' ' : '') + 'Charge x3'
     }
-    if ((amount == null && !per) && charge) {
-      return charge
-    }
-    return null
+
+    return frequency
   }
 
   const spellFrequency = buildFrequencyString(selectedSpell)
@@ -379,7 +403,7 @@ function EditSpells() {
           const spellDetails = ALL_SPELLS.find(s => s.id === spellObj.id) as VerbalSpell | undefined
           const spellFrequency = buildFrequencyString(spellObj)
           console.log('spellFrequency', spellFrequency)
-          if (spellDetails?.type === 'Verbal' && spellFrequency !== 'Unlimited') {
+          if (spellDetails?.type === 'Verbal' && !spellFrequency.includes('Unlimited')) {
             verbals.push(spellDetails)
           }
         })
@@ -1180,7 +1204,7 @@ const removeSpellFromList = (spellId: number) => {
                   onClick={() => addSpellToList(56, spell.id)}
                 >
                   {spell.name}
-                  {/* {' '}( {buildFrequencyString(spell)} ) */}
+                  {' '}( {buildFrequencyString(spell)} )
                 </Button>
               </div>
             ))}
