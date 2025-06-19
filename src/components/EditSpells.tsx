@@ -402,7 +402,6 @@ function EditSpells() {
           if (spellObj.experienced && spellObj.experienced !== 0) return
           const spellDetails = ALL_SPELLS.find(s => s.id === spellObj.id) as VerbalSpell | undefined
           const spellFrequency = buildFrequencyString(spellObj)
-          console.log('spellFrequency', spellFrequency)
           if (spellDetails?.type === 'Verbal') {
             if (!spellFrequency.includes('Unlimited') && !spellFrequency.includes('Charge')) {
               verbals.push(spellDetails)
@@ -460,11 +459,15 @@ function EditSpells() {
   useEffect(() => {
     const warderArchetype = ALL_SPELLS.find(spell => spell.name === 'Warder')
     const necromancerArchetype = ALL_SPELLS.find(spell => spell.name === 'Necromancer')
+    const summonerArchetype = ALL_SPELLS.find(spell => spell.name === 'Summoner')
     const warderPresent = modifiedSpellList.levels.some(level =>
       level.spells.some(spell => spell.id === warderArchetype?.id)
     )
     const necromancerPresent = modifiedSpellList.levels.some(level =>
       level.spells.some(spell => spell.id === necromancerArchetype?.id)
+    )
+    const summonerPresent = modifiedSpellList.levels.some(level =>
+      level.spells.some(spell => spell.id === summonerArchetype?.id)
     )
 
     let cleanedSpellList = modifiedSpellList
@@ -484,6 +487,32 @@ function EditSpells() {
     if (necromancerPresent) {
       const restrictedIds = ALL_SPELLS
         .filter(s => s.school === 'Protection')
+        .map(s => s.id)
+
+      restrictedIds.forEach(spellId => {
+        cleanedSpellList = autoRemoveAndRefundSpell(spellId, cleanedSpellList)
+      })
+      shouldUpdate = true
+    }
+
+    if (summonerPresent) {
+      const restrictedIds = ALL_SPELLS
+        .filter(s => s.type !== null && s.type === 'Verbal' && (s.range === "20'" || s.range === "50'" || s.range === 'Other'))
+        .map(s => s.id)
+
+      restrictedIds.forEach(spellId => {
+        cleanedSpellList = autoRemoveAndRefundSpell(spellId, cleanedSpellList)
+      })
+      shouldUpdate = true
+    }
+
+    if (summonerPresent) {
+      const restrictedIds = ALL_SPELLS
+        .filter(
+          s => s.name !== null &&
+          s.name.includes('Equipment') &&
+          modifiedSpellList.levels.some(level => level.level > 2 && level.spells.some(spell => spell.id === s.id))
+        )
         .map(s => s.id)
 
       restrictedIds.forEach(spellId => {
