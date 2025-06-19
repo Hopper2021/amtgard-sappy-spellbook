@@ -99,7 +99,14 @@ function CreateSpellList() {
 		maxLevel: 6,
 		lookThePart: false,
 		lookThePartSpells: [],
-		levels: [{ level: 1, points: 5, spells: [] }],
+		levels: [
+			{ level: 1, points: 5, spells: [] },
+			{ level: 2, points: 5, spells: [] },
+			{ level: 3, points: 5, spells: [] },
+			{ level: 4, points: 5, spells: [] },
+			{ level: 5, points: 5, spells: [] },
+			{ level: 6, points: 5, spells: [] },
+		],
 	})
 
 	return (
