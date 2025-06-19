@@ -3527,7 +3527,7 @@ export const PATCH_NOTES = [
     title: `Add APK v6.6, more martial class v8.6.4 fixes`,
     details: [
       `Add APK v6.6 file to downloads page.`,
-      "Feature request: Add base spell frequency and current charge rate when selecting a spell to experience in the pop up modal",
+      "Feature request: Add base spell frequency and current charge rate when selecting a spell to experience AND only show spells with no current charge. This also takes subclasses into account.",
       "Feature request: Default spell list creation to level 6",
     ]
   },

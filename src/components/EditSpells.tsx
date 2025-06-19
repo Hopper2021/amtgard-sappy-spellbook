@@ -403,8 +403,10 @@ function EditSpells() {
           const spellDetails = ALL_SPELLS.find(s => s.id === spellObj.id) as VerbalSpell | undefined
           const spellFrequency = buildFrequencyString(spellObj)
           console.log('spellFrequency', spellFrequency)
-          if (spellDetails?.type === 'Verbal' && !spellFrequency.includes('Unlimited')) {
-            verbals.push(spellDetails)
+          if (spellDetails?.type === 'Verbal') {
+            if (!spellFrequency.includes('Unlimited') && !spellFrequency.includes('Charge')) {
+              verbals.push(spellDetails)
+            }
           }
         })
       })
@@ -1191,6 +1193,7 @@ const removeSpellFromList = (spellId: number) => {
         <Modal.Header className="pb-2 pt-2" closeButton>
           <Modal.Title>
             <Row className="ps-3">Apply Experience to:</Row>
+            <Row className="text-secondary fs-6 ps-3 pt-0">( Showing spells with no charge. )</Row>
           </Modal.Title>
         </Modal.Header>
         {!selectedSpell?.effect && !selectedSpell?.limitation && !selectedSpell?.note && (
