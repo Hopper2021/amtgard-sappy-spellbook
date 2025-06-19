@@ -3530,6 +3530,7 @@ export const PATCH_NOTES = [
       "Feature request: Add base spell frequency and current charge rate when selecting a spell to experience AND only show spells with no current charge. This also takes subclasses into account.",
       "Feature request: Default spell list creation to level 6",
       "Fix: When adding Summoner, restricted spells and equipment will be auto removed.",
+      "Fix: When adding Legend, restricted spell ( Swift ) is removed if it had been taken.",
     ]
   },
   {

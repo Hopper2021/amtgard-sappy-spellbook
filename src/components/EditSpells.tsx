@@ -422,10 +422,13 @@ function EditSpells() {
     let spellCost = spellData?.cost ?? 0
 
     const currentLevelObj = spellList.levels.find(level => level.level === spellLevel.level)
+    console.log('currentLevelObj', currentLevelObj)
     if (!currentLevelObj) return spellList
 
     const spellExists = currentLevelObj.spells.find((spell: Spell) => spell.id === spellId)
     if (!spellExists) return spellList
+    console.log('spellExists', spellExists)
+
 
     let rolledDownMap = getRolledDownMap(spellExists)
     const maxLevel = spellList.maxLevel
@@ -456,23 +459,27 @@ function EditSpells() {
     }
   }
 
+  const checkIfArchetypeIsPresent = (archetypeId: number) => {
+    const archetypePresent = modifiedSpellList.levels.some(level =>
+      level.spells.some(spell => spell.id === archetypeId)
+    )
+    return archetypePresent
+  }
+
   useEffect(() => {
     const warderArchetype = ALL_SPELLS.find(spell => spell.name === 'Warder')
     const necromancerArchetype = ALL_SPELLS.find(spell => spell.name === 'Necromancer')
     const summonerArchetype = ALL_SPELLS.find(spell => spell.name === 'Summoner')
-    const warderPresent = modifiedSpellList.levels.some(level =>
-      level.spells.some(spell => spell.id === warderArchetype?.id)
-    )
-    const necromancerPresent = modifiedSpellList.levels.some(level =>
-      level.spells.some(spell => spell.id === necromancerArchetype?.id)
-    )
-    const summonerPresent = modifiedSpellList.levels.some(level =>
-      level.spells.some(spell => spell.id === summonerArchetype?.id)
-    )
+    const legendArchetype = ALL_SPELLS.find(spell => spell.name === 'Legend')
+    const warderPresent = checkIfArchetypeIsPresent(warderArchetype?.id || 0)
+    const necromancerPresent = checkIfArchetypeIsPresent(necromancerArchetype?.id || 0)
+    const summonerPresent = checkIfArchetypeIsPresent(summonerArchetype?.id || 0)
+    const legendPresent = checkIfArchetypeIsPresent(legendArchetype?.id || 0)
 
     let cleanedSpellList = modifiedSpellList
     let shouldUpdate = false
 
+    // Healer Archetype spell limitations
     if (warderPresent) {
       const restrictedIds = ALL_SPELLS
         .filter(s => s.school !== null && ['Death', 'Command', 'Subdual'].includes(s.school))
@@ -495,6 +502,7 @@ function EditSpells() {
       shouldUpdate = true
     }
 
+    // Druid Archetype spell limitations
     if (summonerPresent) {
       const restrictedIds = ALL_SPELLS
         .filter(s => s.type !== null && s.type === 'Verbal' && (s.range === "20'" || s.range === "50'" || s.range === 'Other'))
@@ -559,6 +567,20 @@ function EditSpells() {
       const restrictedIds = ALL_SPELLS
         .filter(spell => spell.type === 'Verbal' && (spell.range === "20'" || spell.range === "50'"))
         .map(spell => spell.id)
+      restrictedIds.forEach(spellId => {
+        cleanedSpellList = autoRemoveAndRefundSpell(spellId, cleanedSpellList)
+      })
+      shouldUpdate = true
+    }
+
+    // Bard Archetype spell limitations
+    if (legendPresent) {
+      const restrictedIds = ALL_SPELLS
+        .filter(s => s.name !== null && s.name === 'Swift')
+        .map(s => s.id)
+
+        console.log('Restricted Swift Spell IDs:', restrictedIds)
+
       restrictedIds.forEach(spellId => {
         cleanedSpellList = autoRemoveAndRefundSpell(spellId, cleanedSpellList)
       })
