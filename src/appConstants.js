@@ -3523,11 +3523,11 @@ export const JUGGERNAUT_SPELLS = [
 
 export const PATCH_NOTES = [
   {
-    version: "0.2.6",
-    title: `Add APK v6.6, Experienced modal change, Summoner feat and fix, Legend Fix, etc.`,
+    version: "0.3.0",
+    title: `Add APK v6.6, Experienced modal update, default spell list creation to level 6, and caster subclass feats and fixes.`,
     details: [
       `Add APK v6.6 file to downloads page.`,
-      "Feature request: Add base spell frequency and current charge rate when selecting a spell to experience AND only show spells with no current charge. This also takes subclasses into account.",
+      "Feature request: Experience modal: Add base spell frequency and current charge rate when selecting a spell to experience AND only show spells with no current charge. This also takes subclasses into account.",
       "Feature request: Default spell list creation to level 6",
       "Fix: When adding Summoner, restricted spells and equipment will be auto removed.",
       "Fix: When adding Legend, restricted spell ( Swift ) is removed if it had been taken.",

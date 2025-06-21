@@ -38,10 +38,10 @@ const PatchNotes = () => {
               <span className="fw-semibold">Version: {note.version}</span>
               <Container className="ps-2 pt-1 pe-0">
                 <Row className="ps-2 pb-1">{note.title}</Row>
-                <Accordion className="ps-2 pb-1">
+                <Accordion className="ps-1 pb-1">
                   <Accordion.Header className="border">Details</Accordion.Header>
                   <Accordion.Body>
-                    <ul>
+                    <ul className="ps-0">
                       {note.details.map((item, idx) => (
                         <li key={idx}>{item}</li>
                       ))}
