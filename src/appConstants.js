@@ -1,4 +1,4 @@
-export const IS_APK = false
+export const IS_APK = true
 
 export const CURRENT_VERSION = 'V8.6.4'
 export const CURRENT_VERSION_NAME = 'V8.6.4 "Sappy Four"'
@@ -3531,6 +3531,7 @@ export const PATCH_NOTES = [
       "Feature request: Default spell list creation to level 6",
       "Fix: When adding Summoner, restricted spells and equipment will be auto removed.",
       "Fix: When adding Legend, restricted spell ( Swift ) is removed if it had been taken.",
+      "Feature: Show special swift when purchasing Silver Tongue.",
     ]
   },
   {
