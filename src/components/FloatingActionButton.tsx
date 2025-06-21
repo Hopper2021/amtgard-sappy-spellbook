@@ -6,7 +6,7 @@ import { IS_APK } from '../appConstants'
 
 function FloatingActionButton() {
   const navigate = useNavigate()
-  const apkMargin = IS_APK ? 'mb-5 me-5' : 'mb-5 me-4'
+  const apkMargin = IS_APK ? 'mb-5 me-3' : 'm-3'
 
   return (
     <Button
