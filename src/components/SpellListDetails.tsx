@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import {
   ALL_SPELLS,
   BARD_SPELLS,
+  SILVER_TONGUE_SWIFT,
   HEALER_SPELLS,
   DRUID_SPELLS,
   WIZARD_SPELLS,
@@ -281,6 +282,7 @@ function SpellListDetails() {
     "Apex": APEX_SPELLS,
     "Marauder": MARAUDER_SPELLS,
     "Juggernaut": JUGGERNAUT_SPELLS,
+    "Silver Tongue": SILVER_TONGUE_SWIFT
   }
 
   const martialClasses = [
@@ -811,8 +813,15 @@ function SpellListDetails() {
     return { frequency, range, per }
   }
 
+  const renderCasterArchetypeSpells = (chosenName: string) => {
+    const spells = subclassSpellsMap[chosenName] || []
+
+    return spells.map((sub: any) => {
+      return renderSubclassSpells(sub, chosenName)
+    })
+  }
+
   const renderSubclassSpells = (sub: any, chosenName: string) => {
-    // If sub is a spell object, render as before
     if (sub && typeof sub === 'object' && 'id' in sub) {
       const spellType = fetchSpellDetails('type', sub.id)
       const spellSchool = fetchSpellDetails('school', sub.id)
@@ -836,10 +845,9 @@ function SpellListDetails() {
             {' '}{spellMagical ? '(m)' : ''}
             {' '}{spellAmbulant ? '(Ambulant)' : ''}
             {' '}{spellExtraordinary ? '(ex)' : ''}
-            {' '}{spellSwift ? '(Swift)' : ''}
+            {' '}{spellSwift ? '(Swift)' : ''}{' '}
             {showTypeAndSchool && (
               <>
-                {' '}
                 <span>( {spellType} )</span>
                 {spellSchool && <span>( {spellSchool} )</span>}
               </>
@@ -869,9 +877,9 @@ function SpellListDetails() {
               })}
           </div>
           <div className="m-0">
-            {showStrips && spellMaterials ? (
+            {showStrips && spellMaterials && (
               <span style={{ color: 'green' }}>( {spellMaterials} )</span>
-            ) : null}
+            )}
           </div>
         </Row>
       )
@@ -1153,43 +1161,42 @@ function SpellListDetails() {
                 }
 
                 return (
+                  <>
                   <Row key={index} className="m-0">
                     <div >
                       {!isMartialClass && <span>{spell.purchased}x </span>}
-                        <span
-                          style={{
-                            textDecoration: 'underline',
-                            color: isPickTwoOfThree && spell.chosen ? 'green' : undefined
-                          }}
-                          className={isPickOne || isOptional || isPickTwoOfThree ? 'ms-3' : ''}
-                        >
+                      <span
+                        style={{ textDecoration: 'underline', color: isPickTwoOfThree && spell.chosen ? 'green' : undefined}}
+                        className={isPickOne || isOptional || isPickTwoOfThree ? 'ms-3' : ''}
+                      >
                         {isPickTwoOfThree && spell.chosen && (
                           <span style={{ color: 'green', fontWeight: 600 }}>
                             Spell chosen:
                           </span>
                         )}
-                          {' '}{spellName}
-                        </span>{' '}
-                        <span style={{ color: isPickTwoOfThree && spell.chosen ? 'green' : undefined }}>
-                        {spellFrequency.frequency}
+                        {' '}{spellName}
+                      </span>
+                      <span style={{ color: isPickTwoOfThree && spell.chosen ? 'green' : undefined }}>
+                        {' '}{spellFrequency.frequency}
                         {' '}{spellExtraordinary ? '(ex)' : ''}
                         {' '}{spellSwift ? '(Swift)' : ''}
                         {' '}{spellMagical ? '(m)' : ''}
                         {' '}{spellTrait ? '( T )' : ''}
                         {' '}{spellAmbulant ? '(Ambulant)' : ''}
                         {' '}{showRange && spellFrequency.range ? ` (${spellFrequency.range})` : ''}
-                      </span>{' '}
-                      {showTypeAndSchool && <span style={{
-                          color: isPickTwoOfThree && spell.chosen ? 'green' : undefined
-                        }}>( {spellType} )</span>}
+                      </span>
+                      {showTypeAndSchool && 
+                        <span style={{ color: isPickTwoOfThree && spell.chosen ? 'green' : undefined}}>
+                          {' '}( {spellType} )
+                        </span>
+                      }
                       {spellSchool && showTypeAndSchool && (
-                        <span style={{
-                          color: isPickTwoOfThree && spell.chosen ? 'green' : undefined
-                        }}>( {spellSchool} )</span>
+                        <span style={{color: isPickTwoOfThree && spell.chosen ? 'green' : undefined}}>
+                          ( {spellSchool} )
+                        </span>
                       )}
                       <div style={{ marginLeft: '15px' }}>
-                        {showIncantation &&
-                          spellIncantation &&
+                        {showIncantation && spellIncantation &&
                           spellIncantation.split('\n').map((line, idx) => {
                             const isIndented = line.startsWith('>>')
                             const cleanLine = isIndented ? line.replace(/^>>/, '') : line
@@ -1216,6 +1223,12 @@ function SpellListDetails() {
                       </div>
                     </div>
                   </Row>
+                  {spellName === 'Silver Tongue' && (
+                    <Row className="ms-2">
+                      {renderCasterArchetypeSpells('Silver Tongue')}
+                    </Row>
+                  )}
+                  </>
                 )
               })}
             </>

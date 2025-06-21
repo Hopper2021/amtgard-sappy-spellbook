@@ -2529,6 +2529,8 @@ export const BARD_SPELLS = {
 ]
 }
 
+export const SILVER_TONGUE_SWIFT = [{ id: 159, cost: null, max: null, frequency: { amount: 1, per: 'Refresh', charge: 'Charge x3' }, restricted: false, magical: true }]
+
 export const HEALER_SPELLS = {
   levels: [
   {
@@ -2785,8 +2787,6 @@ export const DRUID_SPELLS = {
   },
 ]
 }
-
-export const AVATAR_OF_NATURE_SWIFT = { id: 24, cost: 1, max: null, frequency: { amount: 1, per: 'Refresh', charge: null }, restricted: false }
 
 export const ANTIPALADIN_EQUIPMENT = {
   lookThePart: 'Terror 1/Life',
