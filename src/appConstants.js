@@ -3524,7 +3524,7 @@ export const JUGGERNAUT_SPELLS = [
 export const PATCH_NOTES = [
   {
     version: "0.2.6",
-    title: `Add APK v6.6, more martial class v8.6.4 fixes`,
+    title: `Add APK v6.6, Experienced modal change, Summoner feat and fix, Legend Fix, etc.`,
     details: [
       `Add APK v6.6 file to downloads page.`,
       "Feature request: Add base spell frequency and current charge rate when selecting a spell to experience AND only show spells with no current charge. This also takes subclasses into account.",
