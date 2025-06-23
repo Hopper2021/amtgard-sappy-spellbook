@@ -4,7 +4,7 @@ import { Container, Row, Button, Modal } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { IoIosWarning } from "react-icons/io"
 import { LuCirclePlus } from "react-icons/lu"
-import { CURRENT_VERSION } from '../appConstants.js'
+import { CURRENT_AMTGARD_VERSION } from '../appConstants.js'
 import AlertTip from './AlertTip.tsx'
 
 function App() {
@@ -13,7 +13,7 @@ function App() {
   const [toggleDeleteModal, setDeleteToggleModal] = useState(false)
   const emptySpellList = {
     id: null,
-    version: CURRENT_VERSION,
+    version: CURRENT_AMTGARD_VERSION,
     name: '',
     class: '',
     maxLevel: null,
@@ -24,10 +24,13 @@ function App() {
   const [longPressTimeout, setLongPressTimeout] = useState<NodeJS.Timeout | null>(null)
 
   let enableTips = localStorage.getItem('enableTips')
+  let theme = localStorage.getItem('theme')
   if (enableTips === null) {
     localStorage.setItem('enableTips', 'true')
     enableTips = 'true'
   }
+
+  console.log('theme: ', theme)
 
   const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
 
@@ -108,38 +111,38 @@ function App() {
           </Modal.Footer>
       </Modal>
 
-        <Container className="px-0 pt-1">
-          <AlertTip message={'Long press on a spell book to modify its base data or delete it.'} />
-          <Container>
+      <Container className="px-0 pt-1">
+        <AlertTip message={'Long press on a spell book to modify its base data or delete it.'} />
+        <Container>
           <Row className="pb-2 fw-semibold">Spell Books</Row>
-            {allSpellLists.length === 0 ? (
-              <Row className="d-flex justify-content-center">
-                <h6 className="text-center">No Spell Books Found</h6>
-                <h6 className="text-center">Click the <LuCirclePlus size={20} /> on the bottom right to create one</h6>
-              </Row>)
-              : (allSpellLists.map((spellList) => (
-              <Row key={spellList.id} className="border-bottom mb-3">
-                <Button
-                  className="p-1 text-start w-100"
-                  variant="link"
-                  style={{ textDecoration: 'none', color: 'inherit' }}
-                  onMouseDown={() => handleLongPressStart(spellList)}
-                  onMouseUp={handleLongPressEnd}
-                  onMouseLeave={handleLongPressEnd}
-                  onTouchStart={() => handleLongPressStart(spellList)}
-                  onTouchEnd={handleLongPressEnd}
-                  onClick={() => {
-                    spellList.version && spellList.version === CURRENT_VERSION
-                    ? navigate(`/listDetails/${spellList.id}`)
-                    : navigate(`/legacyListDetails/${spellList.id}`)
-                  }}
-                >
-                  {spellList.name} ({spellList.class}, level {spellList.maxLevel})
-                </Button>
-              </Row>
-            )))}
-          </Container>
+          {allSpellLists.length === 0 ? (
+            <Row className="d-flex justify-content-center">
+              <h6 className="text-center">No Spell Books Found</h6>
+              <h6 className="text-center">Click the <LuCirclePlus size={20} /> on the bottom right to create one</h6>
+            </Row>)
+            : (allSpellLists.map((spellList) => (
+            <Row key={spellList.id} className="border-bottom mb-3">
+              <Button
+                className="p-1 text-start w-100"
+                variant="link"
+                style={{ textDecoration: 'none', color: 'inherit' }}
+                onMouseDown={() => handleLongPressStart(spellList)}
+                onMouseUp={handleLongPressEnd}
+                onMouseLeave={handleLongPressEnd}
+                onTouchStart={() => handleLongPressStart(spellList)}
+                onTouchEnd={handleLongPressEnd}
+                onClick={() => {
+                  spellList.version && spellList.version === CURRENT_AMTGARD_VERSION
+                  ? navigate(`/listDetails/${spellList.id}`)
+                  : navigate(`/legacyListDetails/${spellList.id}`)
+                }}
+              >
+                {spellList.name} ({spellList.class}, level {spellList.maxLevel})
+              </Button>
+            </Row>
+          )))}
         </Container>
+      </Container>
       <FloatingActionButton />
     </Container>
   )
