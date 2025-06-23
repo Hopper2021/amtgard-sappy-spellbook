@@ -1,9 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Col, Container, Dropdown, Row } from 'react-bootstrap'
 import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
 import { useNavigate, useParams } from 'react-router-dom'
-import { CURRENT_VERSION, CURRENT_VERSION_NAME } from '../appConstants'
+import {
+	CURRENT_AMTGARD_VERSION,
+	CURRENT_AMTGARD_VERSION_NAME,
+	ALL_CLASSES,
+	CASTER_CLASSES,
+	MARTIAL_CLASS_SPELL_LISTS,
+	MARTIAL_CLASSES,
+} from '../appConstants'
+import Alert from 'react-bootstrap/Alert'
+import { IoIosWarning } from 'react-icons/io'
 
 interface SpellLevel {
 	level: number
@@ -24,14 +33,24 @@ interface SpellList {
 
 function ModifySpellList() {
   const navigate = useNavigate()
+	const [showClassAlert, setShowClassAlert] = useState(false)
+	const [showLevelAlert, setShowLevelAlert] = useState(false)
   const { id } = useParams<{ id: string }>() // Grab the id from the URL
+	const casterMessage = 
+	  <>
+    Changing your
+    {showClassAlert && <strong> class </strong>}
+    {showClassAlert && showLevelAlert && ' and '}
+    {showLevelAlert && <strong> level </strong>}
+    will completely reset your spell choices and points.
+  </>
 
   const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
   const spellListToEdit = allSpellLists.find((list: SpellList) => list.id === parseInt(id || '0'))
 
 	const [modifiedSpellList, setModifiedSpellList] = React.useState<SpellList>({
 		id: parseInt(id || '0'),
-		version: CURRENT_VERSION,
+		version: CURRENT_AMTGARD_VERSION,
 		name: spellListToEdit?.name || 'My SpellBook',
 		class: spellListToEdit?.class || 'Bard',
 		maxLevel: spellListToEdit?.maxLevel || 1,
@@ -41,7 +60,26 @@ function ModifySpellList() {
 	})
 
   return (
-    <Container fluid className="p-4" style={{ maxWidth: 600 }}>
+    <Container className="p-4" style={{ maxWidth: 600 }}>
+			{(showClassAlert || showLevelAlert) && (
+				<Alert
+					show={showClassAlert || showLevelAlert}
+					variant="warning"
+					className="d-flex"
+					dismissible
+					onClose={() => [setShowClassAlert(false), setShowLevelAlert(false)]}
+					>
+					<IoIosWarning size={35} className="me-1" color="gold"/>
+					<div className="d-flex flex-column">
+						<span>{casterMessage}</span>
+						<div
+							className="end-0 bottom-0 text-muted small mt-1"
+							style={{ pointerEvents: 'none' }}
+						>
+						</div>
+					</div>
+				</Alert>
+			)}
 			<InputGroup className="mb-4 w-100">
 				<InputGroup.Text>
 					Name:
@@ -67,28 +105,65 @@ function ModifySpellList() {
 									borderColor: 'lightgrey',
 									borderWidth: 1,
 									color: 'black',
-									backgroundColor: 'lightgrey',
+									backgroundColor: 'white',
 								}}
-								disabled
 							>
 								{modifiedSpellList.class}
 							</Dropdown.Toggle>
+							<Dropdown.Menu>
+							{ALL_CLASSES.map(className => (
+								<Dropdown.Item
+									key={className}
+									onClick={() => {
+										if (className !== spellListToEdit.class) {
+											setShowClassAlert(true)
+										} else {
+											setShowClassAlert(false)
+										}
+										if (CASTER_CLASSES.includes(className)) {
+										const newLevels = Array.from({ length: modifiedSpellList.maxLevel }, (_, index) => ({
+											level: index + 1,
+											points: modifiedSpellList.lookThePart && index + 1 === modifiedSpellList.maxLevel ? 6 : 5,
+											spells: modifiedSpellList.levels[index]?.spells || [],
+										}))
+										setModifiedSpellList({
+											...modifiedSpellList,
+											class: className,
+											levels: newLevels,
+											lookThePartSpells: [],
+										})
+										} else {
+										const classObj = MARTIAL_CLASS_SPELL_LISTS[className] || {}
+										const newLevels = (classObj.levels || []).filter(
+											(levelObj: any) => levelObj.level <= modifiedSpellList.maxLevel
+										)
+										setModifiedSpellList({
+											...modifiedSpellList,
+											class: className,
+											levels: newLevels,
+											lookThePartSpells: classObj.lookThePartSpells || [],
+										})
+										}
+									}}
+								>
+									{className}
+								</Dropdown.Item>
+							))}
+							</Dropdown.Menu>
 						</Dropdown>
 					</InputGroup>
 				</Col>
 
-				<Col xs={5} md={6}>
-					<InputGroup className="w-100">
+				<Col className="ps-0">
+					<InputGroup>
 						<InputGroup.Text>Level:</InputGroup.Text>
-						<Dropdown className="w-100">
+						<Dropdown>
 							<Dropdown.Toggle
-								disabled
-								variant="outline-secondary"
 								style={{
 									borderColor: 'lightgrey',
 									borderWidth: 1,
 									color: 'black',
-									backgroundColor: 'lightgrey',
+									backgroundColor: 'white', 
 								}}
 							>
 								{modifiedSpellList.maxLevel}
@@ -101,12 +176,35 @@ function ModifySpellList() {
 										<Dropdown.Item
 											key={level}
 											onClick={() => {
-											const updatedLevels = Array.from({ length: level }, (_, index) => ({
-												level: index + 1,
-												points: modifiedSpellList.lookThePart && index + 1 === level ? 6 : 5,
-												spells: [],
-											}))
-											setModifiedSpellList({ ...modifiedSpellList, maxLevel: level, levels: updatedLevels })
+												if (level !== spellListToEdit.maxLevel) {
+													setShowLevelAlert(true)
+												} else {
+													setShowLevelAlert(false)
+												}
+												if (MARTIAL_CLASSES.includes(modifiedSpellList.class)) {
+												const classObj = MARTIAL_CLASS_SPELL_LISTS[modifiedSpellList.class] || {}
+												const newLevels = (classObj.levels || []).filter(
+													(levelObj: any) => levelObj.level <= level
+												)
+												setModifiedSpellList({
+													...modifiedSpellList,
+													maxLevel: level,
+													levels: newLevels,
+													lookThePartSpells: classObj.lookThePartSpells || [],
+												})
+												} else {
+												const newLevels = Array.from({ length: level }, (_, index) => ({
+													level: index + 1,
+													points: modifiedSpellList.lookThePart && index + 1 === level ? 6 : 5,
+													spells: [],
+												}))
+												setModifiedSpellList({
+													...modifiedSpellList,
+													maxLevel: level,
+													levels: newLevels,
+													lookThePartSpells: [],
+												})
+												}
 											}}
 										>
 											{level}
@@ -128,14 +226,18 @@ function ModifySpellList() {
 							Version:
 						</InputGroup.Text>
 						<Dropdown>
-							<Dropdown.Toggle disabled variant="outline-secondary" style={{ borderColor: 'lightgrey',
+							<Dropdown.Toggle
+								style={{
+									borderColor: 'lightgrey',
 									borderWidth: 1,
 									color: 'black',
-									backgroundColor: 'lightgrey', }}>
-								{CURRENT_VERSION_NAME}
+									backgroundColor: 'white', 
+								}}
+							>
+								{CURRENT_AMTGARD_VERSION_NAME}
 							</Dropdown.Toggle>
 							<Dropdown.Menu>
-								<Dropdown.Item>{CURRENT_VERSION_NAME}</Dropdown.Item>
+								<Dropdown.Item>{CURRENT_AMTGARD_VERSION_NAME}</Dropdown.Item>
 							</Dropdown.Menu>
 						</Dropdown>
 					</InputGroup>
