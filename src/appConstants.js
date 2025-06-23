@@ -3558,6 +3558,15 @@ export const MARTIAL_CLASSES = [
 
 export const PATCH_NOTES = [
   {
+    version: "0.4.0",
+    title: ``,
+    details: [
+      "Adjust create button margin",
+      "Activate Modify level and class buttons",
+      "Create dark theme", 
+    ]
+  },
+  {
     version: "0.3.0",
     title: `Add APK v6.6, Experienced modal update, default spell list creation to level 6, and caster subclass feats and fixes.`,
     details: [
