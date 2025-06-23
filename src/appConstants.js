@@ -1,8 +1,21 @@
 export const IS_APK = false
 
-export const CURRENT_VERSION = 'V8.6.4'
-export const CURRENT_VERSION_NAME = 'V8.6.4 "Sappy Four"'
 export const APK_VERSION = 'v6.6'
+export const CURRENT_AMTGARD_VERSION = 'V8.6.4'
+export const CURRENT_AMTGARD_VERSION_NAME = 'V8.6.4 "Sappy Four"'
+
+export const CASTER_CLASSES = ['Bard', 'Druid', 'Healer', 'Wizard']
+export const ALL_CLASSES = [
+  ...CASTER_CLASSES,
+  'Anti-Paladin',
+  'Archer',
+  'Assassin',
+  'Barbarian',
+  'Monk',
+  'Paladin',
+  'Scout',
+  'Warrior'
+]
 
 export const ALL_SPELLS = [
   {
@@ -3519,6 +3532,28 @@ export const JUGGERNAUT_SPELLS = [
   { id: 69, frequency: { amount: 1, per: 'Life', charge: null }, range: 'Self', trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
   { id: 200, frequency: { amount: 3, per: 'Refresh', charge: null }, swift: true, range: 'Self', trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
   { id: 199, frequency: { amount: null, per: null, charge: null }, range: null, trait: true, extraordinary: false, magical: false, ambulant: false, restricted: false, chosen: false, },
+]
+
+export const MARTIAL_CLASS_SPELL_LISTS = {
+  'Anti-Paladin': ANTIPALADIN_LIST,
+  'Archer': ARCHER_LIST,
+  'Assassin': ASSASSIN_LIST,
+  'Barbarian': BARBARIAN_LIST,
+  'Monk': MONK_LIST,
+  'Paladin': PALADIN_LIST,
+  'Scout': SCOUT_LIST,
+  'Warrior': WARRIOR_LIST,
+}
+
+export const MARTIAL_CLASSES = [
+  'Anti-Paladin',
+  'Archer',
+  'Assassin',
+  'Barbarian',
+  'Monk',
+  'Paladin',
+  'Scout',
+  'Warrior'
 ]
 
 export const PATCH_NOTES = [

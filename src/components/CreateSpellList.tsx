@@ -4,16 +4,12 @@ import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
 import { useNavigate } from 'react-router-dom'
 import {
-	ANTIPALADIN_LIST,
-	ARCHER_LIST,
-	ASSASSIN_LIST,
-	BARBARIAN_LIST,
-	MONK_LIST,
-	PALADIN_LIST,
-	SCOUT_LIST,
-	WARRIOR_LIST,
-	CURRENT_VERSION,
-	CURRENT_VERSION_NAME
+	CURRENT_AMTGARD_VERSION,
+	CURRENT_AMTGARD_VERSION_NAME,
+	ALL_CLASSES,
+	CASTER_CLASSES,
+	MARTIAL_CLASS_SPELL_LISTS,
+	MARTIAL_CLASSES,
 } from '../appConstants'
 
 type SpellFrequency = {
@@ -51,40 +47,6 @@ function CreateSpellList() {
 		localStorage.setItem('allSpellLists', JSON.stringify([]))
 	}
 	const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
-	const martialClasses = [
-		'Anti-Paladin',
-		'Archer',
-		'Assassin',
-		'Barbarian',
-		'Monk',
-		'Paladin',
-		'Scout',
-		'Warrior'
-	]
-
-	const classSpellLists: Record<string, any> = {
-		'Anti-Paladin': ANTIPALADIN_LIST,
-		'Archer': ARCHER_LIST,
-		'Assassin': ASSASSIN_LIST,
-		'Barbarian': BARBARIAN_LIST,
-		'Monk': MONK_LIST,
-		'Paladin': PALADIN_LIST,
-		'Scout': SCOUT_LIST,
-		'Warrior': WARRIOR_LIST,
-	}
-
-	const casterClasses = ['Bard', 'Druid', 'Healer', 'Wizard']
-	const allClasses = [
-		...casterClasses,
-		'Anti-Paladin',
-		'Archer',
-		'Assassin',
-		'Barbarian',
-		'Monk',
-		'Paladin',
-		'Scout',
-		'Warrior'
-	]
 
 	const generateNewId = () => {
 		const maxId = allSpellLists.reduce((max, spellList) => Math.max(max, spellList.id), 0)
@@ -93,7 +55,7 @@ function CreateSpellList() {
 	
 	const [newSpellList, setNewSpellList] = useState<SpellList>({
 		id: generateNewId(),
-		version: CURRENT_VERSION,
+		version: CURRENT_AMTGARD_VERSION,
 		name: 'My SpellBook',
 		class: 'Bard',
 		maxLevel: 6,
@@ -139,37 +101,37 @@ function CreateSpellList() {
 								{newSpellList.class}
 							</Dropdown.Toggle>
 							<Dropdown.Menu>
-							{allClasses.map(className => (
+							{ALL_CLASSES.map(className => (
 								<Dropdown.Item
-								key={className}
-								onClick={() => {
-									if (casterClasses.includes(className)) {
-									const newLevels = Array.from({ length: newSpellList.maxLevel }, (_, index) => ({
-										level: index + 1,
-										points: newSpellList.lookThePart && index + 1 === newSpellList.maxLevel ? 6 : 5,
-										spells: [],
-									}))
-									setNewSpellList({
-										...newSpellList,
-										class: className,
-										levels: newLevels,
-										lookThePartSpells: [],
-									})
-									} else {
-									const classObj = classSpellLists[className] || {}
-									const newLevels = (classObj.levels || []).filter(
-										(levelObj: any) => levelObj.level <= newSpellList.maxLevel
-									)
-									setNewSpellList({
-										...newSpellList,
-										class: className,
-										levels: newLevels,
-										lookThePartSpells: classObj.lookThePartSpells || [],
-									})
-									}
-								}}
-								>
-								{className}
+									key={className}
+									onClick={() => {
+										if (CASTER_CLASSES.includes(className)) {
+										const newLevels = Array.from({ length: newSpellList.maxLevel }, (_, index) => ({
+											level: index + 1,
+											points: newSpellList.lookThePart && index + 1 === newSpellList.maxLevel ? 6 : 5,
+											spells: [],
+										}))
+										setNewSpellList({
+											...newSpellList,
+											class: className,
+											levels: newLevels,
+											lookThePartSpells: [],
+										})
+										} else {
+										const classObj = MARTIAL_CLASS_SPELL_LISTS[className] || {}
+										const newLevels = (classObj.levels || []).filter(
+											(levelObj: any) => levelObj.level <= newSpellList.maxLevel
+										)
+										setNewSpellList({
+											...newSpellList,
+											class: className,
+											levels: newLevels,
+											lookThePartSpells: classObj.lookThePartSpells || [],
+										})
+										}
+									}}
+									>
+									{className}
 								</Dropdown.Item>
 							))}
 							</Dropdown.Menu>
@@ -198,8 +160,8 @@ function CreateSpellList() {
 										<Dropdown.Item
 											key={level}
 											onClick={() => {
-												if (martialClasses.includes(newSpellList.class)) {
-												const classObj = classSpellLists[newSpellList.class] || {}
+												if (MARTIAL_CLASSES.includes(newSpellList.class)) {
+												const classObj = MARTIAL_CLASS_SPELL_LISTS[newSpellList.class] || {}
 												const newLevels = (classObj.levels || []).filter(
 													(levelObj: any) => levelObj.level <= level
 												)
@@ -247,14 +209,14 @@ function CreateSpellList() {
 							variant="outline-secondary"
 							style={{ borderColor: 'lightgrey', borderWidth: 1, color: 'black' }}
 						>
-							{CURRENT_VERSION_NAME}
+							{CURRENT_AMTGARD_VERSION_NAME}
 						</Dropdown.Toggle>
 						<Dropdown.Menu>
 							<Dropdown.Item
-							active={newSpellList.version === CURRENT_VERSION}
+							active={newSpellList.version === CURRENT_AMTGARD_VERSION}
 							onClick={() =>
-								setNewSpellList({ ...newSpellList, version: CURRENT_VERSION })}>
-							{CURRENT_VERSION_NAME}
+								setNewSpellList({ ...newSpellList, version: CURRENT_AMTGARD_VERSION })}>
+							{CURRENT_AMTGARD_VERSION_NAME}
 							</Dropdown.Item>
 						</Dropdown.Menu>
 						</Dropdown>
@@ -277,7 +239,7 @@ function CreateSpellList() {
 								...level,
 								points: nextLookThePart && level.level === newSpellList.maxLevel ? 6 : 5,
 								}));
-								if (martialClasses.includes(newSpellList.class)) {
+								if (MARTIAL_CLASSES.includes(newSpellList.class)) {
 									setNewSpellList({ ...newSpellList, lookThePart: nextLookThePart });
 								} else {
 									setNewSpellList({ ...newSpellList, lookThePart: nextLookThePart, levels: updatedLevels });

@@ -18,7 +18,7 @@ import {
   APEX_SPELLS,
   MARAUDER_SPELLS,
   JUGGERNAUT_SPELLS,
-  CURRENT_VERSION,
+  CURRENT_AMTGARD_VERSION,
 } from '../appConstants'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Toast, ToastContainer } from 'react-bootstrap'
@@ -129,7 +129,7 @@ function EditMartialList() {
   
   const [modifiedSpellList, setModifiedSpellList] = React.useState<SpellList>({
     id: parseInt(id || '0'),
-    version: CURRENT_VERSION,
+    version: CURRENT_AMTGARD_VERSION,
     name: spellListToEdit?.name || 'My SpellBook',
     class: spellListToEdit?.class || 'Bard',
     maxLevel: spellListToEdit?.maxLevel || 1,
