@@ -1,4 +1,4 @@
-## Swiftgard
+## <img src="public/screenshots/logo-transparent.png" width="50" /> Swiftgard
 
 Web app: https://swiftgard.com
 
@@ -12,11 +12,11 @@ Swiftgard is a calculator and ability reference tool created for players of the 
 
 Technology:
 
-Users do not need to log into this application. All data is stored in their browser's local storage or in their android device's app data directory. The application is about 5MB, so its lightweight and minimalistic. This app is meant to be used quickly to put together ability and spell lists, and is able to be downloaded via APK or from the Google play store for offline use. ( Amtgard participants often attend event locations that has poor reception. ) 
+Users do not need to log into this application. All data is stored in their browser's local storage or in their android device's app data directory. The application is about 5MB, so its lightweight and minimalistic. This application was build mostly using Typescript/javascript and is able to be downloaded via APK or from the Google play store for offline use. ( Amtgard participants often attend event locations that has poor reception. ) 
 
-How the game works, and why the app is useful:
+Why the app is useful:
 
-Amtgard is a game where players choose a class then need to build an ability or spell list based on the class they choose so that they can play in games. ( Imagine capture the flag withe extra steps and casting spells at each other ) The application handles all of the heavy lifting of calculating spell costs, tracking points rounded down to lower levels, or displaying an easy to read list based on subclass choices. This gives players the ability to maximize their time spent on building a strong list for their game and not worry about the math involved or if they've build the list correctly based on the most recent Amtgard rule set.
+Amtgard is a game that requires players to choose a class and build an ability or spell list based on the class they choose. ( Imagine capture the flag with extra steps. ) The application handles all of the heavy lifting of calculating spell costs, tracking points rounded down to lower levels, and displays an easy to read list limitation and additions based on the choices made. This gives players the ability to maximize their time spent on building a strong list for their game and not worry about the math involved or if they've build the list correctly based on the most recent Amtgard rule set.
 
 ### Main Flow
 
@@ -48,3 +48,5 @@ The three dot menu offers a few extra features:
 - Consolidated version of spell list and level version of spell lists options on details page.
    
 Screenshots:
+
+<img src="public/screenshots/home.png" width="200"/><img src="public/screenshots/home-edit.jpg" width="200"/><img src="public/screenshots/create.jpg" width="200"/><img src="public/screenshots/caster-details.jpg" width="200"/><img src="public/screenshots/caster-add-spells.jpg" width="200"/><img src="public/screenshots/caster-remove-spells.jpg" width="200"/><img src="public/screenshots/caster-edit-details-modal.jpg" width="200"/><img src="public/screenshots/edit-spell-limitation-example.jpg" width="200"/><img src="public/screenshots/martial-list-details.jpg" width="200"/><img src="public/screenshots/martial-edit-abilities-modal.jpg" width="200"/><img src="public/screenshots/patch-notes.jpg" width="200"/>
