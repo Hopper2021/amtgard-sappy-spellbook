@@ -1,6 +1,7 @@
 ## Swiftgard
 
 Web app: https://swiftgard.com
+
 Get it on Google play: https://play.google.com/store/apps/details?id=com.swiftgard.app
 
 Swiftgard is a calculator and ability reference tool created for players of the international non-profit, Amtgard. It organizes the rules of play from the Amtgard rulebook ( 90 pages )into a steamlined application from an ever evolving document.
@@ -8,9 +9,11 @@ Swiftgard is a calculator and ability reference tool created for players of the 
 ## How it works:
 
 Technology:
+
 Users do not need to log into this application. All data is stored in their browser's local storage or in their android device's app data directory. The application is about 5MB, so its lightweight and minimalistic. This app is meant to be used quickly to put together ability and spell lists, and is able to be downloaded via APK or from the Google play store for offline use. ( Amtgard participants often attend event locations that has poor reception. ) 
 
 How the game works, and why the app is useful:
+
 Amtgard is a game where players choose a class then need to build an ability or spell list based on the class they choose so that they can play in games. ( Imagine capture the flag withe extra steps and casting spells at each other ) The application handles all of the heavy lifting of calculating spell costs, tracking points rounded down to lower levels, or displaying an easy to read list based on subclass choices. This gives players the ability to maximize their time spent on building a strong list for their game and not worry about the math involved or if they've build the list correctly based on the most recent Amtgard rule set.
 
 ### Main Flow
