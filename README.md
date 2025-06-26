@@ -4,6 +4,8 @@ Web app: https://swiftgard.com
 
 Get it on Google play: https://play.google.com/store/apps/details?id=com.swiftgard.app
 
+Introductory video: https://drive.google.com/file/d/1HYSZX6y3raQn6tj4di-W72TRiLdXSReM/view?usp=sharing
+
 Swiftgard is a calculator and ability reference tool created for players of the international non-profit, Amtgard. It organizes the rules of play from the Amtgard rulebook ( 90 pages )into a steamlined application from an ever evolving document.
 
 ## How it works:
