@@ -35,14 +35,14 @@ function ModifySpellList() {
   const navigate = useNavigate()
 	const [showClassAlert, setShowClassAlert] = useState(false)
 	const [showLevelAlert, setShowLevelAlert] = useState(false)
-  const { id } = useParams<{ id: string }>() // Grab the id from the URL
+  const { id } = useParams<{ id: string }>()
 	const casterMessage = 
 	  <>
-    Changing your
-    {showClassAlert && <strong> class </strong>}
-    {showClassAlert && showLevelAlert && ' and '}
-    {showLevelAlert && <strong> level </strong>}
-    will completely reset your spell choices and points.
+			Changing your
+			{showClassAlert && <strong> class </strong>}
+			{showClassAlert && showLevelAlert && ' and '}
+			{showLevelAlert && <strong> level </strong>}
+			will completely reset your spell choices and points.
   </>
 
   const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
@@ -58,6 +58,88 @@ function ModifySpellList() {
 		levels: spellListToEdit?.levels || [],
 		lookThePartSpells: spellListToEdit?.lookThePartSpells || [],
 	})
+
+	const isMartialClass = MARTIAL_CLASSES.includes(modifiedSpellList.class)
+	const isCasterClass = CASTER_CLASSES.includes(modifiedSpellList.class)
+
+	// PART 3:
+	// Switching between caster and martial classes swaps up spells array incorrectly
+	// Martial class to caster results in empty spells ( no levels to add spells to )
+	// Caster class to martial results in edit page with empty spell levels instead of preset martial list 
+	// result is from function combination, see graph push for what changed
+	const handleClassChange = (className: string) => {
+		let newLevels: SpellLevel[] = []
+
+		const casterLevels: SpellLevel[] = Array.from({ length: modifiedSpellList.maxLevel }, (_, index) => ({
+			level: index + 1,
+			points: modifiedSpellList.lookThePart && index + 1 === modifiedSpellList.maxLevel ? 6 : 5,
+			spells: modifiedSpellList.levels[index]?.spells || [],
+		}))
+		const classObj = MARTIAL_CLASS_SPELL_LISTS[className] || {}
+		const martialLevels: SpellLevel[] = (classObj.levels || []).filter(
+			(levelObj: any) => levelObj.level <= modifiedSpellList.maxLevel
+		)
+
+		if (isCasterClass) {
+			newLevels = casterLevels
+		} else if (isMartialClass) {
+			newLevels = martialLevels
+		}
+
+		setModifiedSpellList({
+			...modifiedSpellList,
+			class: className,
+			levels: newLevels,
+			lookThePartSpells: isMartialClass ? classObj.lookThePartSpells || [] : [],
+		})
+	}
+
+	const handleLevelChange = (level: number) => {
+		let newLevels: SpellLevel[] = []
+
+		const casterLevels = Array.from({ length: level }, (_, index) => ({
+			level: index + 1,
+			points: modifiedSpellList.lookThePart && index + 1 === level ? 6 : 5,
+			spells: [],
+		}))
+		const classObj = MARTIAL_CLASS_SPELL_LISTS[modifiedSpellList.class] || {}
+		const martialLevels = (classObj.levels || []).filter(
+			(levelObj: any) => levelObj.level <= level
+		)
+
+		if (isCasterClass) {
+			newLevels = casterLevels
+		} else if (isMartialClass) {
+			newLevels = martialLevels
+		}
+
+		setModifiedSpellList({
+			...modifiedSpellList,
+			maxLevel: level,
+			levels: newLevels,
+			lookThePartSpells: isMartialClass ? classObj.lookThePartSpells || [] : [],
+		})
+	}
+
+	const handleResetAlert = (className?: string, level?: number) => {
+		if (className && className !== spellListToEdit.class) {
+			setShowClassAlert(true)
+		} else if (level && level !== spellListToEdit.maxLevel) {
+			setShowLevelAlert(true)
+		} else if (className === spellListToEdit.class) {
+			setShowClassAlert(false)
+		} else if (level === spellListToEdit.maxLevel) {
+			setShowLevelAlert(false)
+		}
+	}
+
+	const updateLocalStorage = () => {
+		const updatedAllSpellLists = allSpellLists.map((list: SpellList) =>
+			list.id === modifiedSpellList.id ? modifiedSpellList : list
+		)
+		localStorage.setItem('allSpellLists', JSON.stringify(updatedAllSpellLists))
+		navigate('/')
+	}
 
   return (
     <Container className="p-4" style={{ maxWidth: 600 }}>
@@ -115,35 +197,8 @@ function ModifySpellList() {
 								<Dropdown.Item
 									key={className}
 									onClick={() => {
-										if (className !== spellListToEdit.class) {
-											setShowClassAlert(true)
-										} else {
-											setShowClassAlert(false)
-										}
-										if (CASTER_CLASSES.includes(className)) {
-										const newLevels = Array.from({ length: modifiedSpellList.maxLevel }, (_, index) => ({
-											level: index + 1,
-											points: modifiedSpellList.lookThePart && index + 1 === modifiedSpellList.maxLevel ? 6 : 5,
-											spells: modifiedSpellList.levels[index]?.spells || [],
-										}))
-										setModifiedSpellList({
-											...modifiedSpellList,
-											class: className,
-											levels: newLevels,
-											lookThePartSpells: [],
-										})
-										} else {
-										const classObj = MARTIAL_CLASS_SPELL_LISTS[className] || {}
-										const newLevels = (classObj.levels || []).filter(
-											(levelObj: any) => levelObj.level <= modifiedSpellList.maxLevel
-										)
-										setModifiedSpellList({
-											...modifiedSpellList,
-											class: className,
-											levels: newLevels,
-											lookThePartSpells: classObj.lookThePartSpells || [],
-										})
-										}
+										handleResetAlert(className, undefined)
+										handleClassChange(className)
 									}}
 								>
 									{className}
@@ -176,35 +231,8 @@ function ModifySpellList() {
 										<Dropdown.Item
 											key={level}
 											onClick={() => {
-												if (level !== spellListToEdit.maxLevel) {
-													setShowLevelAlert(true)
-												} else {
-													setShowLevelAlert(false)
-												}
-												if (MARTIAL_CLASSES.includes(modifiedSpellList.class)) {
-												const classObj = MARTIAL_CLASS_SPELL_LISTS[modifiedSpellList.class] || {}
-												const newLevels = (classObj.levels || []).filter(
-													(levelObj: any) => levelObj.level <= level
-												)
-												setModifiedSpellList({
-													...modifiedSpellList,
-													maxLevel: level,
-													levels: newLevels,
-													lookThePartSpells: classObj.lookThePartSpells || [],
-												})
-												} else {
-												const newLevels = Array.from({ length: level }, (_, index) => ({
-													level: index + 1,
-													points: modifiedSpellList.lookThePart && index + 1 === level ? 6 : 5,
-													spells: [],
-												}))
-												setModifiedSpellList({
-													...modifiedSpellList,
-													maxLevel: level,
-													levels: newLevels,
-													lookThePartSpells: [],
-												})
-												}
+												handleResetAlert(undefined, level)
+												handleLevelChange(level)
 											}}
 										>
 											{level}
@@ -271,13 +299,7 @@ function ModifySpellList() {
 				className="w-100"
 				disabled={spellListToEdit.version === undefined}
 				variant={spellListToEdit.version === undefined ? 'secondary' : 'primary'}
-				onClick={() => {
-					const updatedAllSpellLists = allSpellLists.map((list: SpellList) =>
-						list.id === modifiedSpellList.id ? modifiedSpellList : list
-					)
-					localStorage.setItem('allSpellLists', JSON.stringify(updatedAllSpellLists))
-					navigate('/')
-				}}
+				onClick={() => updateLocalStorage()}
 			>
 				{spellListToEdit.version === undefined ? 'VERSION OUT OF DATE' : 'Update'}
 			</Button>
