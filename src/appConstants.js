@@ -926,7 +926,7 @@ export const ALL_SPELLS = [
     range: 'Touch',
     materials: null,
     incantation: '"The white light of healing hath healed thee." x5',
-    effect: 'Target player heals a wound. Will restore all armor points in one location or repair a damaged or broken item.',
+    effect: 'Target player heals a wound.',
     limitation: null,
     note: null
   },
@@ -3559,8 +3559,9 @@ export const MARTIAL_CLASSES = [
 export const PATCH_NOTES = [
   {
     version: "0.4.0",
-    title: ``,
+    title: `Heal fix, style adjustments, enable modify class and level buttons,`,
     details: [
+      "Fix Heal description",
       "Adjust create button margin",
       "Activate Modify level and class buttons",
       "Create dark theme", 
