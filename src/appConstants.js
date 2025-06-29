@@ -1,6 +1,6 @@
-export const IS_APK = false
+export const IS_APK = true
 
-export const APK_VERSION = 'v6.6'
+export const APK_VERSION = 'v7.0'
 export const CURRENT_AMTGARD_VERSION = 'V8.6.4'
 export const CURRENT_AMTGARD_VERSION_NAME = 'V8.6.4 "Sappy Four"'
 
@@ -3558,13 +3558,13 @@ export const MARTIAL_CLASSES = [
 
 export const PATCH_NOTES = [
   {
-    version: "0.4.0",
-    title: `Heal fix, style adjustments, enable modify class and level buttons,`,
+    version: "1.0.0",
+    title: `App added to Google play store, APK v7.0, Heal description fix, style adjustments, enable modify level button.`,
     details: [
+      "First google play store release! Patch number jump to 1.0.0 for major release.",
       "Fix Heal description",
       "Adjust create button margin",
-      "Activate Modify level and class buttons",
-      "Create dark theme", 
+      "Enable level button on when modifying spell list",
     ]
   },
   {
