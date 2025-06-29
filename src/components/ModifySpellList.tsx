@@ -182,12 +182,12 @@ function ModifySpellList() {
 					<InputGroup>
 						<InputGroup.Text>Class:</InputGroup.Text>
 						<Dropdown>
-							<Dropdown.Toggle
+							<Dropdown.Toggle disabled
 								style={{
-									borderColor: 'lightgrey',
+									borderColor: 'grey',
 									borderWidth: 1,
 									color: 'black',
-									backgroundColor: 'white',
+									backgroundColor: 'grey',
 								}}
 							>
 								{modifiedSpellList.class}
