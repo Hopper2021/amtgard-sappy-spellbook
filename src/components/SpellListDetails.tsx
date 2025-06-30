@@ -1134,6 +1134,7 @@ function SpellListDetails() {
                 </Row>
               )}
               {spellsToRender.map((spell, index) => {
+                const spellExperienced = spell.experienced === 1 || spell.experienced === 2
                 const spellName = fetchSpellDetails('name', spell.id) || 'Unknown Spell'
                 const spellType = fetchSpellDetails('type', spell.id)
                 const spellSchool = fetchSpellDetails('school', spell.id)
@@ -1177,6 +1178,7 @@ function SpellListDetails() {
                         {' '}{spellName}
                       </span>
                       <span style={{ color: isPickTwoOfThree && spell.chosen ? 'green' : undefined }}>
+                        {spellExperienced ? '(Exp)' : ''}
                         {' '}{spellFrequency.frequency}
                         {' '}{spellExtraordinary ? '(ex)' : ''}
                         {' '}{spellSwift ? '(Swift)' : ''}

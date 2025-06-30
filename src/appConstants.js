@@ -3558,6 +3558,13 @@ export const MARTIAL_CLASSES = [
 
 export const PATCH_NOTES = [
   {
+    version: "1.1.0",
+    title: `Add (Exp) Experienced identifier to spell details page.`,
+    details: [
+      "Add (Exp) description when spell is chosen to be experienced on the list details page.",
+    ]
+  },
+  {
     version: "1.0.0",
     title: `App added to Google play store, APK v7.0, Heal description fix, style adjustments, enable modify level button.`,
     details: [
