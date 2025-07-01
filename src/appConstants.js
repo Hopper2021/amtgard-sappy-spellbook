@@ -1,6 +1,5 @@
-export const IS_APK = true
+export const IS_APK = false
 
-export const APK_VERSION = 'v7.0'
 export const CURRENT_AMTGARD_VERSION = 'V8.6.4'
 export const CURRENT_AMTGARD_VERSION_NAME = 'V8.6.4 "Sappy Four"'
 
@@ -3559,8 +3558,9 @@ export const MARTIAL_CLASSES = [
 export const PATCH_NOTES = [
   {
     version: "1.1.0",
-    title: `Add (Exp) Experienced identifier to spell details page.`,
+    title: ` Move app to Google Play Store. Add (Exp) Experienced identifier to spell details page.`,
     details: [
+      "Move app to Google Play Store.",
       "Add (Exp) description when spell is chosen to be experienced on the list details page.",
     ]
   },

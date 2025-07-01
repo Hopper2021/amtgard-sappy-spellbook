@@ -1,5 +1,5 @@
 import { Container, Row, Accordion } from 'react-bootstrap'
-import { APK_VERSION, IS_APK, PATCH_NOTES } from '../appConstants.js'
+import { IS_APK, PATCH_NOTES } from '../appConstants.js'
 import AlertTip from './AlertTip.tsx'
 
 const PatchNotes = () => {
@@ -12,20 +12,19 @@ const PatchNotes = () => {
               <AlertTip
                 message={
                   <>
-                    <span>Open Beta APK <strong>{APK_VERSION}</strong> is now available!</span>
-                  <br />
-                  <span>Ignore the warnings, it's fine to download.</span>
+                    <span>Now available on the <strong>Google Play Store</strong></span>
+                    <br />
+                    <br /><span>Recommended: If you installed the Open Beta APK, uninstall it and reinstall from the play store to receive prompted updates.</span>
                 </>
               }
             />
-            <Container className="d-flex justify-content-center mb-2">
-              <a
-                href="/downloads/swiftgard-main-6c41ec-release.apk" 
-                className="btn btn-primary mb-1"
-                download
-                style={{ minWidth: 200, textAlign: 'center' }}
-              >
-                Download Android APK {APK_VERSION}
+            <Container className="d-flex flex-wrap justify-content-center align-items-center justify-content-around mb-2">
+              <a href="https://play.google.com/store/apps/details?id=com.swiftgard.app&pcampaignid=web_share" target="_blank" rel="noopener noreferrer">
+                <img
+                  src="/screenshots/GetItOnGooglePlay_Badge_Web_color_English.png"
+                  style={{ width: 200, textAlign: 'center' }}
+                  alt="Google Play Store Link. Click to open in a new tab."
+                />
               </a>
             </Container>
           </>
