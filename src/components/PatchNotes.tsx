@@ -14,7 +14,7 @@ const PatchNotes = () => {
                   <>
                     <span>Now available on the <strong>Google Play Store</strong></span>
                     <br />
-                    <br /><span>Recommended: If you installed the Open Beta APK, uninstall it and reinstall from the play store to receive prompted updates.</span>
+                    <br /><span>Recommended: If you installed the Open Beta APK, uninstall it and reinstall from the play store.</span>
                 </>
               }
             />
