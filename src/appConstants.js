@@ -1,4 +1,4 @@
-export const IS_APK = false
+export const IS_APK = true
 
 export const CURRENT_AMTGARD_VERSION = 'V8.6.4'
 export const CURRENT_AMTGARD_VERSION_NAME = 'V8.6.4 "Sappy Four"'
@@ -3556,6 +3556,13 @@ export const MARTIAL_CLASSES = [
 ]
 
 export const PATCH_NOTES = [
+  {
+    version: "1.1.1",
+    title: `Fix Attuned`,
+    details: [
+      "Bug report: Fix attuned incantation.",
+    ]
+  },
   {
     version: "1.1.0",
     title: ` Move app to Google Play Store. Add (Exp) Experienced identifier to spell details page.`,
