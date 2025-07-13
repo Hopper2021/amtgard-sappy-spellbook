@@ -209,7 +209,7 @@ export const ALL_SPELLS = [
     school: 'Sorcery',
     range: null,
     materials: 'Yellow strip',
-    incantation: null,
+    incantation: '"I enchant thee with attune" x3',
     effect: "May wear an additional Enchantment. Attuned does not count towards the bearer's Enchantment limit.",
     limitation: 'This ability may not be used in conjunction with any other similar ability.',
     note: 'If Attuned is removed, the bearer chooses which (m) Enchantments to lose to meet their new Enchantment limit, if necessary.'
