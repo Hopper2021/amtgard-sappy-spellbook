@@ -188,7 +188,6 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
     const evolutionId = ALL_SPELLS.find(spell => spell.id === 196)?.id || ALL_SPELLS.find(spell => spell.id === 55)?.id || 0
     const holdPersonId = ALL_SPELLS.find(spell => spell.name === 'Hold Person')?.id || 0
     const pinningArrowId = ALL_SPELLS.find(spell => spell.name === 'Pinning Arrow')?.id || 0
-    const adaptiveProtectionId = ALL_SPELLS.find(spell => spell.id === 197)?.id || ALL_SPELLS.find(spell => spell.id === 3)?.id || 0
     const ancestralArmorId = ALL_SPELLS.find(spell => spell.id === 188)?.id || ALL_SPELLS.find(spell => spell.id === 7)?.id || 0
     const trueGritId = ALL_SPELLS.find(spell => spell.name === 'True Grit')?.id || 0
     const hardenId = ALL_SPELLS.find(spell => spell.name === 'Harden')?.id || 0
