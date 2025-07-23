@@ -3569,6 +3569,14 @@ export const MARTIAL_CLASSES = [
 
 export const PATCH_NOTES = [
   {
+    version: "1.1.2",
+    title: `Fix Attuned`,
+    details: [
+      "Bug report: Fix Apex 8.6.4: No longer limits Adaptive Protection.",
+      "Fix Assassin look the part Poison Arrow.",
+    ]
+  },
+  {
     version: "1.1.1",
     title: `Fix Attuned`,
     details: [
