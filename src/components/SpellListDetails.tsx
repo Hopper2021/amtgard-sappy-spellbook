@@ -508,6 +508,13 @@ function SpellListDetails() {
       spellDetails = subclassSpells.find(s => s.id === spellId)
     }
 
+    if (spellsByClass && 'lookThePartSpells' in spellsByClass && Array.isArray(spellsByClass.lookThePartSpells)) {
+    const lookThePartSpell = spellsByClass.lookThePartSpells.find(s => s.id === spellId)
+      if (lookThePartSpell) {
+        spellDetails = lookThePartSpell
+      }
+    }
+
     if (spellsByClass && !Array.isArray(spellsByClass) && Array.isArray((spellsByClass as any).levels)) {
       for (const level of spellsByClass.levels) {
         // Martial class: level.spells is an array of objects with base/pickOne/etc
@@ -1266,6 +1273,8 @@ function SpellListDetails() {
       )
     }
 
+    {console.log('lookThePartArr', lookThePartArr)}
+
     const chosenSpell = lookThePartArr.find(spell => spell.chosen)
     const onlyOneLookThePartOption = lookThePartArr.length === 1
 
@@ -1340,6 +1349,7 @@ function SpellListDetails() {
                       {fetchSpellDetails('name', spell.id) || 'Unknown Spell'}
                     </span>
                     <span>
+                      {console.log('spell', spell)}
                       {' '}{fetchSpellFrequency(spell.id)?.frequency}
                       {' '}{fetchMartialSpellDetails('extraordinary', spell.id) ? '(ex)' : ''}
                       {' '}{fetchMartialSpellDetails('magical', spell.id) ? '(m)' : ''}
