@@ -127,7 +127,7 @@ export const ALL_SPELLS = [
     materials: null,
     incantation: null,
     effect: 'Gain Mend 1/Life (ex) and Sleight of Mind (Self) 1/Life (ex)',
-    limitation: 'Loses all instances of Evolution, Hold Person, Pinning Arrow, and Adaptive Protection',
+    limitation: 'Loses all instances of Evolution, Hold Person, Pinning Arrow.',
     note: null
   },
   {
@@ -2461,6 +2461,18 @@ Additionally Phoenix Tears allows you to wear an extra Enchantment from the Prot
     limitation: 'Phoenix Tears is removed when the last strip is removed. If Phoenix Tears is removed, the bearer chooses which (m) Enchantments to lose to meet their new Enchantment limit, if necessary.',
     note: null
   },
+  {
+    id: 201,
+    name: 'Poison Arrow', // Assassin look the part poison arrow
+    type: 'Specialty Arrow',
+    school: 'Death',
+    range: null,
+    materials: "Arrow with green head cover labeled 'Poison'",
+    incantation: '"Poison Arrow"',
+    effect: 'This arrow is Wounds Kill.',
+    limitation: null,
+    note: null
+  },
 ]
 
 export const BARD_SPELLS = {
@@ -3006,8 +3018,8 @@ export const ASSASSIN_EQUIPMENT = {
 
 export const ASSASSIN_LIST = {
   lookThePartSpells: [
-      { id: 111, frequency: { amount: 1, per: 'Life', charge: 'Charge x3' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
-      { id: 112, frequency: { amount: 1, per: 'Arrows', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+    { id: 111, frequency: { amount: 1, per: 'Life', charge: 'Charge x3' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
+    { id: 201, frequency: { amount: 1, per: 'Arrow', charge: 'Unlimited' }, trait: false, extraordinary: true, magical: false, ambulant: false, restricted: false, chosen: false, },
   ],
   levels: [  
     {

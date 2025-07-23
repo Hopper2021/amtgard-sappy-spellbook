@@ -215,7 +215,7 @@ const [selectedSpellFrequency, setSelectedSpellFrequency] = useState<
     } else if (hunterChosen) {
       restrictedSpellIds = [releaseId, evolutionId]
     } else if (apexChosen) {
-      restrictedSpellIds = [evolutionId, holdPersonId, pinningArrowId, adaptiveProtectionId]
+      restrictedSpellIds = [evolutionId, holdPersonId, pinningArrowId]
     } else if (juggernautChosen) {
       restrictedSpellIds = [hardenId, ancestralArmorId, trueGritId]
     } else if (mysticChosen) {
