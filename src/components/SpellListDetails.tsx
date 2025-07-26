@@ -1085,19 +1085,28 @@ function SpellListDetails() {
           </>
         )
       } else {
+        const noAvailableSpells = spellArr.filter(spell => !spell.restricted).length === 0
         // If nothing is chosen, show the default label and all option names
         return (
           <>
             <Row className="ms-2 fw-bold text-secondary">
               <span className="d-flex align-items-center">
-                <IoIosWarning color="gold" className="me-1"/>
-                {isOptional ? 'Optional, Pick one ' : 'Pick one '} in edit mode:
+                {!noAvailableSpells && <IoIosWarning color="gold" className="me-1"/>}
+                {(!isOptional && !noAvailableSpells) && 'Pick one in edit mode:'}
+                {(isOptional && !noAvailableSpells) && 'Optional, Pick one in edit mode'}
+                {noAvailableSpells && ''}
               </span>
             </Row>
             {spellArr.map((spell, idx) => (
-              <Row key={idx} className="m-0">
-                <span className="ms-3">{fetchSpellDetails('name', spell.id) || ''}</span>
-              </Row>
+              spell.restricted ? (
+                <Row key={idx} className="ms-3">
+                  {' - '}
+                </Row>
+              ) : (
+                <Row key={idx} className="m-0">
+                  <span className="ms-3">{fetchSpellDetails('name', spell.id) || ''}</span>
+                </Row>
+              )
             ))}
           </>
         )
@@ -1273,8 +1282,6 @@ function SpellListDetails() {
       )
     }
 
-    {console.log('lookThePartArr', lookThePartArr)}
-
     const chosenSpell = lookThePartArr.find(spell => spell.chosen)
     const onlyOneLookThePartOption = lookThePartArr.length === 1
 
@@ -1349,7 +1356,6 @@ function SpellListDetails() {
                       {fetchSpellDetails('name', spell.id) || 'Unknown Spell'}
                     </span>
                     <span>
-                      {console.log('spell', spell)}
                       {' '}{fetchSpellFrequency(spell.id)?.frequency}
                       {' '}{fetchMartialSpellDetails('extraordinary', spell.id) ? '(ex)' : ''}
                       {' '}{fetchMartialSpellDetails('magical', spell.id) ? '(m)' : ''}
