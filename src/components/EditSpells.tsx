@@ -419,13 +419,10 @@ function EditSpells() {
     let spellCost = spellData?.cost ?? 0
 
     const currentLevelObj = spellList.levels.find(level => level.level === spellLevel.level)
-    console.log('currentLevelObj', currentLevelObj)
     if (!currentLevelObj) return spellList
 
     const spellExists = currentLevelObj.spells.find((spell: Spell) => spell.id === spellId)
     if (!spellExists) return spellList
-    console.log('spellExists', spellExists)
-
 
     let rolledDownMap = getRolledDownMap(spellExists)
     const maxLevel = spellList.maxLevel
@@ -575,8 +572,6 @@ function EditSpells() {
       const restrictedIds = ALL_SPELLS
         .filter(s => s.name !== null && s.name === 'Swift')
         .map(s => s.id)
-
-        console.log('Restricted Swift Spell IDs:', restrictedIds)
 
       restrictedIds.forEach(spellId => {
         cleanedSpellList = autoRemoveAndRefundSpell(spellId, cleanedSpellList)

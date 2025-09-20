@@ -30,8 +30,6 @@ function App() {
     enableTips = 'true'
   }
 
-  console.log('theme: ', theme)
-
   const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
 
   const handleClose = () => {
