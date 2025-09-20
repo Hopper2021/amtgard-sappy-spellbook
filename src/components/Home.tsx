@@ -29,8 +29,28 @@ function App() {
     localStorage.setItem('enableTips', 'true')
     enableTips = 'true'
   }
-
+  
   const allSpellLists = JSON.parse(localStorage.getItem('allSpellLists') || '[]')
+
+  const updateLocalStorage = (modifiedSpellList) => {
+    const updatedAllSpellLists = allSpellLists.map((list) =>
+      list.id === modifiedSpellList.id ? modifiedSpellList : list
+    )
+		localStorage.setItem('allSpellLists', JSON.stringify(updatedAllSpellLists))
+	}
+
+  const updateOldVersionedSpellList = (clickedSpellList) => {
+    const newlyVersionsClickedList = {
+        id: parseInt(clickedSpellList.id || '0'),
+        version: "V8.7",
+        name: clickedSpellList?.name || 'My SpellBook',
+        class: clickedSpellList?.class || 'Bard',
+        maxLevel: clickedSpellList?.maxLevel || 1,
+        lookThePart: clickedSpellList?.lookThePart || false,
+        levels: clickedSpellList?.levels || [],
+      }
+    updateLocalStorage(newlyVersionsClickedList)
+  }
 
   const handleClose = () => {
     setOpenModal(false)
@@ -130,7 +150,10 @@ function App() {
                 onTouchStart={() => handleLongPressStart(spellList)}
                 onTouchEnd={handleLongPressEnd}
                 onClick={() => {
-                  spellList.version && spellList.version === CURRENT_AMTGARD_VERSION
+                  if (spellList.version === "V8.6.4") {
+                    updateOldVersionedSpellList(spellList)
+                  }
+                  spellList.version && spellList.version === CURRENT_AMTGARD_VERSION || "V8.6.4" // needs this when updating 8.6.4 to 8.7.
                   ? navigate(`/listDetails/${spellList.id}`)
                   : navigate(`/legacyListDetails/${spellList.id}`)
                 }}
