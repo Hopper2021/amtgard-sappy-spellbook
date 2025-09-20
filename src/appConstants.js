@@ -1,7 +1,7 @@
 export const IS_APK = false
 
-export const CURRENT_AMTGARD_VERSION = 'V8.6.4'
-export const CURRENT_AMTGARD_VERSION_NAME = 'V8.6.4 "Sappy Four"'
+export const CURRENT_AMTGARD_VERSION = 'V8.7'
+export const CURRENT_AMTGARD_VERSION_NAME = 'V8.7 "Soupy"'
 
 export const CASTER_CLASSES = ['Bard', 'Druid', 'Healer', 'Wizard']
 export const ALL_CLASSES = [
