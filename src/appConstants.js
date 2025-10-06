@@ -1,4 +1,4 @@
-export const IS_APK = true
+export const IS_APK = false
 
 export const CURRENT_AMTGARD_VERSION = 'V8.7'
 export const CURRENT_AMTGARD_VERSION_NAME = 'V8.7 "Soupy"'
@@ -3568,6 +3568,13 @@ export const MARTIAL_CLASSES = [
 ]
 
 export const PATCH_NOTES = [
+  {
+    version: "2.0.1",
+    title: "Fix V8.7 versioning bug",
+    details: [
+      "Fix V8.7 versioning bug"
+    ]
+  },
   {
     version: "2.0.0",
     title: "Update to Amtgard version 8.7",
