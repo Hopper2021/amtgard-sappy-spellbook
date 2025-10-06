@@ -153,7 +153,7 @@ function App() {
                   if (spellList.version === "V8.6.4") {
                     updateOldVersionedSpellList(spellList)
                   }
-                  spellList.version && spellList.version === (CURRENT_AMTGARD_VERSION || "8.6.4") // needs this when updating 8.6.4 to 8.7.
+                  spellList.version && (spellList.version === CURRENT_AMTGARD_VERSION || spellList.version === "V8.6.4") // needs this when updating 8.6.4 to 8.7.
                   ? navigate(`/listDetails/${spellList.id}`)
                   : navigate(`/legacyListDetails/${spellList.id}`)
                 }}
