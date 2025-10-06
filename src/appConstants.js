@@ -3569,6 +3569,13 @@ export const MARTIAL_CLASSES = [
 
 export const PATCH_NOTES = [
   {
+    version: "2.0.0",
+    title: "Update to Amtgard version 8.7",
+    details: [
+      "All V8.6.4 spell books are updated to Amtgard rulebook V8.7",
+    ],
+  },
+  {
     version: "1.1.2",
     title: `Fix Apex and Assassin for 8.6.4`,
     details: [
