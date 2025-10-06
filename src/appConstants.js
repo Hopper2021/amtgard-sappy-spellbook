@@ -1,4 +1,4 @@
-export const IS_APK = true
+export const IS_APK = false
 
 export const CURRENT_AMTGARD_VERSION = 'V8.7'
 export const CURRENT_AMTGARD_VERSION_NAME = 'V8.7 "Soupy"'
@@ -10,7 +10,7 @@ export const ALL_CLASSES = [
   'Archer',
   'Assassin',
   'Barbarian',
-  'Monk',   
+  'Monk',
   'Paladin',
   'Scout',
   'Warrior'
