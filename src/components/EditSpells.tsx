@@ -232,7 +232,7 @@ function EditSpells() {
     let restrictedTypes: string[] = []
     let restrictedRanges: string[] = []
     if (summonerArchetype) restrictedTypes.push('Verbal')
-    if (summonerArchetype) restrictedRanges.push("20'", "50'", 'Other')
+    if (summonerArchetype) restrictedRanges.push("20'", "50'")
 
     // Always apply restrictions if any archetype is present
     return baseDruidSpells.map(level => ({
@@ -248,7 +248,7 @@ function EditSpells() {
           summonerPresent &&
           allSpell &&
           allSpell.type === 'Verbal' &&
-          (allSpell.range === "20'" || allSpell.range === "50'" || allSpell.range === 'Other')
+          (allSpell.range === "20'" || allSpell.range === "50'")
         ) {
           restricted = true
         }
@@ -499,7 +499,7 @@ function EditSpells() {
     // Druid Archetype spell limitations
     if (summonerPresent) {
       const restrictedIds = ALL_SPELLS
-        .filter(s => s.type !== null && s.type === 'Verbal' && (s.range === "20'" || s.range === "50'" || s.range === 'Other'))
+        .filter(s => s.type !== null && s.type === 'Verbal' && (s.range === "20'" || s.range === "50'"))
         .map(s => s.id)
 
       restrictedIds.forEach(spellId => {
