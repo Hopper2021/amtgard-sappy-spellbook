@@ -81,7 +81,7 @@ interface SpellList {
   lookThePartSpells?: MartialSpell[]
 }
 
-function EditMartialList() {
+const EditMartialList = () => {
   const navigate = useNavigate()
   const [pressStartPos, setPressStartPos] = useState<{ x: number, y: number } | null>(null)
   const [pressCancelled, setPressCancelled] = useState(false)

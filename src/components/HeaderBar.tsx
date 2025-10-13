@@ -5,7 +5,7 @@ import { IoEllipsisVertical } from "react-icons/io5"
 import { IoIosArrowBack } from "react-icons/io"
 import { IS_APK } from '../appConstants'
 
-function HeaderBar() {
+const HeaderBar = () => {
   const navigate = useNavigate()
   const currentSetting = localStorage.getItem('enableTips')
   const apkPadding = IS_APK ? 'd-flex pt-5' : 'd-flex pt-2'

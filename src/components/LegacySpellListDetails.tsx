@@ -66,7 +66,7 @@ interface EquipmentByClass {
   weapons: string
 }
 
-function LegacySpellListDetails() {
+const LegacySpellListDetails = () => {
   const { id } = useParams<{ id: string }>()
   const [showTypeAndSchool, setShowTypeAndSchool] = React.useState(false)
   const [showIncantation, setShowIncantation] = React.useState(false)

@@ -4,7 +4,7 @@ import { LuCirclePlus } from "react-icons/lu"
 import { useNavigate } from 'react-router-dom'
 import { IS_APK } from '../appConstants'
 
-function FloatingActionButton() {
+const FloatingActionButton = () => {
   const navigate = useNavigate()
   const apkMargin = IS_APK ? 'mb-5 me-3' : 'm-3'
 

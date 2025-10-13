@@ -7,7 +7,7 @@ import { LuCirclePlus } from "react-icons/lu"
 import { CURRENT_AMTGARD_VERSION } from '../appConstants.js'
 import AlertTip from './AlertTip.tsx'
 
-function App() {
+const App = () => {
   const navigate = useNavigate()
   const [openModal, setOpenModal] = useState(false)
   const [toggleDeleteModal, setDeleteToggleModal] = useState(false)

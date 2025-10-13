@@ -74,7 +74,7 @@ interface LevelsByClass {
   spells: Spell[]
 }
 
-function EditSpells() {
+const EditSpells = () => {
   const navigate = useNavigate()
   const [pressStartPos, setPressStartPos] = useState<{ x: number, y: number } | null>(null)
   const [pressCancelled, setPressCancelled] = useState(false)

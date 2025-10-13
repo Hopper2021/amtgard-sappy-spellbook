@@ -31,7 +31,7 @@ interface SpellList {
   lookThePartSpells?: any[]
 }
 
-function ModifySpellList() {
+const ModifySpellList = () => {
   const navigate = useNavigate()
 	const [showClassAlert, setShowClassAlert] = useState(false)
 	const [showLevelAlert, setShowLevelAlert] = useState(false)

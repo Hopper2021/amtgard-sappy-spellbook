@@ -68,7 +68,7 @@ interface EquipmentByClass {
   weapons: string
 }
 
-function SpellListDetails() {
+const SpellListDetails = () => {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const [showTypeAndSchool, setShowTypeAndSchool] = useState(false)

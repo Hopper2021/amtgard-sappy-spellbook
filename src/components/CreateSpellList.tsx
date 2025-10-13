@@ -41,7 +41,7 @@ interface SpellList {
   levels: any[]
 }
 
-function CreateSpellList() {
+const CreateSpellList = () => {
 	const navigate = useNavigate()
 	if (localStorage.getItem('allSpellLists') === null) {
 		localStorage.setItem('allSpellLists', JSON.stringify([]))

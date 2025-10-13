@@ -12,7 +12,7 @@ import EditMartialList from './components/EditMartialList.tsx'
 import LegacySpellListDetails from './components/LegacySpellListDetails.tsx'
 import BugsAndFeatures from './components/BugsAndFeatures.tsx'
 
-function App() {
+const App = () => {
   return (
     <>
       <HeaderBar />
