@@ -3569,6 +3569,13 @@ export const MARTIAL_CLASSES = [
 
 export const PATCH_NOTES = [
   {
+    version: "2.0.2",
+    title: "Summoner bug report by Eevee Eeverson",
+    details: [
+      "Make Verbals with range other available to Summoner subclass. ( Fixed typo in rulebook )"
+    ]
+  },
+  {
     version: "2.0.1",
     title: "Fix V8.7 versioning bug",
     details: [
